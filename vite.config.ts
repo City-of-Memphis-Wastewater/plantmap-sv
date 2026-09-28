@@ -7,12 +7,7 @@ export default defineConfig({
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),
-		sveltekit({
-			compilerOptions: {
-				runes: ({ filename }) =>
-					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
-			}
-		})
+		sveltekit() // Must remain empty so svelte.config.js is read
 	],
 	optimizeDeps: {
 		include: ['cesium', 'mersenne-twister']

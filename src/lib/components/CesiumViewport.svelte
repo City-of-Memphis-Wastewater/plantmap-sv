@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
-	import { telemetry } from '$lib/stores/telemetry.svelte';
+	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
-	import { toggleViewMode } from '$lib/cesium/navigation';
-
+	//import { toggleViewMode } from '$lib/cesium/navigation';
+    import { resetCamera, toggleViewMode, zoomCamera } from '$lib/cesium/navigation';
+    
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
 	let CesiumModule: any = $state(undefined);
@@ -26,7 +27,7 @@
 	$effect(() => {
 		if (!viewer || !CesiumModule) return;
 
-		Object.values(telemetry.sensors).forEach((sensor) => {
+		Object.values(telemetryStore.sensors).forEach((sensor) => {
 			const entityId = `sensor-${sensor.id}`;
 			let entity = viewer.entities.getById(entityId);
 			const pos = CesiumModule.Cartesian3.fromDegrees(sensor.lon, sensor.lat, sensor.altitude ?? 15);
@@ -61,21 +62,6 @@
 		});
 	});
 
-	function resetCamera() {
-		if (!viewer || !CesiumModule) return;
-		viewer.camera.flyTo({
-			destination: CesiumModule.Cartesian3.fromDegrees(SITE_LON, SITE_LAT, 1200),
-			orientation: {
-				heading: CesiumModule.Math.toRadians(0),
-				//pitch: CesiumModule.Math.toRadians(-45),
-				pitch: CesiumModule.Math.toRadians(-90),
-				roll: 0.0
-			},
-			duration: 1.5
-		});
-		//viewMode = '2D'
-	}
-
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {
 		currentBasemap = type;
 		applyBasemap(viewer, CesiumModule, type);
@@ -97,7 +83,7 @@
 	onMount(async () => {
 		try {
 		    // Fetch initial sensor locations/metadata
-    		await telemetry.init();
+    		await telemetryStore.init();
 
     		// Optional: Connect live telemetry WebSocket feed after store is populated
     		// initTelemetryWebSocket();
