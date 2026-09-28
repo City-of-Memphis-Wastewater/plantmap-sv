@@ -2,7 +2,7 @@
 
 export const SITE_LON = -90.155655;
 export const SITE_LAT = 35.071202;
-export const DEFAULT_CAMERA_ALT = 450; // Maxson plant scale
+export const DEFAULT_CAMERA_ALT = 1100; // Maxson plant scale
 
 export function resetCamera(viewer: any, CesiumModule: any) {
 	if (!viewer || !CesiumModule) return;
