@@ -103,11 +103,3 @@ export function toggleViewMode(viewer: any, CesiumModule: any, mode: '2D' | '3D'
         }
 }
 
-export function zoomCamera(viewer: any, amount: number) {
-	if (!viewer) return;
-	if (amount > 0) {
-		viewer.camera.zoomIn(amount);
-	} else {
-		viewer.camera.zoomOut(Math.abs(amount));
-	}
-}

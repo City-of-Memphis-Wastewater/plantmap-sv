@@ -4,7 +4,7 @@
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
 	//import { toggleViewMode } from '$lib/cesium/navigation';
-    import { resetCamera, toggleViewMode, zoomCamera } from '$lib/cesium/navigation';
+    import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
     
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
@@ -139,8 +139,8 @@
 			await loadKmlOverlay(viewer, CesiumModule, '/kml/maxson.kml');
 
 			viewer.resize();
-			resetCamera();
-
+			resetCamera(viewer, CesiumModule);
+            
 			// Entity Inspection & Hover Tooltip handler
 			const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
 			handler.setInputAction((movement: any) => {
@@ -176,6 +176,10 @@
 			viewer?.destroy();
 		};
 	});
+	function handleResetCamera() {
+		resetCamera(viewer, CesiumModule);
+	}
+
 </script>
 
 <div class="relative h-screen w-screen overflow-hidden bg-slate-950">
@@ -217,7 +221,7 @@
 		</div>
 
 		<button
-			onclick={resetCamera}
+			onclick={handleResetCamera}
 			class="rounded-lg border border-slate-700 bg-slate-900/90 px-3 py-2 font-mono text-xs font-semibold text-slate-200 shadow-xl transition-all hover:bg-slate-800 hover:text-white"
 		>
 			Reset View
