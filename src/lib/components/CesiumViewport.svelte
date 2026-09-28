@@ -55,7 +55,8 @@
 					}
 				});
 			} else if (entity.label) {
-				entity.label.text = new CesiumModule.ConstantProperty(`${sensor.name}\n${sensor.value} ${sensor.unit}`);
+				//entity.label.text = new CesiumModule.ConstantProperty(`${sensor.name}\n${sensor.value} ${sensor.unit}`);
+				entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
 			}
 		});
 	});
