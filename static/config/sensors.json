@@ -1,0 +1,22 @@
+{
+  "SWG-100": {
+    "id": "SWG-100",
+    "name": "SWG 100 Biogas Analyzer",
+    "lat": 35.067038,
+    "lon": -90.135478,
+    "altitude": 3,
+    "value": 450,
+    "unit": "ppm H2S",
+    "status": "normal"
+  },
+  "BIOREM-01": {
+    "id": "BIOREM-01",
+    "name": "BioRem Scrubber Stage 1",
+    "lat": 35.067049,
+    "lon": -90.135734,
+    "altitude": 10,
+    "value": 12.4,
+    "unit": "in. w.c.",
+    "status": "normal"
+  }
+}

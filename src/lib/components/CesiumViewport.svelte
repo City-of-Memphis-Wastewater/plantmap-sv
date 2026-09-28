@@ -17,9 +17,9 @@
 	let cameraPos = $state({ lat: 0, lon: 0, alt: 0 });
 	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
 
-	const SITE_LON = -90.0908;
-	const SITE_LAT = 35.0256;
-
+    const SITE_LON = -90.155655;
+	const SITE_LAT = 35.061202;
+    
 	// Telemetry updates
 	$effect(() => {
 		if (!viewer || !CesiumModule) return;
@@ -86,6 +86,11 @@
 
 	onMount(async () => {
 		try {
+		    // Fetch initial sensor locations/metadata
+    		await telemetry.init();
+
+    		// Optional: Connect live telemetry WebSocket feed after store is populated
+    		// initTelemetryWebSocket();
 			const canvasTest = document.createElement('canvas');
 			const gl = canvasTest.getContext('webgl2') || canvasTest.getContext('webgl');
 			if (!gl) {
