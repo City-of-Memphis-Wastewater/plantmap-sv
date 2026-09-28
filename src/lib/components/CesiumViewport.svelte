@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
-    import { PUBLIC_CARTO_API_KEY } from '$env/static/public';
 	import { telemetry } from '$lib/stores/telemetry.svelte';
+	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
 
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
@@ -71,30 +71,9 @@
 		});
 	}
 
-	function switchBasemap(type: 'satellite' | 'streets') {
-		if (!viewer || !CesiumModule) return;
+	function handleSwitchBasemap(type: 'satellite' | 'streets') {
 		currentBasemap = type;
-
-		const layers = viewer.imageryLayers;
-		layers.removeAll();
-
-		if (type === 'satellite') {
-			// ArcGIS World Imagery (High-res satellite)
-			const satelliteProvider = new CesiumModule.UrlTemplateImageryProvider({
-				url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-				maximumLevel: 19,
-				credit: 'Esri, Maxar, Earthstar Geographics'
-			});
-			layers.addImageryProvider(satelliteProvider);
-		} else {
-			// CartoDB Voyager (Clean street basemap)
-			const streetProvider = new CesiumModule.UrlTemplateImageryProvider({
-				url: 'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png?api_key=${PUBLIC_CARTO_API_KEY}`,
-				maximumLevel: 19,
-				credit: 'CartoDB, OpenStreetMap contributors'
-			});
-			layers.addImageryProvider(streetProvider);
-		}
+		applyBasemap(viewer, CesiumModule, type);
 	}
 
 	function zoomIn() {
@@ -131,15 +110,7 @@
 
 			statusMsg = 'Initializing 3D Globe Viewer...';
 
-			// Initialize viewer with explicit Esri Satellite imagery
-			const satelliteProvider = new Cesium.UrlTemplateImageryProvider({
-				url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-				maximumLevel: 19,
-				credit: 'Esri, Maxar, Earthstar Geographics'
-			});
-
 			viewer = new Cesium.Viewer(container, {
-				imageryProvider: satelliteProvider,
 				baseLayerPicker: false,
 				animation: false,
 				timeline: false,
@@ -151,16 +122,20 @@
 				selectionIndicator: false
 			});
 
-			// Configure globe lighting and depth testing
 			viewer.scene.globe.enableLighting = false;
 			viewer.scene.globe.depthTestAgainstTerrain = false;
 
-			// Enable input handling
 			viewer.scene.screenSpaceCameraController.enableRotate = true;
 			viewer.scene.screenSpaceCameraController.enableTranslate = true;
 			viewer.scene.screenSpaceCameraController.enableZoom = true;
 			viewer.scene.screenSpaceCameraController.enableTilt = true;
 			viewer.scene.screenSpaceCameraController.enableLook = true;
+
+			// Apply initial basemap
+			applyBasemap(viewer, CesiumModule, currentBasemap);
+
+			// Asynchronously load KML layer overlay once during initialization
+			await loadKmlOverlay(viewer, CesiumModule, '/kml/maxson.kml');
 
 			viewer.resize();
 			resetCamera();
@@ -181,7 +156,6 @@
 					hoverInfo = null;
 				}
 
-				// Update coordinates HUD
 				const cartesian = viewer.camera.position;
 				const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
 				cameraPos = {
@@ -212,13 +186,13 @@
 		<!-- Basemap Switcher -->
 		<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl">
 			<button
-				onclick={() => switchBasemap('satellite')}
+				onclick={() => handleSwitchBasemap('satellite')}
 				class="rounded px-2.5 py-1 font-mono text-xs transition-colors {currentBasemap === 'satellite' ? 'bg-emerald-600 font-bold text-white' : 'text-slate-400 hover:text-white'}"
 			>
 				Satellite
 			</button>
 			<button
-				onclick={() => switchBasemap('streets')}
+				onclick={() => handleSwitchBasemap('streets')}
 				class="rounded px-2.5 py-1 font-mono text-xs transition-colors {currentBasemap === 'streets' ? 'bg-emerald-600 font-bold text-white' : 'text-slate-400 hover:text-white'}"
 			>
 				Streets
