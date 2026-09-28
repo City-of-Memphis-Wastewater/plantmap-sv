@@ -3,12 +3,15 @@
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
-	//import { toggleViewMode } from '$lib/cesium/navigation';
-    import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
-    
+	import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
+
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
 	let CesiumModule: any = $state(undefined);
+
+	// Make geojsonDataSource reactive so Svelte tracks when it finishes loading
+	let geojsonDataSource: any = $state(null);
+	let showGeoJson = $state(true);
 
 	let statusMsg = $state('Initializing WebGL context...');
 	let webGlSupported = $state(true);
@@ -18,11 +21,11 @@
 	let hoverInfo = $state<{ name: string; value: string; x: number; y: number } | null>(null);
 	let cameraPos = $state({ lat: 0, lon: 0, alt: 0 });
 	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
-    let viewMode = $state<'2D' | '3D'>('2D');
-    
-    const SITE_LON = -90.155655;
+	let viewMode = $state<'2D' | '3D'>('2D');
+
+	const SITE_LON = -90.155655;
 	const SITE_LAT = 35.071202;
-    
+
 	// Telemetry updates
 	$effect(() => {
 		if (!viewer || !CesiumModule) return;
@@ -56,7 +59,6 @@
 					}
 				});
 			} else if (entity.label) {
-				//entity.label.text = new CesiumModule.ConstantProperty(`${sensor.name}\n${sensor.value} ${sensor.unit}`);
 				entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
 			}
 		});
@@ -66,7 +68,7 @@
 		currentBasemap = type;
 		applyBasemap(viewer, CesiumModule, type);
 	}
-	
+
 	function handleToggleViewMode(targetMode: '2D' | '3D') {
 		viewMode = targetMode;
 		toggleViewMode(viewer, CesiumModule, targetMode);
@@ -80,106 +82,126 @@
 		viewer?.camera.zoomOut(300);
 	}
 
-	onMount(async () => {
-		try {
-		    // Fetch initial sensor locations/metadata
-    		await telemetryStore.init();
-
-    		// Optional: Connect live telemetry WebSocket feed after store is populated
-    		// initTelemetryWebSocket();
-			const canvasTest = document.createElement('canvas');
-			const gl = canvasTest.getContext('webgl2') || canvasTest.getContext('webgl');
-			if (!gl) {
-				webGlSupported = false;
-				statusMsg = 'WebGL context unhandled by hardware driver.';
-				return;
-			}
-
-			statusMsg = 'Setting asset base route...';
-			(window as any).CESIUM_BASE_URL = '/cesium/';
-
-			statusMsg = 'Importing Cesium bundle...';
-			const Cesium = await import('cesium');
-			CesiumModule = Cesium;
-
-			await tick();
-
-			if (!container) {
-				errorLog = 'Viewport container missing from DOM.';
-				return;
-			}
-
-			statusMsg = 'Initializing 3D Globe Viewer...';
-
-			viewer = new Cesium.Viewer(container, {
-				baseLayerPicker: false,
-				animation: false,
-				timeline: false,
-				infoBox: false,
-				geocoder: false,
-				homeButton: false,
-				sceneModePicker: false,
-				navigationHelpButton: false,
-				selectionIndicator: false
-			});
-
-			viewer.scene.globe.enableLighting = false;
-			viewer.scene.globe.depthTestAgainstTerrain = false;
-
-			viewer.scene.screenSpaceCameraController.enableRotate = true;
-			viewer.scene.screenSpaceCameraController.enableTranslate = true;
-			viewer.scene.screenSpaceCameraController.enableZoom = true;
-			viewer.scene.screenSpaceCameraController.enableTilt = true;
-			viewer.scene.screenSpaceCameraController.enableLook = true;
-
-			// Apply initial basemap
-			applyBasemap(viewer, CesiumModule, currentBasemap);
-
-			// Asynchronously load KML layer overlay once during initialization
-			await loadKmlOverlay(viewer, CesiumModule, '/kml/maxson.kml');
-
-			viewer.resize();
-			resetCamera(viewer, CesiumModule);
-            
-			// Entity Inspection & Hover Tooltip handler
-			const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-			handler.setInputAction((movement: any) => {
-				const pickedObject = viewer.scene.pick(movement.endPosition);
-				if (Cesium.defined(pickedObject) && pickedObject.id) {
-					const sensor = pickedObject.id.properties?.sensorData?.getValue();
-					hoverInfo = {
-						name: pickedObject.id.name || pickedObject.id.id,
-						value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
-						x: movement.endPosition.x,
-						y: movement.endPosition.y
-					};
-				} else {
-					hoverInfo = null;
-				}
-
-				const cartesian = viewer.camera.position;
-				const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-				cameraPos = {
-					lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
-					lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
-					alt: Math.round(cartographic.height)
-				};
-			}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-			statusMsg = '3D Scene Operational';
-		} catch (err: any) {
-			console.error('Cesium execution error:', err);
-			errorLog = err?.stack || err?.message || String(err);
+	function toggleGeoJson() {
+		if (!geojsonDataSource) {
+			console.warn('GeoJSON DataSource not loaded yet.');
+			return;
 		}
 
+		showGeoJson = !showGeoJson;
+		geojsonDataSource.show = showGeoJson;
+	}
+
+	onMount(() => {
+		let isMounted = true;
+
+		(async () => {
+			try {
+				await telemetryStore.init();
+
+				const canvasTest = document.createElement('canvas');
+				const gl = canvasTest.getContext('webgl2') || canvasTest.getContext('webgl');
+				if (!gl) {
+					webGlSupported = false;
+					statusMsg = 'WebGL context unhandled by hardware driver.';
+					return;
+				}
+
+				statusMsg = 'Setting asset base route...';
+				(window as any).CESIUM_BASE_URL = '/cesium/';
+
+				statusMsg = 'Importing Cesium bundle...';
+				const Cesium = await import('cesium');
+				CesiumModule = Cesium;
+
+				await tick();
+
+				if (!container) {
+					errorLog = 'Viewport container missing from DOM.';
+					return;
+				}
+
+				statusMsg = 'Initializing 3D Globe Viewer...';
+
+				viewer = new Cesium.Viewer(container, {
+					baseLayerPicker: false,
+					animation: false,
+					timeline: false,
+					infoBox: false,
+					geocoder: false,
+					homeButton: false,
+					sceneModePicker: false,
+					navigationHelpButton: false,
+					selectionIndicator: false
+				});
+
+				viewer.scene.globe.enableLighting = false;
+				viewer.scene.globe.depthTestAgainstTerrain = false;
+
+				viewer.scene.screenSpaceCameraController.enableRotate = true;
+				viewer.scene.screenSpaceCameraController.enableTranslate = true;
+				viewer.scene.screenSpaceCameraController.enableZoom = true;
+				viewer.scene.screenSpaceCameraController.enableTilt = true;
+				viewer.scene.screenSpaceCameraController.enableLook = true;
+
+				applyBasemap(viewer, CesiumModule, currentBasemap);
+				await loadKmlOverlay(viewer, CesiumModule, '/kml/maxson.kml');
+
+				statusMsg = 'Loading GeoJSON layer...';
+				const loadedDs = await CesiumModule.GeoJsonDataSource.load('/geojson/plant.geojson', {
+					stroke: CesiumModule.Color.YELLOW,
+					fill: CesiumModule.Color.YELLOW.withAlpha(0.3),
+					strokeWidth: 3
+				});
+
+				if (!isMounted) return;
+
+				await viewer.dataSources.add(loadedDs);
+				geojsonDataSource = loadedDs; // Assign reactive state once added to viewer
+
+				viewer.resize();
+				resetCamera(viewer, CesiumModule);
+
+				const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+				handler.setInputAction((movement: any) => {
+					const pickedObject = viewer.scene.pick(movement.endPosition);
+					if (Cesium.defined(pickedObject) && pickedObject.id) {
+						const sensor = pickedObject.id.properties?.sensorData?.getValue();
+						hoverInfo = {
+							name: pickedObject.id.name || pickedObject.id.id,
+							value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
+							x: movement.endPosition.x,
+							y: movement.endPosition.y
+						};
+					} else {
+						hoverInfo = null;
+					}
+
+					const cartesian = viewer.camera.position;
+					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+					cameraPos = {
+						lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
+						lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
+						alt: Math.round(cartographic.height)
+					};
+				}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+				statusMsg = '3D Scene Operational';
+			} catch (err: any) {
+				console.error('Cesium execution error:', err);
+				errorLog = err?.stack || err?.message || String(err);
+			}
+		})();
+
 		return () => {
+			isMounted = false;
 			viewer?.destroy();
 		};
 	});
+
 	function handleResetCamera() {
 		resetCamera(viewer, CesiumModule);
 	}
-
 </script>
 
 <div class="relative h-screen w-screen overflow-hidden bg-slate-950">
@@ -188,7 +210,7 @@
 
 	<!-- Interactive Map Controls & Layer Switcher (Bottom Right) -->
 	<div class="absolute bottom-6 right-6 z-30 flex flex-col gap-2">
-        <!-- 2D / 3D Mode Switcher -->
+		<!-- 2D / 3D Mode Switcher -->
 		<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl">
 			<button
 				onclick={() => handleToggleViewMode('2D')}
@@ -203,7 +225,7 @@
 				3D Perspective
 			</button>
 		</div>
-		
+
 		<!-- Basemap Switcher -->
 		<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl">
 			<button
@@ -226,6 +248,7 @@
 		>
 			Reset View
 		</button>
+
 		<div class="flex gap-2">
 			<button
 				onclick={zoomIn}
@@ -240,6 +263,29 @@
 				-
 			</button>
 		</div>
+	</div>
+
+	<!-- Map Control Toolbar Overlay (Top Left) -->
+	<div class="absolute bottom-4 left-4 z-30 flex gap-2">
+		<button
+			onclick={toggleGeoJson}
+			disabled={!geojsonDataSource}
+			title={geojsonDataSource ? "Toggle Feature Overlay" : "Loading Features..."}
+			class="rounded-md bg-slate-900/90 p-2 text-white shadow-xl backdrop-blur-sm border border-slate-700 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed"
+		>
+			{#if showGeoJson}
+				<!-- Eye Open Icon -->
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+				</svg>
+			{:else}
+				<!-- Eye Off Icon -->
+				<svg class="h-5 w-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.049 10.049 0 013.122-.813c4.478 0 8.268 2.943 9.542 7a9.97 9.97 0 01-1.168 2.376M3 3l18 18" />
+				</svg>
+			{/if}
+		</button>
 	</div>
 
 	<!-- Hover Element Inspection Tooltip -->
@@ -264,9 +310,9 @@
 			</div>
 
 			<div class="py-1">
-			    <span class="text-slate-500">Mode:</span>
+				<span class="text-slate-500">Mode:</span>
 				<span class="text-emerald-300">{viewMode}</span>
-				<span class="text-slate-500">Status:</span>
+				<span class="ml-2 text-slate-500">Status:</span>
 				<span class="text-amber-300">{statusMsg}</span>
 			</div>
 
