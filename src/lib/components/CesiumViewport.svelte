@@ -3,6 +3,7 @@
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 	import { telemetry } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
+	import { toggleViewMode } from '$lib/cesium/navigation';
 
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
@@ -16,9 +17,10 @@
 	let hoverInfo = $state<{ name: string; value: string; x: number; y: number } | null>(null);
 	let cameraPos = $state({ lat: 0, lon: 0, alt: 0 });
 	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
-
+    let viewMode = $state<'2D' | '3D'>('2D');
+    
     const SITE_LON = -90.155655;
-	const SITE_LAT = 35.061202;
+	const SITE_LAT = 35.071202;
     
 	// Telemetry updates
 	$effect(() => {
@@ -64,16 +66,23 @@
 			destination: CesiumModule.Cartesian3.fromDegrees(SITE_LON, SITE_LAT, 1200),
 			orientation: {
 				heading: CesiumModule.Math.toRadians(0),
-				pitch: CesiumModule.Math.toRadians(-45),
+				//pitch: CesiumModule.Math.toRadians(-45),
+				pitch: CesiumModule.Math.toRadians(-90),
 				roll: 0.0
 			},
 			duration: 1.5
 		});
+		//viewMode = '2D'
 	}
 
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {
 		currentBasemap = type;
 		applyBasemap(viewer, CesiumModule, type);
+	}
+	
+	function handleToggleViewMode(targetMode: '2D' | '3D') {
+		viewMode = targetMode;
+		toggleViewMode(viewer, CesiumModule, targetMode);
 	}
 
 	function zoomIn() {
@@ -188,6 +197,22 @@
 
 	<!-- Interactive Map Controls & Layer Switcher (Bottom Right) -->
 	<div class="absolute bottom-6 right-6 z-30 flex flex-col gap-2">
+        <!-- 2D / 3D Mode Switcher -->
+		<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl">
+			<button
+				onclick={() => handleToggleViewMode('2D')}
+				class="flex-1 rounded px-3 py-1 font-mono text-xs transition-colors {viewMode === '2D' ? 'bg-emerald-600 font-bold text-white' : 'text-slate-400 hover:text-white'}"
+			>
+				2D Top-Down
+			</button>
+			<button
+				onclick={() => handleToggleViewMode('3D')}
+				class="flex-1 rounded px-3 py-1 font-mono text-xs transition-colors {viewMode === '3D' ? 'bg-emerald-600 font-bold text-white' : 'text-slate-400 hover:text-white'}"
+			>
+				3D Perspective
+			</button>
+		</div>
+		
 		<!-- Basemap Switcher -->
 		<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl">
 			<button
@@ -248,6 +273,8 @@
 			</div>
 
 			<div class="py-1">
+			    <span class="text-slate-500">Mode:</span>
+				<span class="text-emerald-300">{viewMode}</span>
 				<span class="text-slate-500">Status:</span>
 				<span class="text-amber-300">{statusMsg}</span>
 			</div>
