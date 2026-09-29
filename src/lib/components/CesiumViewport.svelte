@@ -22,6 +22,7 @@
 	let cameraPos = $state({ lat: 0, lon: 0, alt: 0 });
 	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
 	let viewMode = $state<'2D' | '3D'>('2D');
+    let showDebugger = $state(true);
 
 	const SITE_LON = -90.155655;
 	const SITE_LAT = 35.071202;
@@ -307,37 +308,36 @@
 	{/if}
 
 	<!-- Debug HUD (Top Right) -->
-    <!-- Debug HUD (Top Right) -->
     {#if showDebugger}
         <div class="pointer-events-none absolute top-4 right-4 z-30 flex max-w-md flex-col gap-2">
-	{/if}
-		<div class="pointer-events-auto rounded-lg border border-slate-800 bg-slate-900/90 p-3 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md">
-			<div class="mb-1 flex items-center justify-between border-b border-slate-800 pb-1">
-				<span class="font-bold uppercase text-slate-400">3D Viewport Debugger</span>
-				<span class={webGlSupported ? 'text-emerald-400' : 'text-rose-400'}>
-					{webGlSupported ? 'WebGL OK' : 'WebGL FAIL'}
-				</span>
-			</div>
+    		<div class="pointer-events-auto rounded-lg border border-slate-800 bg-slate-900/90 p-3 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md">
+    			<div class="mb-1 flex items-center justify-between border-b border-slate-800 pb-1">
+    				<span class="font-bold uppercase text-slate-400">3D Viewport Debugger</span>
+    				<span class={webGlSupported ? 'text-emerald-400' : 'text-rose-400'}>
+    					{webGlSupported ? 'WebGL OK' : 'WebGL FAIL'}
+    				</span>
+    			</div>
 
-			<div class="py-1">
-				<span class="text-slate-500">Mode:</span>
-				<span class="text-emerald-300">{viewMode}</span>
-				<span class="ml-2 text-slate-500">Status:</span>
-				<span class="text-amber-300">{statusMsg}</span>
-			</div>
+    			<div class="py-1">
+    				<span class="text-slate-500">Mode:</span>
+    				<span class="text-emerald-300">{viewMode}</span>
+    				<span class="ml-2 text-slate-500">Status:</span>
+    				<span class="text-amber-300">{statusMsg}</span>
+    			</div>
 
-			<div class="mt-1 border-t border-slate-800/80 pt-1 text-[11px] text-slate-400">
-				Cam: {cameraPos.lat}°N, {cameraPos.lon}°W | Alt: {cameraPos.alt}m
-			</div>
+    			<div class="mt-1 border-t border-slate-800/80 pt-1 text-[11px] text-slate-400">
+    				Cam: {cameraPos.lat}°N, {cameraPos.lon}°W | Alt: {cameraPos.alt}m
+    			</div>
 
-			{#if errorLog}
-				<div class="mt-2 overflow-x-auto rounded border border-rose-800/50 bg-rose-950/80 p-2 font-mono text-[11px] text-rose-200">
-					<div class="font-bold text-rose-400">Initialization Exception:</div>
-					<pre class="mt-1 whitespace-pre-wrap">{errorLog}</pre>
-				</div>
-			{/if}
-		</div>
-	</div>
+    			{#if errorLog}
+    				<div class="mt-2 overflow-x-auto rounded border border-rose-800/50 bg-rose-950/80 p-2 font-mono text-[11px] text-rose-200">
+    					<div class="font-bold text-rose-400">Initialization Exception:</div>
+    					<pre class="mt-1 whitespace-pre-wrap">{errorLog}</pre>
+    				</div>
+    			{/if}
+    		</div>
+    	</div>
+    {/if}
 </div>
 
 <style>
