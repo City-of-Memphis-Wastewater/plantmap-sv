@@ -128,6 +128,8 @@
 		}
     	geojsonDataSource.show = !geojsonDataSource.show;
     	showGeoJson = geojsonDataSource.show;
+    	console.debug(`[Cesium] GeoJSON visibility: ${showGeoJson}`);
+
     }
 
 	function toggleSensorLabels() {
@@ -215,6 +217,17 @@
 					CesiumModule,
 					'/kml/maxson.kml'
 				);
+
+
+                const geojson = await Cesium.GeoJsonDataSource.load('/geojson/plant.geojson', {
+                	stroke: Cesium.Color.YELLOW,
+                	fill: Cesium.Color.YELLOW.withAlpha(0.15),
+                	strokeWidth: 3
+                });
+
+                geojsonDataSource = geojson;
+                viewer.dataSources.add(geojson);
+                geojson.show = showGeoJson;
 
 				statusMsg = 'Loading GeoJSON layer...';
 
