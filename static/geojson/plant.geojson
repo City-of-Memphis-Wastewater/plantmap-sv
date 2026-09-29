@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "Maxson Layers, Multi-Source",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "T.E. Maxson Lagoon #2A", "description": "<div><div>Abbreviation: LG2A&lt;br/&gt;XLIMS ID: 435<br></div><div>XLIMS Sample Point.<br></div></div>", "tessellate": -1, "extrude": 0, "visibility": -1 }, "geometry": { "type": "Point", "coordinates": [ -90.137557695641448, 35.065684978735483, 71.109816703017515 ] } },
+{ "type": "Feature", "properties": { "Name": "T.E. Maxson Lagoon #2B", "description": "<div><div>Abbreviation: LG2B&lt;br/&gt;XLIMS ID: 456<br></div><div>XLIMS Sample Point<br></div></div>", "tessellate": -1, "extrude": 0, "visibility": -1 }, "geometry": { "type": "Point", "coordinates": [ -90.133805567294587, 35.064777191216692, 64.513388950439989 ] } }
+]
+}
