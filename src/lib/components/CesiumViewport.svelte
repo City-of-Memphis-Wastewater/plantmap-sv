@@ -3,7 +3,7 @@
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
-	import { applyBasemap, loadKmlOverlay } from '$lib/cesium/layers';
+	import { applyBasemap } from '$lib/cesium/layers';
 	import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
 
 	let container: HTMLDivElement;
@@ -211,13 +211,6 @@
 					CesiumModule,
 					currentBasemap
 				);
-
-				await loadKmlOverlay(
-					viewer,
-					CesiumModule,
-					'/kml/maxson.kml'
-				);
-
 
                 const geojson = await Cesium.GeoJsonDataSource.load('/geojson/plant.geojson', {
                 	stroke: Cesium.Color.YELLOW,
