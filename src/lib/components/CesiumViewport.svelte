@@ -286,6 +286,13 @@
 				</svg>
 			{/if}
 		</button>
+		<button
+                onclick={() => (showDebugger = !showDebugger)}
+                title={showDebugger ? 'Hide debugger' : 'Show debugger'}
+                class="rounded-md border border-slate-700 bg-slate-900/90 p-2 font-mono text-xs text-white shadow-xl backdrop-blur-sm hover:bg-slate-800"
+        >
+                {showDebugger ? 'Debug On' : 'Debug Off'}
+        </button>
 	</div>
 
 	<!-- Hover Element Inspection Tooltip -->
@@ -300,7 +307,10 @@
 	{/if}
 
 	<!-- Debug HUD (Top Right) -->
-	<div class="pointer-events-none absolute top-4 right-4 z-30 flex max-w-md flex-col gap-2">
+    <!-- Debug HUD (Top Right) -->
+    {#if showDebugger}
+        <div class="pointer-events-none absolute top-4 right-4 z-30 flex max-w-md flex-col gap-2">
+	{/if}
 		<div class="pointer-events-auto rounded-lg border border-slate-800 bg-slate-900/90 p-3 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md">
 			<div class="mb-1 flex items-center justify-between border-b border-slate-800 pb-1">
 				<span class="font-bold uppercase text-slate-400">3D Viewport Debugger</span>
