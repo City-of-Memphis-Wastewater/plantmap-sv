@@ -22,8 +22,8 @@
   "M100FI": {
     "id": "M100FI",
     "name": "Plant Influent",
-    "lat": 35.067049,
-    "lon": -90.135734,
+    "lat":  35.071853,
+    "lon": -90.154216,
     "altitude": -12,
     "value": 66.7,
     "unit": "MGD",
@@ -32,8 +32,8 @@
   "FI8001": {
     "id": "FI8001",
     "name": "Plant Effluent",
-    "lat": 35.067049,
-    "lon": -90.135734,
+    "lat": 35.071363,
+    "lon": -90.160027,
     "altitude": 4,
     "value": 55.4,
     "unit": "MGD",
@@ -42,8 +42,8 @@
   "M310LI": {
     "id": "M310LI",
     "name": "Wetwell After",
-    "lat": 35.067049,
-    "lon": -90.135734,
+    "lat": 35.071714,
+    "lon": -90.153946,
     "altitude": 10,
     "value": 44.1,
     "unit": "inches",

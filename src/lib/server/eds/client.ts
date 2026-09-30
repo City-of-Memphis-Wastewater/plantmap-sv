@@ -119,6 +119,32 @@ export class ClientEdsSoap {
 		return `${id}${this.iessSuffix}`;
 	}
 
+	public async fetchPointValues(tags: string[]): Promise<any[]> {
+		const token = await this.login();
+		const results = [];
+
+		for (const tag of tags) {
+			const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getPoints>
+      <tns:authString>${token}</tns:authString>
+      <tns:filter>
+        <tns:iessRe>${tag}</tns:iessRe>
+      </tns:filter>
+      <tns:maxCount>1</tns:maxCount>
+    </tns:getPoints>
+  </soap:Body>
+</soap:Envelope>`;
+
+			const response = await this.postSoap('getPoints', soapEnvelope);
+			// Parse out the point value, quality, and iess from response XML
+			results.push(response);
+		}
+
+		return results;
+	}
+	
 	public async fetchCurrentValues(sensorIds: string[]): Promise<Record<string, EDSTelemetryValue>> {
 		if (sensorIds.length === 0) return {};
 
@@ -141,6 +167,10 @@ export class ClientEdsSoap {
       <tns:pointNames>
         ${iessTags.map((tag) => `<tns:string>${tag}</tns:string>`).join('\n        ')}
       </tns:pointNames>
+	  <tns:filter>
+        <tns:iessRe>^(M100FI.UNIT0@NET0|FI8001.UNIT0@NET0)\..*</tns:iessRe>
+      </tns:filter>
+      <tns:maxCount>50</tns:maxCount>
     </tns:getPoints>
   </soap:Body>
 </soap:Envelope>`;

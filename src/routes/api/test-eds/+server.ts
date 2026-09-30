@@ -10,7 +10,8 @@ export const GET: RequestHandler = async () => {
 		const sampleTags = ['m100fi', 'fi8001'];
 		
 		console.log('[TestRoute] Attempting to fetch current values from EDS...');
-		const data = await client.fetchCurrentValues(sampleTags);
+		//const data = await client.fetchCurrentValues(sampleTags);
+		const data = await client.fetchPointValues(sampleTags);
 		
 		await client.logout();
 
