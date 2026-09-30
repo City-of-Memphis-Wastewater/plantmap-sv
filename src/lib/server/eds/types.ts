@@ -20,4 +20,5 @@ export interface EDSClientOptions {
 	username?: string;
 	password?: string;
 	iessSuffix?: string;
+	timeoutMs?: number;
 }

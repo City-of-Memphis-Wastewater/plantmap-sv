@@ -3,10 +3,12 @@ import type { EDSClientOptions, EDSTelemetryValue } from './types';
 export class ClientEdsSoap {
 	private endpoint: string;
 	private iessSuffix: string;
+	private timeoutMs: number;
 
 	constructor(options: EDSClientOptions = {}) {
-		this.endpoint = options.endpoint || process.env.OVATION_EDS_ENDPOINT || 'http://ovation-eds.local/soap';
-		this.iessSuffix = options.iessSuffix || '.UNIT0@NET0';
+		this.endpoint = options.endpoint || 'http://000.00.0.000:00000';
+		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
+		this.timeoutMs = options.timeoutMs ?? 5000;
 	}
 
 	/**
@@ -33,7 +35,10 @@ export class ClientEdsSoap {
     </GetPointValues>
   </soap:Body>
 </soap:Envelope>`;
-
+		
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+		
 		const response = await fetch(this.endpoint, {
 			method: 'POST',
 			headers: {

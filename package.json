@@ -49,9 +49,11 @@
 		"@threlte/core": "^8.6.1",
 		"@threlte/extras": "^9.22.0",
 		"cesium": "^1.145.0",
+		"crypto": "^1.0.1",
 		"proj4": "^2.22.0",
 		"three": "^0.186.1",
-		"three-geo": "^1.4.5"
+		"three-geo": "^1.4.5",
+		"zod": "^4.6.5"
 	},
 	"allowScripts": {
 		"three-geo@1.4.5": true

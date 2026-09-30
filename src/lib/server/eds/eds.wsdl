@@ -1,0 +1,3253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="eds"
+  targetNamespace="http://tt.com.pl/eds/"
+  xmlns:tns="http://tt.com.pl/eds/"
+  xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope"
+  xmlns:SOAP-ENC="http://www.w3.org/2003/05/soap-encoding"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:eds="http://tt.com.pl/eds/"
+  xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap12/"
+  xmlns:HTTP="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+  xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+  <schema targetNamespace="http://tt.com.pl/eds/"
+    xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:SOAP-ENC="http://www.w3.org/2003/05/soap-encoding"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:eds="http://tt.com.pl/eds/"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="qualified">
+    <import namespace="http://www.w3.org/2003/05/soap-encoding"/>
+    <simpleType name="ClientType"><!-- eds__ClientType -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="CLIENT-TYPE-DEFAULT"/><!-- CLIENT_TYPE_DEFAULT -->
+        <!-- = 1 -->
+        <enumeration value="CLIENT-TYPE-MOBILE"/><!-- CLIENT_TYPE_MOBILE -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ObjectSourceKind"><!-- eds__ObjectSourceKind -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="OBJECT-SOURCE-KIND-UNKNOWN"/><!-- OBJECT_SOURCE_KIND_UNKNOWN -->
+        <!-- = 68 -->
+        <enumeration value="OBJECT-SOURCE-KIND-DISK"/><!-- OBJECT_SOURCE_KIND_DISK -->
+        <!-- = 70 -->
+        <enumeration value="OBJECT-SOURCE-KIND-FTP"/><!-- OBJECT_SOURCE_KIND_FTP -->
+        <!-- = 66 -->
+        <enumeration value="OBJECT-SOURCE-KIND-DB"/><!-- OBJECT_SOURCE_KIND_DB -->
+      </restriction>
+    </simpleType>
+    <simpleType name="PointType"><!-- eds__PointType -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="POINT-TYPE-UNKNOWN"/><!-- POINT_TYPE_UNKNOWN -->
+        <!-- = 65 -->
+        <enumeration value="POINT-TYPE-ANALOG"/><!-- POINT_TYPE_ANALOG -->
+        <!-- = 68 -->
+        <enumeration value="POINT-TYPE-DOUBLE"/><!-- POINT_TYPE_DOUBLE -->
+        <!-- = 66 -->
+        <enumeration value="POINT-TYPE-BINARY"/><!-- POINT_TYPE_BINARY -->
+        <!-- = 80 -->
+        <enumeration value="POINT-TYPE-PACKED"/><!-- POINT_TYPE_PACKED -->
+        <!-- = 73 -->
+        <enumeration value="POINT-TYPE-INT64"/><!-- POINT_TYPE_INT64 -->
+      </restriction>
+    </simpleType>
+    <simpleType name="Quality"><!-- eds__Quality -->
+      <restriction base="xsd:string">
+        <!-- = 78 -->
+        <enumeration value="QUALITY-NONE"/><!-- QUALITY_NONE -->
+        <!-- = 71 -->
+        <enumeration value="QUALITY-GOOD"/><!-- QUALITY_GOOD -->
+        <!-- = 70 -->
+        <enumeration value="QUALITY-FAIR"/><!-- QUALITY_FAIR -->
+        <!-- = 80 -->
+        <enumeration value="QUALITY-POOR"/><!-- QUALITY_POOR -->
+        <!-- = 66 -->
+        <enumeration value="QUALITY-BAD"/><!-- QUALITY_BAD -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ArchivingType"><!-- eds__ArchivingType -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="ARCHIVING-UNKNOWN"/><!-- ARCHIVING_UNKNOWN -->
+        <!-- = 78 -->
+        <enumeration value="ARCHIVING-NONE"/><!-- ARCHIVING_NONE -->
+        <!-- = 76 -->
+        <enumeration value="ARCHIVING-LOCAL"/><!-- ARCHIVING_LOCAL -->
+        <!-- = 69 -->
+        <enumeration value="ARCHIVING-EXTERNAL"/><!-- ARCHIVING_EXTERNAL -->
+        <!-- = 70 -->
+        <enumeration value="ARCHIVING-FILLIN"/><!-- ARCHIVING_FILLIN -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ArchivingDeadbandType"><!-- eds__ArchivingDeadbandType -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="ARCHIVING-DEADBAND-UNKNOWN"/><!-- ARCHIVING_DEADBAND_UNKNOWN -->
+        <!-- = 78 -->
+        <enumeration value="ARCHIVING-DEADBAND-NONE"/><!-- ARCHIVING_DEADBAND_NONE -->
+        <!-- = 70 -->
+        <enumeration value="ARCHIVING-DEADBAND-FLOW"/><!-- ARCHIVING_DEADBAND_FLOW -->
+        <!-- = 76 -->
+        <enumeration value="ARCHIVING-DEADBAND-LOG"/><!-- ARCHIVING_DEADBAND_LOG -->
+        <!-- = 80 -->
+        <enumeration value="ARCHIVING-DEADBAND-PCT-RANGE"/><!-- ARCHIVING_DEADBAND_PCT_RANGE -->
+        <!-- = 87 -->
+        <enumeration value="ARCHIVING-DEADBAND-POWER"/><!-- ARCHIVING_DEADBAND_POWER -->
+        <!-- = 88 -->
+        <enumeration value="ARCHIVING-DEADBAND-RADIATION"/><!-- ARCHIVING_DEADBAND_RADIATION -->
+        <!-- = 82 -->
+        <enumeration value="ARCHIVING-DEADBAND-RATIO"/><!-- ARCHIVING_DEADBAND_RATIO -->
+        <!-- = 86 -->
+        <enumeration value="ARCHIVING-DEADBAND-STANDARD"/><!-- ARCHIVING_DEADBAND_STANDARD -->
+        <!-- = 116 -->
+        <enumeration value="ARCHIVING-DEADBAND-TEST"/><!-- ARCHIVING_DEADBAND_TEST -->
+        <!-- = 49 -->
+        <enumeration value="ARCHIVING-DEADBAND-GEOMETRIC1"/><!-- ARCHIVING_DEADBAND_GEOMETRIC1 -->
+        <!-- = 51 -->
+        <enumeration value="ARCHIVING-DEADBAND-GEOMETRIC3"/><!-- ARCHIVING_DEADBAND_GEOMETRIC3 -->
+        <!-- = 84 -->
+        <enumeration value="ARCHIVING-DEADBAND-TRAPEZOIDAL"/><!-- ARCHIVING_DEADBAND_TRAPEZOIDAL -->
+        <!-- = 83 -->
+        <enumeration value="ARCHIVING-DEADBAND-LTS-BASED"/><!-- ARCHIVING_DEADBAND_LTS_BASED -->
+        <!-- = 73 -->
+        <enumeration value="ARCHIVING-DEADBAND-TIME-INTERVAL"/><!-- ARCHIVING_DEADBAND_TIME_INTERVAL -->
+      </restriction>
+    </simpleType>
+    <simpleType name="RequestStatus"><!-- eds__RequestStatus -->
+      <restriction base="xsd:string">
+        <!-- = 81 -->
+        <enumeration value="REQUEST-QUEUED"/><!-- REQUEST_QUEUED -->
+        <!-- = 69 -->
+        <enumeration value="REQUEST-EXECUTING"/><!-- REQUEST_EXECUTING -->
+        <!-- = 70 -->
+        <enumeration value="REQUEST-FAILURE"/><!-- REQUEST_FAILURE -->
+        <!-- = 83 -->
+        <enumeration value="REQUEST-SUCCESS"/><!-- REQUEST_SUCCESS -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ShadePriority"><!-- eds__ShadePriority -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="REGULAR-OVER-SHADE"/><!-- REGULAR_OVER_SHADE -->
+        <!-- = 1 -->
+        <enumeration value="SHADE-OVER-REGULAR"/><!-- SHADE_OVER_REGULAR -->
+        <!-- = 2 -->
+        <enumeration value="REGULAR-ONLY"/><!-- REGULAR_ONLY -->
+        <!-- = 3 -->
+        <enumeration value="SHADE-ONLY"/><!-- SHADE_ONLY -->
+        <!-- = 4 -->
+        <enumeration value="DEFAULT-SHADE-PRIORITY"/><!-- DEFAULT_SHADE_PRIORITY -->
+      </restriction>
+    </simpleType>
+    <simpleType name="SampleOrigin"><!-- eds__SampleOrigin -->
+      <restriction base="xsd:string">
+        <!-- = 68 -->
+        <enumeration value="SAMPLE-ORIGIN-DATA-SOURCE"/><!-- SAMPLE_ORIGIN_DATA_SOURCE -->
+        <!-- = 70 -->
+        <enumeration value="SAMPLE-ORIGIN-FILTER"/><!-- SAMPLE_ORIGIN_FILTER -->
+        <!-- = 77 -->
+        <enumeration value="SAMPLE-ORIGIN-FUNCTION"/><!-- SAMPLE_ORIGIN_FUNCTION -->
+        <!-- = 80 -->
+        <enumeration value="SAMPLE-ORIGIN-PROCESSOR"/><!-- SAMPLE_ORIGIN_PROCESSOR -->
+        <!-- = 84 -->
+        <enumeration value="SAMPLE-ORIGIN-TEST"/><!-- SAMPLE_ORIGIN_TEST -->
+        <!-- = 79 -->
+        <enumeration value="SAMPLE-ORIGIN-OTHER"/><!-- SAMPLE_ORIGIN_OTHER -->
+      </restriction>
+    </simpleType>
+    <simpleType name="SampleType"><!-- eds__SampleType -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="SAMPLE-TYPE-REGULAR"/><!-- SAMPLE_TYPE_REGULAR -->
+        <!-- = 1 -->
+        <enumeration value="SAMPLE-TYPE-REGULAR-ZERO-ORDER"/><!-- SAMPLE_TYPE_REGULAR_ZERO_ORDER -->
+        <!-- = 2 -->
+        <enumeration value="SAMPLE-TYPE-SHADE-BEGIN"/><!-- SAMPLE_TYPE_SHADE_BEGIN -->
+        <!-- = 3 -->
+        <enumeration value="SAMPLE-TYPE-SHADE-END"/><!-- SAMPLE_TYPE_SHADE_END -->
+      </restriction>
+    </simpleType>
+    <simpleType name="EventCategory"><!-- eds__EventCategory -->
+      <restriction base="xsd:string">
+        <!-- = 83 -->
+        <enumeration value="EVENT-CATEGORY-SYSTEM"/><!-- EVENT_CATEGORY_SYSTEM -->
+        <!-- = 67 -->
+        <enumeration value="EVENT-CATEGORY-CUSTOM"/><!-- EVENT_CATEGORY_CUSTOM -->
+        <!-- = 69 -->
+        <enumeration value="EVENT-CATEGORY-EXTERNAL"/><!-- EVENT_CATEGORY_EXTERNAL -->
+        <!-- = 65 -->
+        <enumeration value="EVENT-CATEGORY-ALARM"/><!-- EVENT_CATEGORY_ALARM -->
+        <!-- = 80 -->
+        <enumeration value="EVENT-CATEGORY-SET-POINT"/><!-- EVENT_CATEGORY_SET_POINT -->
+      </restriction>
+    </simpleType>
+    <simpleType name="EventType"><!-- eds__EventType -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="EVENT-UNKNOWN"/><!-- EVENT_UNKNOWN -->
+        <!-- = 1 -->
+        <enumeration value="EVENT-SYSTEM-STARTUP"/><!-- EVENT_SYSTEM_STARTUP -->
+        <!-- = 2 -->
+        <enumeration value="EVENT-SYSTEM-SHUTDOWN"/><!-- EVENT_SYSTEM_SHUTDOWN -->
+        <!-- = 3 -->
+        <enumeration value="EVENT-SYSTEM-GRANT-LOGIN"/><!-- EVENT_SYSTEM_GRANT_LOGIN -->
+        <!-- = 4 -->
+        <enumeration value="EVENT-SYSTEM-DENY-LOGIN"/><!-- EVENT_SYSTEM_DENY_LOGIN -->
+        <!-- = 5 -->
+        <enumeration value="EVENT-SYSTEM-LOGOUT"/><!-- EVENT_SYSTEM_LOGOUT -->
+        <!-- = 6 -->
+        <enumeration value="EVENT-SYSTEM-TIMEOUT"/><!-- EVENT_SYSTEM_TIMEOUT -->
+        <!-- = 7 -->
+        <enumeration value="EVENT-SYSTEM-DIAGRAM-CHANGE"/><!-- EVENT_SYSTEM_DIAGRAM_CHANGE -->
+        <!-- = 8 -->
+        <enumeration value="EVENT-SYSTEM-SCANNER"/><!-- EVENT_SYSTEM_SCANNER -->
+        <!-- = 9 -->
+        <enumeration value="EVENT-SYSTEM-ZD-SHUTDOWN"/><!-- EVENT_SYSTEM_ZD_SHUTDOWN -->
+        <!-- = 10 -->
+        <enumeration value="EVENT-CUSTOM-MESSAGE"/><!-- EVENT_CUSTOM_MESSAGE_ -->
+        <!-- = 11 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-ANALOG"/><!-- EVENT_EXTERNAL_ALARM_ANALOG -->
+        <!-- = 12 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-BINARY"/><!-- EVENT_EXTERNAL_ALARM_BINARY -->
+        <!-- = 13 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-PACKED"/><!-- EVENT_EXTERNAL_ALARM_PACKED -->
+        <!-- = 14 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-DROP"/><!-- EVENT_EXTERNAL_ALARM_DROP -->
+        <!-- = 15 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-HARDWARE"/><!-- EVENT_EXTERNAL_ALARM_HARDWARE -->
+        <!-- = 16 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-MODULE"/><!-- EVENT_EXTERNAL_ALARM_MODULE -->
+        <!-- = 17 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-NODE"/><!-- EVENT_EXTERNAL_ALARM_NODE -->
+        <!-- = 18 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-DEVICE"/><!-- EVENT_EXTERNAL_ALARM_DEVICE -->
+        <!-- = 19 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-COS"/><!-- EVENT_EXTERNAL_ALARM_COS -->
+        <!-- = 20 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-SOE"/><!-- EVENT_EXTERNAL_ALARM_SOE -->
+        <!-- = 21 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-SYSTEM"/><!-- EVENT_EXTERNAL_ALARM_SYSTEM -->
+        <!-- = 22 -->
+        <enumeration value="EVENT-EXTERNAL-ALARM-OEL"/><!-- EVENT_EXTERNAL_ALARM_OEL -->
+        <!-- = 23 -->
+        <enumeration value="EVENT-EXTERNAL-REPORT-EXEC-SUCC"/><!-- EVENT_EXTERNAL_REPORT_EXEC_SUCC -->
+        <!-- = 24 -->
+        <enumeration value="EVENT-EXTERNAL-REPORT-EXEC-RETR"/><!-- EVENT_EXTERNAL_REPORT_EXEC_RETR -->
+        <!-- = 25 -->
+        <enumeration value="EVENT-EXTERNAL-REPORT-EXEC-FAIL"/><!-- EVENT_EXTERNAL_REPORT_EXEC_FAIL -->
+        <!-- = 26 -->
+        <enumeration value="EVENT-ALARM-ANALOG"/><!-- EVENT_ALARM_ANALOG_ -->
+        <!-- = 27 -->
+        <enumeration value="EVENT-ALARM-DOUBLE"/><!-- EVENT_ALARM_DOUBLE_ -->
+        <!-- = 28 -->
+        <enumeration value="EVENT-ALARM-BINARY"/><!-- EVENT_ALARM_BINARY_ -->
+        <!-- = 29 -->
+        <enumeration value="EVENT-ALARM-PACKED"/><!-- EVENT_ALARM_PACKED_ -->
+        <!-- = 30 -->
+        <enumeration value="EVENT-ALARM-INT64"/><!-- EVENT_ALARM_INT64_ -->
+        <!-- = 31 -->
+        <enumeration value="EVENT-SET-ANALOG"/><!-- EVENT_SET_ANALOG_ -->
+        <!-- = 32 -->
+        <enumeration value="EVENT-SET-DOUBLE"/><!-- EVENT_SET_DOUBLE_ -->
+        <!-- = 33 -->
+        <enumeration value="EVENT-SET-BINARY"/><!-- EVENT_SET_BINARY_ -->
+        <!-- = 34 -->
+        <enumeration value="EVENT-SET-PACKED"/><!-- EVENT_SET_PACKED_ -->
+        <!-- = 35 -->
+        <enumeration value="EVENT-SET-INT64"/><!-- EVENT_SET_INT64_ -->
+        <!-- = 36 -->
+        <enumeration value="EVENT-SYSTEM-FORCE-FILLIN"/><!-- EVENT_SYSTEM_FORCE_FILLIN -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ReportOutputType"><!-- eds__ReportOutputType -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-UNKNOWN"/><!-- REPORT_OUTPUT_TYPE_UNKNOWN -->
+        <!-- = 116 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-TXT"/><!-- REPORT_OUTPUT_TYPE_FILE_TXT -->
+        <!-- = 114 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-RDF"/><!-- REPORT_OUTPUT_TYPE_FILE_RDF -->
+        <!-- = 101 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-EDF"/><!-- REPORT_OUTPUT_TYPE_FILE_EDF -->
+        <!-- = 104 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-HTML"/><!-- REPORT_OUTPUT_TYPE_FILE_HTML -->
+        <!-- = 112 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-PDF"/><!-- REPORT_OUTPUT_TYPE_FILE_PDF -->
+        <!-- = 99 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-FILE-CSV"/><!-- REPORT_OUTPUT_TYPE_FILE_CSV -->
+        <!-- = 82 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-DATABASE-RDF"/><!-- REPORT_OUTPUT_TYPE_DATABASE_RDF -->
+        <!-- = 69 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-DATABASE-EDF"/><!-- REPORT_OUTPUT_TYPE_DATABASE_EDF -->
+        <!-- = 72 -->
+        <enumeration value="REPORT-OUTPUT-TYPE-DATABASE-HTML"/><!-- REPORT_OUTPUT_TYPE_DATABASE_HTML -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ReportExecutionCondition"><!-- eds__ReportExecutionCondition -->
+      <restriction base="xsd:string">
+        <!-- = 85 -->
+        <enumeration value="REPORT-EXECUTION-CONDITION-UNKNOWN"/><!-- REPORT_EXECUTION_CONDITION_UNKNOWN -->
+        <!-- = 67 -->
+        <enumeration value="REPORT-EXECUTION-CONDITION-CYCLIC"/><!-- REPORT_EXECUTION_CONDITION_CYCLIC -->
+        <!-- = 69 -->
+        <enumeration value="REPORT-EXECUTION-CONDITION-ON-EVENT"/><!-- REPORT_EXECUTION_CONDITION_ON_EVENT -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ReportTimeMode"><!-- eds__ReportTimeMode -->
+      <restriction base="xsd:string">
+        <!-- = 82 -->
+        <enumeration value="REPORT-TIME-MODE-RELATIVE"/><!-- REPORT_TIME_MODE_RELATIVE -->
+        <!-- = 65 -->
+        <enumeration value="REPORT-TIME-MODE-ABSOLUTE"/><!-- REPORT_TIME_MODE_ABSOLUTE -->
+      </restriction>
+    </simpleType>
+    <simpleType name="ReportAddressingType"><!-- eds__ReportAddressingType -->
+      <restriction base="xsd:string">
+        <!-- = 82 -->
+        <enumeration value="REPORT-ADDRESSING-TYPE-R1C1"/><!-- REPORT_ADDRESSING_TYPE_R1C1 -->
+        <!-- = 69 -->
+        <enumeration value="REPORT-ADDRESSING-TYPE-A1"/><!-- REPORT_ADDRESSING_TYPE_A1 -->
+      </restriction>
+    </simpleType>
+    <simpleType name="DiagramRole"><!-- eds__DiagramRole -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="DIAGRAM-ROLE-MAIN"/><!-- DIAGRAM_ROLE_MAIN -->
+        <!-- = 1 -->
+        <enumeration value="DIAGRAM-ROLE-SUBWINDOW"/><!-- DIAGRAM_ROLE_SUBWINDOW -->
+        <!-- = 2 -->
+        <enumeration value="DIAGRAM-ROLE-WINDOW"/><!-- DIAGRAM_ROLE_WINDOW -->
+      </restriction>
+    </simpleType>
+    <simpleType name="DiagramNavigation"><!-- eds__DiagramNavigation -->
+      <restriction base="xsd:string">
+        <!-- = 0 -->
+        <enumeration value="DIAGRAM-NAVIGATE-HOME"/><!-- DIAGRAM_NAVIGATE_HOME -->
+        <!-- = 1 -->
+        <enumeration value="DIAGRAM-NAVIGATE-PREVIOUS"/><!-- DIAGRAM_NAVIGATE_PREVIOUS -->
+        <!-- = 2 -->
+        <enumeration value="DIAGRAM-NAVIGATE-NEXT"/><!-- DIAGRAM_NAVIGATE_NEXT -->
+        <!-- = 3 -->
+        <enumeration value="DIAGRAM-NAVIGATE-UP"/><!-- DIAGRAM_NAVIGATE_UP -->
+        <!-- = 4 -->
+        <enumeration value="DIAGRAM-NAVIGATE-DOWN"/><!-- DIAGRAM_NAVIGATE_DOWN -->
+        <!-- = 5 -->
+        <enumeration value="DIAGRAM-NAVIGATE-LEFT"/><!-- DIAGRAM_NAVIGATE_LEFT -->
+        <!-- = 6 -->
+        <enumeration value="DIAGRAM-NAVIGATE-RIGHT"/><!-- DIAGRAM_NAVIGATE_RIGHT -->
+      </restriction>
+    </simpleType>
+    <complexType name="Timestamp">
+      <annotation>
+        <documentation>
+          Represents a point in time, defined as the number of seconds elapsed since midnight proleptic Coordinated Universal Time (UTC) of January 1, 1970, not counting leap seconds.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="second" type="xsd:long" minOccurs="1" maxOccurs="1"/><!-- eds__Timestamp::second -->
+          </sequence>
+    </complexType>
+    <complexType name="TimeDuration">
+      <annotation>
+        <documentation>
+          Represents a length of time.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="seconds" type="xsd:long" minOccurs="1" maxOccurs="1"/><!-- eds__TimeDuration::seconds -->
+          </sequence>
+    </complexType>
+    <complexType name="TimePeriod">
+      <annotation>
+        <documentation>
+          Represents a range between two points in time.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="from" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__TimePeriod::from -->
+            <element name="till" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__TimePeriod::till -->
+          </sequence>
+    </complexType>
+    <complexType name="Color">
+      <annotation>
+        <documentation>
+          Represents color from sRGB color space with alpha channel. Value has Alpha sample in the highest 8 bits, followed by the Red sample, Green sample and the Blue sample in the lowest 8 bits.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="argb" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__Color::argb -->
+          </sequence>
+    </complexType>
+    <complexType name="Group">
+      <annotation>
+        <documentation>
+          Information about a single technological or security group.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1"/><!-- eds__Group::id -->
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__Group::name -->
+            <element name="desc" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__Group::desc -->
+          </sequence>
+    </complexType>
+    <complexType name="User">
+      <annotation>
+        <documentation>
+          Information about user of EDS92.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__User::id -->
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__User::name -->
+            <element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__User::description -->
+            <element name="locked" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__User::locked -->
+            <element name="created" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__User::created -->
+            <element name="lastModified" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__User::lastModified -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__User::sg -->
+          </sequence>
+    </complexType>
+    <complexType name="UserFilter">
+      <annotation>
+        <documentation>
+          Filter for nameRe is Perl regular expressions. All fields in the UserFilter are optional. If more than one filter field is set, only users matching all fields will match the whole filter.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="0" maxOccurs="unbounded"/><!-- eds__UserFilter::id -->
+            <element name="nameRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__UserFilter::nameRe -->
+          </sequence>
+    </complexType>
+    <complexType name="ObjectMetadata">
+      <annotation>
+        <documentation>
+          Information about a single object (file) stored on EDS92 server.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="file" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::file -->
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::name -->
+            <element name="sourceName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::sourceName -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::sourceId -->
+            <element name="lastModified" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::lastModified -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectMetadata::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectMetadata::tg -->
+            <element name="md5" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::md5 -->
+            <element name="hasPermission" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectMetadata::hasPermission -->
+          </sequence>
+    </complexType>
+    <complexType name="ObjectFilter">
+      <annotation>
+        <documentation>
+          Filter allows selecting objects using values of most of their fields. &lt;em&gt;SourceNameRe&lt;/em&gt;, &lt;em&gt;fileRe&lt;/em&gt; and &lt;em&gt;nameRe&lt;/em&gt; fields are Perl regular expressions. If more than one filter field is set, only objects matching all fields will match the whole filter.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="fileRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectFilter::fileRe -->
+            <element name="nameRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectFilter::nameRe -->
+            <element name="sourceNameRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectFilter::sourceNameRe -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectFilter::sourceId -->
+            <element name="modified" type="eds:TimePeriod" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectFilter::modified -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectFilter::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectFilter::tg -->
+            <element name="md5" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectFilter::md5 -->
+            <element name="withoutPermission" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectFilter::withoutPermission -->
+          </sequence>
+    </complexType>
+    <complexType name="AlterableObjectAttributes">
+      <annotation>
+        <documentation>
+          Object&amp;#39;s attributes that can be modified.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__AlterableObjectAttributes::name -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__AlterableObjectAttributes::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__AlterableObjectAttributes::tg -->
+          </sequence>
+    </complexType>
+    <complexType name="ObjectSource">
+      <annotation>
+        <documentation>
+          Contains information about a single object source.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::id -->
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::name -->
+            <element name="desc" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::desc -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectSource::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectSource::tg -->
+            <element name="kind" type="eds:ObjectSourceKind" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::kind -->
+            <element name="host" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::host -->
+            <element name="prefix" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::prefix -->
+            <element name="suffix" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::suffix -->
+            <element name="options" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::options -->
+            <element name="hasPermission" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__ObjectSource::hasPermission -->
+          </sequence>
+    </complexType>
+    <complexType name="ObjectSourceFilter">
+      <annotation>
+        <documentation>
+          It allows selecting objects sources using values of most of their fields. Filters for &lt;em&gt;nameRe&lt;/em&gt;, &lt;em&gt;descRe&lt;/em&gt;, &lt;em&gt;hostRe&lt;/em&gt;, &lt;em&gt;prefixRe&lt;/em&gt; and &lt;em&gt;suffixRe&lt;/em&gt; fields are Perl regular expressions.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectSourceFilter::id -->
+            <element name="nameRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::nameRe -->
+            <element name="descRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::descRe -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectSourceFilter::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ObjectSourceFilter::tg -->
+            <element name="kind" type="eds:ObjectSourceKind" minOccurs="0" maxOccurs="1" default="OBJECT-SOURCE-KIND-UNKNOWN"/><!-- eds__ObjectSourceFilter::kind -->
+            <element name="hostRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::hostRe -->
+            <element name="prefixRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::prefixRe -->
+            <element name="suffixRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::suffixRe -->
+            <element name="optionsSet" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::optionsSet -->
+            <element name="optionsUnset" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::optionsUnset -->
+            <element name="withoutPermission" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__ObjectSourceFilter::withoutPermission -->
+          </sequence>
+    </complexType>
+    <complexType name="AlterableObjectSourceAttributes">
+      <annotation>
+        <documentation>
+          Object source attributes that can be modified.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="desc" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__AlterableObjectSourceAttributes::desc -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__AlterableObjectSourceAttributes::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__AlterableObjectSourceAttributes::tg -->
+          </sequence>
+    </complexType>
+    <complexType name="PointId">
+      <annotation>
+        <documentation>
+          Information uniquely identifying EDS92 point. To identify point sid or iess or idcs and zd fields must be set.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="sid" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointId::sid -->
+            <element name="iess" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointId::iess -->
+            <element name="idcs" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointId::idcs -->
+            <element name="zd" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointId::zd -->
+          </sequence>
+    </complexType>
+    <complexType name="PointValue"><!-- eds__PointValue -->
+          <sequence>
+            <element name="av" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__PointValue::av -->
+            <element name="dav" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__PointValue::dav -->
+            <element name="bv" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__PointValue::bv -->
+            <element name="pv" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointValue::pv -->
+            <element name="ipv" type="xsd:long" minOccurs="0" maxOccurs="1"/><!-- eds__PointValue::ipv -->
+          </sequence>
+    </complexType>
+    <complexType name="Point">
+      <annotation>
+        <documentation>
+          Information about a single EDS92 point. See EDS92 Database Access documentation appendix A.8 "Types of EDS92 points" for details.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__Point::id -->
+            <element name="rt" type="eds:PointType" minOccurs="1" maxOccurs="1"/><!-- eds__Point::rt -->
+            <element name="value" type="eds:PointValue" minOccurs="1" maxOccurs="1"/><!-- eds__Point::value -->
+            <element name="quality" type="eds:Quality" minOccurs="1" maxOccurs="1"/><!-- eds__Point::quality -->
+            <element name="ts" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__Point::ts -->
+            <element name="lts" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__Point::lts -->
+            <element name="tss" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__Point::tss -->
+            <element name="at" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__Point::at -->
+            <element name="atss" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__Point::atss -->
+            <element name="desc" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__Point::desc -->
+            <element name="st" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__Point::st -->
+            <element name="xst1" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__Point::xst1 -->
+            <element name="xst2" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__Point::xst2 -->
+            <element name="xst3" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__Point::xst3 -->
+            <element name="ar" type="eds:ArchivingType" minOccurs="1" maxOccurs="1"/><!-- eds__Point::ar -->
+            <element name="artd" type="eds:ArchivingDeadbandType" minOccurs="1" maxOccurs="1"/><!-- eds__Point::artd -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__Point::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__Point::tg -->
+            <element name="df" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__Point::df -->
+            <element name="ap" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1"/><!-- eds__Point::ap -->
+            <element name="aux" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__Point::aux -->
+            <element name="un" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__Point::un -->
+            <element name="dp" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dp -->
+            <element name="ard" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__Point::ard -->
+            <element name="tb" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__Point::tb -->
+            <element name="bb" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__Point::bb -->
+            <element name="hl" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__Point::hl -->
+            <element name="ll" type="xsd:float" minOccurs="0" maxOccurs="1"/><!-- eds__Point::ll -->
+            <element name="dun" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dun -->
+            <element name="ddp" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1"/><!-- eds__Point::ddp -->
+            <element name="dard" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dard -->
+            <element name="dtb" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dtb -->
+            <element name="dbb" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dbb -->
+            <element name="dhl" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dhl -->
+            <element name="dll" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__Point::dll -->
+            <element name="sd" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__Point::sd -->
+            <element name="rd" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__Point::rd -->
+            <element name="foreground" type="eds:Color" minOccurs="1" maxOccurs="1"/><!-- eds__Point::foreground -->
+            <element name="background" type="eds:Color" minOccurs="1" maxOccurs="1"/><!-- eds__Point::background -->
+          </sequence>
+    </complexType>
+    <complexType name="PointFilter">
+      <annotation>
+        <documentation>
+          Filters for iessRe, descRe, zdRe, idcsRe and auxRe fields are Perl regular expressions. All fields in the PointFilter are optional. If more than one filter field is set, only points matching all fields will match the whole filter.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="sid" type="xsd:unsignedInt" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::sid -->
+            <element name="iessRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::iessRe -->
+            <element name="idcsRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::idcsRe -->
+            <element name="zdRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::zdRe -->
+            <element name="descRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::descRe -->
+            <element name="auxRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::auxRe -->
+            <element name="rt" type="eds:PointType" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::rt -->
+            <element name="ts" type="eds:TimePeriod" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::ts -->
+            <element name="quality" type="eds:Quality" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::quality -->
+            <element name="stSet" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::stSet -->
+            <element name="stUnset" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::stUnset -->
+            <element name="dfSet" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::dfSet -->
+            <element name="dfUnset" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::dfUnset -->
+            <element name="xst1Set" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst1Set -->
+            <element name="xst1Unset" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst1Unset -->
+            <element name="xst2Set" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst2Set -->
+            <element name="xst2Unset" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst2Unset -->
+            <element name="xst3Set" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst3Set -->
+            <element name="xst3Unset" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::xst3Unset -->
+            <element name="ar" type="eds:ArchivingType" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::ar -->
+            <element name="artd" type="eds:ArchivingDeadbandType" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::artd -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::tg -->
+            <element name="ap" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__PointFilter::ap -->
+            <element name="withoutPermission" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__PointFilter::withoutPermission -->
+          </sequence>
+    </complexType>
+    <complexType name="PointNewValue"><!-- eds__PointNewValue -->
+          <sequence>
+            <element name="id" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__PointNewValue::id -->
+            <element name="value" type="eds:PointValue" minOccurs="0" maxOccurs="1"/><!-- eds__PointNewValue::value -->
+            <element name="quality" type="eds:Quality" minOccurs="0" maxOccurs="1"/><!-- eds__PointNewValue::quality -->
+            <element name="duration" type="eds:TimeDuration" minOccurs="0" maxOccurs="1"/><!-- eds__PointNewValue::duration -->
+          </sequence>
+    </complexType>
+    <complexType name="TrendRequestItem"><!-- eds__TrendRequestItem -->
+          <sequence>
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__TrendRequestItem::pointId -->
+            <element name="shadePriority" type="eds:ShadePriority" minOccurs="0" maxOccurs="1" default="DEFAULT-SHADE-PRIORITY"/><!-- eds__TrendRequestItem::shadePriority -->
+          </sequence>
+    </complexType>
+    <complexType name="TrendRequest"><!-- eds__TrendRequest -->
+          <sequence>
+            <element name="useAverages" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="true"/><!-- eds__TrendRequest::useAverages -->
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__TrendRequest::period -->
+            <element name="pixelCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__TrendRequest::pixelCount -->
+            <element name="items" type="eds:TrendRequestItem" minOccurs="1" maxOccurs="unbounded"/><!-- eds__TrendRequest::items -->
+          </sequence>
+    </complexType>
+    <complexType name="TrendValue">
+      <annotation>
+        <documentation>
+          One trend value.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="value" type="eds:PointValue" minOccurs="1" maxOccurs="1"/><!-- eds__TrendValue::value -->
+            <element name="quality" type="eds:Quality" minOccurs="1" maxOccurs="1"/><!-- eds__TrendValue::quality -->
+            <element name="ts" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__TrendValue::ts -->
+            <element name="tss" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__TrendValue::tss -->
+            <element name="origin" type="eds:SampleOrigin" minOccurs="0" maxOccurs="1"/><!-- eds__TrendValue::origin -->
+            <element name="type" type="eds:SampleType" minOccurs="0" maxOccurs="1"/><!-- eds__TrendValue::type -->
+          </sequence>
+    </complexType>
+    <complexType name="TrendRow"><!-- eds__TrendRow -->
+          <sequence>
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__TrendRow::pointId -->
+            <element name="values" type="eds:TrendValue" minOccurs="0" maxOccurs="unbounded"/><!-- eds__TrendRow::values -->
+            <element name="average" type="eds:PointValue" minOccurs="1" maxOccurs="1"/><!-- eds__TrendRow::average -->
+          </sequence>
+    </complexType>
+    <complexType name="TabularRequestItem">
+      <annotation>
+        <documentation>
+          One tabular request item. Available functions: AVG; AVG_QUAL; BETWEEN_TIME; F_INTOOVER_DT; F_INTOUNDER_DT; F_MAX_DT; F_MIN_DT; F_OVER_TIME; F_UNDER_TIME; INTG; INTG_OVER; INTG_UNDER; L_INTOOVER_DT; L_INTOUNDER_DT; L_MAX_DT; L_MIN_DT; L_OVER_TIME; L_UNDER_TIME; MAX_VALUE; MIN_VALUE; OVER_TIME; TIME; TOGGLE; TOGGLE_OVER; TOGGLE_UNDER; UNDER_TIME; VALUE. See EDS92 Terminal documentation chapter 3.11.1.7 "Predefined point value functions" for details.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__TabularRequestItem::pointId -->
+            <element name="shadePriority" type="eds:ShadePriority" minOccurs="0" maxOccurs="1" default="DEFAULT-SHADE-PRIORITY"/><!-- eds__TabularRequestItem::shadePriority -->
+            <element name="function" type="xsd:string" minOccurs="0" maxOccurs="1" default="VALUE"/><!-- eds__TabularRequestItem::function -->
+            <element name="params" type="xsd:double" minOccurs="0" maxOccurs="unbounded"/><!-- eds__TabularRequestItem::params -->
+          </sequence>
+    </complexType>
+    <complexType name="TabularRequest"><!-- eds__TabularRequest -->
+          <sequence>
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__TabularRequest::period -->
+            <element name="step" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__TabularRequest::step -->
+            <element name="items" type="eds:TabularRequestItem" minOccurs="1" maxOccurs="unbounded"/><!-- eds__TabularRequest::items -->
+          </sequence>
+    </complexType>
+    <complexType name="TabularValue"><!-- eds__TabularValue -->
+          <sequence>
+            <element name="value" type="eds:PointValue" minOccurs="1" maxOccurs="1"/><!-- eds__TabularValue::value -->
+            <element name="quality" type="eds:Quality" minOccurs="1" maxOccurs="1"/><!-- eds__TabularValue::quality -->
+            <element name="tss" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__TabularValue::tss -->
+          </sequence>
+    </complexType>
+    <complexType name="TabularRow"><!-- eds__TabularRow -->
+          <sequence>
+            <element name="ts" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__TabularRow::ts -->
+            <element name="values" type="eds:TabularValue" minOccurs="0" maxOccurs="unbounded"/><!-- eds__TabularRow::values -->
+          </sequence>
+    </complexType>
+    <complexType name="ShadeFilter">
+      <annotation>
+        <documentation>
+          Filters for iessRe field is a Perl regular expressions. All fields in the ShadeFilter are optional. If more than one filter field is set, only points matching all fields will match the whole filter.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="sid" type="xsd:unsignedInt" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ShadeFilter::sid -->
+            <element name="pointType" type="eds:PointType" minOccurs="0" maxOccurs="1"/><!-- eds__ShadeFilter::pointType -->
+            <element name="iessRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ShadeFilter::iessRe -->
+          </sequence>
+    </complexType>
+    <complexType name="ShadeProperty"><!-- eds__ShadeProperty -->
+          <sequence>
+            <element name="sid" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeProperty::sid -->
+            <element name="iess" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeProperty::iess -->
+            <element name="type" type="eds:PointType" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeProperty::type -->
+          </sequence>
+    </complexType>
+    <complexType name="ShadeSelector"><!-- eds__ShadeSelector -->
+          <sequence>
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeSelector::pointId -->
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeSelector::period -->
+          </sequence>
+    </complexType>
+    <complexType name="ShadeValue">
+      <annotation>
+        <documentation>
+          Represents one point shade value. If shade for time period is not defined, quality is set to POINT-QUALITY-NONE and value field is not set.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="value" type="eds:PointValue" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeValue::value -->
+            <element name="quality" type="eds:Quality" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeValue::quality -->
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeValue::period -->
+          </sequence>
+    </complexType>
+    <complexType name="Shade"><!-- eds__Shade -->
+          <sequence>
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__Shade::pointId -->
+            <element name="values" type="eds:ShadeValue" minOccurs="0" maxOccurs="unbounded"/><!-- eds__Shade::values -->
+          </sequence>
+    </complexType>
+    <complexType name="ShadeCopyRequest"><!-- eds__ShadeCopyRequest -->
+          <sequence>
+            <element name="srcPointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeCopyRequest::srcPointId -->
+            <element name="dstPointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeCopyRequest::dstPointId -->
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__ShadeCopyRequest::period -->
+          </sequence>
+    </complexType>
+    <complexType name="EventFilter">
+      <annotation>
+        <documentation>
+          IessRe and messageRe are Perl regular expressions. PointTypes field should contain letters "A", "B", "P", "D" and/or "I" discriminating point type. Tg field should be a string containing a list of group numbers, separated with semicolons. Zds is a list of source names. If more than one filter field is set, only events matching ALL fields will match the whole filter.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="period" type="eds:TimePeriod" minOccurs="1" maxOccurs="1"/><!-- eds__EventFilter::period -->
+            <element name="category" type="eds:EventCategory" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::category -->
+            <element name="rt" type="eds:PointType" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::rt -->
+            <element name="priority" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::priority -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::tg -->
+            <element name="zd" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::zd -->
+            <element name="iessRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__EventFilter::iessRe -->
+            <element name="messageRe" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__EventFilter::messageRe -->
+            <element name="pointId" type="eds:PointId" minOccurs="0" maxOccurs="unbounded"/><!-- eds__EventFilter::pointId -->
+          </sequence>
+    </complexType>
+    <complexType name="Event">
+      <annotation>
+        <documentation>
+          Stores information about a single event. See EDS92 Terminal documentation chapter 3.10 "Events" for details.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="category" type="eds:EventCategory" minOccurs="1" maxOccurs="1"/><!-- eds__Event::category -->
+            <element name="type" type="eds:EventType" minOccurs="1" maxOccurs="1"/><!-- eds__Event::type -->
+            <element name="priority" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1"/><!-- eds__Event::priority -->
+            <element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__Event::message -->
+            <element name="pointId" type="eds:PointId" minOccurs="1" maxOccurs="1"/><!-- eds__Event::pointId -->
+            <element name="floatValue" type="xsd:double" minOccurs="1" maxOccurs="1"/><!-- eds__Event::floatValue -->
+            <element name="intValue" type="xsd:long" minOccurs="1" maxOccurs="1"/><!-- eds__Event::intValue -->
+            <element name="st" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__Event::st -->
+            <element name="ts" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__Event::ts -->
+            <element name="tss" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__Event::tss -->
+            <element name="aux" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__Event::aux -->
+            <element name="foreground" type="eds:Color" minOccurs="1" maxOccurs="1"/><!-- eds__Event::foreground -->
+            <element name="background" type="eds:Color" minOccurs="1" maxOccurs="1"/><!-- eds__Event::background -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportConfigFilter"><!-- eds__ReportConfigFilter -->
+          <sequence>
+            <element name="objectFilter" type="eds:ObjectFilter" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigFilter::objectFilter -->
+            <element name="outputType" type="eds:ReportOutputType" minOccurs="0" maxOccurs="1" default="REPORT-OUTPUT-TYPE-UNKNOWN"/><!-- eds__ReportConfigFilter::outputType -->
+            <element name="executionCondition" type="eds:ReportExecutionCondition" minOccurs="0" maxOccurs="1" default="REPORT-EXECUTION-CONDITION-UNKNOWN"/><!-- eds__ReportConfigFilter::executionCondition -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportConfig">
+      <annotation>
+        <documentation>
+          Report configuration. See EDS92 Terminal documentation chapter 3.12.3 "Configuring a report definition" for details.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::id -->
+            <element name="reportDefinitionSource" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::reportDefinitionSource -->
+            <element name="reportDefinitionFile" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::reportDefinitionFile -->
+            <element name="referenceTimeShift" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::referenceTimeShift -->
+            <element name="runDelay" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::runDelay -->
+            <element name="timeMaskExpression" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::timeMaskExpression -->
+            <element name="eventsExpression" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::eventsExpression -->
+            <element name="inputValues" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfig::inputValues -->
+            <element name="outputMaskFileTxt" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFileTxt -->
+            <element name="outputMaskFileRdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFileRdf -->
+            <element name="outputMaskFileEdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFileEdf -->
+            <element name="outputMaskFileHtml" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFileHtml -->
+            <element name="outputMaskFilePdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFilePdf -->
+            <element name="outputMaskFileCsv" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskFileCsv -->
+            <element name="outputMaskDatabaseRdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskDatabaseRdf -->
+            <element name="outputMaskDatabaseEdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskDatabaseEdf -->
+            <element name="outputMaskDatabaseHtml" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfig::outputMaskDatabaseHtml -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportConfigDefinition">
+      <annotation>
+        <documentation>
+          Report config attributes that can be modified.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="referenceTimeShift" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfigDefinition::referenceTimeShift -->
+            <element name="runDelay" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfigDefinition::runDelay -->
+            <element name="timeMaskExpression" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfigDefinition::timeMaskExpression -->
+            <element name="eventsExpression" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfigDefinition::eventsExpression -->
+            <element name="inputValues" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportConfigDefinition::inputValues -->
+            <element name="outputMaskFileTxt" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFileTxt -->
+            <element name="outputMaskFileRdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFileRdf -->
+            <element name="outputMaskFileEdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFileEdf -->
+            <element name="outputMaskFileHtml" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFileHtml -->
+            <element name="outputMaskFilePdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFilePdf -->
+            <element name="outputMaskFileCsv" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskFileCsv -->
+            <element name="outputMaskDatabaseRdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskDatabaseRdf -->
+            <element name="outputMaskDatabaseEdf" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskDatabaseEdf -->
+            <element name="outputMaskDatabaseHtml" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportConfigDefinition::outputMaskDatabaseHtml -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportValue"><!-- eds__ReportValue -->
+          <sequence>
+            <element name="boolean" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::boolean -->
+            <element name="number" type="xsd:double" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::number -->
+            <element name="packed" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::packed -->
+            <element name="string" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::string -->
+            <element name="timestamp" type="eds:Timestamp" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::timestamp -->
+            <element name="point" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__ReportValue::point -->
+            <element name="quality" type="eds:Quality" minOccurs="0" maxOccurs="1" default="QUALITY-GOOD"/><!-- eds__ReportValue::quality -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportArgument"><!-- eds__ReportArgument -->
+          <sequence>
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportArgument::name -->
+            <element name="value" type="eds:ReportValue" minOccurs="1" maxOccurs="1"/><!-- eds__ReportArgument::value -->
+          </sequence>
+    </complexType>
+    <complexType name="GlobalReportRequest"><!-- eds__GlobalReportRequest -->
+          <sequence>
+            <element name="reportConfigId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__GlobalReportRequest::reportConfigId -->
+            <element name="dtRef" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__GlobalReportRequest::dtRef -->
+            <element name="args" type="eds:ReportArgument" minOccurs="0" maxOccurs="unbounded"/><!-- eds__GlobalReportRequest::args -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportDefinitionCell">
+      <annotation>
+        <documentation>
+          Single report definition cell. Content field should always contain at least one character. Otherwise cell may be disregarded in SOAP serialization. Empty cells can be represented by a single space character. All time expressions must be in seconds relative to @DT_REF value.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="content" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ReportDefinitionCell::content -->
+            <element name="showQuality" type="xsd:boolean" minOccurs="0" maxOccurs="1"/><!-- eds__ReportDefinitionCell::showQuality -->
+            <element name="precision" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1"/><!-- eds__ReportDefinitionCell::precision -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportDefinitionRow"><!-- eds__ReportDefinitionRow -->
+          <sequence>
+            <element name="cells" type="eds:ReportDefinitionCell" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ReportDefinitionRow::cells -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportDefinition"><!-- eds__ReportDefinition -->
+          <sequence>
+            <element name="localTime" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/><!-- eds__ReportDefinition::localTime -->
+            <element name="showDstTransition" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/><!-- eds__ReportDefinition::showDstTransition -->
+            <element name="showQualities" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="true"/><!-- eds__ReportDefinition::showQualities -->
+            <element name="precisions" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1" default="6"/><!-- eds__ReportDefinition::precisions -->
+            <element name="timeMode" type="eds:ReportTimeMode" minOccurs="0" maxOccurs="1" default="REPORT-TIME-MODE-RELATIVE"/><!-- eds__ReportDefinition::timeMode -->
+            <element name="addressingType" type="eds:ReportAddressingType" minOccurs="0" maxOccurs="1" default="REPORT-ADDRESSING-TYPE-A1"/><!-- eds__ReportDefinition::addressingType -->
+            <element name="shadesPriority" type="eds:ShadePriority" minOccurs="0" maxOccurs="1" default="DEFAULT-SHADE-PRIORITY"/><!-- eds__ReportDefinition::shadesPriority -->
+            <element name="rows" type="eds:ReportDefinitionRow" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ReportDefinition::rows -->
+          </sequence>
+    </complexType>
+    <complexType name="CustomReportRequest"><!-- eds__CustomReportRequest -->
+          <sequence>
+            <element name="rdf" type="eds:ReportDefinition" minOccurs="1" maxOccurs="1"/><!-- eds__CustomReportRequest::rdf -->
+            <element name="dtRef" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__CustomReportRequest::dtRef -->
+            <element name="args" type="eds:ReportArgument" minOccurs="0" maxOccurs="unbounded"/><!-- eds__CustomReportRequest::args -->
+          </sequence>
+    </complexType>
+    <complexType name="ReportResultRow"><!-- eds__ReportResultRow -->
+          <sequence>
+            <element name="cells" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- eds__ReportResultRow::cells -->
+          </sequence>
+    </complexType>
+    <complexType name="DiagramResolution"><!-- eds__DiagramResolution -->
+          <sequence>
+            <element name="width" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramResolution::width -->
+            <element name="height" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramResolution::height -->
+          </sequence>
+    </complexType>
+    <complexType name="DiagramPosition">
+      <annotation>
+        <documentation>
+          Represents relative position on diagram where [0.0, 0.0] is a top left diagram coordinate and [1.0, 1.0] is a bottom right diagram corner.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="x" type="xsd:double" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramPosition::x -->
+            <element name="y" type="xsd:double" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramPosition::y -->
+          </sequence>
+    </complexType>
+    <complexType name="DiagramArea"><!-- eds__DiagramArea -->
+          <sequence>
+            <element name="topLeft" type="eds:DiagramPosition" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramArea::topLeft -->
+            <element name="bottomRight" type="eds:DiagramPosition" minOccurs="1" maxOccurs="1"/><!-- eds__DiagramArea::bottomRight -->
+          </sequence>
+    </complexType>
+    <complexType name="LicenseParameter">
+      <annotation>
+        <documentation>
+          represents part of EDS license in form of (key, value) string pair.
+        </documentation>
+      </annotation>
+          <sequence>
+            <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__LicenseParameter::name -->
+            <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__LicenseParameter::value -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="authenticate">
+      <complexType>
+          <sequence>
+            <element name="username" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__authenticate::username -->
+            <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__authenticate::password -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="authenticateResponse">
+      <complexType>
+          <sequence>
+            <element name="authenticated" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__authenticate::authenticated -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="login">
+      <complexType>
+          <sequence>
+            <element name="username" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__login::username -->
+            <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__login::password -->
+            <element name="type" type="eds:ClientType" minOccurs="0" maxOccurs="1"/><!-- eds__login::type -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="loginResponse">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__login::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="logout">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__logout::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="VoidResponse" type="eds:VoidResponse"/>
+    <complexType name="VoidResponse">
+          <sequence>
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="ping">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__ping::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getTechnologicalGroups">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getTechnologicalGroups::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="GroupsResponse" type="eds:GroupsResponse"/>
+    <complexType name="GroupsResponse">
+          <sequence>
+            <element name="groups" type="eds:Group" minOccurs="0" maxOccurs="unbounded"/><!-- eds__GroupsResponse::groups -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getSecurityGroups">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getSecurityGroups::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getUserSecurityGroups">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getUserSecurityGroups::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getUsers">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getUsers::authString -->
+            <element name="filter" type="eds:UserFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getUsers::filter -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getUsers::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getUsers::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getUsers::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getUsersResponse" type="eds:getUsersResponse"/>
+    <complexType name="getUsersResponse">
+          <sequence>
+            <element name="users" type="eds:User" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getUsersResponse::users -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getUsersResponse::matchCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getEffectiveUserProfile">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getEffectiveUserProfile::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="getEffectiveUserProfileResponse">
+      <complexType>
+          <sequence>
+            <element name="result" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getEffectiveUserProfile::result -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getServerTime">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerTime::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getServerTimeResponse" type="eds:getServerTimeResponse"/>
+    <complexType name="getServerTimeResponse">
+          <sequence>
+            <element name="time" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__getServerTimeResponse::time -->
+            <element name="zone" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__getServerTimeResponse::zone -->
+            <element name="offset" type="eds:TimeDuration" minOccurs="1" maxOccurs="1"/><!-- eds__getServerTimeResponse::offset -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getServerStatus">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatus::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getServerStatusResponse" type="eds:getServerStatusResponse"/>
+    <complexType name="getServerStatusResponse">
+          <sequence>
+            <element name="startTime" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::startTime -->
+            <element name="soapConnectionCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::soapConnectionCount -->
+            <element name="soapHttpsConnectionCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::soapHttpsConnectionCount -->
+            <element name="sessionCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::sessionCount -->
+            <element name="requestCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::requestCount -->
+            <element name="requestRunningCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::requestRunningCount -->
+            <element name="srvConnection" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::srvConnection -->
+            <element name="objConnection" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::objConnection -->
+            <element name="globalObjectCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::globalObjectCount -->
+            <element name="pendingObjectCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::pendingObjectCount -->
+            <element name="liveDataConnectionCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getServerStatusResponse::liveDataConnectionCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getServerConfig">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfig::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getServerConfigResponse" type="eds:getServerConfigResponse"/>
+    <complexType name="getServerConfigResponse">
+          <sequence>
+            <element name="srvHost" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::srvHost -->
+            <element name="srvPort" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::srvPort -->
+            <element name="objHost" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::objHost -->
+            <element name="objPort" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::objPort -->
+            <element name="archHost" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::archHost -->
+            <element name="archPort" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1"/><!-- eds__getServerConfigResponse::archPort -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getObjectsMetadata">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsMetadata::authString -->
+            <element name="filter" type="eds:ObjectFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getObjectsMetadata::filter -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getObjectsMetadata::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getObjectsMetadata::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getObjectsMetadata::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getObjectsMetadataResponse" type="eds:getObjectsMetadataResponse"/>
+    <complexType name="getObjectsMetadataResponse">
+          <sequence>
+            <element name="objects" type="eds:ObjectMetadata" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getObjectsMetadataResponse::objects -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsMetadataResponse::matchCount -->
+            <element name="totalCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsMetadataResponse::totalCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="alterObject">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__alterObject::authString -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__alterObject::sourceId -->
+            <element name="sourceName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__alterObject::sourceName -->
+            <element name="file" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__alterObject::file -->
+            <element name="newAttributes" type="eds:AlterableObjectAttributes" minOccurs="1" maxOccurs="1"/><!-- eds__alterObject::newAttributes -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getObjectsSources">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsSources::authString -->
+            <element name="filter" type="eds:ObjectSourceFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getObjectsSources::filter -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getObjectsSources::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getObjectsSources::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getObjectsSources::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getObjectsSourcesResponse" type="eds:getObjectsSourcesResponse"/>
+    <complexType name="getObjectsSourcesResponse">
+          <sequence>
+            <element name="sources" type="eds:ObjectSource" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getObjectsSourcesResponse::sources -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsSourcesResponse::matchCount -->
+            <element name="totalCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getObjectsSourcesResponse::totalCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="alterObjectSource">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__alterObjectSource::authString -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__alterObjectSource::sourceId -->
+            <element name="sourceName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__alterObjectSource::sourceName -->
+            <element name="newAttributes" type="eds:AlterableObjectSourceAttributes" minOccurs="1" maxOccurs="1"/><!-- eds__alterObjectSource::newAttributes -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getPoints">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPoints::authString -->
+            <element name="filter" type="eds:PointFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getPoints::filter -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getPoints::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getPoints::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getPoints::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getPointsResponse" type="eds:getPointsResponse"/>
+    <complexType name="getPointsResponse">
+          <sequence>
+            <element name="points" type="eds:Point" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getPointsResponse::points -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsResponse::matchCount -->
+            <element name="totalCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsResponse::totalCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getPointsWithCustomFilter">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsWithCustomFilter::authString -->
+            <element name="source" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsWithCustomFilter::source -->
+            <element name="filterName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsWithCustomFilter::filterName -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getPointsWithCustomFilter::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getPointsWithCustomFilter::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getPointsWithCustomFilter::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getPointsSources">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsSources::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getPointsSourcesResponse" type="eds:getPointsSourcesResponse"/>
+    <complexType name="getPointsSourcesResponse">
+          <sequence>
+            <element name="sources" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getPointsSourcesResponse::sources -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getModifiedPoints">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getModifiedPoints::authString -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getModifiedPoints::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getModifiedPoints::maxCount -->
+            <element name="timestamp" type="eds:Timestamp" minOccurs="0" maxOccurs="1"/><!-- eds__getModifiedPoints::timestamp -->
+            <element name="dbSequence" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getModifiedPoints::dbSequence -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getModifiedPointsResponse" type="eds:getModifiedPointsResponse"/>
+    <complexType name="getModifiedPointsResponse">
+          <sequence>
+            <element name="points" type="eds:Point" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getModifiedPointsResponse::points -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getModifiedPointsResponse::matchCount -->
+            <element name="totalCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getModifiedPointsResponse::totalCount -->
+            <element name="timestamp" type="eds:Timestamp" minOccurs="1" maxOccurs="1"/><!-- eds__getModifiedPointsResponse::timestamp -->
+            <element name="dbSequence" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getModifiedPointsResponse::dbSequence -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="operatePoints">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__operatePoints::authString -->
+            <element name="pointsNewValues" type="eds:PointNewValue" minOccurs="1" maxOccurs="unbounded"/><!-- eds__operatePoints::pointsNewValues -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="publishPoints">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__publishPoints::authString -->
+            <element name="pointsNewValues" type="eds:PointNewValue" minOccurs="1" maxOccurs="unbounded"/><!-- eds__publishPoints::pointsNewValues -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="unpublishPoints">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__unpublishPoints::authString -->
+            <element name="pointsIds" type="eds:PointId" minOccurs="1" maxOccurs="unbounded"/><!-- eds__unpublishPoints::pointsIds -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getRequestStatus">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatus::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatus::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getRequestStatusResponse" type="eds:getRequestStatusResponse"/>
+    <complexType name="getRequestStatusResponse">
+          <sequence>
+            <element name="id" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatusResponse::id -->
+            <element name="status" type="eds:RequestStatus" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatusResponse::status -->
+            <element name="progress" type="xsd:float" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatusResponse::progress -->
+            <element name="message" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getRequestStatusResponse::message -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="dropRequest">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__dropRequest::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__dropRequest::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestTrend">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestTrend::authString -->
+            <element name="request" type="eds:TrendRequest" minOccurs="1" maxOccurs="1"/><!-- eds__requestTrend::request -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestTrendResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestTrend::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getTrend">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getTrend::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getTrend::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getTrendResponse" type="eds:getTrendResponse"/>
+    <complexType name="getTrendResponse">
+          <sequence>
+            <element name="rows" type="eds:TrendRow" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getTrendResponse::rows -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getTrendGroups">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getTrendGroups::authString -->
+            <element name="configurationVersion" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getTrendGroups::configurationVersion -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getTrendGroupsResponse" type="eds:getTrendGroupsResponse"/>
+    <complexType name="getTrendGroupsResponse">
+          <sequence>
+            <element name="trendGroupsJson" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getTrendGroupsResponse::trendGroupsJson -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="requestTabular">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestTabular::authString -->
+            <element name="request" type="eds:TabularRequest" minOccurs="1" maxOccurs="1"/><!-- eds__requestTabular::request -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestTabularResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestTabular::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getTabular">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getTabular::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getTabular::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getTabularResponse" type="eds:getTabularResponse"/>
+    <complexType name="getTabularResponse">
+          <sequence>
+            <element name="pointsIds" type="eds:PointId" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getTabularResponse::pointsIds -->
+            <element name="rows" type="eds:TabularRow" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getTabularResponse::rows -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="getPointsWithShades">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsWithShades::authString -->
+            <element name="filter" type="eds:ShadeFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getPointsWithShades::filter -->
+            <element name="order" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__getPointsWithShades::order -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getPointsWithShades::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getPointsWithShades::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getPointsWithShadesResponse" type="eds:getPointsWithShadesResponse"/>
+    <complexType name="getPointsWithShadesResponse">
+          <sequence>
+            <element name="shades" type="eds:ShadeProperty" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getPointsWithShadesResponse::shades -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getPointsWithShadesResponse::matchCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="requestShadesRead">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesRead::authString -->
+            <element name="shadesSelector" type="eds:ShadeSelector" minOccurs="1" maxOccurs="unbounded"/><!-- eds__requestShadesRead::shadesSelector -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestShadesReadResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesRead::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getShades">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getShades::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getShades::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getShadesResponse" type="eds:getShadesResponse"/>
+    <complexType name="getShadesResponse">
+          <sequence>
+            <element name="shades" type="eds:Shade" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getShadesResponse::shades -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="requestShadesWrite">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesWrite::authString -->
+            <element name="newShades" type="eds:Shade" minOccurs="1" maxOccurs="unbounded"/><!-- eds__requestShadesWrite::newShades -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestShadesWriteResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesWrite::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestShadesClear">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesClear::authString -->
+            <element name="shadesSelector" type="eds:ShadeSelector" minOccurs="1" maxOccurs="unbounded"/><!-- eds__requestShadesClear::shadesSelector -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestShadesClearResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesClear::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestShadesCopy">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesCopy::authString -->
+            <element name="shadesToCopy" type="eds:ShadeCopyRequest" minOccurs="1" maxOccurs="unbounded"/><!-- eds__requestShadesCopy::shadesToCopy -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestShadesCopyResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestShadesCopy::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestEvents">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestEvents::authString -->
+            <element name="filter" type="eds:EventFilter" minOccurs="0" maxOccurs="1"/><!-- eds__requestEvents::filter -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__requestEvents::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestEventsResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestEvents::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getEvents">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getEvents::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getEvents::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getEventsResponse" type="eds:getEventsResponse"/>
+    <complexType name="getEventsResponse">
+          <sequence>
+            <element name="events" type="eds:Event" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getEventsResponse::events -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="addEvents">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__addEvents::authString -->
+            <element name="newEvents" type="eds:Event" minOccurs="1" maxOccurs="unbounded"/><!-- eds__addEvents::newEvents -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getReportsConfigs">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getReportsConfigs::authString -->
+            <element name="filter" type="eds:ReportConfigFilter" minOccurs="0" maxOccurs="1"/><!-- eds__getReportsConfigs::filter -->
+            <element name="startIdx" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__getReportsConfigs::startIdx -->
+            <element name="maxCount" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="100"/><!-- eds__getReportsConfigs::maxCount -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getReportsConfigsResponse" type="eds:getReportsConfigsResponse"/>
+    <complexType name="getReportsConfigsResponse">
+          <sequence>
+            <element name="configs" type="eds:ReportConfig" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getReportsConfigsResponse::configs -->
+            <element name="matchCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getReportsConfigsResponse::matchCount -->
+            <element name="totalCount" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getReportsConfigsResponse::totalCount -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="createReportConfig">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__createReportConfig::authString -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__createReportConfig::sourceId -->
+            <element name="sourceName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__createReportConfig::sourceName -->
+            <element name="rdfFileName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__createReportConfig::rdfFileName -->
+            <element name="config" type="eds:ReportConfigDefinition" minOccurs="1" maxOccurs="1"/><!-- eds__createReportConfig::config -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="alterReportConfig">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__alterReportConfig::authString -->
+            <element name="configId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__alterReportConfig::configId -->
+            <element name="config" type="eds:ReportConfigDefinition" minOccurs="1" maxOccurs="1"/><!-- eds__alterReportConfig::config -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="deleteReportConfig">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__deleteReportConfig::authString -->
+            <element name="configId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__deleteReportConfig::configId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestGlobalReport">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestGlobalReport::authString -->
+            <element name="request" type="eds:GlobalReportRequest" minOccurs="1" maxOccurs="1"/><!-- eds__requestGlobalReport::request -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestGlobalReportResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestGlobalReport::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestCustomReport">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestCustomReport::authString -->
+            <element name="request" type="eds:CustomReportRequest" minOccurs="1" maxOccurs="1"/><!-- eds__requestCustomReport::request -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestCustomReportResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestCustomReport::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getCustomReport">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getCustomReport::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__getCustomReport::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getCustomReportResponse" type="eds:getCustomReportResponse"/>
+    <complexType name="getCustomReportResponse">
+          <sequence>
+            <element name="rows" type="eds:ReportResultRow" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getCustomReportResponse::rows -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="createGlobalReport">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__createGlobalReport::authString -->
+            <element name="sourceId" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" default="0"/><!-- eds__createGlobalReport::sourceId -->
+            <element name="sourceName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__createGlobalReport::sourceName -->
+            <element name="file" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__createGlobalReport::file -->
+            <element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__createGlobalReport::name -->
+            <element name="rdf" type="eds:ReportDefinition" minOccurs="1" maxOccurs="1"/><!-- eds__createGlobalReport::rdf -->
+            <element name="sg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__createGlobalReport::sg -->
+            <element name="tg" type="xsd:unsignedByte" minOccurs="0" maxOccurs="unbounded"/><!-- eds__createGlobalReport::tg -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="requestScriptRun">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestScriptRun::authString -->
+            <element name="scriptName" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__requestScriptRun::scriptName -->
+            <element name="args" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- eds__requestScriptRun::args -->
+            <element name="input" type="xsd:base64Binary" minOccurs="0" maxOccurs="1"/><!-- eds__requestScriptRun::input -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="requestScriptRunResponse">
+      <complexType>
+          <sequence>
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__requestScriptRun::requestId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="interactWithScript">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__interactWithScript::authString -->
+            <element name="requestId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__interactWithScript::requestId -->
+            <element name="input" type="xsd:base64Binary" minOccurs="0" maxOccurs="1"/><!-- eds__interactWithScript::input -->
+            <element name="eof" type="xsd:boolean" minOccurs="0" maxOccurs="1" default="false"/><!-- eds__interactWithScript::eof -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="interactWithScriptResponse" type="eds:interactWithScriptResponse"/>
+    <complexType name="interactWithScriptResponse">
+          <sequence>
+            <element name="output" type="xsd:base64Binary" minOccurs="1" maxOccurs="1"/><!-- eds__interactWithScriptResponse::output -->
+            <element name="errors" type="xsd:base64Binary" minOccurs="1" maxOccurs="1"/><!-- eds__interactWithScriptResponse::errors -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="openDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openDiagram::authString -->
+            <element name="source" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openDiagram::source -->
+            <element name="file" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openDiagram::file -->
+            <element name="refreshRate" type="eds:TimeDuration" minOccurs="0" maxOccurs="1"/><!-- eds__openDiagram::refreshRate -->
+            <element name="previousUrl" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__openDiagram::previousUrl -->
+            <element name="pointGroup" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__openDiagram::pointGroup -->
+            <element name="httpUrl" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__openDiagram::httpUrl -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element -->
+    <element name="openDiagramResponse">
+      <complexType>
+          <sequence>
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openDiagram::url -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="resizeDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__resizeDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__resizeDiagram::url -->
+            <element name="role" type="eds:DiagramRole" minOccurs="1" maxOccurs="1"/><!-- eds__resizeDiagram::role -->
+            <element name="newResolution" type="eds:DiagramResolution" minOccurs="1" maxOccurs="1"/><!-- eds__resizeDiagram::newResolution -->
+            <element name="windowId" type="xsd:int" minOccurs="0" maxOccurs="1" default="-1"/><!-- eds__resizeDiagram::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="setDiagramViewport">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramViewport::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramViewport::url -->
+            <element name="role" type="eds:DiagramRole" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramViewport::role -->
+            <element name="viewport" type="eds:DiagramArea" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramViewport::viewport -->
+            <element name="windowId" type="xsd:int" minOccurs="0" maxOccurs="1" default="-1"/><!-- eds__setDiagramViewport::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="handleDiagramClick">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__handleDiagramClick::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__handleDiagramClick::url -->
+            <element name="role" type="eds:DiagramRole" minOccurs="1" maxOccurs="1"/><!-- eds__handleDiagramClick::role -->
+            <element name="areaId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__handleDiagramClick::areaId -->
+            <element name="windowId" type="xsd:int" minOccurs="0" maxOccurs="1" default="-1"/><!-- eds__handleDiagramClick::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="setDiagramEntryFieldValue">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramEntryFieldValue::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramEntryFieldValue::url -->
+            <element name="role" type="eds:DiagramRole" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramEntryFieldValue::role -->
+            <element name="areaId" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramEntryFieldValue::areaId -->
+            <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setDiagramEntryFieldValue::value -->
+            <element name="windowId" type="xsd:int" minOccurs="0" maxOccurs="1" default="-1"/><!-- eds__setDiagramEntryFieldValue::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="lockWindowDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__lockWindowDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__lockWindowDiagram::url -->
+            <element name="windowId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__lockWindowDiagram::windowId -->
+            <element name="locked" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__lockWindowDiagram::locked -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="setActiveWindowDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setActiveWindowDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__setActiveWindowDiagram::url -->
+            <element name="windowId" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/><!-- eds__setActiveWindowDiagram::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="navigateDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__navigateDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__navigateDiagram::url -->
+            <element name="navigation" type="eds:DiagramNavigation" minOccurs="1" maxOccurs="1"/><!-- eds__navigateDiagram::navigation -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="closeDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__closeDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__closeDiagram::url -->
+            <element name="role" type="eds:DiagramRole" minOccurs="0" maxOccurs="1"/><!-- eds__closeDiagram::role -->
+            <element name="windowId" type="xsd:int" minOccurs="0" maxOccurs="1" default="-1"/><!-- eds__closeDiagram::windowId -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getGfxSrvFeatures">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeatures::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeatures::url -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getGfxSrvFeaturesResponse" type="eds:getGfxSrvFeaturesResponse"/>
+    <complexType name="getGfxSrvFeaturesResponse">
+          <sequence>
+            <element name="tagQueryKeepAlive" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::tagQueryKeepAlive -->
+            <element name="canSuspendSession" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::canSuspendSession -->
+            <element name="supportsFeatureNegotiation" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::supportsFeatureNegotiation -->
+            <element name="supportsSettingEntryField" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::supportsSettingEntryField -->
+            <element name="supportsMultiWindowDiagrams" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::supportsMultiWindowDiagrams -->
+            <element name="supportsOpenWindowDiagram" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- eds__getGfxSrvFeaturesResponse::supportsOpenWindowDiagram -->
+          </sequence>
+    </complexType>
+    <!-- operation request element -->
+    <element name="openWindowDiagram">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openWindowDiagram::authString -->
+            <element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openWindowDiagram::url -->
+            <element name="source" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openWindowDiagram::source -->
+            <element name="file" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__openWindowDiagram::file -->
+            <element name="pointGroup" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- eds__openWindowDiagram::pointGroup -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation request element -->
+    <element name="getLicense">
+      <complexType>
+          <sequence>
+            <element name="authString" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- eds__getLicense::authString -->
+          </sequence>
+      </complexType>
+    </element>
+    <!-- operation response element and type -->
+    <element name="getLicenseResponse" type="eds:getLicenseResponse"/>
+    <complexType name="getLicenseResponse">
+          <sequence>
+            <element name="parameters" type="eds:LicenseParameter" minOccurs="0" maxOccurs="unbounded"/><!-- eds__getLicenseResponse::parameters -->
+          </sequence>
+    </complexType>
+  </schema>
+
+</types>
+
+<message name="authenticateRequest">
+  <part name="Body" element="eds:authenticate"/><!-- eds__authenticate::eds__authenticate -->
+</message>
+
+<message name="authenticateResponse">
+  <part name="Body" element="eds:authenticateResponse"/>
+</message>
+
+<message name="loginRequest">
+  <part name="Body" element="eds:login"/><!-- eds__login::eds__login -->
+</message>
+
+<message name="loginResponse">
+  <part name="Body" element="eds:loginResponse"/>
+</message>
+
+<message name="logout">
+  <part name="Body" element="eds:logout"/><!-- eds__logout::eds__logout -->
+</message>
+
+<message name="VoidResponse">
+  <part name="Body" element="eds:VoidResponse"/><!-- eds__logout::_param_1 -->
+</message>
+
+<message name="ping">
+  <part name="Body" element="eds:ping"/><!-- eds__ping::eds__ping -->
+</message>
+
+<message name="getTechnologicalGroups">
+  <part name="Body" element="eds:getTechnologicalGroups"/><!-- eds__getTechnologicalGroups::eds__getTechnologicalGroups -->
+</message>
+
+<message name="GroupsResponse">
+  <part name="Body" element="eds:GroupsResponse"/><!-- eds__getTechnologicalGroups::response -->
+</message>
+
+<message name="getSecurityGroups">
+  <part name="Body" element="eds:getSecurityGroups"/><!-- eds__getSecurityGroups::eds__getSecurityGroups -->
+</message>
+
+<message name="getUserSecurityGroups">
+  <part name="Body" element="eds:getUserSecurityGroups"/><!-- eds__getUserSecurityGroups::eds__getUserSecurityGroups -->
+</message>
+
+<message name="getUsers">
+  <part name="Body" element="eds:getUsers"/><!-- eds__getUsers::eds__getUsers -->
+</message>
+
+<message name="getUsersResponse">
+  <part name="Body" element="eds:getUsersResponse"/><!-- eds__getUsers::response -->
+</message>
+
+<message name="getEffectiveUserProfileRequest">
+  <part name="Body" element="eds:getEffectiveUserProfile"/><!-- eds__getEffectiveUserProfile::eds__getEffectiveUserProfile -->
+</message>
+
+<message name="getEffectiveUserProfileResponse">
+  <part name="Body" element="eds:getEffectiveUserProfileResponse"/>
+</message>
+
+<message name="getServerTime">
+  <part name="Body" element="eds:getServerTime"/><!-- eds__getServerTime::eds__getServerTime -->
+</message>
+
+<message name="getServerTimeResponse">
+  <part name="Body" element="eds:getServerTimeResponse"/><!-- eds__getServerTime::response -->
+</message>
+
+<message name="getServerStatus">
+  <part name="Body" element="eds:getServerStatus"/><!-- eds__getServerStatus::eds__getServerStatus -->
+</message>
+
+<message name="getServerStatusResponse">
+  <part name="Body" element="eds:getServerStatusResponse"/><!-- eds__getServerStatus::response -->
+</message>
+
+<message name="getServerConfig">
+  <part name="Body" element="eds:getServerConfig"/><!-- eds__getServerConfig::eds__getServerConfig -->
+</message>
+
+<message name="getServerConfigResponse">
+  <part name="Body" element="eds:getServerConfigResponse"/><!-- eds__getServerConfig::response -->
+</message>
+
+<message name="getObjectsMetadata">
+  <part name="Body" element="eds:getObjectsMetadata"/><!-- eds__getObjectsMetadata::eds__getObjectsMetadata -->
+</message>
+
+<message name="getObjectsMetadataResponse">
+  <part name="Body" element="eds:getObjectsMetadataResponse"/><!-- eds__getObjectsMetadata::response -->
+</message>
+
+<message name="alterObject">
+  <part name="Body" element="eds:alterObject"/><!-- eds__alterObject::eds__alterObject -->
+</message>
+
+<message name="getObjectsSources">
+  <part name="Body" element="eds:getObjectsSources"/><!-- eds__getObjectsSources::eds__getObjectsSources -->
+</message>
+
+<message name="getObjectsSourcesResponse">
+  <part name="Body" element="eds:getObjectsSourcesResponse"/><!-- eds__getObjectsSources::response -->
+</message>
+
+<message name="alterObjectSource">
+  <part name="Body" element="eds:alterObjectSource"/><!-- eds__alterObjectSource::eds__alterObjectSource -->
+</message>
+
+<message name="getPoints">
+  <part name="Body" element="eds:getPoints"/><!-- eds__getPoints::eds__getPoints -->
+</message>
+
+<message name="getPointsResponse">
+  <part name="Body" element="eds:getPointsResponse"/><!-- eds__getPoints::response -->
+</message>
+
+<message name="getPointsWithCustomFilter">
+  <part name="Body" element="eds:getPointsWithCustomFilter"/><!-- eds__getPointsWithCustomFilter::eds__getPointsWithCustomFilter -->
+</message>
+
+<message name="getPointsSources">
+  <part name="Body" element="eds:getPointsSources"/><!-- eds__getPointsSources::eds__getPointsSources -->
+</message>
+
+<message name="getPointsSourcesResponse">
+  <part name="Body" element="eds:getPointsSourcesResponse"/><!-- eds__getPointsSources::response -->
+</message>
+
+<message name="getModifiedPoints">
+  <part name="Body" element="eds:getModifiedPoints"/><!-- eds__getModifiedPoints::eds__getModifiedPoints -->
+</message>
+
+<message name="getModifiedPointsResponse">
+  <part name="Body" element="eds:getModifiedPointsResponse"/><!-- eds__getModifiedPoints::response -->
+</message>
+
+<message name="operatePoints">
+  <part name="Body" element="eds:operatePoints"/><!-- eds__operatePoints::eds__operatePoints -->
+</message>
+
+<message name="publishPoints">
+  <part name="Body" element="eds:publishPoints"/><!-- eds__publishPoints::eds__publishPoints -->
+</message>
+
+<message name="unpublishPoints">
+  <part name="Body" element="eds:unpublishPoints"/><!-- eds__unpublishPoints::eds__unpublishPoints -->
+</message>
+
+<message name="getRequestStatus">
+  <part name="Body" element="eds:getRequestStatus"/><!-- eds__getRequestStatus::eds__getRequestStatus -->
+</message>
+
+<message name="getRequestStatusResponse">
+  <part name="Body" element="eds:getRequestStatusResponse"/><!-- eds__getRequestStatus::response -->
+</message>
+
+<message name="dropRequest">
+  <part name="Body" element="eds:dropRequest"/><!-- eds__dropRequest::eds__dropRequest -->
+</message>
+
+<message name="requestTrendRequest">
+  <part name="Body" element="eds:requestTrend"/><!-- eds__requestTrend::eds__requestTrend -->
+</message>
+
+<message name="requestTrendResponse">
+  <part name="Body" element="eds:requestTrendResponse"/>
+</message>
+
+<message name="getTrend">
+  <part name="Body" element="eds:getTrend"/><!-- eds__getTrend::eds__getTrend -->
+</message>
+
+<message name="getTrendResponse">
+  <part name="Body" element="eds:getTrendResponse"/><!-- eds__getTrend::response -->
+</message>
+
+<message name="getTrendGroups">
+  <part name="Body" element="eds:getTrendGroups"/><!-- eds__getTrendGroups::eds__getTrendGroups -->
+</message>
+
+<message name="getTrendGroupsResponse">
+  <part name="Body" element="eds:getTrendGroupsResponse"/><!-- eds__getTrendGroups::response -->
+</message>
+
+<message name="requestTabularRequest">
+  <part name="Body" element="eds:requestTabular"/><!-- eds__requestTabular::eds__requestTabular -->
+</message>
+
+<message name="requestTabularResponse">
+  <part name="Body" element="eds:requestTabularResponse"/>
+</message>
+
+<message name="getTabular">
+  <part name="Body" element="eds:getTabular"/><!-- eds__getTabular::eds__getTabular -->
+</message>
+
+<message name="getTabularResponse">
+  <part name="Body" element="eds:getTabularResponse"/><!-- eds__getTabular::response -->
+</message>
+
+<message name="getPointsWithShades">
+  <part name="Body" element="eds:getPointsWithShades"/><!-- eds__getPointsWithShades::eds__getPointsWithShades -->
+</message>
+
+<message name="getPointsWithShadesResponse">
+  <part name="Body" element="eds:getPointsWithShadesResponse"/><!-- eds__getPointsWithShades::response -->
+</message>
+
+<message name="requestShadesReadRequest">
+  <part name="Body" element="eds:requestShadesRead"/><!-- eds__requestShadesRead::eds__requestShadesRead -->
+</message>
+
+<message name="requestShadesReadResponse">
+  <part name="Body" element="eds:requestShadesReadResponse"/>
+</message>
+
+<message name="getShades">
+  <part name="Body" element="eds:getShades"/><!-- eds__getShades::eds__getShades -->
+</message>
+
+<message name="getShadesResponse">
+  <part name="Body" element="eds:getShadesResponse"/><!-- eds__getShades::response -->
+</message>
+
+<message name="requestShadesWriteRequest">
+  <part name="Body" element="eds:requestShadesWrite"/><!-- eds__requestShadesWrite::eds__requestShadesWrite -->
+</message>
+
+<message name="requestShadesWriteResponse">
+  <part name="Body" element="eds:requestShadesWriteResponse"/>
+</message>
+
+<message name="requestShadesClearRequest">
+  <part name="Body" element="eds:requestShadesClear"/><!-- eds__requestShadesClear::eds__requestShadesClear -->
+</message>
+
+<message name="requestShadesClearResponse">
+  <part name="Body" element="eds:requestShadesClearResponse"/>
+</message>
+
+<message name="requestShadesCopyRequest">
+  <part name="Body" element="eds:requestShadesCopy"/><!-- eds__requestShadesCopy::eds__requestShadesCopy -->
+</message>
+
+<message name="requestShadesCopyResponse">
+  <part name="Body" element="eds:requestShadesCopyResponse"/>
+</message>
+
+<message name="requestEventsRequest">
+  <part name="Body" element="eds:requestEvents"/><!-- eds__requestEvents::eds__requestEvents -->
+</message>
+
+<message name="requestEventsResponse">
+  <part name="Body" element="eds:requestEventsResponse"/>
+</message>
+
+<message name="getEvents">
+  <part name="Body" element="eds:getEvents"/><!-- eds__getEvents::eds__getEvents -->
+</message>
+
+<message name="getEventsResponse">
+  <part name="Body" element="eds:getEventsResponse"/><!-- eds__getEvents::response -->
+</message>
+
+<message name="addEvents">
+  <part name="Body" element="eds:addEvents"/><!-- eds__addEvents::eds__addEvents -->
+</message>
+
+<message name="getReportsConfigs">
+  <part name="Body" element="eds:getReportsConfigs"/><!-- eds__getReportsConfigs::eds__getReportsConfigs -->
+</message>
+
+<message name="getReportsConfigsResponse">
+  <part name="Body" element="eds:getReportsConfigsResponse"/><!-- eds__getReportsConfigs::response -->
+</message>
+
+<message name="createReportConfig">
+  <part name="Body" element="eds:createReportConfig"/><!-- eds__createReportConfig::eds__createReportConfig -->
+</message>
+
+<message name="alterReportConfig">
+  <part name="Body" element="eds:alterReportConfig"/><!-- eds__alterReportConfig::eds__alterReportConfig -->
+</message>
+
+<message name="deleteReportConfig">
+  <part name="Body" element="eds:deleteReportConfig"/><!-- eds__deleteReportConfig::eds__deleteReportConfig -->
+</message>
+
+<message name="requestGlobalReportRequest">
+  <part name="Body" element="eds:requestGlobalReport"/><!-- eds__requestGlobalReport::eds__requestGlobalReport -->
+</message>
+
+<message name="requestGlobalReportResponse">
+  <part name="Body" element="eds:requestGlobalReportResponse"/>
+</message>
+
+<message name="requestCustomReportRequest">
+  <part name="Body" element="eds:requestCustomReport"/><!-- eds__requestCustomReport::eds__requestCustomReport -->
+</message>
+
+<message name="requestCustomReportResponse">
+  <part name="Body" element="eds:requestCustomReportResponse"/>
+</message>
+
+<message name="getCustomReport">
+  <part name="Body" element="eds:getCustomReport"/><!-- eds__getCustomReport::eds__getCustomReport -->
+</message>
+
+<message name="getCustomReportResponse">
+  <part name="Body" element="eds:getCustomReportResponse"/><!-- eds__getCustomReport::response -->
+</message>
+
+<message name="createGlobalReport">
+  <part name="Body" element="eds:createGlobalReport"/><!-- eds__createGlobalReport::eds__createGlobalReport -->
+</message>
+
+<message name="requestScriptRunRequest">
+  <part name="Body" element="eds:requestScriptRun"/><!-- eds__requestScriptRun::eds__requestScriptRun -->
+</message>
+
+<message name="requestScriptRunResponse">
+  <part name="Body" element="eds:requestScriptRunResponse"/>
+</message>
+
+<message name="interactWithScript">
+  <part name="Body" element="eds:interactWithScript"/><!-- eds__interactWithScript::eds__interactWithScript -->
+</message>
+
+<message name="interactWithScriptResponse">
+  <part name="Body" element="eds:interactWithScriptResponse"/><!-- eds__interactWithScript::response -->
+</message>
+
+<message name="openDiagramRequest">
+  <part name="Body" element="eds:openDiagram"/><!-- eds__openDiagram::eds__openDiagram -->
+</message>
+
+<message name="openDiagramResponse">
+  <part name="Body" element="eds:openDiagramResponse"/>
+</message>
+
+<message name="resizeDiagram">
+  <part name="Body" element="eds:resizeDiagram"/><!-- eds__resizeDiagram::eds__resizeDiagram -->
+</message>
+
+<message name="setDiagramViewport">
+  <part name="Body" element="eds:setDiagramViewport"/><!-- eds__setDiagramViewport::eds__setDiagramViewport -->
+</message>
+
+<message name="handleDiagramClick">
+  <part name="Body" element="eds:handleDiagramClick"/><!-- eds__handleDiagramClick::eds__handleDiagramClick -->
+</message>
+
+<message name="setDiagramEntryFieldValue">
+  <part name="Body" element="eds:setDiagramEntryFieldValue"/><!-- eds__setDiagramEntryFieldValue::eds__setDiagramEntryFieldValue -->
+</message>
+
+<message name="lockWindowDiagram">
+  <part name="Body" element="eds:lockWindowDiagram"/><!-- eds__lockWindowDiagram::eds__lockWindowDiagram -->
+</message>
+
+<message name="setActiveWindowDiagram">
+  <part name="Body" element="eds:setActiveWindowDiagram"/><!-- eds__setActiveWindowDiagram::eds__setActiveWindowDiagram -->
+</message>
+
+<message name="navigateDiagram">
+  <part name="Body" element="eds:navigateDiagram"/><!-- eds__navigateDiagram::eds__navigateDiagram -->
+</message>
+
+<message name="closeDiagram">
+  <part name="Body" element="eds:closeDiagram"/><!-- eds__closeDiagram::eds__closeDiagram -->
+</message>
+
+<message name="getGfxSrvFeatures">
+  <part name="Body" element="eds:getGfxSrvFeatures"/><!-- eds__getGfxSrvFeatures::eds__getGfxSrvFeatures -->
+</message>
+
+<message name="getGfxSrvFeaturesResponse">
+  <part name="Body" element="eds:getGfxSrvFeaturesResponse"/><!-- eds__getGfxSrvFeatures::response -->
+</message>
+
+<message name="openWindowDiagram">
+  <part name="Body" element="eds:openWindowDiagram"/><!-- eds__openWindowDiagram::eds__openWindowDiagram -->
+</message>
+
+<message name="getLicense">
+  <part name="Body" element="eds:getLicense"/><!-- eds__getLicense::eds__getLicense -->
+</message>
+
+<message name="getLicenseResponse">
+  <part name="Body" element="eds:getLicenseResponse"/><!-- eds__getLicense::response -->
+</message>
+
+<portType name="edsPortType">
+  <operation name="authenticate">
+    <documentation>
+      Checks user name and password.
+    </documentation>
+    <input message="tns:authenticateRequest"/>
+    <output message="tns:authenticateResponse"/>
+  </operation>
+  <operation name="login">
+    <documentation>
+      Tries to create new session for client.
+    </documentation>
+    <input message="tns:loginRequest"/>
+    <output message="tns:loginResponse"/>
+  </operation>
+  <operation name="logout">
+    <documentation>
+      Destroys clent session.
+    </documentation>
+    <input message="tns:logout"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="ping">
+    <documentation>
+      Revitalizes client session.
+    </documentation>
+    <input message="tns:ping"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getTechnologicalGroups">
+    <documentation>
+      Returns a list of all technological groups (tg).
+    </documentation>
+    <input message="tns:getTechnologicalGroups"/>
+    <output message="tns:GroupsResponse"/>
+  </operation>
+  <operation name="getSecurityGroups">
+    <documentation>
+      Returns a list of all security groups (sg).
+    </documentation>
+    <input message="tns:getSecurityGroups"/>
+    <output message="tns:GroupsResponse"/>
+  </operation>
+  <operation name="getUserSecurityGroups">
+    <documentation>
+      Returns a list of security groups (sg) to which current user belongs.
+    </documentation>
+    <input message="tns:getUserSecurityGroups"/>
+    <output message="tns:GroupsResponse"/>
+  </operation>
+  <operation name="getUsers">
+    <documentation>
+      Allows querying EDS92 for users matching selected criteria. It chooses all users matching the filter, sorts them using the requested order and returns a part of the result list defined by startIdx and maxCount. The order parameter should be a semicolon-separated list of user field names, in example: "description;name;id" or "created;-id". Adding "-" before a field name reverses the order. Full list of fields that may appear in the order parameter: id, name, description, locked, created, lastModified.
+    </documentation>
+    <input message="tns:getUsers"/>
+    <output message="tns:getUsersResponse"/>
+  </operation>
+  <operation name="getEffectiveUserProfile">
+    <documentation>
+      Allows querying EDS92 user effective profile. Effective profile is composition of all profiles with user security groups access
+    </documentation>
+    <input message="tns:getEffectiveUserProfileRequest"/>
+    <output message="tns:getEffectiveUserProfileResponse"/>
+  </operation>
+  <operation name="getServerTime">
+    <documentation>
+      Retrieves current server time.
+    </documentation>
+    <input message="tns:getServerTime"/>
+    <output message="tns:getServerTimeResponse"/>
+  </operation>
+  <operation name="getServerStatus">
+    <documentation>
+      Returns information about current server status.
+    </documentation>
+    <input message="tns:getServerStatus"/>
+    <output message="tns:getServerStatusResponse"/>
+  </operation>
+  <operation name="getServerConfig">
+    <documentation>
+      Retrieves EDS92 server basic configuration.
+    </documentation>
+    <input message="tns:getServerConfig"/>
+    <output message="tns:getServerConfigResponse"/>
+  </operation>
+  <operation name="getObjectsMetadata">
+    <documentation>
+      Allows querying EDS92 for objects matching selected criteria. It chooses all objects matching the filter, sorts them using the requested order and returns a part of the resulting list defined by startIdx and maxCount. The order parameter should be a semicolon-separated list of ObjectMetadata fields names, for example: "sourceId" or "file;-name". Adding "-" before a field name reverses the order. Full list of fields that may appear in the order parameter: sourceId, file, name, lastModified, sourceName, hasPermission.
+    </documentation>
+    <input message="tns:getObjectsMetadata"/>
+    <output message="tns:getObjectsMetadataResponse"/>
+  </operation>
+  <operation name="alterObject">
+    <documentation>
+      Source must be specified using either sourceId or sourceName; setting both sourceId and sourceName is an error. If some attribute in newAttributes is not set then it is not changed. Objects can be deleted via HTTP DEL request.
+    </documentation>
+    <input message="tns:alterObject"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getObjectsSources">
+    <documentation>
+      Returns a list of all object sources if filter is not set or all object sources matching filter. Note: point sources and object sources might be completely different, even though in many cases they have similar names. Use getPointSources() to get a list of point sources. The order parameter should be a semicolon-separated list of ObjectSource field names, in example: "id" or "kind;-name". Adding "-" before a field name reverses the order. Full list of fields that may appear in the order parameter: id, name, desc, kind, host, prefix, suffix, hasPermission.
+    </documentation>
+    <input message="tns:getObjectsSources"/>
+    <output message="tns:getObjectsSourcesResponse"/>
+  </operation>
+  <operation name="alterObjectSource">
+    <documentation>
+      Source must be specified using either sourceId or sourceName; setting both sourceId and sourceName is an error. If some attribute in newAttributes is not set then it is not changed.
+    </documentation>
+    <input message="tns:alterObjectSource"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getPoints">
+    <documentation>
+      Allows querying EDS92 for points matching selected criteria. It chooses all points matching the filter, sorts them using the requested order and returns a part of the result list defined by startIdx and maxCount. The order parameter should be a semicolon-separated list of Point field names, in example: "zd;iess;sid" or "aux;-sid". Adding "-" before a field name reverses the order. Full list of fields that may appear in the order parameter: sid, value, dts, tss, at, atss, quality, iess, desc, rt, zd, idcs, ar, ap, aux, un, dp, artd, ard, tb, bb, hl, ll, dun, ddp, dartd, dard, dtb, dbb, dhl, dll, sd, rd.
+    </documentation>
+    <input message="tns:getPoints"/>
+    <output message="tns:getPointsResponse"/>
+  </operation>
+  <operation name="getPointsWithCustomFilter">
+    <documentation>Service definition of function eds__getPointsWithCustomFilter</documentation>
+    <input message="tns:getPointsWithCustomFilter"/>
+    <output message="tns:getPointsResponse"/>
+  </operation>
+  <operation name="getPointsSources">
+    <documentation>
+      Returns a list of all point sources. Note: point sources and object sources might be completely different, even though in many cases they have similar names. Use getObjectSources() to get a list of object sources.
+    </documentation>
+    <input message="tns:getPointsSources"/>
+    <output message="tns:getPointsSourcesResponse"/>
+  </operation>
+  <operation name="getModifiedPoints">
+    <documentation>
+      Returns a list of points that have been modified after specified timestamp. However, if input dbSequence is different from database sequence number in EDS92, then all points from EDS92 are returned with disregard of the value of gptTimeStamp parameter. This method can be used to synchronize EDS92 points' database with the client's side. Only users belonging to admin group are authorized to use this method.
+    </documentation>
+    <input message="tns:getModifiedPoints"/>
+    <output message="tns:getModifiedPointsResponse"/>
+  </operation>
+  <operation name="operatePoints">
+    <documentation>
+      Changes current points&amp;#39; values. PointNewValue::duration is ignored.
+    </documentation>
+    <input message="tns:operatePoints"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="publishPoints">
+    <documentation>
+      Set values will be automatically refreshed for PointNewValue::duration time after this call.
+    </documentation>
+    <input message="tns:publishPoints"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="unpublishPoints">
+    <documentation>
+      Turns off automatic refresh of points values. See publishPoints() method.
+    </documentation>
+    <input message="tns:unpublishPoints"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getRequestStatus">
+    <documentation>Service definition of function eds__getRequestStatus</documentation>
+    <input message="tns:getRequestStatus"/>
+    <output message="tns:getRequestStatusResponse"/>
+  </operation>
+  <operation name="dropRequest">
+    <documentation>Service definition of function eds__dropRequest</documentation>
+    <input message="tns:dropRequest"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="requestTrend">
+    <documentation>
+      Executes graphical trend. "pixelCount" parameter is just a suggestion to ArchSrv. When requesting trend for long time range 1 pixel can correspond to e.g. 1 day, that's why trend request may return up to 5 samples per pixel (value at the start of the range, maximum, minimum, value at the end, hole marker). See also getRequestStatus() and getTrend().
+    </documentation>
+    <input message="tns:requestTrendRequest"/>
+    <output message="tns:requestTrendResponse"/>
+  </operation>
+  <operation name="getTrend">
+    <documentation>
+      Retrieves graphical trend request result. See also requestTrend() and getRequestStatus().
+    </documentation>
+    <input message="tns:getTrend"/>
+    <output message="tns:getTrendResponse"/>
+  </operation>
+  <operation name="getTrendGroups">
+    <documentation>
+      Retrieves a list of trend groups migrated to the specified configuration version. If configuration version is unspecified, it defaults to the current version.
+    </documentation>
+    <input message="tns:getTrendGroups"/>
+    <output message="tns:getTrendGroupsResponse"/>
+  </operation>
+  <operation name="requestTabular">
+    <documentation>
+      Tells the server to execute tabular trend. See also getRequestStatus() and getTabular().
+    </documentation>
+    <input message="tns:requestTabularRequest"/>
+    <output message="tns:requestTabularResponse"/>
+  </operation>
+  <operation name="getTabular">
+    <documentation>
+      Retrieves tabular trend request result. See also requestTabular() and getRequestStatus().
+    </documentation>
+    <input message="tns:getTabular"/>
+    <output message="tns:getTabularResponse"/>
+  </operation>
+  <operation name="getPointsWithShades">
+    <documentation>Service definition of function eds__getPointsWithShades</documentation>
+    <input message="tns:getPointsWithShades"/>
+    <output message="tns:getPointsWithShadesResponse"/>
+  </operation>
+  <operation name="requestShadesRead">
+    <documentation>
+      Tells the server to read points shades as defined in request argument. The returned &lt;em&gt;requestId&lt;/em&gt; contains an identifier you can pass to getRequestStatus() to check current request state and later to getShades() to return requested shades.
+    </documentation>
+    <input message="tns:requestShadesReadRequest"/>
+    <output message="tns:requestShadesReadResponse"/>
+  </operation>
+  <operation name="getShades">
+    <documentation>
+      Retrieves shades read request results. See also requestShadeRead() and getRequestStatus().
+    </documentation>
+    <input message="tns:getShades"/>
+    <output message="tns:getShadesResponse"/>
+  </operation>
+  <operation name="requestShadesWrite">
+    <documentation>
+      Tells the server to overwrite points shades. See also getRequestStatus().
+    </documentation>
+    <input message="tns:requestShadesWriteRequest"/>
+    <output message="tns:requestShadesWriteResponse"/>
+  </operation>
+  <operation name="requestShadesClear">
+    <documentation>
+      Tells the server to clear points shades for a specific time periods. See also getRequestStatus().
+    </documentation>
+    <input message="tns:requestShadesClearRequest"/>
+    <output message="tns:requestShadesClearResponse"/>
+  </operation>
+  <operation name="requestShadesCopy">
+    <documentation>
+      Tells the server to copy shades between points. The points must be of the same type.
+    </documentation>
+    <input message="tns:requestShadesCopyRequest"/>
+    <output message="tns:requestShadesCopyResponse"/>
+  </operation>
+  <operation name="requestEvents">
+    <documentation>
+      Requests historical event data. All returned Events will be ordered in reverse chronological order. See also getRequestStatus() and getEvents().
+    </documentation>
+    <input message="tns:requestEventsRequest"/>
+    <output message="tns:requestEventsResponse"/>
+  </operation>
+  <operation name="getEvents">
+    <documentation>
+      Retrieves requestEvents() results.
+    </documentation>
+    <input message="tns:getEvents"/>
+    <output message="tns:getEventsResponse"/>
+  </operation>
+  <operation name="addEvents">
+    <documentation>
+      Creates events of type EVENT-CUSTOM-MESSAGE.
+    </documentation>
+    <input message="tns:addEvents"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getReportsConfigs">
+    <documentation>
+      Allows querying EDS92 for reports configs matching selected criteria.
+    </documentation>
+    <input message="tns:getReportsConfigs"/>
+    <output message="tns:getReportsConfigsResponse"/>
+  </operation>
+  <operation name="createReportConfig">
+    <documentation>
+      Edits global report configuration.
+    </documentation>
+    <input message="tns:createReportConfig"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="alterReportConfig">
+    <documentation>Service definition of function eds__alterReportConfig</documentation>
+    <input message="tns:alterReportConfig"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="deleteReportConfig">
+    <documentation>
+      Deletes global report configuration.
+    </documentation>
+    <input message="tns:deleteReportConfig"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="requestGlobalReport">
+    <documentation>
+      Executes global report. See EDS92 Terminal documentation chapter 8 "Reporting" for details. See also requestCustomReport() and getRequestStatus().
+    </documentation>
+    <input message="tns:requestGlobalReportRequest"/>
+    <output message="tns:requestGlobalReportResponse"/>
+  </operation>
+  <operation name="requestCustomReport">
+    <documentation>
+      Executes custom report. See EDS92 Terminal documentation chapter 8 "Reporting" for details. See also requestGlobalReport(), getRequestStatus() and getCustomReportResult().
+    </documentation>
+    <input message="tns:requestCustomReportRequest"/>
+    <output message="tns:requestCustomReportResponse"/>
+  </operation>
+  <operation name="getCustomReport">
+    <documentation>Service definition of function eds__getCustomReport</documentation>
+    <input message="tns:getCustomReport"/>
+    <output message="tns:getCustomReportResponse"/>
+  </operation>
+  <operation name="createGlobalReport">
+    <documentation>Service definition of function eds__createGlobalReport</documentation>
+    <input message="tns:createGlobalReport"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="requestScriptRun">
+    <documentation>
+      Starts predefined script. See also interactWithScript() and getRequestStatus().
+    </documentation>
+    <input message="tns:requestScriptRunRequest"/>
+    <output message="tns:requestScriptRunResponse"/>
+  </operation>
+  <operation name="interactWithScript">
+    <documentation>
+      Interact with script started in requestScriptRun().
+    </documentation>
+    <input message="tns:interactWithScript"/>
+    <output message="tns:interactWithScriptResponse"/>
+  </operation>
+  <operation name="openDiagram">
+    <documentation>
+      Opens diagram on EDS92 graphics server. Returns root URL in form http://GFX-HOST:GFX-PORT/UUID/. This URL is also an identifier of renderer session (URI) and should be used as url parameter in every diagram method. Current tag  will be avaiable under http://GFX-HOST:GFX-PORT/UUID/tag?_=CURRENT-TIME-STAMP. CURRENT-TIME-STAMP is needed to force suppressing cache on all communication levels (HTTP client, proxies, etc...). Meta data will be avaiable on http://GFX-HOST:GFX-PORT/UUID/meta.json?tag=TAG. Main window view will be avaiable under http://GFX-HOST:GFX-PORT/UUID/main.png?tag=TAG. List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:openDiagramRequest"/>
+    <output message="tns:openDiagramResponse"/>
+  </operation>
+  <operation name="resizeDiagram">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:resizeDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="setDiagramViewport">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:setDiagramViewport"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="handleDiagramClick">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:handleDiagramClick"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="setDiagramEntryFieldValue">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:setDiagramEntryFieldValue"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="lockWindowDiagram">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:lockWindowDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="setActiveWindowDiagram">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:setActiveWindowDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="navigateDiagram">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:navigateDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="closeDiagram">
+    <documentation>
+      List of all diagram methods: openDiagram(), resizeDiagram(), setDiagramViewport(), handleDiagramClick(), setDiagramEntryFieldValue(), lockWindowDiagram(), setActiveWindowDiagram(), navigateDiagram(), closeDiagram().
+    </documentation>
+    <input message="tns:closeDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getGfxSrvFeatures">
+    <documentation>
+      Returns features supported by connected graphics server.
+    </documentation>
+    <input message="tns:getGfxSrvFeatures"/>
+    <output message="tns:getGfxSrvFeaturesResponse"/>
+  </operation>
+  <operation name="openWindowDiagram">
+    <documentation>Service definition of function eds__openWindowDiagram</documentation>
+    <input message="tns:openWindowDiagram"/>
+    <output message="tns:VoidResponse"/>
+  </operation>
+  <operation name="getLicense">
+    <documentation>
+      Returns EDS server license information.
+    </documentation>
+    <input message="tns:getLicense"/>
+    <output message="tns:getLicenseResponse"/>
+  </operation>
+</portType>
+
+<binding name="eds" type="tns:edsPortType">
+  <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="authenticate">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="login">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="logout">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="ping">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getTechnologicalGroups">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getSecurityGroups">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getUserSecurityGroups">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getUsers">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getEffectiveUserProfile">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getServerTime">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getServerStatus">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getServerConfig">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getObjectsMetadata">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="alterObject">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getObjectsSources">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="alterObjectSource">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getPoints">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getPointsWithCustomFilter">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getPointsSources">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getModifiedPoints">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="operatePoints">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="publishPoints">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="unpublishPoints">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getRequestStatus">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="dropRequest">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestTrend">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getTrend">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getTrendGroups">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestTabular">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getTabular">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getPointsWithShades">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestShadesRead">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getShades">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestShadesWrite">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestShadesClear">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestShadesCopy">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestEvents">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getEvents">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="addEvents">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getReportsConfigs">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="createReportConfig">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="alterReportConfig">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="deleteReportConfig">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestGlobalReport">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestCustomReport">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getCustomReport">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="createGlobalReport">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="requestScriptRun">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="interactWithScript">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="openDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="resizeDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="setDiagramViewport">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="handleDiagramClick">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="setDiagramEntryFieldValue">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="lockWindowDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="setActiveWindowDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="navigateDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="closeDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getGfxSrvFeatures">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="openWindowDiagram">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+  <operation name="getLicense">
+    <SOAP:operation/>
+    <input>
+          <SOAP:body use="literal" parts="Body"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body"/>
+    </output>
+  </operation>
+</binding>
+
+<service name="eds">
+  <documentation>
+    SOAP interface to EDS92 server.
+  </documentation>
+  <port name="eds" binding="tns:eds">
+    <SOAP:address location="http://172.19.4.127:43080/"/>
+  </port>
+</service>
+
+</definitions>
