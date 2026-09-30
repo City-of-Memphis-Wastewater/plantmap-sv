@@ -53,7 +53,6 @@ export class ClientEdsSoap {
 		// Actual request with real password
 		const actualEnvelope = soapEnvelope.replace('<tns:password>********</tns:password>', `<tns:password>${pass}</tns:password>`);
 
-		this.log('Final Outgoing Login Payload', soapEnvelope);
 		this.log('Final Outgoing Login Payload', actualEnvelope);
 
 		const response = await fetch(this.endpoint, {
