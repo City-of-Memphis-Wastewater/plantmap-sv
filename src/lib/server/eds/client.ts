@@ -30,28 +30,31 @@ export class ClientEdsSoap {
 
 	public async login(): Promise<string> {
 		if (this.authstring) return this.authstring;
-		if (!this.username || !this.password) {
+		if (!this.username) {
 			this.log('Login', 'No credentials provided. Using ANONYMOUS_SESSION.');
 			return (this.authstring = 'ANONYMOUS_SESSION');
 		}
+		
+		const user = this.username ?? '';
+		const pass = this.password ?? '';
 
 		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
   <soap:Body>
     <tns:login>
-      <username>${this.username}</username>
-      <password>********</password>
-	  <type>CLIENT-TYPE-DEFAULT</type>
+      <tns:username>${user}</tns:username>
+      <tns:password>********</tns:password>
+	  <tns:type>CLIENT-TYPE-DEFAULT</tns:type>
     </tns:login>
   </soap:Body>
 </soap:Envelope>`;
 
-		this.log('Outgoing Login Request', soapEnvelope);
 
 		// Actual request with real password
-		const actualEnvelope = soapEnvelope.replace('<password>********</password>', `<password>${this.password}</password>`);
+		const actualEnvelope = soapEnvelope.replace('<tns:password>********</tns:password>', `<tns:password>${pass}</tns:password>`);
 
 		this.log('Final Outgoing Login Payload', soapEnvelope);
+		this.log('Final Outgoing Login Payload', actualEnvelope);
 
 		const response = await fetch(this.endpoint, {
 			method: 'POST',
