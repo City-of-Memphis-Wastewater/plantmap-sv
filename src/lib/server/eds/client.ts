@@ -112,99 +112,140 @@ export class ClientEdsSoap {
 		}
 	}
 
-	public formatIessTag(id: string): string {
-		if (id.includes('@') || id.includes('.UNIT')) {
-			return id;
-		}
-		return `${id}${this.iessSuffix}`;
-	}
+	public async getPointsByIess(iessName: string): Promise<string> {
+        const token = await this.login();
+        const formattedTag = this.formatIessTag(iessName);
 
-	public async fetchPointValues(tags: string[]): Promise<any[]> {
-		const token = await this.login();
-		const results = [];
-
-		for (const tag of tags) {
-			const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+        const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
   <soap:Body>
     <tns:getPoints>
       <tns:authString>${token}</tns:authString>
       <tns:filter>
-        <tns:iessRe>${tag}</tns:iessRe>
+        <tns:iessRe>${formattedTag}</tns:iessRe>
+      </tns:filter>
+    </tns:getPoints>
+  </soap:Body>
+</soap:Envelope>`;
+
+        const response = await fetch(this.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
+            },
+            body: soapEnvelope
+        });
+
+        return await response.text();
+    }
+
+	public async fetchPointValues(tags: string[]): Promise<any[]> {
+        const token = await this.login();
+        const results = [];
+
+        for (const tag of tags) {
+            const formattedTag = this.formatIessTag(tag);
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getPoints>
+      <tns:authString>${token}</tns:authString>
+      <tns:filter>
+        <tns:iessRe>${formattedTag}</tns:iessRe>
       </tns:filter>
       <tns:maxCount>1</tns:maxCount>
     </tns:getPoints>
   </soap:Body>
 </soap:Envelope>`;
 
-			const response = await this.postSoap('getPoints', soapEnvelope);
-			// Parse out the point value, quality, and iess from response XML
-			results.push(response);
-		}
+            this.log('Outgoing getPoints Request (Single)', soapEnvelope);
 
-		return results;
-	}
-	
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+
+            try {
+                const response = await fetch(this.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
+                    },
+                    body: soapEnvelope,
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`EDS HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const xmlText = await response.text();
+                results.push({ tag: formattedTag, xml: xmlText });
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        return results;
+    }
+
 	public async fetchCurrentValues(sensorIds: string[]): Promise<Record<string, EDSTelemetryValue>> {
-		if (sensorIds.length === 0) return {};
+        if (sensorIds.length === 0) return {};
 
-		const token = await this.login();
+        const token = await this.login();
+        const results: Record<string, EDSTelemetryValue> = {};
 
-		const tagToIdMap: Record<string, string> = {};
-		const iessTags = sensorIds.length > 0 && sensorIds[0].includes('@') 
-			? sensorIds 
-			: sensorIds.map((id) => {
-				const tag = this.formatIessTag(id);
-				tagToIdMap[tag] = id;
-				return tag;
-			});
-
-		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+        for (const id of sensorIds) {
+            const formattedTag = this.formatIessTag(id);
+            
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
   <soap:Body>
     <tns:getPoints>
       <tns:authString>${token}</tns:authString>
-      <tns:pointNames>
-        ${iessTags.map((tag) => `<tns:string>${tag}</tns:string>`).join('\n        ')}
-      </tns:pointNames>
-	  <tns:filter>
-        <tns:iessRe>^(M100FI.UNIT0@NET0|FI8001.UNIT0@NET0)\..*</tns:iessRe>
+      <tns:filter>
+        <tns:iessRe>${formattedTag}</tns:iessRe>
       </tns:filter>
-      <tns:maxCount>50</tns:maxCount>
+      <tns:maxCount>1</tns:maxCount>
     </tns:getPoints>
   </soap:Body>
 </soap:Envelope>`;
 
-		this.log('Outgoing getPoints Request', soapEnvelope);
+            this.log(`Outgoing getPoints Request for tag: ${formattedTag}`, soapEnvelope);
 
-		const controller = new AbortController();
-		const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
 
-		try {
-			const response = await fetch(this.endpoint, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
-				},
-				body: soapEnvelope,
-				signal: controller.signal
-			});
+            try {
+                const response = await fetch(this.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
+                    },
+                    body: soapEnvelope,
+                    signal: controller.signal
+                });
 
-			this.log(`Incoming getPoints Response status: ${response.status}`, '');
+                if (!response.ok) {
+                    console.warn(`[EDS] HTTP ${response.status} for tag ${formattedTag}`);
+                    continue;
+                }
 
-			if (!response.ok) {
-				throw new Error(`EDS HTTP ${response.status}: ${response.statusText}`);
-			}
+                const xmlText = await response.text();
+                
+                // Parse individual point response using your existing parser logic
+                const parsed = this.parseSoapResponse(xmlText, { [formattedTag]: id });
+                Object.assign(results, parsed);
 
-			const xmlText = await response.text();
-			this.log('Incoming getPoints XML Body', xmlText);
+            } catch (err) {
+                console.warn(`[EDS] Error fetching tag ${formattedTag}:`, err);
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
 
-			return this.parseSoapResponse(xmlText, tagToIdMap);
-		} finally {
-			clearTimeout(timeoutId);
-		}
-	}
-
+        this.log('Final Batch Telemetry Results', results);
+        return results;
+    }
+	
 	private parseSoapResponse(xml: string, tagToIdMap: Record<string, string>): Record<string, EDSTelemetryValue> {
 		const results: Record<string, EDSTelemetryValue> = {};
 		const pointNodeRegex = /<(?:PointValue|item|point)[^>]*>([\s\S]*?)<\/(?:PointValue|item|point)>/g;
@@ -238,4 +279,248 @@ export class ClientEdsSoap {
 		this.log('Parsed Telemetry Results', results);
 		return results;
 	}
+
+	public formatIessTag(id: string): string {
+        const upper = id.toUpperCase();
+        if (upper.includes('@') || upper.includes('.UNIT')) {
+            return upper;
+        }
+        return `${upper}${this.iessSuffix}`;
+    }
+
+    /**
+     * Verifies existence of IESS point names individually via getPoints.
+     */
+    public async filterValidPoints(tags: string[]): Promise<string[]> {
+        const token = await this.login();
+        const validTags: string[] = [];
+
+        for (const tag of tags) {
+            const formattedTag = this.formatIessTag(tag);
+            const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getPoints>
+      <tns:authString>${token}</tns:authString>
+      <tns:filter>
+        <tns:iessRe>${formattedTag}</tns:iessRe>
+      </tns:filter>
+      <tns:maxCount>1</tns:maxCount>
+    </tns:getPoints>
+  </soap:Body>
+</soap:Envelope>`;
+
+            try {
+                const response = await fetch(this.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
+                    },
+                    body: soapEnvelope
+                });
+
+                if (response.ok) {
+                    const xmlText = await response.text();
+                    const matchCountMatch = xmlText.match(/<(?:[a-zA-Z0-9]+:)?matchCount[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?matchCount>/i);
+                    if (matchCountMatch && parseInt(matchCountMatch[1], 10) === 1) {
+                        validTags.push(formattedTag);
+                    }
+                }
+            } catch (err) {
+                console.warn(`[EDS] Failed point verification for ${formattedTag}:`, err);
+            }
+        }
+
+        return validTags;
+    }
+
+    /**
+     * Executes the full requestTabular -> getRequestStatus -> getTabular sequence.
+     */
+    public async fetchTabularValues(
+        sensorIds: string[],
+        stepSeconds: number = 60,
+        functionType: string = 'AVG'
+    ): Promise<Record<string, EDSTelemetryValue>> {
+        if (sensorIds.length === 0) return {};
+
+        const token = await this.login();
+        const validTags = await this.filterValidPoints(sensorIds);
+
+        if (validTags.length === 0) {
+            this.log('Tabular Request', 'No valid points found to query.');
+            return {};
+        }
+
+        const now = Math.floor(Date.now() / 1000);
+        const startTime = now - 600; // Last 10 minutes
+        const endTime = now;
+
+        const itemsXml = validTags.map((tag) => `
+        <tns:item>
+          <tns:pointId>
+            <tns:iess>${tag}</tns:iess>
+          </tns:pointId>
+          <tns:shadePriority>0</tns:shadePriority>
+          <tns:function>${functionType}</tns:function>
+        </tns:item>`).join('');
+
+        const requestTabularEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:requestTabular>
+      <tns:authString>${token}</tns:authString>
+      <tns:request>
+        <tns:period>
+          <tns:from><tns:second>${startTime}</tns:second></tns:from>
+          <tns:till><tns:second>${endTime}</tns:second></tns:till>
+        </tns:period>
+        <tns:step><tns:seconds>${stepSeconds}</tns:seconds></tns:step>
+        <tns:items>${itemsXml}
+        </tns:items>
+      </tns:request>
+    </tns:requestTabular>
+  </soap:Body>
+</soap:Envelope>`;
+
+        this.log('Outgoing requestTabular Payload', requestTabularEnvelope);
+
+        // 1. Submit Tabular Request
+        const reqResponse = await fetch(this.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/requestTabular"'
+            },
+            body: requestTabularEnvelope
+        });
+
+        const reqXml = await reqResponse.text();
+        const requestIdMatch = reqXml.match(/<(?:[a-zA-Z0-9]+:)?return[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?return>/i) ||
+                               reqXml.match(/<(?:[a-zA-Z0-9]+:)?requestId[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?requestId>/i);
+
+        if (!requestIdMatch) {
+            throw new Error(`Failed to submit tabular request: ${reqXml}`);
+        }
+
+        const requestId = requestIdMatch[1].trim();
+        this.log('Tabular Request Submitted', { requestId });
+
+        // 2. Poll Status until REQUEST-SUCCESS
+        let isReady = false;
+        const maxPolls = 10;
+        for (let i = 0; i < maxPolls; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            const statusEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getRequestStatus>
+      <tns:authString>${token}</tns:authString>
+      <tns:requestId>${requestId}</tns:requestId>
+    </tns:getRequestStatus>
+  </soap:Body>
+</soap:Envelope>`;
+
+            const statusResp = await fetch(this.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getRequestStatus"'
+                },
+                body: statusEnvelope
+            });
+
+            const statusXml = await statusResp.text();
+            const statusMatch = statusXml.match(/<(?:[a-zA-Z0-9]+:)?status[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?status>/i);
+            const status = statusMatch ? statusMatch[1].trim() : '';
+
+            this.log(`Poll Status [${i + 1}/${maxPolls}]`, status);
+
+            if (status === 'REQUEST-SUCCESS') {
+                isReady = true;
+                break;
+            } else if (status === 'REQUEST-FAILURE') {
+                throw new Error(`EDS Tabular Request Failed for requestId: ${requestId}`);
+            }
+        }
+
+        if (!isReady) {
+            throw new Error(`EDS Tabular Request timed out waiting for ready state (requestId: ${requestId})`);
+        }
+
+        // 3. Fetch Tabular Data
+        const getTabularEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getTabular>
+      <tns:authString>${token}</tns:authString>
+      <tns:requestId>${requestId}</tns:requestId>
+    </tns:getTabular>
+  </soap:Body>
+</soap:Envelope>`;
+
+        const dataResp = await fetch(this.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getTabular"'
+            },
+            body: getTabularEnvelope
+        });
+
+        const dataXml = await dataResp.text();
+        this.log('Incoming getTabular XML Response', dataXml);
+
+        return this.parseTabularResponse(dataXml, validTags);
+    }
+
+    private parseTabularResponse(xml: string, requestedTags: string[]): Record<string, EDSTelemetryValue> {
+        const results: Record<string, EDSTelemetryValue> = {};
+
+        // Extract points metadata array to match column ordering
+        const pointsMatch = xml.match(/<pointsIds[^>]*>([\s\S]*?)<\/pointsIds>/gi) || [];
+        const pointTags: string[] = [];
+
+        for (const pBlock of pointsMatch) {
+            const tagMatch = pBlock.match(/<iess[^>]*>([^<]+)<\/iess>/i) ||
+                             pBlock.match(/<idcs[^>]*>([^<]+)<\/idcs>/i);
+            if (tagMatch) {
+                pointTags.push(tagMatch[1].trim().toUpperCase());
+            }
+        }
+
+        // Fallback to input order if XML header tags weren't resolved
+        const activeTags = pointTags.length > 0 ? pointTags : requestedTags;
+
+        // Parse last row of values table for latest snapshot
+        const rowBlocks = xml.match(/<rows[^>]*>([\s\S]*?)<\/rows>/gi) ||
+                          xml.match(/<TabularRow[^>]*>([\s\S]*?)<\/TabularRow>/gi) || [];
+
+        if (rowBlocks.length > 0) {
+            const lastRow = rowBlocks[rowBlocks.length - 1];
+            const tsMatch = lastRow.match(/<second[^>]*>([^<]+)<\/second>/i);
+            const timestamp = tsMatch ? new Date(parseInt(tsMatch[1], 10) * 1000).toISOString() : new Date().toISOString();
+
+            const valueBlocks = lastRow.match(/<values[^>]*>([\s\S]*?)<\/values>/gi) ||
+                                lastRow.match(/<TabularValue[^>]*>([\s\S]*?)<\/TabularValue>/gi) || [];
+
+            valueBlocks.forEach((valBlock, idx) => {
+                if (idx < activeTags.length) {
+                    const tag = activeTags[idx];
+                    const valMatch = valBlock.match(/<value[^>]*>([^<]+)<\/value>/i);
+                    const qualMatch = valBlock.match(/<quality[^>]*>([^<]+)<\/quality>/i);
+
+                    const rawVal = valMatch ? parseFloat(valMatch[1]) : 0;
+                    const qualityStr = qualMatch ? qualMatch[1].toUpperCase() : 'GOOD';
+
+                    results[tag] = {
+                        iessTag: tag,
+                        value: Number.isNaN(rawVal) ? 0 : rawVal,
+                        quality: qualityStr.includes('NONE') || qualityStr.includes('BAD') ? 'BAD' : 'GOOD',
+                        timestamp
+                    };
+                }
+            });
+        }
+
+        return results;
+    }
 }
