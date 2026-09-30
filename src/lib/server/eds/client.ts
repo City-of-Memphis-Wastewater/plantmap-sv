@@ -70,8 +70,10 @@ export class ClientEdsSoap {
 			throw new Error(`EDS Login failed: HTTP ${response.status} ${response.statusText}`);
 		}
 
-		const match = xmlText.match(/<loginResult[^>]*>([^<]+)<\/loginResult>/i) ||
-		              xmlText.match(/<return[^>]*>([^<]+)<\/return>/i);
+
+		const match = xmlText.match(/<(?:[a-zA-Z0-9]+:)?authString[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?authString>/i) ||
+		              xmlText.match(/<(?:[a-zA-Z0-9]+:)?loginResult[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?loginResult>/i) ||
+		              xmlText.match(/<(?:[a-zA-Z0-9]+:)?return[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?return>/i);
 
 		if (!match) {
 			throw new Error('Failed to extract session authstring from TT.com.pl EDS login response');
