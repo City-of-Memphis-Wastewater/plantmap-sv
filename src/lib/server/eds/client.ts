@@ -179,6 +179,23 @@ export class ClientEdsSoap {
         return results;
     }
 
+    public async getPointsByIessListParsed(
+        iessNames: string[]
+    ): Promise<Record<string, EdsPointTelemetry>> {
+        const rawResults = await this.getPointsByIessList(iessNames);
+        const results: Record<string, EdsPointTelemetry> = {};
+
+        for (const xml of Object.values(rawResults)) {
+            const parsed = this.parseGetPointsResponse(xml);
+
+            for (const [key, point] of Object.entries(parsed)) {
+                results[key] = point;
+            }
+        }
+
+        return results;
+    }
+
     /**
      * Batch queries telemetry for multiple tags in a SINGLE SOAP payload
      * using regex OR pattern matching on iessRe.

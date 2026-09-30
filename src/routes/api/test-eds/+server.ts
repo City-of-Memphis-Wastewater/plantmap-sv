@@ -12,7 +12,7 @@ export const GET: RequestHandler = async () => {
 		console.log('[TestRoute] Attempting to fetch current values from EDS...');
 		//const data = await client.fetchCurrentValues(sampleTags);
 		//const data = await client.fetchPointValues(sampleTags);
-		const data = await client.getPointsByIess(sampleTags[0]);
+		const data = await client.getPointsByIessParsed(sampleTags[0]);
 		
 		await client.logout();
 
