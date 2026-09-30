@@ -30,125 +30,157 @@
 		onToggleSensorLabels: () => void;
 		onToggleHoverInfo: () => void;
 	} = $props();
+
+	// Local tracking for active modes if props don't provide active state strings directly
+	let currentView = $state<'2D' | '3D'>('3D');
+	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
+
+	function handleViewChange(mode: '2D' | '3D') {
+		currentView = mode;
+		onToggleViewMode(mode);
+	}
+
+	function handleBasemapChange(map: 'satellite' | 'streets') {
+		currentBasemap = map;
+		onSwitchBasemap(map);
+	}
 </script>
 
-<div class="fixed top-1/2 right-3 z-30 -translate-y-1/2">
-	<div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1 shadow-xl backdrop-blur-sm">
-		<div class="flex items-center justify-between gap-2 px-1.5 py-0.5">
-			<span class="font-mono text-xs font-semibold uppercase tracking-wider text-slate-400">
-				Navigation
+<div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]">
+	<div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md">
+		<!-- Header -->
+		<div class="flex items-center justify-between gap-2 px-1 pb-1">
+			<span class="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
+				HUD Controls
 			</span>
 			<button
 				type="button"
 				onclick={() => (showNavigation = !showNavigation)}
-				title={showNavigation ? 'Collapse navigation' : 'Expand navigation'}
-				class="rounded border border-slate-700/80 px-1.5 py-0.5 font-mono text-xs text-slate-300 hover:bg-slate-800"
+				title={showNavigation ? 'Collapse HUD' : 'Expand HUD'}
+				class="rounded border border-slate-700 px-1.5 py-0.5 font-mono text-xs text-slate-300 hover:bg-slate-800 hover:text-white"
 			>
 				{showNavigation ? '−' : '+'}
 			</button>
 		</div>
 
 		{#if showNavigation}
-			<div class="flex flex-col gap-2 pt-2">
-				<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1">
+			<div class="flex flex-col gap-1.5 pt-1 text-slate-200">
+				<!-- View Mode Segmented Switch -->
+				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
-						onclick={() => onToggleViewMode('2D')}
-						class="rounded px-3 py-2 font-mono text-xs text-white hover:bg-slate-800"
+						onclick={() => handleViewChange('2D')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentView === '2D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
-						2D Top-Down
+						2D
 					</button>
 					<button
 						type="button"
-						onclick={() => onToggleViewMode('3D')}
-						class="rounded px-3 py-2 font-mono text-xs text-white hover:bg-slate-800"
+						onclick={() => handleViewChange('3D')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentView === '3D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
-						3D Perspective
+						3D
 					</button>
 				</div>
 
-				<div class="flex rounded-lg border border-slate-700 bg-slate-900/90 p-1">
+				<!-- Basemap Segmented Switch -->
+				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
-						onclick={() => onSwitchBasemap('satellite')}
-						class="rounded px-3 py-2 font-mono text-xs text-white hover:bg-slate-800"
+						onclick={() => handleBasemapChange('satellite')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'satellite' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						Satellite
 					</button>
 					<button
 						type="button"
-						onclick={() => onSwitchBasemap('streets')}
-						class="rounded px-3 py-2 font-mono text-xs text-white hover:bg-slate-800"
+						onclick={() => handleBasemapChange('streets')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'streets' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						Streets
 					</button>
 				</div>
 
-				<button
-					type="button"
-					onclick={onResetCamera}
-					class="rounded-lg border border-slate-700 bg-slate-900/90 p-2 font-mono text-xs text-white hover:bg-slate-800"
-				>
-					Reset View
-				</button>
-
-				<div class="flex gap-2">
+				<!-- Compact Camera Bar (+ / Reset / -) -->
+				<div class="grid grid-cols-3 gap-1">
 					<button
 						type="button"
 						onclick={onZoomIn}
-						class="flex-1 rounded-lg border border-slate-700 bg-slate-900/90 p-2 font-mono text-lg text-white hover:bg-slate-800"
+						title="Zoom In"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold hover:bg-slate-700 text-slate-100"
 					>
 						+
 					</button>
 					<button
 						type="button"
+						onclick={onResetCamera}
+						title="Reset Camera View"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-[10px] uppercase font-semibold hover:bg-slate-700 text-slate-100"
+					>
+						Reset
+					</button>
+					<button
+						type="button"
 						onclick={onZoomOut}
-						class="flex-1 rounded-lg border border-slate-700 bg-slate-900/90 p-2 font-mono text-lg text-white hover:bg-slate-800"
+						title="Zoom Out"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold hover:bg-slate-700 text-slate-100"
 					>
 						−
 					</button>
 				</div>
 
-				<div class="border-t border-slate-800 pt-2">
-					<div class="mb-1 px-2 font-mono text-[10px] uppercase tracking-wider text-slate-500">
-						Display
+				<!-- Display Layer Toggles -->
+				<div class="border-t border-slate-800/80 pt-1.5 flex flex-col gap-1">
+					<div class="px-1 font-mono text-[9px] uppercase tracking-wider text-slate-500">
+						Layers
 					</div>
+
 					<button
 						type="button"
 						onclick={onToggleGeoJson}
 						disabled={!geojsonLoaded}
-						class="w-full rounded-lg border border-slate-700 bg-slate-900/90 p-2 text-left font-mono text-xs text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
 					>
-						{showGeoJson ? 'Hide Plant GeoJSON' : 'Show Plant GeoJSON'}
+						<span>Plant GeoJSON</span>
+						<span class="text-[10px] font-bold {showGeoJson ? 'text-emerald-400' : 'text-slate-500'}">
+							{showGeoJson ? 'ON' : 'OFF'}
+						</span>
 					</button>
 
 					<button
 						type="button"
 						onclick={onToggleSensorLabels}
-						class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-900/90 p-2 text-left font-mono text-xs text-white hover:bg-slate-800"
+						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
-						{showSensorLabels ? 'Hide Sensor Labels' : 'Show Sensor Labels'}
+						<span>Sensor Labels</span>
+						<span class="text-[10px] font-bold {showSensorLabels ? 'text-emerald-400' : 'text-slate-500'}">
+							{showSensorLabels ? 'ON' : 'OFF'}
+						</span>
 					</button>
 
 					<button
 						type="button"
 						onclick={onToggleHoverInfo}
-						class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-900/90 p-2 text-left font-mono text-xs text-white hover:bg-slate-800"
+						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
-						{showHoverInfo ? 'Hide Sensor Readouts' : 'Show Sensor Readouts'}
+						<span>Readouts</span>
+						<span class="text-[10px] font-bold {showHoverInfo ? 'text-emerald-400' : 'text-slate-500'}">
+							{showHoverInfo ? 'ON' : 'OFF'}
+						</span>
 					</button>
 				</div>
 
-				<div class="border-t border-slate-800 pt-2">
-					<div class="mb-1 px-2 font-mono text-[10px] uppercase tracking-wider text-slate-500">
-						Diagnostics
-					</div>
+				<!-- Diagnostics Toggle -->
+				<div class="border-t border-slate-800/80 pt-1.5">
 					<button
 						type="button"
 						onclick={() => (showDebugger = !showDebugger)}
-						class="w-full rounded-lg border border-slate-700 bg-slate-900/90 p-2 text-left font-mono text-xs text-white hover:bg-slate-800"
+						class="flex w-full items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
-						{showDebugger ? 'Hide Debugger' : 'Show Debugger'}
+						<span class="text-slate-300">Debugger</span>
+						<span class="text-[10px] font-bold {showDebugger ? 'text-amber-400' : 'text-slate-500'}">
+							{showDebugger ? 'ON' : 'OFF'}
+						</span>
 					</button>
 				</div>
 			</div>
