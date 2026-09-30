@@ -32,9 +32,9 @@
 	} = $props();
 </script>
 
-<div class="absolute bottom-6 right-6 z-30">
-	<div class="rounded-lg border border-slate-700 bg-slate-900/90 p-1 shadow-xl backdrop-blur-sm">
-		<div class="flex items-center justify-between gap-4 px-2 py-1">
+<div class="fixed top-1/2 right-3 z-30 -translate-y-1/2">
+	<div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1 shadow-xl backdrop-blur-sm">
+		<div class="flex items-center justify-between gap-2 px-1.5 py-0.5">
 			<span class="font-mono text-xs font-semibold uppercase tracking-wider text-slate-400">
 				Navigation
 			</span>
@@ -42,7 +42,7 @@
 				type="button"
 				onclick={() => (showNavigation = !showNavigation)}
 				title={showNavigation ? 'Collapse navigation' : 'Expand navigation'}
-				class="rounded border border-slate-700 px-2 py-1 font-mono text-xs text-slate-300 hover:bg-slate-800"
+				class="rounded border border-slate-700/80 px-1.5 py-0.5 font-mono text-xs text-slate-300 hover:bg-slate-800"
 			>
 				{showNavigation ? '−' : '+'}
 			</button>
