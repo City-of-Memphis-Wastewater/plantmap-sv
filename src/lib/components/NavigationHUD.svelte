@@ -1,3 +1,4 @@
+<!-- src/lib/components/NavigationHUD.svelte -->
 <script lang="ts">
 	let {
 		showNavigation = $bindable(true),
@@ -6,14 +7,16 @@
 		showSensorLabels = false,
 		showHoverInfo = false,
 		showDebugger = $bindable(false),
-		onToggleViewMode,
-		onSwitchBasemap,
-		onResetCamera,
-		onZoomIn,
-		onZoomOut,
-		onToggleGeoJson,
-		onToggleSensorLabels,
-		onToggleHoverInfo
+		viewMode = '2D',
+		currentBasemap = 'satellite',
+		onToggleViewMode = () => {},
+		onSwitchBasemap = () => {},
+		onResetCamera = () => {},
+		onZoomIn = () => {},
+		onZoomOut = () => {},
+		onToggleGeoJson = () => {},
+		onToggleSensorLabels = () => {},
+		onToggleHoverInfo = () => {}
 	}: {
 		showNavigation?: boolean;
 		geojsonLoaded?: boolean;
@@ -21,29 +24,17 @@
 		showSensorLabels?: boolean;
 		showHoverInfo?: boolean;
 		showDebugger?: boolean;
-		onToggleViewMode: (mode: '2D' | '3D') => void;
-		onSwitchBasemap: (map: 'satellite' | 'streets') => void;
-		onResetCamera: () => void;
-		onZoomIn: () => void;
-		onZoomOut: () => void;
-		onToggleGeoJson: () => void;
-		onToggleSensorLabels: () => void;
-		onToggleHoverInfo: () => void;
+		viewMode?: '2D' | '3D';
+		currentBasemap?: 'satellite' | 'streets';
+		onToggleViewMode?: (mode: '2D' | '3D') => void;
+		onSwitchBasemap?: (map: 'satellite' | 'streets') => void;
+		onResetCamera?: () => void;
+		onZoomIn?: () => void;
+		onZoomOut?: () => void;
+		onToggleGeoJson?: () => void;
+		onToggleSensorLabels?: () => void;
+		onToggleHoverInfo?: () => void;
 	} = $props();
-
-	// Local tracking for active modes if props don't provide active state strings directly
-	let currentView = $state<'2D' | '3D'>('3D');
-	let currentBasemap = $state<'satellite' | 'streets'>('satellite');
-
-	function handleViewChange(mode: '2D' | '3D') {
-		currentView = mode;
-		onToggleViewMode(mode);
-	}
-
-	function handleBasemapChange(map: 'satellite' | 'streets') {
-		currentBasemap = map;
-		onSwitchBasemap(map);
-	}
 </script>
 
 <div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]">
@@ -51,7 +42,7 @@
 		<!-- Header -->
 		<div class="flex items-center justify-between gap-2 px-1 pb-1">
 			<span class="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
-				HUD Controls
+				Nav Controls
 			</span>
 			<button
 				type="button"
@@ -69,15 +60,15 @@
 				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
-						onclick={() => handleViewChange('2D')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentView === '2D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						onclick={() => onToggleViewMode('2D')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode === '2D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						2D
 					</button>
 					<button
 						type="button"
-						onclick={() => handleViewChange('3D')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentView === '3D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						onclick={() => onToggleViewMode('3D')}
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode === '3D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						3D
 					</button>
@@ -87,14 +78,14 @@
 				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
-						onclick={() => handleBasemapChange('satellite')}
+						onclick={() => onSwitchBasemap('satellite')}
 						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'satellite' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						Satellite
 					</button>
 					<button
 						type="button"
-						onclick={() => handleBasemapChange('streets')}
+						onclick={() => onSwitchBasemap('streets')}
 						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'streets' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
 					>
 						Streets

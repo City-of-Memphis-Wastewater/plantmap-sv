@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import CesiumViewport from '$lib/components/CesiumViewport.svelte';
-	import NavigationHUD from '$lib/components/NavigationHUD.svelte';
 	import TelemetryHUD from '$lib/components/TelemetryHUD.svelte';
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 
@@ -31,5 +30,4 @@
 
 	<!-- Overlay Controls -->
 	<TelemetryHUD />
-	<NavigationHUD />
 </main>

@@ -1,3 +1,4 @@
+<!-- src/lib/components/CesiumViewport.svelte -->
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
@@ -5,9 +6,11 @@
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap } from '$lib/cesium/layers';
 	import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
+	import { syncSensorEntities } from '$lib/cesium/syncSensors';
 
 	import NavigationHUD from './NavigationHUD.svelte';
 	import ViewportDebugger from './ViewportDebugger.svelte';
+	import HoverTooltip from './HoverTooltip.svelte';
 
 	let container: HTMLDivElement;
 	let viewer: any = $state(undefined);
@@ -42,66 +45,14 @@
 	let showHoverInfo = $state(true);
 	let showSensorLabels = $state(true);
 
+	// Sync telemetry store to Cesium entities
 	$effect(() => {
-		if (!viewer || !CesiumModule) return;
-
-		Object.values(telemetryStore.sensors).forEach((sensor) => {
-			const entityId = `sensor-${sensor.id}`;
-
-			let entity = viewer.entities.getById(entityId);
-
-			const pos = CesiumModule.Cartesian3.fromDegrees(
-				sensor.lon,
-				sensor.lat,
-				sensor.altitude ?? 15
-			);
-
-			if (!entity) {
-				entity = viewer.entities.add({
-					id: entityId,
-					name: sensor.name,
-					properties: {
-						sensorData: sensor
-					},
-					position: pos,
-
-					point: {
-						pixelSize: 18,
-						color:
-							sensor.status === 'alarm'
-								? CesiumModule.Color.RED
-								: CesiumModule.Color.LIME,
-						outlineColor: CesiumModule.Color.BLACK,
-						outlineWidth: 2
-					},
-
-					label: {
-						text: `${sensor.name}\n${sensor.value} ${sensor.unit}`,
-						font: '13px monospace',
-						style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
-						outlineWidth: 3,
-						verticalOrigin:
-							CesiumModule.VerticalOrigin.BOTTOM,
-						pixelOffset: new CesiumModule.Cartesian2(0, -22),
-						show: showSensorLabels
-					}
-				});
-			} else {
-				if (entity.label) {
-					entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}` as any;
-					entity.point.color = (sensor.status === 'alarm' ? CesiumModule.Color.RED : CesiumModule.Color.LIME) as any;
-					entity.label.show = showSensorLabels;
-					
-				}
-
-				if (entity.point) {
-					entity.point.color =
-						sensor.status === 'alarm'
-							? CesiumModule.Color.RED
-							: CesiumModule.Color.LIME;
-				}
-			}
-		});
+		syncSensorEntities(
+			viewer,
+			CesiumModule,
+			telemetryStore.sensors,
+			showSensorLabels
+		);
 	});
 
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {
@@ -127,15 +78,13 @@
 			console.warn('GeoJSON DataSource not loaded yet.');
 			return;
 		}
-    	geojsonDataSource.show = !geojsonDataSource.show;
-    	showGeoJson = geojsonDataSource.show;
-    	console.debug(`[Cesium] GeoJSON visibility: ${showGeoJson}`);
-
-    }
+		geojsonDataSource.show = !geojsonDataSource.show;
+		showGeoJson = geojsonDataSource.show;
+		console.debug(`[Cesium] GeoJSON visibility: ${showGeoJson}`);
+	}
 
 	function toggleSensorLabels() {
 		showSensorLabels = !showSensorLabels;
-
 		if (!viewer) return;
 
 		Object.values(viewer.entities.values).forEach((entity: any) => {
@@ -146,6 +95,7 @@
 	}
 
 	function handleResetCamera() {
+		handleToggleViewMode('2D');
 		resetCamera(viewer, CesiumModule);
 	}
 
@@ -168,13 +118,10 @@
 				}
 
 				statusMsg = 'Setting asset base route...';
-
 				(window as any).CESIUM_BASE_URL = '/cesium/';
 
 				statusMsg = 'Importing Cesium bundle...';
-
 				const Cesium = await import('cesium');
-
 				CesiumModule = Cesium;
 
 				await tick();
@@ -185,7 +132,6 @@
 				}
 
 				statusMsg = 'Initializing 3D Globe Viewer...';
-
 				viewer = new Cesium.Viewer(container, {
 					baseLayerPicker: false,
 					animation: false,
@@ -207,88 +153,58 @@
 				viewer.scene.screenSpaceCameraController.enableTilt = true;
 				viewer.scene.screenSpaceCameraController.enableLook = true;
 
-				applyBasemap(
-					viewer,
-					CesiumModule,
-					currentBasemap
-				);
-
-                const geojson = await Cesium.GeoJsonDataSource.load('/geojson/plant.geojson', {
-                	stroke: Cesium.Color.GREEN,
-                	fill: Cesium.Color.BLUE.withAlpha(0.15),
-                	strokeWidth: 3
-                });
-
-                geojsonDataSource = geojson;
-                await viewer.dataSources.add(geojson);
-                geojson.show = showGeoJson;
+				applyBasemap(viewer, CesiumModule, currentBasemap);
 
 				statusMsg = 'Loading GeoJSON layer...';
+				const geojson = await Cesium.GeoJsonDataSource.load('/geojson/plant.geojson', {
+					stroke: Cesium.Color.GREEN,
+					fill: Cesium.Color.BLUE.withAlpha(0.15),
+					strokeWidth: 3
+				});
+
+				geojsonDataSource = geojson;
+				await viewer.dataSources.add(geojson);
+				geojson.show = showGeoJson;
 
 				if (!isMounted) return;
 
 				viewer.resize();
-
 				resetCamera(viewer, CesiumModule);
 
-				const handler =
-					new Cesium.ScreenSpaceEventHandler(
-						viewer.scene.canvas
-					);
+				// Mouse move listener for entity hover and camera position telemetry
+				const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
 
-				handler.setInputAction(
-					(movement: any) => {
-						if (showHoverInfo) {
-							const pickedObject = viewer.scene.pick(
-								movement.endPosition
-							);
+				handler.setInputAction((movement: any) => {
+					if (showHoverInfo) {
+						const pickedObject = viewer.scene.pick(movement.endPosition);
 
-							if (
-								Cesium.defined(pickedObject) &&
-								pickedObject.id
-							) {
-								const sensor =
-									pickedObject.id.properties?.sensorData?.getValue();
-
-								hoverInfo = {
-									name:
-										pickedObject.id.name ||
-										pickedObject.id.id,
-									value: sensor
-										? `${sensor.value} ${sensor.unit}`
-										: 'Entity Selected',
-									x: movement.endPosition.x,
-									y: movement.endPosition.y
-								};
-							} else {
-								hoverInfo = null;
-							}
+						if (Cesium.defined(pickedObject) && pickedObject.id) {
+							const sensor = pickedObject.id.properties?.sensorData?.getValue();
+							hoverInfo = {
+								name: pickedObject.id.name || pickedObject.id.id,
+								value: sensor
+									? `${sensor.value} ${sensor.unit}`
+									: 'Entity Selected',
+								x: movement.endPosition.x,
+								y: movement.endPosition.y
+							};
 						} else {
 							hoverInfo = null;
 						}
+					} else {
+						hoverInfo = null;
+					}
 
-						const cartesian = viewer.camera.position;
+					const cartesian = viewer.camera.position;
+					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+					cameraPos = {
+						lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
+						lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
+						alt: Math.round(cartographic.height)
+					};
+				}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-						const cartographic =
-							Cesium.Cartographic.fromCartesian(cartesian);
-
-						cameraPos = {
-							lon: Number(
-								Cesium.Math.toDegrees(
-									cartographic.longitude
-								).toFixed(4)
-							),
-							lat: Number(
-								Cesium.Math.toDegrees(
-									cartographic.latitude
-								).toFixed(4)
-							),
-							alt: Math.round(cartographic.height)
-						};
-					},
-					Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-				// Camera Position Telemetry Listener
+				// Camera position listener on view changes
 				viewer.camera.changed.addEventListener(() => {
 					const cartesian = viewer.camera.position;
 					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
@@ -302,11 +218,7 @@
 				statusMsg = '3D Scene Operational';
 			} catch (err: any) {
 				console.error('Cesium execution error:', err);
-
-				errorLog =
-					err?.stack ||
-					err?.message ||
-					String(err);
+				errorLog = err?.stack || err?.message || String(err);
 			}
 		})();
 
@@ -318,16 +230,15 @@
 </script>
 
 <div class="relative h-screen w-screen overflow-hidden bg-slate-950">
-	<!-- Cesium viewport -->
-	<div
-		class="absolute inset-0 h-full w-full"
-		bind:this={container}
-	></div>
+	<!-- Cesium viewport container -->
+	<div class="absolute inset-0 h-full w-full" bind:this={container}></div>
 
-	<!-- Navigation / Map Controls -->
+	<!-- Navigation Controls HUD -->
 	<NavigationHUD
 		bind:showNavigation
 		bind:showDebugger
+		{viewMode}
+		{currentBasemap}
 		geojsonLoaded={!!geojsonDataSource}
 		{showGeoJson}
 		{showSensorLabels}
@@ -345,30 +256,19 @@
 		}}
 	/>
 
-	<!-- Hover Sensor Readout -->
+	<!-- Hover Sensor Card -->
 	{#if showHoverInfo && hoverInfo}
-		<div
-			class="pointer-events-none absolute z-40 rounded-md border border-slate-700 bg-slate-900/95 px-3 py-2 text-xs shadow-xl backdrop-blur-md"
-			style={`left: ${hoverInfo.x + 12}px; top: ${hoverInfo.y + 12}px;`}
-		>
-			<div class="font-bold text-emerald-400">
-				{hoverInfo.name}
-			</div>
-
-			<div class="text-slate-300">
-				{hoverInfo.value}
-			</div>
-		</div>
+		<HoverTooltip {hoverInfo} />
 	{/if}
 
-	<!-- Debugger -->
+	<!-- Debug Overlay -->
 	{#if showDebugger}
 		<ViewportDebugger
-		{webGlSupported}
-		{viewMode}
-		{statusMsg}
-		{cameraPos}
-		{errorLog}
+			{webGlSupported}
+			{viewMode}
+			{statusMsg}
+			{cameraPos}
+			{errorLog}
 		/>
 	{/if}
 </div>
