@@ -136,16 +136,16 @@ export class ClientEdsSoap {
 		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tns="http://tt.com.pl/eds/">
   <soap:Body>
-    <tns:getPointValues>
-      <authstring>${token}</authstring>
-      <pointNames>
-        ${iessTags.map((tag) => `<string>${tag}</string>`).join('\n        ')}
-      </pointNames>
-    </tns:getPointValues>
+    <tns:getPoints>
+      <tns:authString>${token}</tns:authString>
+      <tns:pointNames>
+        ${iessTags.map((tag) => `<tns:string>${tag}</tns:string>`).join('\n        ')}
+      </tns:pointNames>
+    </tns:getPoints>
   </soap:Body>
 </soap:Envelope>`;
 
-		this.log('Outgoing getPointValues Request', soapEnvelope);
+		this.log('Outgoing getPoints Request', soapEnvelope);
 
 		const controller = new AbortController();
 		const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
@@ -154,20 +154,20 @@ export class ClientEdsSoap {
 			const response = await fetch(this.endpoint, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPointValues"'
+					'Content-Type': 'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
 				},
 				body: soapEnvelope,
 				signal: controller.signal
 			});
 
-			this.log(`Incoming getPointValues Response status: ${response.status}`, '');
+			this.log(`Incoming getPoints Response status: ${response.status}`, '');
 
 			if (!response.ok) {
 				throw new Error(`EDS HTTP ${response.status}: ${response.statusText}`);
 			}
 
 			const xmlText = await response.text();
-			this.log('Incoming getPointValues XML Body', xmlText);
+			this.log('Incoming getPoints XML Body', xmlText);
 
 			return this.parseSoapResponse(xmlText, tagToIdMap);
 		} finally {
