@@ -6,6 +6,14 @@ export function syncSensorEntities(
 	sensors: Record<string, any>,
 	showSensorLabels: boolean
 ) {
+	console.log(
+                '[Cesium Sync] syncSensorEntities',
+                Object.values(sensors).map((s) => ({
+                        id: s.id,
+                        value: s.value
+                }))
+        );
+		
 	if (!viewer || !CesiumModule || !sensors) return;
 
 	Object.values(sensors).forEach((sensor) => {

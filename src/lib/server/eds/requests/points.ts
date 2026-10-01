@@ -91,6 +91,7 @@ export class Points {
 
 			this.client.log('Points.getRegex response body received', {
 				length: xml.length
+				//xml
 			});
 
 			if (!response.ok) {

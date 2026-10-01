@@ -143,6 +143,8 @@ export const GET: RequestHandler = async () => {
 			console.log(
 				'[API /telemetry-new] EDS logout complete'
 			);
+			console.log('[API /telemetry-new] ========================================');
+			console.log('')
 		} catch (error) {
 			console.error(
 				'[API /telemetry-new] EDS logout failed:',

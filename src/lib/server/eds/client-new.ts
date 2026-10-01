@@ -45,6 +45,7 @@ export class ClientEdsSoap {
 		this.points = new Points(this);
 		this.tabular = new Tabular(this);
 
+		this.log('==========================================================================');
 		this.log('Client initialized', {
 			endpoint: this.endpoint,
 			iessSuffix: this.iessSuffix,

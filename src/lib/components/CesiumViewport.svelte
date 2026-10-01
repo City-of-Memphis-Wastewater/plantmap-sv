@@ -104,7 +104,6 @@
 
 		(async () => {
 			try {
-				await telemetryStore.init();
 
 				const canvasTest = document.createElement('canvas');
 				const gl =
