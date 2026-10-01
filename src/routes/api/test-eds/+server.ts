@@ -27,7 +27,7 @@ export const GET: RequestHandler = async () => {
 		const requestStart = Date.now();
 
 		const data = await client.getPointsByIdcsListParsed(sampleTags);
-		//const data = await client.points.getByIdcsList(sampleTags);
+		//const data = await client.points.get(sampleTags);
 
 		console.log('[TestRoute] getPointsByIdcsListParsed() returned.');
 		console.log('[TestRoute] Request elapsed:', `${Date.now() - requestStart}ms`);

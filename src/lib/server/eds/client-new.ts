@@ -89,7 +89,7 @@ export class ClientEdsSoap {
 	public async getPoints(
 		iessNames: string[]
 	) {
-		return this.points.getByIdcsList(iessNames);
+		return this.points.get(iessNames);
 	}
 
 	/**

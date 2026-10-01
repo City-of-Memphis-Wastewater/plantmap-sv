@@ -220,20 +220,20 @@ export class Points {
 	 *
 	 * This corresponds to the old client's getPoints().
 	 */
-	public async getByIdcsList(
+	public async get(
 		idcsTags: string[]
 	): Promise<Record<string, EdsPointTelemetry>> {
 		const started = Date.now();
 
 		if (idcsTags.length === 0) {
 			this.client.log(
-				'Points.getByIdcsList called with empty list'
+				'Points.get called with empty list'
 			);
 
 			return {};
 		}
 
-		this.client.log('Points.getByIdcsList START', {
+		this.client.log('Points.get START', {
 			count: idcsTags.length,
 			idcsTags
 		});
@@ -267,7 +267,7 @@ export class Points {
 	</soap:Body>
 </soap:Envelope>`;
 
-		this.client.log('Points.getByIdcsList sending request', {
+		this.client.log('Points.get sending request', {
 			idcsTags,
 			iessTags,
 			regexPattern,
@@ -287,7 +287,7 @@ export class Points {
 				}
 			);
 
-			this.client.log('Points.getByIdcsList response received', {
+			this.client.log('Points.get response received', {
 				status: response.status,
 				statusText: response.statusText,
 				ok: response.ok,
@@ -296,7 +296,7 @@ export class Points {
 
 			const xml = await response.text();
 
-			this.client.log('Points.getByIdcsList response body received', {
+			this.client.log('Points.get response body received', {
 				length: xml.length
 			});
 
@@ -309,7 +309,7 @@ export class Points {
 			const results =
 				parseGetPointsResponse(xml);
 
-			this.client.log('Points.getByIdcsList COMPLETE', {
+			this.client.log('Points.get COMPLETE', {
 				points: Object.keys(results).length,
 				keys: Object.keys(results),
 				elapsedMs: Date.now() - started
@@ -317,7 +317,7 @@ export class Points {
 
 			return results;
 		} catch (error) {
-			this.client.log('Points.getByIdcsList FAILED', {
+			this.client.log('Points.get FAILED', {
 				elapsedMs: Date.now() - started,
 				error:
 					error instanceof Error
