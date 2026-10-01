@@ -5,7 +5,7 @@ import { Auth } from './auth';
 import { Points } from './requests/points';
 import { Tabular } from './requests/tabular';
 
-import type { EDSClientOptions } from './types';
+import type { EDSClientOptions, EdsPointTelemetry } from './types';
 
 export class ClientEdsSoap {
 	public readonly endpoint: string;
@@ -88,27 +88,9 @@ export class ClientEdsSoap {
 	 * The actual SOAP request and parsing remain owned by Points.
 	 */
 	public async getRegex(
-		iessNames: string[]
-	) {
-		return this.points.getRegex(iessNames);
-	}
-
-	/**
-	 * Convenience API matching the old client's getPointsByIdcs().
-	 */
-	public async getPointsByIdcs(
-		iessName: string
-	): Promise<string> {
-		return this.points.getByIdcs(iessName);
-	}
-
-	/**
-	 * Convenience API matching the old client's getPointsByIdcsList().
-	 */
-	public async getPointsByIdcsList(
-		iessNames: string[]
-	): Promise<Record<string, string>> {
-		return this.points.getByIdcsList(iessNames);
+		idcsTags: string[]
+	): Promise<Record<string, EdsPointTelemetry>> {
+		return this.points.getRegex(idcsTags);
 	}
 
 
@@ -127,10 +109,6 @@ export class ClientEdsSoap {
 			stepSeconds,
 			functionType
 		);
-	}
-
-	public async login(): Promise<string> {
-		return this.auth.getToken();
 	}
 
 	public async logout(): Promise<void> {

@@ -28,15 +28,12 @@ export const GET: RequestHandler = async () => {
 		];
 
 		console.log('[TestRoute] Sample tags:', sampleTags);
-		console.log('[TestRoute] About to call getPointsByIdcsListParsed()...');
 		console.log('[TestRoute] Elapsed:', `${Date.now() - startTime}ms`);
 
 		const requestStart = Date.now();
 
-		//const data = await client.getPointsByIdcsListParsed(sampleTags);
 		const data = await client.getPoints(sampleTags);
 
-		console.log('[TestRoute] getPointsByIdcsListParsed() returned.');
 		console.log('[TestRoute] Request elapsed:', `${Date.now() - requestStart}ms`);
 		console.log('[TestRoute] Total elapsed:', `${Date.now() - startTime}ms`);
 

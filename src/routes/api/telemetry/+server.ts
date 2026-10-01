@@ -2,7 +2,8 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { ClientEdsSoap } from '$lib/server/eds/client';
+//import { ClientEdsSoap } from '$lib/server/eds/client';
+import { ClientEdsSoap } from '$lib/server/eds/client-new';
 
 interface SensorConfig {
 	id: string;
@@ -50,7 +51,8 @@ export const GET: RequestHandler = async () => {
 
 	try {
 		// Native TypeScript SOAP execution
-		const liveData = await edsClient.getPointsByIdcsListParsed(sensorIds);	
+		//const liveData = await edsClient.getPointsByIdcsListParsed(sensorIds);
+		const liveData = await edsClient.getRegex(sensorIds);	
 
 		const sensors = Object.entries(sensorMap).map(([id, config]) => ({
 			...config,

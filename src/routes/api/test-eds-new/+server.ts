@@ -37,20 +37,20 @@ export const GET: RequestHandler = async () => {
 		);
 
 		console.log(
-			'[TestRoute] Calling client.points.getByIdcsList()...'
+			'[TestRoute] Calling client.points.getRegex()...'
 		);
 
 		const requestStarted = Date.now();
 
 		const data =
-			await client.points.getByIdcsList(
+			await client.points.getRegex(
 				sampleTags
 			);
 		
 		console.log(Object.keys(data));
 
 		console.log(
-			'[TestRoute] client.points.getByIdcsList() returned'
+			'[TestRoute] client.points.getRegex() returned'
 		);
 
 		console.log(

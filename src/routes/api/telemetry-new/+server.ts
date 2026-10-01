@@ -81,12 +81,12 @@ export const GET: RequestHandler = async () => {
 		);
 
 		const liveData =
-			await client.points.getByIdcsList(
+			await client.points.getRegex(
 				sensorIds
 			);
 
 		console.log(
-			'[API /telemetry-new] AFTER getByIdcsList'
+			'[API /telemetry-new] AFTER getRegex'
 		);
 
 		console.log(

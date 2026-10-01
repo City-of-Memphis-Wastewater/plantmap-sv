@@ -18,9 +18,7 @@ const eds = new ClientEdsSoap();
 
 await eds.auth.login();
 
-const xml = await eds.points.getByIdcs('M100FI');
-
-const current = await eds.points.getByIdcsList([...]);
+const current = await eds.points.getRegex([...]);
 
 const history = await eds.tabular.fetch([...]);
 

@@ -10,18 +10,6 @@ export class Points {
 		private readonly client: ClientEdsSoap
 	) {}
 
-	/**
-	 * Fetch multiple points concurrently.
-	 *
-	 * This preserves the behavior of the old client.
-	 */
-
-	public async getByIdcsList(
-		idcsTags: string[]
-	): Promise<Record<string, EdsPointTelemetry>> {
-		return this.getRegex(idcsTags);
-	}
-
 
 	/**
 	 * Fetch multiple points in a SINGLE SOAP request.
