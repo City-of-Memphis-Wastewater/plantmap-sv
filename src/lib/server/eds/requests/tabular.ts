@@ -1,7 +1,7 @@
 import type { ClientEdsSoap } from '../client-new';
 import { formatIessTag } from '../helpers';
 import { parseTabularResponse } from '../parsers/tabular';
-import type { EDSTelemetryValue } from '../types-new';
+import type { EDSTelemetryValue } from '../types';
 
 export class Tabular {
     constructor(private readonly client: ClientEdsSoap) {}

@@ -1,4 +1,4 @@
-import type { ClientEdsSoap } from './client';
+import type { ClientEdsSoap } from './client-new';
 
 export class Auth {
     private client: ClientEdsSoap;

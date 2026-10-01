@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 import { ClientEdsSoap } from '$lib/server/eds/client';
+//import { ClientEdsSoap } from '$lib/server/eds/client-new';
 
 export const GET: RequestHandler = async () => {
 	console.log('[TestRoute] ========================================');
@@ -26,6 +27,7 @@ export const GET: RequestHandler = async () => {
 		const requestStart = Date.now();
 
 		const data = await client.getPointsByIessListParsed(sampleTags);
+		//const data = await client.points.get(sampleTags);
 
 		console.log('[TestRoute] getPointsByIessListParsed() returned.');
 		console.log('[TestRoute] Request elapsed:', `${Date.now() - requestStart}ms`);
