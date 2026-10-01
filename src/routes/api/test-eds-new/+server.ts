@@ -11,7 +11,7 @@ export const GET: RequestHandler = async () => {
 	console.log(
 		'============================================================'
 	);
-	console.log('[TestRoute] GET /api/test-eds');
+	console.log('[TestRoute] GET /api/test-eds-new');
 	console.log('[TestRoute] Starting EDS test');
 
 	const client = new ClientEdsSoap();
@@ -33,18 +33,18 @@ export const GET: RequestHandler = async () => {
 		);
 
 		console.log(
-			'[TestRoute] Calling client.points.getByIessListParsed()...'
+			'[TestRoute] Calling client.points.getByIdcsListParsed()...'
 		);
 
 		const requestStarted = Date.now();
 
 		const data =
-			await client.points.getByIessListParsed(
+			await client.points.getByIdcsListParsed(
 				sampleTags
 			);
 
 		console.log(
-			'[TestRoute] client.points.getByIessListParsed() returned'
+			'[TestRoute] client.points.getByIdcsListParsed() returned'
 		);
 
 		console.log(

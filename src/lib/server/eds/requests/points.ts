@@ -13,29 +13,29 @@ export class Points {
 	 *
 	 * Returns the raw SOAP/XML response.
 	 */
-	public async getByIess(
-		iessName: string
+	public async getByIdcs(
+		idcsTag: string
 	): Promise<string> {
 		const started = Date.now();
 
-		this.client.log('Points.getByIess START', {
-			iessName
+		this.client.log('Points.getByIdcs START', {
+			idcsTag
 		});
 
 		const token = await this.client.auth.getToken();
 
-		this.client.log('Points.getByIess authenticated', {
-			iessName
+		this.client.log('Points.getByIdcs authenticated', {
+			idcsTag
 		});
 
-		const formattedTag = formatIessTag(
-			iessName,
+		const iessTag = formatIessTag(
+			idcsTag,
 			this.client.iessSuffix
 		);
 
-		this.client.log('Points.getByIess formatted tag', {
-			iessName,
-			formattedTag
+		this.client.log('Points.getByIdcs formatted tag', {
+			idcsTag,
+			iessTag
 		});
 
 		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
@@ -46,15 +46,15 @@ export class Points {
 		<tns:getPoints>
 			<tns:authString>${token}</tns:authString>
 			<tns:filter>
-				<tns:iessRe>${formattedTag}</tns:iessRe>
+				<tns:iessRe>${iessTag}</tns:iessRe>
 			</tns:filter>
 		</tns:getPoints>
 	</soap:Body>
 </soap:Envelope>`;
 
-		this.client.log('Points.getByIess sending request', {
-			iessName,
-			formattedTag,
+		this.client.log('Points.getByIdcs sending request', {
+			idcsTag,
+			iessTag,
 			endpoint: this.client.endpoint
 		});
 
@@ -71,8 +71,8 @@ export class Points {
 				}
 			);
 
-			this.client.log('Points.getByIess response received', {
-				iessName,
+			this.client.log('Points.getByIdcs response received', {
+				idcsTag,
 				status: response.status,
 				statusText: response.statusText,
 				ok: response.ok,
@@ -81,9 +81,10 @@ export class Points {
 
 			const xml = await response.text();
 
-			this.client.log('Points.getByIess response body received', {
-				iessName,
-				length: xml.length
+			this.client.log('Points.getByIdcs response body received', {
+				idcsTag,
+				length: xml.length,
+				text: xml
 			});
 
 			if (!response.ok) {
@@ -92,15 +93,15 @@ export class Points {
 				);
 			}
 
-			this.client.log('Points.getByIess COMPLETE', {
-				iessName,
+			this.client.log('Points.getByIdcs COMPLETE', {
+				idcsTag,
 				elapsedMs: Date.now() - started
 			});
 
 			return xml;
 		} catch (error) {
-			this.client.log('Points.getByIess FAILED', {
-				iessName,
+			this.client.log('Points.getByIdcs FAILED', {
+				idcsTag,
 				elapsedMs: Date.now() - started,
 				error:
 					error instanceof Error
@@ -117,22 +118,22 @@ export class Points {
 	 *
 	 * This preserves the behavior of the old client.
 	 */
-	public async getByIessList(
-		iessNames: string[]
+	public async getByIdcsList(
+		idcsTags: string[]
 	): Promise<Record<string, string>> {
 		const started = Date.now();
 
-		this.client.log('Points.getByIessList START', {
-			count: iessNames.length,
-			iessNames
+		this.client.log('Points.getByIdcsList START', {
+			count: idcsTags.length,
+			idcsTags
 		});
 
 		const results: Record<string, string> = {};
 
 		const responses = await Promise.all(
-			iessNames.map(async (name) => {
+			idcsTags.map(async (name) => {
 				try {
-					const xml = await this.getByIess(name);
+					const xml = await this.getByIdcs(name);
 
 					return {
 						name,
@@ -158,8 +159,8 @@ export class Points {
 			}
 		}
 
-		this.client.log('Points.getByIessList COMPLETE', {
-			requested: iessNames.length,
+		this.client.log('Points.getByIdcsList COMPLETE', {
+			requested: idcsTags.length,
 			returned: Object.keys(results).length,
 			elapsedMs: Date.now() - started
 		});
@@ -170,21 +171,21 @@ export class Points {
 	/**
 	 * Fetch multiple points and parse each response.
 	 */
-	public async getByIessListParsed(
-		iessNames: string[]
+	public async getByIdcsListParsed(
+		idcsTags: string[]
 	): Promise<Record<string, EdsPointTelemetry>> {
 		const started = Date.now();
 
 		this.client.log(
-			'Points.getByIessListParsed START',
+			'Points.getByIdcsListParsed START',
 			{
-				count: iessNames.length,
-				iessNames
+				count: idcsTags.length,
+				idcsTags
 			}
 		);
 
 		const rawResults =
-			await this.getByIessList(iessNames);
+			await this.getByIdcsList(idcsTags);
 
 		const results: Record<
 			string,
@@ -201,12 +202,13 @@ export class Points {
 		}
 
 		this.client.log(
-			'Points.getByIessListParsed COMPLETE',
+			'Points.getByIdcsListParsed COMPLETE',
 			{
-				requested: iessNames.length,
+				requested: idcsTags.length,
 				rawResponses: Object.keys(rawResults).length,
 				points: Object.keys(results).length,
-				elapsedMs: Date.now() - started
+				elapsedMs: Date.now() - started,
+				results: results
 			}
 		);
 
@@ -218,28 +220,28 @@ export class Points {
 	 *
 	 * This corresponds to the old client's getPoints().
 	 */
-	public async get(
-		iessNames: string[]
+	public async getByIdcsList(
+		idcsTags: string[]
 	): Promise<Record<string, EdsPointTelemetry>> {
 		const started = Date.now();
 
-		if (iessNames.length === 0) {
+		if (idcsTags.length === 0) {
 			this.client.log(
-				'Points.get called with empty list'
+				'Points.getByIdcsList called with empty list'
 			);
 
 			return {};
 		}
 
-		this.client.log('Points.get START', {
-			count: iessNames.length,
-			iessNames
+		this.client.log('Points.getByIdcsList START', {
+			count: idcsTags.length,
+			idcsTags
 		});
 
 		const token =
 			await this.client.auth.getToken();
 
-		const formattedTags = iessNames.map(
+		const iessTags = idcsTags.map(
 			(name) =>
 				formatIessTag(
 					name,
@@ -248,7 +250,7 @@ export class Points {
 		);
 
 		const regexPattern =
-			`^(${formattedTags.join('|')})$`;
+			`^(${iessTags.join('|')})$`;
 
 		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope
@@ -260,14 +262,14 @@ export class Points {
 			<tns:filter>
 				<tns:iessRe>${regexPattern}</tns:iessRe>
 			</tns:filter>
-			<tns:maxCount>${iessNames.length}</tns:maxCount>
+			<tns:maxCount>${idcsTags.length}</tns:maxCount>
 		</tns:getPoints>
 	</soap:Body>
 </soap:Envelope>`;
 
-		this.client.log('Points.get sending request', {
-			iessNames,
-			formattedTags,
+		this.client.log('Points.getByIdcsList sending request', {
+			idcsTags,
+			iessTags,
 			regexPattern,
 			endpoint: this.client.endpoint
 		});
@@ -285,7 +287,7 @@ export class Points {
 				}
 			);
 
-			this.client.log('Points.get response received', {
+			this.client.log('Points.getByIdcsList response received', {
 				status: response.status,
 				statusText: response.statusText,
 				ok: response.ok,
@@ -294,7 +296,7 @@ export class Points {
 
 			const xml = await response.text();
 
-			this.client.log('Points.get response body received', {
+			this.client.log('Points.getByIdcsList response body received', {
 				length: xml.length
 			});
 
@@ -307,7 +309,7 @@ export class Points {
 			const results =
 				parseGetPointsResponse(xml);
 
-			this.client.log('Points.get COMPLETE', {
+			this.client.log('Points.getByIdcsList COMPLETE', {
 				points: Object.keys(results).length,
 				keys: Object.keys(results),
 				elapsedMs: Date.now() - started
@@ -315,7 +317,7 @@ export class Points {
 
 			return results;
 		} catch (error) {
-			this.client.log('Points.get FAILED', {
+			this.client.log('Points.getByIdcsList FAILED', {
 				elapsedMs: Date.now() - started,
 				error:
 					error instanceof Error

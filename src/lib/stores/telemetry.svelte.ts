@@ -57,7 +57,8 @@ class TelemetryStore {
 
 	async fetchTelemetry() {
 		try {
-			const res = await fetch('/api/telemetry');
+			//const res = await fetch('/api/telemetry');
+			const res = await fetch('/api/telemetry-new');
 			const data = await res.json();
 
 			if (!res.ok || !data.success) {

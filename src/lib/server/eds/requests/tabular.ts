@@ -18,7 +18,7 @@ export class Tabular {
 
         const token = await this.client.auth.getToken();
 
-        const validTags = sensorIds.map((id) =>
+        const iessTags = sensorIds.map((id) =>
             formatIessTag(id, this.client.iessSuffix)
         );
 
@@ -26,7 +26,7 @@ export class Tabular {
         const startTime = now - windowSeconds;
         const endTime = now;
 
-        const itemsXml = validTags
+        const itemsXml = iessTags
             .map(
                 (tag) => `
         <tns:item>
@@ -174,6 +174,6 @@ export class Tabular {
 
         const dataXml = await dataResp.text();
 
-        return parseTabularResponse(dataXml, validTags);
+        return parseTabularResponse(dataXml, iessTags);
     }
 }

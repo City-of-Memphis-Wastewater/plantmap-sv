@@ -1,8 +1,8 @@
-<!-- src/lib/components/PlantThrelteCanvas.svelte -->
+<!-- src/lib/components/PlantThrelteCanvas.svelte , DEFUNCT?-->
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
 	import { OrbitControls, HTML } from '@threlte/extras';
-	import { telemetry } from '$lib/stores/telemetry.svelte';
+	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { gpsToLocalCoords } from '$lib/utils/geo';
 </script>
 
@@ -16,7 +16,7 @@
 		<T.DirectionalLight position={[50, 100, 50]} intensity={1.2} />
 		<T.GridHelper args={[300, 30]} />
 
-		{#each Object.values(telemetry.sensors) as sensor (sensor.id)}
+		{#each Object.values(telemetryStore.sensors) as sensor (sensor.id)}
 			{@const pos = gpsToLocalCoords(sensor.lat, sensor.lon)}
 			<T.Group position={[pos.x, 2, pos.y]}>
 				<!-- 3D Sensor Node Marker -->

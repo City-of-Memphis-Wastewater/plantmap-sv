@@ -1,14 +1,14 @@
 const eds = new ClientEdsSoap();
 
 await eds.login();
-await eds.points.getByIess(...);
+await eds.points.getByIdcs(...);
 await eds.tabular.fetch(...);
 
 const eds = new ClientEdsSoap();
 
 await eds.login();
 
-const points = await eds.getPointsByIess('M100FI');
+const points = await eds.getPointsByIdcs('M100FI');
 
 const historical = await eds.fetchTabularValues(['M100FI']);
 
@@ -18,9 +18,9 @@ const eds = new ClientEdsSoap();
 
 await eds.auth.login();
 
-const xml = await eds.points.getByIess('M100FI');
+const xml = await eds.points.getByIdcs('M100FI');
 
-const current = await eds.points.get([...]);
+const current = await eds.points.getByIdcsList([...]);
 
 const history = await eds.tabular.fetch([...]);
 

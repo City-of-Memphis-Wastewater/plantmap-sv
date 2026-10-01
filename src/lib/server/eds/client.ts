@@ -125,7 +125,7 @@ export class ClientEdsSoap {
     /**
      * Single point query returning raw XML.
      */
-    public async getPointsByIess(iessName: string): Promise<string> {
+    public async getPointsByIdcs(iessName: string): Promise<string> {
         const token = await this.login();
         const formattedTag = this.formatIessTag(iessName);
 
@@ -153,15 +153,15 @@ export class ClientEdsSoap {
     }
 
     /**
-     * Multi-tag fan-out querying getPointsByIess concurrently for an array of tags.
+     * Multi-tag fan-out querying getPointsByIdcs concurrently for an array of tags.
      */
-    public async getPointsByIessList(iessNames: string[]): Promise<Record<string, string>> {
+    public async getPointsByIdcsList(iessNames: string[]): Promise<Record<string, string>> {
         const results: Record<string, string> = {};
 
         const responses = await Promise.all(
             iessNames.map(async (name) => {
                 try {
-                    const xml = await this.getPointsByIess(name);
+                    const xml = await this.getPointsByIdcs(name);
                     return { name, xml };
                 } catch (err) {
                     console.warn(`[EDS] Failed fetching point ${name}:`, err);
@@ -179,10 +179,10 @@ export class ClientEdsSoap {
         return results;
     }
 
-    public async getPointsByIessListParsed(
+    public async getPointsByIdcsListParsed(
         iessNames: string[]
     ): Promise<Record<string, EdsPointTelemetry>> {
-        const rawResults = await this.getPointsByIessList(iessNames);
+        const rawResults = await this.getPointsByIdcsList(iessNames);
         const results: Record<string, EdsPointTelemetry> = {};
 
         for (const xml of Object.values(rawResults)) {

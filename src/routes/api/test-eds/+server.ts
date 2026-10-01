@@ -21,15 +21,15 @@ export const GET: RequestHandler = async () => {
 		const sampleTags = ['m100fi', 'fi8001'];
 
 		console.log('[TestRoute] Sample tags:', sampleTags);
-		console.log('[TestRoute] About to call getPointsByIessListParsed()...');
+		console.log('[TestRoute] About to call getPointsByIdcsListParsed()...');
 		console.log('[TestRoute] Elapsed:', `${Date.now() - startTime}ms`);
 
 		const requestStart = Date.now();
 
-		const data = await client.getPointsByIessListParsed(sampleTags);
-		//const data = await client.points.get(sampleTags);
+		const data = await client.getPointsByIdcsListParsed(sampleTags);
+		//const data = await client.points.getByIdcsList(sampleTags);
 
-		console.log('[TestRoute] getPointsByIessListParsed() returned.');
+		console.log('[TestRoute] getPointsByIdcsListParsed() returned.');
 		console.log('[TestRoute] Request elapsed:', `${Date.now() - requestStart}ms`);
 		console.log('[TestRoute] Total elapsed:', `${Date.now() - startTime}ms`);
 

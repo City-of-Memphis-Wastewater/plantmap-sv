@@ -50,7 +50,7 @@ export const GET: RequestHandler = async () => {
 
 	try {
 		// Native TypeScript SOAP execution
-		const liveData = await edsClient.getPointsByIessListParsed(sensorIds);	
+		const liveData = await edsClient.getPointsByIdcsListParsed(sensorIds);	
 
 		const sensors = Object.entries(sensorMap).map(([id, config]) => ({
 			...config,

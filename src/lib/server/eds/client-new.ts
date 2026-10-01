@@ -89,35 +89,35 @@ export class ClientEdsSoap {
 	public async getPoints(
 		iessNames: string[]
 	) {
-		return this.points.get(iessNames);
+		return this.points.getByIdcsList(iessNames);
 	}
 
 	/**
-	 * Convenience API matching the old client's getPointsByIess().
+	 * Convenience API matching the old client's getPointsByIdcs().
 	 */
-	public async getPointsByIess(
+	public async getPointsByIdcs(
 		iessName: string
 	): Promise<string> {
-		return this.points.getByIess(iessName);
+		return this.points.getByIdcs(iessName);
 	}
 
 	/**
-	 * Convenience API matching the old client's getPointsByIessList().
+	 * Convenience API matching the old client's getPointsByIdcsList().
 	 */
-	public async getPointsByIessList(
+	public async getPointsByIdcsList(
 		iessNames: string[]
 	): Promise<Record<string, string>> {
-		return this.points.getByIessList(iessNames);
+		return this.points.getByIdcsList(iessNames);
 	}
 
 	/**
 	 * Convenience API matching the old client's
-	 * getPointsByIessListParsed().
+	 * getPointsByIdcsListParsed().
 	 */
-	public async getPointsByIessListParsed(
+	public async getPointsByIdcsListParsed(
 		iessNames: string[]
 	) {
-		return this.points.getByIessListParsed(iessNames);
+		return this.points.getByIdcsListParsed(iessNames);
 	}
 
 	/**
