@@ -45,6 +45,7 @@ function loadSensorMap(): Record<string, SensorConfig> {
 }
 
 export const GET: RequestHandler = async () => {
+    console.log('[API /telemetry-new] GET called');
 	let sensorMap: Record<string, SensorConfig> = {};
 
 	try {

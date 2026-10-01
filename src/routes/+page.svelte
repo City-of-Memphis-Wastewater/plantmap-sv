@@ -6,6 +6,7 @@
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 
 	onMount(() => {
+		console.log('[PAGE] onMount');
 		telemetryStore.startPolling(10000);
 	});
 

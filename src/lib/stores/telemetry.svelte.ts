@@ -68,9 +68,8 @@ class TelemetryStore {
     }
 
     startPolling(intervalMs = 10000) {
-        if (this.isPolling) return;
-
-        console.log('[TelemetryStore] START POLLING');
+		console.log('[TelemetryStore] START POLLING');
+		if (this.isPolling) return;
 
         this.isPolling = true;
 
