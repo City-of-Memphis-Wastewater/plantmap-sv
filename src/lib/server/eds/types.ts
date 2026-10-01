@@ -14,6 +14,17 @@ export interface EDSTelemetryValue {
 	timestamp: string;
 }
 
+export interface EdsPointTelemetry {
+    sid: string;
+    iess: string;
+    idcs: string;
+    description: string;
+    units: string;
+    value: number;
+    quality: string;
+    timestamp: string;
+}
+
 export interface EDSClientOptions {
 	wsdlUrl?: string;
 	endpoint?: string;
