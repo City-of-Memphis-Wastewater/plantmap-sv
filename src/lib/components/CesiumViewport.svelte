@@ -21,7 +21,7 @@
 
 	let statusMsg = $state('Initializing WebGL context...');
 	let webGlSupported = $state(true);
-	let errorLog = $state<string | null>(null);
+	let errorLog = $state<string | undefined>(undefined);
 
 	let hoverInfo = $state<{
 		name: string;
