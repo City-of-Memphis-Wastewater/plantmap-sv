@@ -1,3 +1,5 @@
+// src/routes/api/test-eds-new/+server.ts
+
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -19,8 +21,10 @@ export const GET: RequestHandler = async () => {
 	try {
 		const sampleTags = [
 			'm100fi',
-			'fi8001'
+			'fi8001',
+			'si1000-6'
 		];
+		
 
 		console.log(
 			'[TestRoute] Sample tags:',
@@ -33,18 +37,20 @@ export const GET: RequestHandler = async () => {
 		);
 
 		console.log(
-			'[TestRoute] Calling client.points.getByIdcsListParsed()...'
+			'[TestRoute] Calling client.points.getByIdcsList()...'
 		);
 
 		const requestStarted = Date.now();
 
 		const data =
-			await client.points.getByIdcsListParsed(
+			await client.points.getByIdcsList(
 				sampleTags
 			);
+		
+		console.log(Object.keys(data));
 
 		console.log(
-			'[TestRoute] client.points.getByIdcsListParsed() returned'
+			'[TestRoute] client.points.getByIdcsList() returned'
 		);
 
 		console.log(

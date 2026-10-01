@@ -1,3 +1,5 @@
+// client.ts
+
 import type { EDSClientOptions, EDSTelemetryValue } from './types';
 import { env } from '$env/dynamic/private';
 

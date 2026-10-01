@@ -1,6 +1,100 @@
+// parsers/points.ts
 import type { EdsPointTelemetry } from '../types';
-
 export function parseGetPointsResponse(
+    xml: string
+): Record<string, EdsPointTelemetry> {
+    const results: Record<string, EdsPointTelemetry> = {};
+
+    const pointsRegex =
+        /<(?:[a-zA-Z0-9]+:)?points[^>]*>([\s\S]*?)<\/(?:[a-zA-Z0-9]+:)?points>/gi;
+
+    let match: RegExpExecArray | null;
+
+    while ((match = pointsRegex.exec(xml)) !== null) {
+        const block = match[1];
+
+        const sid =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?sid>([^<]+)<\/(?:[a-zA-Z0-9]+:)?sid>/i
+            )?.[1]?.trim() ?? '';
+
+        const iess =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?iess>([^<]+)<\/(?:[a-zA-Z0-9]+:)?iess>/i
+            )?.[1]?.trim() ?? '';
+
+        const idcs =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?idcs>([^<]+)<\/(?:[a-zA-Z0-9]+:)?idcs>/i
+            )?.[1]?.trim() ?? '';
+
+        const description =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?desc>([^<]+)<\/(?:[a-zA-Z0-9]+:)?desc>/i
+            )?.[1]?.trim() ?? '';
+
+        const units =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?un>([^<]+)<\/(?:[a-zA-Z0-9]+:)?un>/i
+            )?.[1]?.trim() ?? '';
+
+        const quality =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?quality>([^<]+)<\/(?:[a-zA-Z0-9]+:)?quality>/i
+            )?.[1]?.trim() ?? '';
+
+        const avMatch =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?av>([^<]+)<\/(?:[a-zA-Z0-9]+:)?av>/i
+            );
+
+        const dvMatch =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?dv>([^<]+)<\/(?:[a-zA-Z0-9]+:)?dv>/i
+            );
+
+        const rawValue =
+            avMatch?.[1] ??
+            dvMatch?.[1] ??
+            '';
+
+        const value = Number.parseFloat(rawValue);
+
+        const tsMatch =
+            block.match(
+                /<(?:[a-zA-Z0-9]+:)?ts>\s*<(?:[a-zA-Z0-9]+:)?second>([^<]+)<\/(?:[a-zA-Z0-9]+:)?second>/i
+            );
+
+        const epochSec = tsMatch
+            ? Number.parseInt(tsMatch[1], 10)
+            : 0;
+
+        const timestamp =
+            epochSec > 0
+                ? new Date(epochSec * 1000).toISOString()
+                : new Date().toISOString();
+
+        if (!iess) {
+            continue;
+        }
+
+        const point: EdsPointTelemetry = {
+            sid,
+            iess,
+            idcs,
+            description,
+            units,
+            value: Number.isNaN(value) ? 0 : value,
+            quality,
+            timestamp
+        };
+
+        results[iess] = point;
+    }
+
+    return results;
+}
+export function parseGetPointsResponseDefunct(
 	xml: string
 ): Record<string, EdsPointTelemetry> {
 	const results: Record<

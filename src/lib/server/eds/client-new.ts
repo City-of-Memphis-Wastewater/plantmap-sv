@@ -1,3 +1,4 @@
+// src/lib/server/eds/cleint-new.ts
 import { env } from '$env/dynamic/private';
 
 import { Auth } from './auth';
@@ -86,10 +87,10 @@ export class ClientEdsSoap {
 	 *
 	 * The actual SOAP request and parsing remain owned by Points.
 	 */
-	public async getPoints(
+	public async getRegex(
 		iessNames: string[]
 	) {
-		return this.points.get(iessNames);
+		return this.points.getRegex(iessNames);
 	}
 
 	/**
@@ -110,15 +111,6 @@ export class ClientEdsSoap {
 		return this.points.getByIdcsList(iessNames);
 	}
 
-	/**
-	 * Convenience API matching the old client's
-	 * getPointsByIdcsListParsed().
-	 */
-	public async getPointsByIdcsListParsed(
-		iessNames: string[]
-	) {
-		return this.points.getByIdcsListParsed(iessNames);
-	}
 
 	/**
 	 * Convenience API matching the old client's fetchTabularValues().

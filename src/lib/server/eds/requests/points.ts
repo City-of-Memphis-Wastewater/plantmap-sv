@@ -1,3 +1,5 @@
+// requests/points.ts
+
 import type { ClientEdsSoap } from '../client-new';
 import { formatIessTag } from '../helpers';
 import { parseGetPointsResponse } from '../parsers/points';
@@ -9,231 +11,37 @@ export class Points {
 	) {}
 
 	/**
-	 * Fetch a single point from EDS.
-	 *
-	 * Returns the raw SOAP/XML response.
-	 */
-	public async getByIdcs(
-		idcsTag: string
-	): Promise<string> {
-		const started = Date.now();
-
-		this.client.log('Points.getByIdcs START', {
-			idcsTag
-		});
-
-		const token = await this.client.auth.getToken();
-
-		this.client.log('Points.getByIdcs authenticated', {
-			idcsTag
-		});
-
-		const iessTag = formatIessTag(
-			idcsTag,
-			this.client.iessSuffix
-		);
-
-		this.client.log('Points.getByIdcs formatted tag', {
-			idcsTag,
-			iessTag
-		});
-
-		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope
-	xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
-	xmlns:tns="http://tt.com.pl/eds/">
-	<soap:Body>
-		<tns:getPoints>
-			<tns:authString>${token}</tns:authString>
-			<tns:filter>
-				<tns:iessRe>${iessTag}</tns:iessRe>
-			</tns:filter>
-		</tns:getPoints>
-	</soap:Body>
-</soap:Envelope>`;
-
-		this.client.log('Points.getByIdcs sending request', {
-			idcsTag,
-			iessTag,
-			endpoint: this.client.endpoint
-		});
-
-		try {
-			const response = await fetch(
-				this.client.endpoint,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type':
-							'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
-					},
-					body: soapEnvelope
-				}
-			);
-
-			this.client.log('Points.getByIdcs response received', {
-				idcsTag,
-				status: response.status,
-				statusText: response.statusText,
-				ok: response.ok,
-				elapsedMs: Date.now() - started
-			});
-
-			const xml = await response.text();
-
-			this.client.log('Points.getByIdcs response body received', {
-				idcsTag,
-				length: xml.length,
-				text: xml
-			});
-
-			if (!response.ok) {
-				throw new Error(
-					`EDS getPoints failed: HTTP ${response.status} ${response.statusText}`
-				);
-			}
-
-			this.client.log('Points.getByIdcs COMPLETE', {
-				idcsTag,
-				elapsedMs: Date.now() - started
-			});
-
-			return xml;
-		} catch (error) {
-			this.client.log('Points.getByIdcs FAILED', {
-				idcsTag,
-				elapsedMs: Date.now() - started,
-				error:
-					error instanceof Error
-						? error.message
-						: String(error)
-			});
-
-			throw error;
-		}
-	}
-
-	/**
 	 * Fetch multiple points concurrently.
 	 *
 	 * This preserves the behavior of the old client.
 	 */
+
 	public async getByIdcsList(
 		idcsTags: string[]
-	): Promise<Record<string, string>> {
-		const started = Date.now();
-
-		this.client.log('Points.getByIdcsList START', {
-			count: idcsTags.length,
-			idcsTags
-		});
-
-		const results: Record<string, string> = {};
-
-		const responses = await Promise.all(
-			idcsTags.map(async (name) => {
-				try {
-					const xml = await this.getByIdcs(name);
-
-					return {
-						name,
-						xml
-					};
-				} catch (error) {
-					console.warn(
-						`[EDS] Failed fetching point ${name}:`,
-						error
-					);
-
-					return {
-						name,
-						xml: ''
-					};
-				}
-			})
-		);
-
-		for (const result of responses) {
-			if (result.xml) {
-				results[result.name] = result.xml;
-			}
-		}
-
-		this.client.log('Points.getByIdcsList COMPLETE', {
-			requested: idcsTags.length,
-			returned: Object.keys(results).length,
-			elapsedMs: Date.now() - started
-		});
-
-		return results;
-	}
-
-	/**
-	 * Fetch multiple points and parse each response.
-	 */
-	public async getByIdcsListParsed(
-		idcsTags: string[]
 	): Promise<Record<string, EdsPointTelemetry>> {
-		const started = Date.now();
-
-		this.client.log(
-			'Points.getByIdcsListParsed START',
-			{
-				count: idcsTags.length,
-				idcsTags
-			}
-		);
-
-		const rawResults =
-			await this.getByIdcsList(idcsTags);
-
-		const results: Record<
-			string,
-			EdsPointTelemetry
-		> = {};
-
-		for (const xml of Object.values(rawResults)) {
-			const parsed =
-				parseGetPointsResponse(xml);
-
-			for (const [key, point] of Object.entries(parsed)) {
-				results[key] = point;
-			}
-		}
-
-		this.client.log(
-			'Points.getByIdcsListParsed COMPLETE',
-			{
-				requested: idcsTags.length,
-				rawResponses: Object.keys(rawResults).length,
-				points: Object.keys(results).length,
-				elapsedMs: Date.now() - started,
-				results: results
-			}
-		);
-
-		return results;
+		return this.getRegex(idcsTags);
 	}
+
 
 	/**
 	 * Fetch multiple points in a SINGLE SOAP request.
 	 *
 	 * This corresponds to the old client's getPoints().
 	 */
-	public async get(
+	public async getRegex(
 		idcsTags: string[]
 	): Promise<Record<string, EdsPointTelemetry>> {
 		const started = Date.now();
 
 		if (idcsTags.length === 0) {
 			this.client.log(
-				'Points.get called with empty list'
+				'Points.getRegex called with empty list'
 			);
 
 			return {};
 		}
 
-		this.client.log('Points.get START', {
+		this.client.log('Points.getRegex START', {
 			count: idcsTags.length,
 			idcsTags
 		});
@@ -267,7 +75,7 @@ export class Points {
 	</soap:Body>
 </soap:Envelope>`;
 
-		this.client.log('Points.get sending request', {
+		this.client.log('Points.getRegex sending request', {
 			idcsTags,
 			iessTags,
 			regexPattern,
@@ -287,7 +95,7 @@ export class Points {
 				}
 			);
 
-			this.client.log('Points.get response received', {
+			this.client.log('Points.getRegex response received', {
 				status: response.status,
 				statusText: response.statusText,
 				ok: response.ok,
@@ -296,7 +104,7 @@ export class Points {
 
 			const xml = await response.text();
 
-			this.client.log('Points.get response body received', {
+			this.client.log('Points.getRegex response body received', {
 				length: xml.length
 			});
 
@@ -309,7 +117,7 @@ export class Points {
 			const results =
 				parseGetPointsResponse(xml);
 
-			this.client.log('Points.get COMPLETE', {
+			this.client.log('Points.getRegex COMPLETE', {
 				points: Object.keys(results).length,
 				keys: Object.keys(results),
 				elapsedMs: Date.now() - started
@@ -317,7 +125,7 @@ export class Points {
 
 			return results;
 		} catch (error) {
-			this.client.log('Points.get FAILED', {
+			this.client.log('Points.getRegex FAILED', {
 				elapsedMs: Date.now() - started,
 				error:
 					error instanceof Error

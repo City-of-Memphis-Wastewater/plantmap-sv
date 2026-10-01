@@ -1,3 +1,4 @@
+// src/lib/stores/telementry.svelte.ts
 export interface SensorNode {
 	id: string;
 	name: string;

@@ -1,3 +1,4 @@
+// src/routes/api/telemetry-new/+server.ts
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -80,12 +81,12 @@ export const GET: RequestHandler = async () => {
 		);
 
 		const liveData =
-			await client.points.getByIdcsListParsed(
+			await client.points.getByIdcsList(
 				sensorIds
 			);
 
 		console.log(
-			'[API /telemetry-new] AFTER getByIdcsListParsed'
+			'[API /telemetry-new] AFTER getByIdcsList'
 		);
 
 		console.log(

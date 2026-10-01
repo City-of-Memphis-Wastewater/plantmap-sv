@@ -1,3 +1,5 @@
+// src/routes/api/test-eds/+server.ts
+
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -18,7 +20,12 @@ export const GET: RequestHandler = async () => {
 	console.log('[TestRoute] ClientEdsSoap created.');
 
 	try {
-		const sampleTags = ['m100fi', 'fi8001'];
+		//const sampleTags = ['m100fi', 'fi8001'];
+		const sampleTags = [
+			'm100fi',
+			'fi8001',
+			'si1000-6'
+		];
 
 		console.log('[TestRoute] Sample tags:', sampleTags);
 		console.log('[TestRoute] About to call getPointsByIdcsListParsed()...');
@@ -26,8 +33,8 @@ export const GET: RequestHandler = async () => {
 
 		const requestStart = Date.now();
 
-		const data = await client.getPointsByIdcsListParsed(sampleTags);
-		//const data = await client.points.get(sampleTags);
+		//const data = await client.getPointsByIdcsListParsed(sampleTags);
+		const data = await client.getPoints(sampleTags);
 
 		console.log('[TestRoute] getPointsByIdcsListParsed() returned.');
 		console.log('[TestRoute] Request elapsed:', `${Date.now() - requestStart}ms`);
@@ -37,6 +44,8 @@ export const GET: RequestHandler = async () => {
 		console.log('[TestRoute] Returned data:', data);
 
 		const count = Object.keys(data).length;
+		
+		console.log(Object.keys(data));
 
 		console.log('[TestRoute] Data count:', count);
 		console.log('[TestRoute] Data keys:', Object.keys(data));
