@@ -72,15 +72,6 @@ export class ClientEdsSoap {
 		);
 	}
 
-	public formatIessTag(id: string): string {
-		const upper = id.toUpperCase();
-
-		if (upper.includes('@') || upper.includes('.UNIT')) {
-			return upper;
-		}
-
-		return `${upper}${this.iessSuffix}`;
-	}
 
 	/**
 	 * Convenience API for callers that want all point data in one call.

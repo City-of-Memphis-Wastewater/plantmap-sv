@@ -75,11 +75,6 @@ export const GET: RequestHandler = async () => {
 	const client = new ClientEdsSoap();
 
 	try {
-		console.log(
-			'[API /telemetry-new] Fetching EDS points:',
-			sensorIds
-		);
-
 		const liveData =
 			await client.points.getRegex(
 				sensorIds
@@ -89,15 +84,6 @@ export const GET: RequestHandler = async () => {
 			'[API /telemetry-new] AFTER getRegex'
 		);
 
-		console.log(
-			'[API /telemetry-new] Requested sensor IDs:',
-			sensorIds
-		);
-
-		console.log(
-			'[API /telemetry-new] Returned live-data keys:',
-			Object.keys(liveData)
-		);
 
 		const sensors = Object.entries(sensorMap).map(
 			([id, config]) => {

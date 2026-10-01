@@ -29,10 +29,7 @@ export class Points {
 			return {};
 		}
 
-		this.client.log('Points.getRegex START', {
-			count: idcsTags.length,
-			idcsTags
-		});
+		this.client.log('Points.getRegex START');
 
 		const token =
 			await this.client.auth.getToken();
@@ -106,8 +103,6 @@ export class Points {
 				parseGetPointsResponse(xml);
 
 			this.client.log('Points.getRegex COMPLETE', {
-				points: Object.keys(results).length,
-				keys: Object.keys(results),
 				elapsedMs: Date.now() - started
 			});
 
