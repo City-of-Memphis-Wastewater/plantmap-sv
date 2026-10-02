@@ -154,9 +154,9 @@
 						onclick={onToggleHoverInfo}
 						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
-						<span>Readouts</span>
-						<span class="text-[10px] font-bold {showHoverInfo ? 'text-emerald-400' : 'text-slate-500'}">
-							{showHoverInfo ? 'ON' : 'OFF'}
+						<span>Sensor Values</span>
+						<span class="text-[10px] font-bold {showSensorValues ? 'text-emerald-400' : 'text-slate-500'}">
+							{showSensorValues ? 'ON' : 'OFF'}
 						</span>
 					</button>
 				</div>
