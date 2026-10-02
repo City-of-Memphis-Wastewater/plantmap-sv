@@ -57,5 +57,8 @@
 	},
 	"allowScripts": {
 		"three-geo@1.4.5": true
-	}
+	},
+	"bin": {
+        "plantmap": "./bin/plantmap.js"
+    }
 }
