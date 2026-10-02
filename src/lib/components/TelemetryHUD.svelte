@@ -4,7 +4,8 @@
 
 	let showTelemetryHud = $state(false);
 </script>
-<div class="fixed bottom-[20vh] left-3 z-20 flex max-w-[240px] flex-col gap-1.5">
+
+<div class="fixed bottom-[8vh] left-3 z-20 flex max-w-[240px] flex-col gap-1.5">
 <!--div class="fixed top-1/2 left-3 z-20 -translate-y-1/2 flex max-w-[240px] flex-col gap-1.5"-->
 	<div
 		class="pointer-events-auto select-text rounded-md border border-slate-700/80 bg-slate-900/90 text-xs text-slate-100 shadow-xl backdrop-blur-md"

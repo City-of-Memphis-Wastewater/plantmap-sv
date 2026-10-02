@@ -36,7 +36,8 @@
 		onToggleHoverInfo?: () => void;
 	} = $props();
 </script>
-<div class="fixed bottom-[20vh] right-3 z-30 max-w-[220px]">
+
+<div class="fixed bottom-[8vh] right-3 z-30 max-w-[220px]">
 <!--div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]"-->
 	<div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md">
 		<!-- Header -->
