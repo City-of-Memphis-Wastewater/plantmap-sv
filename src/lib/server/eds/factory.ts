@@ -24,17 +24,28 @@ export function createEdsClient(): ClientEdsSoap {
     const memphisEnv = new MemphisEnv();
 
     const plantMapConfig = loadPlantMapConfig(
-        memphisConfig,
-        //memphisSecret,
-        memphisEnv
+        memphisConfig
     );
 
+    const username = memphisEnv.value(
+        'OVATION_EDS_USERNAME'
+    );
+
+    const password = memphisEnv.value(
+        'OVATION_EDS_PASSWORD'
+    );
+
+    const baseUrl = memphisEnv.value(
+        'OVATION_EDS_BASE_URL'
+    );
 
     const endpoint =
-        `${plantMapConfig.eds.baseUrl}:${plantMapConfig.eds.soapPort}`;
+        `${baseUrl}:${plantMapConfig.eds.soapPort}`;
 
     return new ClientEdsSoap({
         endpoint,
+        username,
+        password,
         iessSuffix: plantMapConfig.eds.suffix,
         debug: plantMapConfig.eds.debug,
 
