@@ -98,7 +98,7 @@ export const GET: RequestHandler = async () => {
 				
 				return {
 					...config,
-					value: value: point?.value ?? null,
+					value: point?.value ?? null,
 					status:
 						point?.quality === 'QUALITY-GOOD'
 							? 'normal'
