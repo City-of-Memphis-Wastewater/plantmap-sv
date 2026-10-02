@@ -2,8 +2,10 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-//import { ClientEdsSoap } from '$lib/server/eds/client';
-import { ClientEdsSoap } from '$lib/server/eds/client-new';
+//import { ClientEdsSoap } from '$lib/server/eds/client-new';
+import { createEdsClient } from '$lib/server/eds/factory';
+const client = createEdsClient();
+
 
 interface SensorConfig {
 	id: string;
@@ -32,7 +34,8 @@ function loadSensorMap(): Record<string, SensorConfig> {
 	return parsed;
 }
 
-const edsClient = new ClientEdsSoap();
+//const edsClient = new ClientEdsSoap();
+const edsClient = createEdsClient();
 
 export const GET: RequestHandler = async () => {
 	let sensorMap: Record<string, SensorConfig> = {};

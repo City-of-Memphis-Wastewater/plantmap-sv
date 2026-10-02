@@ -1,24 +1,34 @@
 // route/api/test-memphis-config
-
+import os from 'node:os';
+import path from 'node:path';
 
 import { json } from '@sveltejs/kit';
 import { MemphisConfig } from '$lib/memphis-config';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = () => {
-    const config = new MemphisConfig();
 
-    const before = config.value('eds.endpoint');
+    const appConfig = new MemphisConfig({
+        appDir: path.join(os.homedir(), '.plantmap')
+    });
 
-    config.setValue(
-        'eds.endpoint',
-        'http://172.19.4.127:43080'
+
+    appConfig.setValue(
+        'eds.baseUrl',
+        'http://172.19.4.127'
     );
 
-    const after = config.value('eds.endpoint');
+    appConfig.setValue(
+        'eds.port',
+        43080
+    );
 
-    return json({
-        before,
-        after
+
+     return json({
+        
+        app: {
+            baseUrl: appConfig.value('eds.baseUrl'),
+            port: appConfig.value('eds.port')
+        }
     });
 };

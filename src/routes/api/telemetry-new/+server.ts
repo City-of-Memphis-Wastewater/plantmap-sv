@@ -6,7 +6,8 @@ import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { ClientEdsSoap } from '$lib/server/eds/client-new';
+//import { ClientEdsSoap } from '$lib/server/eds/client-new';
+import { createEdsClient } from '$lib/server/eds/factory';
 
 interface SensorConfig {
 	id: string;
@@ -63,7 +64,9 @@ export const GET: RequestHandler = async () => {
 		});
 	}
 
-	const client = new ClientEdsSoap();
+	//const client = new ClientEdsSoap();
+	const client = createEdsClient();
+
 
 	try {
 		const liveData = await client.points.getRegex(sensorIds);

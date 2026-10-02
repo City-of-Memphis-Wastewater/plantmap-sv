@@ -1,11 +1,13 @@
 // src/lib/plantmap/config.ts
 
 import { z } from 'zod';
+
 import type { MemphisConfig } from '$lib/memphis-config';
 
 export const PlantMapConfigSchema = z.object({
     eds: z.object({
-        endpoint: z.url(),
+        baseUrl: z.url(),
+        port: z.number().int(),
         suffix: z.string(),
         debug: z.boolean()
     }),
@@ -22,7 +24,8 @@ export function loadPlantMapConfig(
 ): PlantMapConfig {
     return PlantMapConfigSchema.parse({
         eds: {
-            endpoint: config.value('eds.endpoint'),
+            baseUrl: config.value('eds.baseUrl'),
+            port: config.value('eds.port'),
             suffix: config.value('eds.suffix'),
             debug: config.value('eds.debug')
         },

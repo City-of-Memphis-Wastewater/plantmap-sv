@@ -1,5 +1,4 @@
 // src/lib/server/eds/client-new.ts
-// import { env } from '$env/dynamic/private';
 
 import { Auth } from './auth';
 import { Points } from './requests/points';
@@ -8,9 +7,7 @@ import { Tabular } from './requests/tabular';
 import type { EDSClientOptions, EdsPointTelemetry } from './types';
 
 export class ClientEdsSoap {
-	public readonly baseUrl?: string;
-	public readonly port: number;
-	public readonly endpoint: string;
+	public readonly endpoint?: string;
 	public readonly iessSuffix: string;
 	public readonly timeoutMs: number;
 	public readonly username?: string;
@@ -22,9 +19,7 @@ export class ClientEdsSoap {
 	public readonly tabular: Tabular;
 
 	constructor(options: EDSClientOptions) {
-		this.baseUrl = options.baseUrl;
-		this.port = options.port ?? 43080;
-		this.endpoint = `${this.baseUrl}:${this.port}`;
+		this.endpoint = options.endpoint;
 		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
 		this.timeoutMs = options.timeoutMs ?? 1000;
 		this.username = options.username;
@@ -44,34 +39,6 @@ export class ClientEdsSoap {
 			
 		});
 	}
-	/*
-	constructor(options: EDSClientOptions = {}) {
-		this.endpoint = options.endpoint ?? env.OVATION_EDS_ENDPOINT ?? 'http://000.00.0.000:00000';
-
-		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
-
-		this.timeoutMs = options.timeoutMs ?? 10000;
-
-		this.username = options.username ?? env.OVATION_EDS_USER;
-
-		this.password = options.password ?? env.OVATION_EDS_PASSWORD;
-
-		this.debug = env.OVATION_EDS_DEBUG === 'true' || options.wsdlUrl !== undefined;
-
-		this.auth = new Auth(this);
-		this.points = new Points(this);
-		this.tabular = new Tabular(this);
-
-		this.log('==========================================================================');
-		this.log('Client initialized', {
-			endpoint: this.endpoint,
-			iessSuffix: this.iessSuffix,
-			timeoutMs: this.timeoutMs,
-			username: this.username ? '<configured>' : '<anonymous>',
-			debug: this.debug
-		});
-	}
-	*/
 
 	public log(label: string, data?: unknown): void {
 		if (!this.debug) {
