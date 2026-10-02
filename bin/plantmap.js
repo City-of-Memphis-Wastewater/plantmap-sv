@@ -6,14 +6,20 @@ import { spawnSync } from 'node:child_process';
 
 const command = process.argv[2] ?? 'help';
 
-const commands = {
+const npmCommands = {
 	dev: ['run', 'dev'],
 	build: ['run', 'build'],
 	preview: ['run', 'preview'],
 	check: ['run', 'check'],
 	lint: ['run', 'lint'],
-	test: ['run', 'test']
+	test: ['run', 'test'],
 };
+
+const plantmapCommands = new Set([
+    'setup',
+    'config',
+    'start'
+]);
 
 if (command === 'help') {
 	console.log(`
@@ -38,6 +44,7 @@ if (!(command in commands)) {
 	process.exit(1);
 }
 
+// not for all commands, only for some
 const result = spawnSync('npm', commands[command], {
 	stdio: 'inherit',
 	shell: false

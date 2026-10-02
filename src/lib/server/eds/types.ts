@@ -27,9 +27,12 @@ export interface EdsPointTelemetry {
 
 export interface EDSClientOptions {
 	wsdlUrl?: string;
-	endpoint?: string;
+	//endpoint?: string;
+	baseUrl?: string;
+	port?: number;
 	username?: string;
 	password?: string;
 	iessSuffix?: string;
 	timeoutMs?: number;
+	debug?: boolean;
 }

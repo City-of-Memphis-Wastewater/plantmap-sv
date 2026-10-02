@@ -48,6 +48,7 @@
 		"vitest-browser-svelte": "^2.1.1"
 	},
 	"dependencies": {
+		"@inquirer/prompts": "^8.7.2",
 		"@threlte/core": "^8.6.1",
 		"@threlte/extras": "^9.22.0",
 		"cesium": "^1.145.0",

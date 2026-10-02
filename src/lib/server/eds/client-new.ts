@@ -1,5 +1,5 @@
-// src/lib/server/eds/cleint-new.ts
-import { env } from '$env/dynamic/private';
+// src/lib/server/eds/client-new.ts
+// import { env } from '$env/dynamic/private';
 
 import { Auth } from './auth';
 import { Points } from './requests/points';
@@ -8,6 +8,8 @@ import { Tabular } from './requests/tabular';
 import type { EDSClientOptions, EdsPointTelemetry } from './types';
 
 export class ClientEdsSoap {
+	public readonly baseUrl?: string;
+	public readonly port: number;
 	public readonly endpoint: string;
 	public readonly iessSuffix: string;
 	public readonly timeoutMs: number;
@@ -19,6 +21,30 @@ export class ClientEdsSoap {
 	public readonly points: Points;
 	public readonly tabular: Tabular;
 
+	constructor(options: EDSClientOptions) {
+		this.baseUrl = options.baseUrl;
+		this.port = options.port ?? 43080;
+		this.endpoint = `${this.baseUrl}:${this.port}`;
+		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
+		this.timeoutMs = options.timeoutMs ?? 1000;
+		this.username = options.username;
+		this.password = options.password;
+		this.debug = options.debug ?? false;
+		this.auth = new Auth(this);
+		this.points = new Points(this);
+		this.tabular = new Tabular(this);
+		
+		this.log('==========================================================================');
+		this.log('Client initialized', {
+			endpoint: this.endpoint,
+			iessSuffix: this.iessSuffix,
+			timeoutMs: this.timeoutMs,
+			username: this.username ? '<configured>' : '<anonymous>',
+			debug: this.debug
+			
+		});
+	}
+	/*
 	constructor(options: EDSClientOptions = {}) {
 		this.endpoint = options.endpoint ?? env.OVATION_EDS_ENDPOINT ?? 'http://000.00.0.000:00000';
 
@@ -45,6 +71,7 @@ export class ClientEdsSoap {
 			debug: this.debug
 		});
 	}
+	*/
 
 	public log(label: string, data?: unknown): void {
 		if (!this.debug) {
