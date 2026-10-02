@@ -1,18 +1,23 @@
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
+    console.log('[PAGE] module loaded');
+    
 	import { onDestroy, onMount } from 'svelte';
 	import CesiumViewport from '$lib/components/CesiumViewport.svelte';
 	import TelemetryHUD from '$lib/components/TelemetryHUD.svelte';
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
-
-	onMount(() => {
-		console.log('[PAGE] onMount');
-		telemetryStore.startPolling(10000);
-	});
-
-	onDestroy(() => {
-		telemetryStore.stopPolling();
-	});
+    
+    onMount(() => {
+        console.log('[PAGE] onMount');
+        telemetryStore.startPolling(10000);
+        
+        return () => {
+            console.log('[PAGE] onMount cleanup');
+        };
+    });
+	//onDestroy(() => {
+	//	telemetryStore.stopPolling();
+	//});
 
 </script>
 

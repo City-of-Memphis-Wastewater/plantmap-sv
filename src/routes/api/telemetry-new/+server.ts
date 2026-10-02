@@ -84,7 +84,11 @@ export const GET: RequestHandler = async () => {
 		console.log(
 			'[API /telemetry-new] AFTER getRegex'
 		);
-
+        console.log('[API /telemetry-new] getRegex result', {
+            requested: sensorIds.length,
+            returned: Object.keys(liveData).length,
+            ids: Object.keys(liveData)
+        });
 
 		const sensors = Object.entries(sensorMap).map(
 			([id, config]) => {
@@ -105,6 +109,11 @@ export const GET: RequestHandler = async () => {
 				};
 			}
 		);
+
+		console.log('[API /telemetry-new] sensors mapped', {
+            count: sensors.length,
+            sensors
+        });
 
 		return json({
 			success: true,

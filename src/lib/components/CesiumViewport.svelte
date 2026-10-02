@@ -131,6 +131,11 @@
 				}
 
 				statusMsg = 'Initializing 3D Globe Viewer...';
+                console.log('[Cesium] container before Viewer', {
+                    clientWidth: container.clientWidth,
+                    clientHeight: container.clientHeight,
+                    rect: container.getBoundingClientRect()
+                });
 				viewer = new Cesium.Viewer(container, {
 					baseLayerPicker: false,
 					animation: false,
@@ -142,7 +147,14 @@
 					navigationHelpButton: false,
 					selectionIndicator: false
 				});
-
+                console.log('[Cesium] container after Viewer', {
+                    clientWidth: container.clientWidth,
+                    clientHeight: container.clientHeight,
+                    canvas: {
+                        width: viewer.scene.canvas.width,
+                        height: viewer.scene.canvas.height
+                    }
+                });
 				viewer.scene.globe.enableLighting = false;
 				viewer.scene.globe.depthTestAgainstTerrain = false;
 
@@ -167,7 +179,18 @@
 
 				if (!isMounted) return;
 
-				viewer.resize();
+                console.log('[Cesium] container before resize', {
+                    clientWidth: container.clientWidth,
+                    clientHeight: container.clientHeight,
+                    rect: container.getBoundingClientRect()
+                });
+
+                viewer.resize();
+
+                console.log('[Cesium] canvas after resize', {
+                    width: viewer.scene.canvas.width,
+                    height: viewer.scene.canvas.height
+                });
 				resetCamera(viewer, CesiumModule);
 
 				// Mouse move listener for entity hover and camera position telemetry
