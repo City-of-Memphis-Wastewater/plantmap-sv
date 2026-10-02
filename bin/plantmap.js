@@ -39,13 +39,13 @@ Commands:
 	process.exit(0);
 }
 
-if (!(command in commands)) {
+if (!(command in npmCommands)) {
 	console.error(`Unknown command: ${command}`);
 	process.exit(1);
 }
 
 // not for all commands, only for some
-const result = spawnSync('npm', commands[command], {
+const result = spawnSync('npm', npmCommands[command], {
 	stdio: 'inherit',
 	shell: false
 });

@@ -68,11 +68,9 @@ export class MemphisEnv {
     ): void {
         if (
             Object.hasOwn(this.values, key) &&
-            !options.overwrite
+            options.overwrite === false
         ) {
-            throw new Error(
-                `Environment value already exists: ${key}`
-            );
+            return;
         }
 
         this.values[key] = value;

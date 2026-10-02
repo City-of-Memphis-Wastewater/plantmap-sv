@@ -74,11 +74,9 @@ export class MemphisConfig {
 
         if (
             existing !== undefined &&
-            !options.overwrite
+            options.overwrite === false
         ) {
-            throw new Error(
-                `Configuration value already exists: ${key}`
-            );
+            return;
         }
 
         let current: Record<string, ConfigValue> = this.values;
