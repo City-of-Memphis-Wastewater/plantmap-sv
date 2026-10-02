@@ -44,15 +44,18 @@
 	let showDebugger = $state(false);
 	let showHoverInfo = $state(true);
 	let showSensorLabels = $state(true);
-
+    let showSensorValues = $state(true);
+    
 	// Sync telemetry store to Cesium entities
 	$effect(() => {
-		syncSensorEntities(
-			viewer,
-			CesiumModule,
-			telemetryStore.sensors,
-			showSensorLabels
-		);
+        syncSensorEntities(
+            viewer,
+            CesiumModule,
+            telemetryStore.sensors,
+            showSensorLabels,
+            showSensorValues
+        );
+		
 	});
 
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {

@@ -101,7 +101,7 @@ export const GET: RequestHandler = async () => {
                     value:
                         point?.value != null
                             ? Number(point.value.toFixed(config.precision ?? 2))
-                            : null
+                            : null,
 					status:
 						point?.quality === 'QUALITY-GOOD'
 							? 'normal'

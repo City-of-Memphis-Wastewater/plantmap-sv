@@ -1,11 +1,19 @@
 // src/lib/cesium/syncSensors.ts
 
 export function syncSensorEntities(
-	viewer: any,
-	CesiumModule: any,
-	sensors: Record<string, any>,
-	showSensorLabels: boolean
+    viewer: any,
+    CesiumModule: any,
+    sensors: Record<string, any>,
+    showSensorLabels: boolean,
+    showSensorValues: boolean
 ) {
+
+//export function syncSensorEntities(
+//	viewer: any,
+//	CesiumModule: any,
+//	sensors: Record<string, any>,
+//	showSensorLabels: boolean
+//) {
 	console.log(
                 '[Cesium Sync] syncSensorEntities',
                 Object.values(sensors).map((s) => ({
@@ -44,20 +52,43 @@ export function syncSensorEntities(
 					outlineWidth: 2
 				},
 				label: {
-					text: `${sensor.name}\n${sensor.value} ${sensor.unit}`,
-					font: '13px monospace',
-					style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
-					outlineWidth: 3,
-					verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
-					pixelOffset: new CesiumModule.Cartesian2(0, -22),
-					show: showSensorLabels
-				}
+                    text: showSensorValues
+                        ? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
+                        : showSensorLabels
+                            ? sensor.name
+                            : '',
+                    font: '13px monospace',
+                    style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
+                    outlineWidth: 3,
+                    verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
+                    pixelOffset: new CesiumModule.Cartesian2(0, -22),
+                    show: showSensorLabels || showSensorValues
+                }
+                
+				//label: {
+				//	text: `${sensor.name}\n${sensor.value} ${sensor.unit}`,
+				//	font: '13px monospace',
+				//	style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
+				//	outlineWidth: 3,
+				//	verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
+				//	pixelOffset: new CesiumModule.Cartesian2(0, -22),
+				//	show: showSensorLabels
+				//}
 			});
 		} else {
-			if (entity.label) {
-				entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
-				entity.label.show = showSensorLabels;
-			}
+		    if (entity.label) {
+                entity.label.text = showSensorValues
+                    ? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
+                    : showSensorLabels
+                        ? sensor.name
+                        : '';
+
+                entity.label.show = showSensorLabels || showSensorValues;
+            }
+			//if (entity.label) {
+			//	entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
+			//	entity.label.show = showSensorLabels;
+			//}
 			if (entity.point) {
 				entity.point.color =
 					sensor.status === 'alarm'
