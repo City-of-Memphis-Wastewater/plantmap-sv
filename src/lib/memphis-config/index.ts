@@ -11,7 +11,8 @@ import path from 'node:path';
 
 import type {
     ConfigValue,
-    MemphisConfigOptions
+    MemphisConfigOptions,
+    MemphisConfigSetOptions
 } from './types';
 
 export class MemphisConfig {
@@ -53,22 +54,42 @@ export class MemphisConfig {
         return current;
     }
 
-    public setValue(key: string, value: ConfigValue): void {
+    public setValue(
+        key: string,
+        value: ConfigValue,
+        options: MemphisConfigSetOptions = {}
+    ): void {
         const parts = key.split('.');
 
-        if (parts.length === 0) {
-            throw new Error('Configuration key cannot be empty');
+        if (
+            key.trim() === '' ||
+            parts.some((part) => part.trim() === '')
+        ) {
+            throw new Error(
+                'Configuration key cannot be empty'
+            );
+        }
+
+        const existing = this.value(key);
+
+        if (
+            existing !== undefined &&
+            !options.overwrite
+        ) {
+            throw new Error(
+                `Configuration value already exists: ${key}`
+            );
         }
 
         let current: Record<string, ConfigValue> = this.values;
 
         for (const part of parts.slice(0, -1)) {
-            const existing = current[part];
+            const child = current[part];
 
             if (
-                typeof existing !== 'object' ||
-                existing === null ||
-                Array.isArray(existing)
+                typeof child !== 'object' ||
+                child === null ||
+                Array.isArray(child)
             ) {
                 current[part] = {};
             }

@@ -11,3 +11,7 @@ export type ConfigValue =
 export interface MemphisConfigOptions {
     appDir?: string;
 }
+
+export interface MemphisConfigSetOptions {
+    overwrite?: boolean;
+}

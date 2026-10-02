@@ -1,13 +1,19 @@
 // src/lib/memphis-env/index.ts
+
 import {
     existsSync,
-    readFileSync
+    mkdirSync,
+    readFileSync,
+    writeFileSync
 } from 'node:fs';
 
-import os from 'node:os';
 import path from 'node:path';
 
-import type { MemphisEnvOptions, EnvValue } from './types';
+import type {
+    EnvValue,
+    MemphisEnvOptions,
+    MemphisEnvSetOptions
+} from './types';
 
 export class MemphisEnv {
     private readonly envFile: string;
@@ -53,5 +59,36 @@ export class MemphisEnv {
 
     public value(key: string): EnvValue | undefined {
         return this.values[key];
+    }
+
+    public setValue(
+        key: string,
+        value: EnvValue,
+        options: MemphisEnvSetOptions = {}
+    ): void {
+        if (
+            Object.hasOwn(this.values, key) &&
+            !options.overwrite
+        ) {
+            throw new Error(
+                `Environment value already exists: ${key}`
+            );
+        }
+
+        this.values[key] = value;
+
+        const envDir = path.dirname(this.envFile);
+
+        mkdirSync(envDir, { recursive: true });
+
+        const contents = Object.entries(this.values)
+            .map(([name, envValue]) => `${name}=${envValue}`)
+            .join('\n');
+
+        writeFileSync(
+            this.envFile,
+            contents + '\n',
+            'utf8'
+        );
     }
 }

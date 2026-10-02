@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import type { MemphisConfig } from '$lib/memphis-config';
 import type { MemphisEnv } from '$lib/memphis-env';
-import type { MemphisSecretOptions } from '$lib/memphis-secret';
+//import type { MemphisSecretOptions } from '$lib/memphis-secret';
 
 export const PlantMapConfigSchema = z.object({
     eds: z.object({
@@ -19,6 +19,7 @@ export const PlantMapConfigSchema = z.object({
     })
 });
 
+
 export type PlantMapConfig = z.infer<typeof PlantMapConfigSchema>;
 
 export function loadPlantMapConfig(
@@ -29,7 +30,7 @@ export function loadPlantMapConfig(
     return PlantMapConfigSchema.parse({
         eds: {
             //baseUrl: config.value('eds.baseUrl'),
-            baseUrl: env.value('OVATION_EDS_BASEURL'),
+            baseUrl: env.value('OVATION_EDS_BASE_URL'),
             soapPort: config.value('eds.soapPort'),
             suffix: config.value('eds.suffix'),
             debug: config.value('eds.debug')
