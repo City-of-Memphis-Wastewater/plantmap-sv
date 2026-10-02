@@ -4,8 +4,9 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { MemphisConfig } from '$lib/memphis-config';
-import { loadPlantMapConfig } from '$lib/plantmap/config';
+import { MemphisEnv } from '$lib/memphis-env';
 //import { MemphisSecret } from '$lib/memphis-secret';
+import { loadPlantMapConfig } from '$lib/plantmap/config';
 
 import { ClientEdsSoap } from './client-new';
 
@@ -16,7 +17,15 @@ export function createEdsClient(): ClientEdsSoap {
         appDir
     });
 
-    const plantMapConfig = loadPlantMapConfig(memphisConfig);
+    const memphisEnv = new MemphisEnv();
+
+    const plantMapConfig = loadPlantMapConfig(
+        memphisConfig,
+        memphisEnv
+    );
+
+
+    //const plantMapConfig = loadPlantMapConfig(memphisConfig);
 
     //const memphisSecret = new MemphisSecret({
     //   appDir
