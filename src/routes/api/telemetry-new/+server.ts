@@ -92,8 +92,7 @@ export const GET: RequestHandler = async () => {
 
 		const sensors = Object.entries(sensorMap).map(
 			([id, config]) => {
-				const point = liveData[id];
-				
+				const point = liveData[`${id}${client.iessSuffix}`];
 
 				
 				return {
