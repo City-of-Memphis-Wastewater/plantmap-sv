@@ -1,38 +1,33 @@
 // src/lib/cesium/syncSensors.ts
 
 export function syncSensorEntities(
-    viewer: any,
-    CesiumModule: any,
-    sensors: Record<string, any>,
-    showSensorLabels: boolean,
-    showSensorValues: boolean
+	viewer: any,
+	CesiumModule: any,
+	sensors: Record<string, any>,
+	showSensorLabels: boolean,
+	showSensorValues: boolean
 ) {
-
-//export function syncSensorEntities(
-//	viewer: any,
-//	CesiumModule: any,
-//	sensors: Record<string, any>,
-//	showSensorLabels: boolean
-//) {
+	//export function syncSensorEntities(
+	//	viewer: any,
+	//	CesiumModule: any,
+	//	sensors: Record<string, any>,
+	//	showSensorLabels: boolean
+	//) {
 	console.log(
-                '[Cesium Sync] syncSensorEntities',
-                Object.values(sensors).map((s) => ({
-                        id: s.id,
-                        value: s.value
-                }))
-        );
-		
+		'[Cesium Sync] syncSensorEntities',
+		Object.values(sensors).map((s) => ({
+			id: s.id,
+			value: s.value
+		}))
+	);
+
 	if (!viewer || !CesiumModule || !sensors) return;
 
 	Object.values(sensors).forEach((sensor) => {
 		const entityId = `sensor-${sensor.id}`;
 		let entity = viewer.entities.getById(entityId);
 
-		const pos = CesiumModule.Cartesian3.fromDegrees(
-			sensor.lon,
-			sensor.lat,
-			sensor.altitude ?? 15
-		);
+		const pos = CesiumModule.Cartesian3.fromDegrees(sensor.lon, sensor.lat, sensor.altitude ?? 15);
 
 		if (!entity) {
 			viewer.entities.add({
@@ -44,27 +39,24 @@ export function syncSensorEntities(
 				position: pos,
 				point: {
 					pixelSize: 18,
-					color:
-						sensor.status === 'alarm'
-							? CesiumModule.Color.RED
-							: CesiumModule.Color.LIME,
+					color: sensor.status === 'alarm' ? CesiumModule.Color.RED : CesiumModule.Color.LIME,
 					outlineColor: CesiumModule.Color.BLACK,
 					outlineWidth: 2
 				},
 				label: {
-                    text: showSensorValues
-                        ? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
-                        : showSensorLabels
-                            ? sensor.name
-                            : '',
-                    font: '13px monospace',
-                    style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
-                    outlineWidth: 3,
-                    verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
-                    pixelOffset: new CesiumModule.Cartesian2(0, -22),
-                    show: showSensorLabels || showSensorValues
-                }
-                
+					text: showSensorValues
+						? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
+						: showSensorLabels
+							? sensor.name
+							: '',
+					font: '13px monospace',
+					style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
+					outlineWidth: 3,
+					verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
+					pixelOffset: new CesiumModule.Cartesian2(0, -22),
+					show: showSensorLabels || showSensorValues
+				}
+
 				//label: {
 				//	text: `${sensor.name}\n${sensor.value} ${sensor.unit}`,
 				//	font: '13px monospace',
@@ -76,24 +68,22 @@ export function syncSensorEntities(
 				//}
 			});
 		} else {
-		    if (entity.label) {
-                entity.label.text = showSensorValues
-                    ? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
-                    : showSensorLabels
-                        ? sensor.name
-                        : '';
+			if (entity.label) {
+				entity.label.text = showSensorValues
+					? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
+					: showSensorLabels
+						? sensor.name
+						: '';
 
-                entity.label.show = showSensorLabels || showSensorValues;
-            }
+				entity.label.show = showSensorLabels || showSensorValues;
+			}
 			//if (entity.label) {
 			//	entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
 			//	entity.label.show = showSensorLabels;
 			//}
 			if (entity.point) {
 				entity.point.color =
-					sensor.status === 'alarm'
-						? CesiumModule.Color.RED
-						: CesiumModule.Color.LIME;
+					sensor.status === 'alarm' ? CesiumModule.Color.RED : CesiumModule.Color.LIME;
 			}
 		}
 	});

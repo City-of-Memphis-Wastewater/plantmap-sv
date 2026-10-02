@@ -20,26 +20,17 @@ export class ClientEdsSoap {
 	public readonly tabular: Tabular;
 
 	constructor(options: EDSClientOptions = {}) {
-		this.endpoint =
-			options.endpoint ??
-			env.OVATION_EDS_ENDPOINT ??
-			'http://000.00.0.000:00000';
+		this.endpoint = options.endpoint ?? env.OVATION_EDS_ENDPOINT ?? 'http://000.00.0.000:00000';
 
 		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
 
 		this.timeoutMs = options.timeoutMs ?? 10000;
 
-		this.username =
-			options.username ??
-			env.OVATION_EDS_USER;
+		this.username = options.username ?? env.OVATION_EDS_USER;
 
-		this.password =
-			options.password ??
-			env.OVATION_EDS_PASSWORD;
+		this.password = options.password ?? env.OVATION_EDS_PASSWORD;
 
-		this.debug =
-			env.OVATION_EDS_DEBUG === 'true' ||
-			options.wsdlUrl !== undefined;
+		this.debug = env.OVATION_EDS_DEBUG === 'true' || options.wsdlUrl !== undefined;
 
 		this.auth = new Auth(this);
 		this.points = new Points(this);
@@ -67,24 +58,18 @@ export class ClientEdsSoap {
 
 		console.log(
 			`[EDS DEBUG] ${label}:`,
-			typeof data === 'string'
-				? data
-				: JSON.stringify(data, null, 2)
+			typeof data === 'string' ? data : JSON.stringify(data, null, 2)
 		);
 	}
-
 
 	/**
 	 * Convenience API for callers that want all point data in one call.
 	 *
 	 * The actual SOAP request and parsing remain owned by Points.
 	 */
-	public async getRegex(
-		idcsTags: string[]
-	): Promise<Record<string, EdsPointTelemetry>> {
+	public async getRegex(idcsTags: string[]): Promise<Record<string, EdsPointTelemetry>> {
 		return this.points.getRegex(idcsTags);
 	}
-
 
 	/**
 	 * Convenience API matching the old client's fetchTabularValues().
@@ -95,12 +80,7 @@ export class ClientEdsSoap {
 		stepSeconds: number = 60,
 		functionType: string = 'AVG'
 	) {
-		return this.tabular.fetch(
-			sensorIds,
-			windowSeconds,
-			stepSeconds,
-			functionType
-		);
+		return this.tabular.fetch(sensorIds, windowSeconds, stepSeconds, functionType);
 	}
 
 	public async logout(): Promise<void> {

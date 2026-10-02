@@ -2,21 +2,21 @@
 	"name": "plantmap-sv",
 	"private": true,
 	"version": "0.0.1",
-    "license": "MIT",
+	"license": "MIT",
 	"type": "module",
 	"scripts": {
-        "dev": "vite dev",
-        "build": "vite build",
-        "preview": "vite preview",
-        "prepare": "svelte-kit sync",
-        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "lint": "prettier --check . && eslint .",
-        "format": "prettier --write .",
-        "test": "vitest run --project server",
-        "test:watch": "vitest --project server",
-        "test:browser": "vitest run --project browser"
-    },
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test": "vitest run --project server",
+		"test:watch": "vitest --project server",
+		"test:browser": "vitest run --project browser"
+	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^7.0.1",
@@ -60,6 +60,6 @@
 		"three-geo@1.4.5": true
 	},
 	"bin": {
-        "plantmap": "./bin/plantmap.js"
-    }
+		"plantmap": "./bin/plantmap.js"
+	}
 }

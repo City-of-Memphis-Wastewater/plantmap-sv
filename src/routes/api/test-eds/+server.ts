@@ -21,11 +21,7 @@ export const GET: RequestHandler = async () => {
 
 	try {
 		//const sampleTags = ['m100fi', 'fi8001'];
-		const sampleTags = [
-			'm100fi',
-			'fi8001',
-			'si1000-6'
-		];
+		const sampleTags = ['m100fi', 'fi8001', 'si1000-6'];
 
 		console.log('[TestRoute] Sample tags:', sampleTags);
 		console.log('[TestRoute] Elapsed:', `${Date.now() - startTime}ms`);
@@ -41,7 +37,7 @@ export const GET: RequestHandler = async () => {
 		console.log('[TestRoute] Returned data:', data);
 
 		const count = Object.keys(data).length;
-		
+
 		console.log(Object.keys(data));
 
 		console.log('[TestRoute] Data count:', count);
@@ -53,15 +49,9 @@ export const GET: RequestHandler = async () => {
 
 		await client.logout();
 
-		console.log(
-			'[TestRoute] EDS logout completed.',
-			`(${Date.now() - logoutStart}ms)`
-		);
+		console.log('[TestRoute] EDS logout completed.', `(${Date.now() - logoutStart}ms)`);
 
-		console.log(
-			'[TestRoute] Test completed successfully.',
-			`Total: ${Date.now() - startTime}ms`
-		);
+		console.log('[TestRoute] Test completed successfully.', `Total: ${Date.now() - startTime}ms`);
 
 		console.log('[TestRoute] ========================================');
 

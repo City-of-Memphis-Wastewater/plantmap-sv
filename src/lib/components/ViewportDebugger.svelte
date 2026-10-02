@@ -15,9 +15,11 @@
 </script>
 
 <div class="pointer-events-none absolute top-4 right-4 z-30 flex max-w-md flex-col gap-2">
-	<div class="pointer-events-auto rounded-lg border border-slate-800 bg-slate-900/90 p-3 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md">
+	<div
+		class="pointer-events-auto rounded-lg border border-slate-800 bg-slate-900/90 p-3 font-mono text-xs text-slate-300 shadow-2xl backdrop-blur-md"
+	>
 		<div class="mb-1 flex items-center justify-between border-b border-slate-800 pb-1">
-			<span class="font-bold uppercase text-slate-400">3D Viewport Debugger</span>
+			<span class="font-bold text-slate-400 uppercase">3D Viewport Debugger</span>
 			<div class="flex items-center gap-2">
 				<span class={webGlSupported ? 'text-emerald-400' : 'text-rose-400'}>
 					{webGlSupported ? 'WebGL OK' : 'WebGL FAIL'}
@@ -39,7 +41,7 @@
 		{#if errorLog}
 			<div class="mt-2 overflow-x-auto rounded border border-rose-900/50 bg-rose-950/30 p-2">
 				<div class="font-bold text-rose-400">Initialization Exception:</div>
-				<pre class="mt-1 whitespace-pre-wrap text-[10px] text-rose-300">{errorLog}</pre>
+				<pre class="mt-1 text-[10px] whitespace-pre-wrap text-rose-300">{errorLog}</pre>
 			</div>
 		{/if}
 	</div>

@@ -6,44 +6,29 @@ import { parseGetPointsResponse } from '../parsers/points';
 import type { EdsPointTelemetry } from '../types';
 
 export class Points {
-	constructor(
-		private readonly client: ClientEdsSoap
-	) {}
-
+	constructor(private readonly client: ClientEdsSoap) {}
 
 	/**
 	 * Fetch multiple points in a SINGLE SOAP request.
 	 *
 	 * This corresponds to the old client's getPoints().
 	 */
-	public async getRegex(
-		idcsTags: string[]
-	): Promise<Record<string, EdsPointTelemetry>> {
+	public async getRegex(idcsTags: string[]): Promise<Record<string, EdsPointTelemetry>> {
 		const started = Date.now();
 
 		if (idcsTags.length === 0) {
-			this.client.log(
-				'Points.getRegex called with empty list'
-			);
+			this.client.log('Points.getRegex called with empty list');
 
 			return {};
 		}
 
 		this.client.log('Points.getRegex START');
 
-		const token =
-			await this.client.auth.getToken();
+		const token = await this.client.auth.getToken();
 
-		const iessTags = idcsTags.map(
-			(name) =>
-				formatIessTag(
-					name,
-					this.client.iessSuffix
-				)
-		);
+		const iessTags = idcsTags.map((name) => formatIessTag(name, this.client.iessSuffix));
 
-		const regexPattern =
-			`^(${iessTags.join('|')})$`;
+		const regexPattern = `^(${iessTags.join('|')})$`;
 
 		const soapEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope
@@ -68,17 +53,14 @@ export class Points {
 		});
 
 		try {
-			const response = await fetch(
-				this.client.endpoint,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type':
-							'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
-					},
-					body: soapEnvelope
-				}
-			);
+			const response = await fetch(this.client.endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type':
+						'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getPoints"'
+				},
+				body: soapEnvelope
+			});
 
 			this.client.log('Points.getRegex response received', {
 				status: response.status,
@@ -95,13 +77,10 @@ export class Points {
 			});
 
 			if (!response.ok) {
-				throw new Error(
-					`EDS getPoints failed: HTTP ${response.status} ${response.statusText}`
-				);
+				throw new Error(`EDS getPoints failed: HTTP ${response.status} ${response.statusText}`);
 			}
 
-			const results =
-				parseGetPointsResponse(xml);
+			const results = parseGetPointsResponse(xml);
 
 			this.client.log('Points.getRegex COMPLETE', {
 				elapsedMs: Date.now() - started
@@ -111,10 +90,7 @@ export class Points {
 		} catch (error) {
 			this.client.log('Points.getRegex FAILED', {
 				elapsedMs: Date.now() - started,
-				error:
-					error instanceof Error
-						? error.message
-						: String(error)
+				error: error instanceof Error ? error.message : String(error)
 			});
 
 			throw error;

@@ -36,17 +36,19 @@
 		onZoomOut?: () => void;
 		onToggleGeoJson?: () => void;
 		onToggleSensorLabels?: () => void;
-		onToggleSensorValues?: () => void,
+		onToggleSensorValues?: () => void;
 		onToggleHoverInfo?: () => void;
 	} = $props();
 </script>
 
-<div class="fixed bottom-[4vh] right-3 z-30 max-w-[220px]">
-<!--div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]"-->
-	<div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md">
+<div class="fixed right-3 bottom-[4vh] z-30 max-w-[220px]">
+	<!--div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]"-->
+	<div
+		class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md"
+	>
 		<!-- Header -->
 		<div class="flex items-center justify-between gap-2 px-1 pb-1">
-			<span class="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
+			<span class="font-mono text-[10px] font-bold tracking-wider text-slate-400 uppercase">
 				Nav Controls
 			</span>
 			<button
@@ -66,14 +68,20 @@
 					<button
 						type="button"
 						onclick={() => onToggleViewMode('2D')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode === '2D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode ===
+						'2D'
+							? 'bg-sky-600/80 text-white'
+							: 'text-slate-400 hover:text-slate-200'}"
 					>
 						2D
 					</button>
 					<button
 						type="button"
 						onclick={() => onToggleViewMode('3D')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode === '3D' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {viewMode ===
+						'3D'
+							? 'bg-sky-600/80 text-white'
+							: 'text-slate-400 hover:text-slate-200'}"
 					>
 						3D
 					</button>
@@ -84,14 +92,20 @@
 					<button
 						type="button"
 						onclick={() => onSwitchBasemap('satellite')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'satellite' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap ===
+						'satellite'
+							? 'bg-sky-600/80 text-white'
+							: 'text-slate-400 hover:text-slate-200'}"
 					>
 						Satellite
 					</button>
 					<button
 						type="button"
 						onclick={() => onSwitchBasemap('streets')}
-						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap === 'streets' ? 'bg-sky-600/80 text-white' : 'text-slate-400 hover:text-slate-200'}"
+						class="rounded py-1 font-mono text-[11px] font-medium transition-colors {currentBasemap ===
+						'streets'
+							? 'bg-sky-600/80 text-white'
+							: 'text-slate-400 hover:text-slate-200'}"
 					>
 						Streets
 					</button>
@@ -103,7 +117,7 @@
 						type="button"
 						onclick={onZoomIn}
 						title="Zoom In"
-						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold hover:bg-slate-700 text-slate-100"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold text-slate-100 hover:bg-slate-700"
 					>
 						+
 					</button>
@@ -111,7 +125,7 @@
 						type="button"
 						onclick={onResetCamera}
 						title="Reset Camera View"
-						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-[10px] uppercase font-semibold hover:bg-slate-700 text-slate-100"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-[10px] font-semibold text-slate-100 uppercase hover:bg-slate-700"
 					>
 						Reset
 					</button>
@@ -119,15 +133,15 @@
 						type="button"
 						onclick={onZoomOut}
 						title="Zoom Out"
-						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold hover:bg-slate-700 text-slate-100"
+						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold text-slate-100 hover:bg-slate-700"
 					>
 						−
 					</button>
 				</div>
 
 				<!-- Display Layer Toggles -->
-				<div class="border-t border-slate-800/80 pt-1.5 flex flex-col gap-1">
-					<div class="px-1 font-mono text-[9px] uppercase tracking-wider text-slate-500">
+				<div class="flex flex-col gap-1 border-t border-slate-800/80 pt-1.5">
+					<div class="px-1 font-mono text-[9px] tracking-wider text-slate-500 uppercase">
 						Layers
 					</div>
 
@@ -138,7 +152,9 @@
 						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
 					>
 						<span>Plant GeoJSON</span>
-						<span class="text-[10px] font-bold {showGeoJson ? 'text-emerald-400' : 'text-slate-500'}">
+						<span
+							class="text-[10px] font-bold {showGeoJson ? 'text-emerald-400' : 'text-slate-500'}"
+						>
 							{showGeoJson ? 'ON' : 'OFF'}
 						</span>
 					</button>
@@ -149,7 +165,11 @@
 						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
 						<span>Sensor Labels</span>
-						<span class="text-[10px] font-bold {showSensorLabels ? 'text-emerald-400' : 'text-slate-500'}">
+						<span
+							class="text-[10px] font-bold {showSensorLabels
+								? 'text-emerald-400'
+								: 'text-slate-500'}"
+						>
 							{showSensorLabels ? 'ON' : 'OFF'}
 						</span>
 					</button>
@@ -160,7 +180,11 @@
 						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
 						<span>Sensor Values</span>
-						<span class="text-[10px] font-bold {showSensorValues ? 'text-emerald-400' : 'text-slate-500'}">
+						<span
+							class="text-[10px] font-bold {showSensorValues
+								? 'text-emerald-400'
+								: 'text-slate-500'}"
+						>
 							{showSensorValues ? 'ON' : 'OFF'}
 						</span>
 					</button>
@@ -174,7 +198,9 @@
 						class="flex w-full items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
 						<span class="text-slate-300">Debugger</span>
-						<span class="text-[10px] font-bold {showDebugger ? 'text-amber-400' : 'text-slate-500'}">
+						<span
+							class="text-[10px] font-bold {showDebugger ? 'text-amber-400' : 'text-slate-500'}"
+						>
 							{showDebugger ? 'ON' : 'OFF'}
 						</span>
 					</button>

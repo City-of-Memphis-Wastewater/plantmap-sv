@@ -44,18 +44,17 @@
 	let showDebugger = $state(false);
 	let showHoverInfo = $state(true);
 	let showSensorLabels = $state(true);
-    let showSensorValues = $state(true);
-    
+	let showSensorValues = $state(true);
+
 	// Sync telemetry store to Cesium entities
 	$effect(() => {
-        syncSensorEntities(
-            viewer,
-            CesiumModule,
-            telemetryStore.sensors,
-            showSensorLabels,
-            showSensorValues
-        );
-		
+		syncSensorEntities(
+			viewer,
+			CesiumModule,
+			telemetryStore.sensors,
+			showSensorLabels,
+			showSensorValues
+		);
 	});
 
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {
@@ -86,14 +85,14 @@
 		console.debug(`[Cesium] GeoJSON visibility: ${showGeoJson}`);
 	}
 
-    function toggleSensorLabels() {
-        showSensorLabels = !showSensorLabels;
-    }
+	function toggleSensorLabels() {
+		showSensorLabels = !showSensorLabels;
+	}
 
-    function toggleSensorValues() {
-        showSensorValues = !showSensorValues;
-    }
-    
+	function toggleSensorValues() {
+		showSensorValues = !showSensorValues;
+	}
+
 	function handleResetCamera() {
 		handleToggleViewMode('2D');
 		resetCamera(viewer, CesiumModule);
@@ -104,11 +103,8 @@
 
 		(async () => {
 			try {
-
 				const canvasTest = document.createElement('canvas');
-				const gl =
-					canvasTest.getContext('webgl2') ||
-					canvasTest.getContext('webgl');
+				const gl = canvasTest.getContext('webgl2') || canvasTest.getContext('webgl');
 
 				if (!gl) {
 					webGlSupported = false;
@@ -131,11 +127,11 @@
 				}
 
 				statusMsg = 'Initializing 3D Globe Viewer...';
-                console.log('[Cesium] container before Viewer', {
-                    clientWidth: container.clientWidth,
-                    clientHeight: container.clientHeight,
-                    rect: container.getBoundingClientRect()
-                });
+				console.log('[Cesium] container before Viewer', {
+					clientWidth: container.clientWidth,
+					clientHeight: container.clientHeight,
+					rect: container.getBoundingClientRect()
+				});
 				viewer = new Cesium.Viewer(container, {
 					baseLayerPicker: false,
 					animation: false,
@@ -147,14 +143,14 @@
 					navigationHelpButton: false,
 					selectionIndicator: false
 				});
-                console.log('[Cesium] container after Viewer', {
-                    clientWidth: container.clientWidth,
-                    clientHeight: container.clientHeight,
-                    canvas: {
-                        width: viewer.scene.canvas.width,
-                        height: viewer.scene.canvas.height
-                    }
-                });
+				console.log('[Cesium] container after Viewer', {
+					clientWidth: container.clientWidth,
+					clientHeight: container.clientHeight,
+					canvas: {
+						width: viewer.scene.canvas.width,
+						height: viewer.scene.canvas.height
+					}
+				});
 				viewer.scene.globe.enableLighting = false;
 				viewer.scene.globe.depthTestAgainstTerrain = false;
 
@@ -179,18 +175,18 @@
 
 				if (!isMounted) return;
 
-                console.log('[Cesium] container before resize', {
-                    clientWidth: container.clientWidth,
-                    clientHeight: container.clientHeight,
-                    rect: container.getBoundingClientRect()
-                });
+				console.log('[Cesium] container before resize', {
+					clientWidth: container.clientWidth,
+					clientHeight: container.clientHeight,
+					rect: container.getBoundingClientRect()
+				});
 
-                viewer.resize();
+				viewer.resize();
 
-                console.log('[Cesium] canvas after resize', {
-                    width: viewer.scene.canvas.width,
-                    height: viewer.scene.canvas.height
-                });
+				console.log('[Cesium] canvas after resize', {
+					width: viewer.scene.canvas.width,
+					height: viewer.scene.canvas.height
+				});
 				resetCamera(viewer, CesiumModule);
 
 				// Mouse move listener for entity hover and camera position telemetry
@@ -204,9 +200,7 @@
 							const sensor = pickedObject.id.properties?.sensorData?.getValue();
 							hoverInfo = {
 								name: pickedObject.id.name || pickedObject.id.id,
-								value: sensor
-									? `${sensor.value} ${sensor.unit}`
-									: 'Entity Selected',
+								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
 								x: movement.endPosition.x,
 								y: movement.endPosition.y
 							};
@@ -287,12 +281,6 @@
 
 	<!-- Debug Overlay -->
 	{#if showDebugger}
-		<ViewportDebugger
-			{webGlSupported}
-			{viewMode}
-			{statusMsg}
-			{cameraPos}
-			{errorLog}
-		/>
+		<ViewportDebugger {webGlSupported} {viewMode} {statusMsg} {cameraPos} {errorLog} />
 	{/if}
 </div>

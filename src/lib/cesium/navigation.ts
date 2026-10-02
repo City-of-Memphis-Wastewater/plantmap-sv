@@ -8,11 +8,7 @@ export function resetCamera(viewer: any, CesiumModule: any) {
 	if (!viewer || !CesiumModule) return;
 
 	viewer.camera.flyTo({
-		destination: CesiumModule.Cartesian3.fromDegrees(
-			SITE_LON,
-			SITE_LAT,
-			DEFAULT_CAMERA_ALT
-		),
+		destination: CesiumModule.Cartesian3.fromDegrees(SITE_LON, SITE_LAT, DEFAULT_CAMERA_ALT),
 		orientation: {
 			heading: CesiumModule.Math.toRadians(0),
 			pitch: CesiumModule.Math.toRadians(-90), // Top-down 2D angle

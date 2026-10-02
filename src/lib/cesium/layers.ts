@@ -1,10 +1,6 @@
 // src/lib/cesium/layers.ts
 
-export function applyBasemap(
-	viewer: any,
-	CesiumModule: any,
-	type: 'satellite' | 'streets'
-) {
+export function applyBasemap(viewer: any, CesiumModule: any, type: 'satellite' | 'streets') {
 	if (!viewer || !CesiumModule) return;
 
 	const layers = viewer.imageryLayers;
@@ -63,12 +59,18 @@ export async function loadGeoJsonOverlay(viewer: any, CesiumModule: any, geoJson
 		// Fix fuzzy/grainy label rendering on entities
 		for (const entity of geoJsonDataSource.entities.values) {
 			if (entity.label) {
-				entity.label.font = new CesiumModule.ConstantProperty('bold 14px Inter, system-ui, sans-serif');
-				entity.label.style = new CesiumModule.ConstantProperty(CesiumModule.LabelStyle.FILL_AND_OUTLINE);
+				entity.label.font = new CesiumModule.ConstantProperty(
+					'bold 14px Inter, system-ui, sans-serif'
+				);
+				entity.label.style = new CesiumModule.ConstantProperty(
+					CesiumModule.LabelStyle.FILL_AND_OUTLINE
+				);
 				entity.label.fillColor = new CesiumModule.ConstantProperty(CesiumModule.Color.WHITE);
 				entity.label.outlineColor = new CesiumModule.ConstantProperty(CesiumModule.Color.BLACK);
 				entity.label.outlineWidth = new CesiumModule.ConstantProperty(3);
-				entity.label.disableDepthTestDistance = new CesiumModule.ConstantProperty(Number.POSITIVE_INFINITY);
+				entity.label.disableDepthTestDistance = new CesiumModule.ConstantProperty(
+					Number.POSITIVE_INFINITY
+				);
 				entity.label.scaleByDistance = new CesiumModule.NearFarScalar(150, 1.0, 2000, 0.5);
 			}
 		}

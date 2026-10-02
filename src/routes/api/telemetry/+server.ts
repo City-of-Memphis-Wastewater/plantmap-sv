@@ -52,7 +52,7 @@ export const GET: RequestHandler = async () => {
 	try {
 		// Native TypeScript SOAP execution
 		//const liveData = await edsClient.getPointsByIdcsListParsed(sensorIds);
-		const liveData = await edsClient.getRegex(sensorIds);	
+		const liveData = await edsClient.getRegex(sensorIds);
 
 		const sensors = Object.entries(sensorMap).map(([id, config]) => ({
 			...config,
@@ -66,7 +66,10 @@ export const GET: RequestHandler = async () => {
 			sensors
 		});
 	} catch (err) {
-		console.warn('[API /telemetry] EDS SOAP endpoint unreachable. Serving fallback configuration values:', (err as Error).message);
+		console.warn(
+			'[API /telemetry] EDS SOAP endpoint unreachable. Serving fallback configuration values:',
+			(err as Error).message
+		);
 
 		// Fallback safely to static sensors.json configuration so the UI never crashes
 		const fallbackSensors = Object.entries(sensorMap).map(([id, config]) => ({
