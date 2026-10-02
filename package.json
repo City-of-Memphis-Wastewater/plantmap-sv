@@ -15,7 +15,6 @@
         "format": "prettier --write .",
         "test": "vitest run --project server",
         "test:watch": "vitest --project server",
-        "test:unit": "vitest run --project server",
         "test:browser": "vitest run --project browser"
     },
 	"devDependencies": {
