@@ -86,17 +86,14 @@
 		console.debug(`[Cesium] GeoJSON visibility: ${showGeoJson}`);
 	}
 
-	function toggleSensorLabels() {
-		showSensorLabels = !showSensorLabels;
-		if (!viewer) return;
+    function toggleSensorLabels() {
+        showSensorLabels = !showSensorLabels;
+    }
 
-		Object.values(viewer.entities.values).forEach((entity: any) => {
-			if (entity.id?.startsWith('sensor-') && entity.label) {
-				entity.label.show = showSensorLabels;
-			}
-		});
-	}
-
+    function toggleSensorValues() {
+        showSensorValues = !showSensorValues;
+    }
+    
 	function handleResetCamera() {
 		handleToggleViewMode('2D');
 		resetCamera(viewer, CesiumModule);
@@ -267,6 +264,7 @@
 		geojsonLoaded={!!geojsonDataSource}
 		{showGeoJson}
 		{showSensorLabels}
+		{showSensorValues}
 		{showHoverInfo}
 		onToggleViewMode={handleToggleViewMode}
 		onSwitchBasemap={handleSwitchBasemap}
@@ -275,6 +273,7 @@
 		onZoomOut={zoomOut}
 		onToggleGeoJson={toggleGeoJson}
 		onToggleSensorLabels={toggleSensorLabels}
+		onToggleSensorValues={toggleSensorValues}
 		onToggleHoverInfo={() => {
 			showHoverInfo = !showHoverInfo;
 			if (!showHoverInfo) hoverInfo = null;

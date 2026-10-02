@@ -36,7 +36,7 @@
 		onZoomOut?: () => void;
 		onToggleGeoJson?: () => void;
 		onToggleSensorLabels?: () => void;
-		onToggleSensorValues?: () => {},
+		onToggleSensorValues?: () => void,
 		onToggleHoverInfo?: () => void;
 	} = $props();
 </script>
