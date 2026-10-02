@@ -5,6 +5,7 @@
 		geojsonLoaded = false,
 		showGeoJson = false,
 		showSensorLabels = false,
+		showSensorValues = false,
 		showHoverInfo = false,
 		showDebugger = $bindable(false),
 		viewMode = '2D',
@@ -16,12 +17,14 @@
 		onZoomOut = () => {},
 		onToggleGeoJson = () => {},
 		onToggleSensorLabels = () => {},
+		onToggleSensorValues = () => {},
 		onToggleHoverInfo = () => {}
 	}: {
 		showNavigation?: boolean;
 		geojsonLoaded?: boolean;
 		showGeoJson?: boolean;
 		showSensorLabels?: boolean;
+		showSensorValues?: boolean;
 		showHoverInfo?: boolean;
 		showDebugger?: boolean;
 		viewMode?: '2D' | '3D';
@@ -33,6 +36,7 @@
 		onZoomOut?: () => void;
 		onToggleGeoJson?: () => void;
 		onToggleSensorLabels?: () => void;
+		onToggleSensorValues?: () => {},
 		onToggleHoverInfo?: () => void;
 	} = $props();
 </script>
@@ -152,7 +156,7 @@
 
 					<button
 						type="button"
-						onclick={onToggleHoverInfo}
+						onclick={onToggleSensorValues}
 						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
 						<span>Sensor Values</span>
