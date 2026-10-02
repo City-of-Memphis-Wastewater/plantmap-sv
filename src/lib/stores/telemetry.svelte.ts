@@ -5,9 +5,9 @@ export interface SensorNode {
 	lat: number;
 	lon: number;
 	altitude?: number;
-	value: number;
+	value: number | null;
 	unit: string;
-	status: 'normal' | 'warning' | 'alarm';
+	status: 'normal' | 'warning' | 'alarm' | 'missing';
 }
 
 class TelemetryStore {
