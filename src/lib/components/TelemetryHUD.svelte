@@ -42,34 +42,35 @@
 			</button>
 		</div>
 
-		<!-- Expandable Matrix -->
-		{#if showTelemetryHud}
-			<div class="border-t border-slate-800/80 p-2 text-[11px]">
-				<!-- Warning Callout -->
-				{#if telemetryStore.error}
-					<div class="mb-1.5 rounded bg-amber-950/40 px-1.5 py-1 font-mono text-[10px] italic text-amber-300/90 border border-amber-800/40">
-						{telemetryStore.error}
-					</div>
-				{/if}
+        <!-- Expandable Matrix -->
+        {#if showTelemetryHud}
+            <div class="border-t border-slate-800/80 px-1.5 py-1 text-[10px]">
+                <!-- Warning Callout -->
+                {#if telemetryStore.error}
+                    <div class="mb-1 rounded bg-amber-950/40 px-1.5 py-0.5 font-mono text-[9px] italic">
+                        {telemetryStore.error}
+                    </div>
+                {/if}
 
-				<!-- Sensor Grid -->
-				<div class="flex flex-col gap-0.5">
-					{#each Object.values(telemetryStore.sensors || {}) as sensor (sensor.id)}
-						<div class="flex items-center justify-between gap-4 py-0.5 font-mono">
-							<span class="text-slate-400">
-								{sensor.name || sensor.id}
-							</span>
-							<span class="font-bold text-emerald-400">
-								{sensor.value ?? '--'} <span class="text-[9px] font-normal text-slate-400">{sensor.unit}</span>
-							</span>
-						</div>
-					{:else}
-						<div class="py-1 text-center font-mono text-[10px] text-slate-500">
-							Loading sensor matrix...
-						</div>
-					{/each}
-				</div>
-			</div>
-		{/if}
+                <!-- Sensor Grid -->
+                <div class="flex flex-col gap-0">
+                    {#each Object.values(telemetryStore.sensors || {}) as sensor (sensor.id)}
+                        <div class="flex items-center justify-between gap-2 py-0 font-mono">
+                            <span class="text-slate-400">
+                                {sensor.name || sensor.id}
+                            </span>
+                            <span class="font-semibold text-emerald-400">
+                                {sensor.value ?? '--'}
+                                <span class="text-[8px] font-normal text-slate-500">></span>
+                            </span>
+                        </div>
+                        {:else}
+                            <div class="py-0.5 text-center font-mono text-[9px] text-slate-500">
+                                Loading sensor matrix...
+                            </div>
+                        {/each}
+                </div>
+            </div>
+        {/if}
 	</div>
 </div>
