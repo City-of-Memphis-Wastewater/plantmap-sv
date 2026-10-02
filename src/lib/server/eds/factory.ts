@@ -17,22 +17,21 @@ export function createEdsClient(): ClientEdsSoap {
         appDir
     });
 
-    const memphisEnv = new MemphisEnv();
-
-    const plantMapConfig = loadPlantMapConfig(
-        memphisConfig,
-        memphisEnv
-    );
-
-
-    //const plantMapConfig = loadPlantMapConfig(memphisConfig);
-
     //const memphisSecret = new MemphisSecret({
     //   appDir
     //});
 
+    const memphisEnv = new MemphisEnv();
+
+    const plantMapConfig = loadPlantMapConfig(
+        memphisConfig,
+        //memphisSecret,
+        memphisEnv
+    );
+
+
     const endpoint =
-        `${plantMapConfig.eds.baseUrl}:${plantMapConfig.eds.port}`;
+        `${plantMapConfig.eds.baseUrl}:${plantMapConfig.eds.soapPort}`;
 
     return new ClientEdsSoap({
         endpoint,

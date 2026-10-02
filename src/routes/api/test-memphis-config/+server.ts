@@ -19,7 +19,7 @@ export const GET: RequestHandler = () => {
     );
 
     appConfig.setValue(
-        'eds.port',
+        'eds.soapPort',
         43080
     );
 
@@ -28,7 +28,7 @@ export const GET: RequestHandler = () => {
         
         app: {
             baseUrl: appConfig.value('eds.baseUrl'),
-            port: appConfig.value('eds.port')
+            soapPort: appConfig.value('eds.soapPort')
         }
     });
 };
