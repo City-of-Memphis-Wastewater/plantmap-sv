@@ -15,6 +15,7 @@ interface SensorConfig {
 	lon: number;
 	altitude?: number;
 	value?: number;
+	precision?: number;
 	unit: string;
 	status?: 'normal' | 'warning' | 'alarm';
 }
