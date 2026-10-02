@@ -24,13 +24,22 @@ export function loadPlantMapConfig(
 ): PlantMapConfig {
     return PlantMapConfigSchema.parse({
         eds: {
-            soapPort: config.value('eds.soapPort'),
-            suffix: config.value('eds.suffix'),
-            debug: config.value('eds.debug')
+            soapPort:
+                config.value('eds.soapPort') ??
+                43080,
+             suffix:
+                config.value('eds.suffix') ??
+                '.UNIT0@NET0',
+
+            debug:
+                config.value('eds.debug') ??
+                false
         },
 
         server: {
-            port: config.value('server.port')
+            port:
+                config.value('server.port') ??
+                5173
         }
     });
 }
