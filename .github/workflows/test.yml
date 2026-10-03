@@ -15,7 +15,7 @@ jobs:
         with:
           bun-version: latest
 
-      - run: bun install --frozen-lockfile
+      - run: bun install # --frozen-lockfile  # we use npm on termux, tough
       - run: bun run check
       - run: bun run test
       - run: bunx playwright install --with-deps chromium
