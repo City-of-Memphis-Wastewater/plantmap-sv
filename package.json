@@ -6,6 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"setup": "tsx bin/setup.js",
+		"plantmap": "tsx bin/plantmap.js",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
@@ -40,6 +42,7 @@
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"tailwindcss": "^4.3.0",
+		"tsx": "^4.23.15",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.60.1",
 		"vite": "^8.0.16",

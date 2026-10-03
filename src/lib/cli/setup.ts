@@ -15,9 +15,7 @@ export async function setup() {
         appDir
     });
 
-    const env = new MemphisEnv({
-        appDir
-    });
+    const env = new MemphisEnv();
 
     const baseUrl = await input({
         message: 'Ovation EDS endpoint baseUrl:',
