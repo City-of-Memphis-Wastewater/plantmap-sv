@@ -1,4 +1,4 @@
-// src/lib/server/eds/client-new.ts
+// src/lib/server/eds/client.ts
 
 import { Auth } from './auth';
 import { Points } from './requests/points';

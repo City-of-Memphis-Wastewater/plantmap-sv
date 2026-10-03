@@ -3,8 +3,6 @@
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
-
-//import { ClientEdsSoap } from '$lib/server/eds/client-new';
 import { createEdsClient } from '$lib/server/eds/factory';
 
 

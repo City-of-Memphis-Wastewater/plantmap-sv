@@ -1,6 +1,6 @@
 // requests/points.ts
 
-import type { ClientEdsSoap } from '../client-new';
+import type { ClientEdsSoap } from '../client';
 import { formatIessTag } from '../helpers';
 import { parseGetPointsResponse } from '../parsers/points';
 import type { EdsPointTelemetry } from '../types';

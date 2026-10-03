@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-//import { ClientEdsSoap } from '$lib/server/eds/client-new';
 import { createEdsClient } from '$lib/server/eds/factory';
 const client = createEdsClient();
 

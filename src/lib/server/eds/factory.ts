@@ -8,7 +8,7 @@ import { MemphisEnv } from '$lib/memphis-env';
 //import { MemphisSecret } from '$lib/memphis-secret';
 import { loadPlantMapConfig } from '$lib/plantmap/config';
 
-import { ClientEdsSoap } from './client-new';
+import { ClientEdsSoap } from './client';
 
 export function createEdsClient(): ClientEdsSoap {
     const appDir = path.join(os.homedir(), '.plantmap');

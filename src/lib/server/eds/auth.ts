@@ -1,5 +1,5 @@
 // server/eds/auth.ts
-import type { ClientEdsSoap } from './client-new'; // only for typing
+import type { ClientEdsSoap } from './client'; // only for typing
 
 export class Auth {
 	private client: ClientEdsSoap;
