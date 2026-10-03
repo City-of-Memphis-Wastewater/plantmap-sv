@@ -40,7 +40,7 @@ export function createEdsClient(): ClientEdsSoap {
     );
 
     const endpoint =
-        `${baseUrl}:${plantMapConfig.eds.soapPort}`;
+        `http://${baseUrl}:${plantMapConfig.eds.soapPort}`;
 
     return new ClientEdsSoap({
         endpoint,
