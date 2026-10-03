@@ -26,11 +26,11 @@ export interface EdsPointTelemetry {
 }
 
 export interface EDSClientOptions {
-	wsdlUrl?: string;
-	endpoint?: string;
-	username?: string;
-	password?: string;
-	iessSuffix?: string;
-	timeoutMs?: number;
-	debug?: boolean;
+    endpoint: string;
+    username: string;
+    password: string;
+    iessSuffix: string;
+    wsdlUrl?: string;
+    timeoutMs?: number;
+    debug?: boolean;
 }

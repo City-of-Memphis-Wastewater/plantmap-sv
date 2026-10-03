@@ -6,9 +6,6 @@ export async function runCli(command: string) {
         case 'setup':
             return setup();
 
-        case 'config':
-            return config();
-
         default:
             throw new Error(`Unknown command: ${command}`);
     }

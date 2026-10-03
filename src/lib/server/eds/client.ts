@@ -7,11 +7,11 @@ import { Tabular } from './requests/tabular';
 import type { EDSClientOptions, EdsPointTelemetry } from './types';
 
 export class ClientEdsSoap {
-	public readonly endpoint?: string;
+	public readonly endpoint: string;
 	public readonly iessSuffix: string;
 	public readonly timeoutMs: number;
-	public readonly username?: string;
-	public readonly password?: string;
+	public readonly username: string;
+	public readonly password: string;
 	public readonly debug: boolean;
 
 	public readonly auth: Auth;
