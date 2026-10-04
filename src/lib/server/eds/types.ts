@@ -30,7 +30,6 @@ export interface EDSClientOptions {
     username: string;
     password: string;
     iessSuffix: string;
-    wsdlUrl?: string;
     timeoutMs?: number;
     debug?: boolean;
 }

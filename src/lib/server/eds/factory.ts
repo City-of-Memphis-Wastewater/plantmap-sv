@@ -10,6 +10,21 @@ import { loadPlantMapConfig } from '$lib/plantmap/config';
 
 import { ClientEdsSoap } from './client';
 
+function requiredEnv(
+    env: MemphisEnv,
+    key: string
+): string {
+    const value = env.value(key);
+
+    if (!value) {
+        throw new Error(
+            `Required environment variable is missing: ${key}`
+        );
+    }
+
+    return value;
+}
+
 export function createEdsClient(): ClientEdsSoap {
     const appDir = path.join(os.homedir(), '.plantmap');
 
@@ -27,6 +42,7 @@ export function createEdsClient(): ClientEdsSoap {
         memphisConfig
     );
 
+    /*
     const username = memphisEnv.value(
         'OVATION_EDS_USERNAME'
     );
@@ -36,6 +52,22 @@ export function createEdsClient(): ClientEdsSoap {
     );
 
     const baseUrl = memphisEnv.value(
+        'OVATION_EDS_BASE_URL'
+    );
+    */
+    
+    const username = requiredEnv(
+        memphisEnv,
+        'OVATION_EDS_USERNAME'
+    );
+
+    const password = requiredEnv(
+        memphisEnv,
+        'OVATION_EDS_PASSWORD'
+    );
+
+    const baseUrl = requiredEnv(
+        memphisEnv,
         'OVATION_EDS_BASE_URL'
     );
 
