@@ -16,7 +16,7 @@ function requiredEnv(
 ): string {
     const value = env.value(key);
 
-    if (!value) {
+    if (value === undefined || value === null) {
         throw new Error(
             `Required environment variable is missing: ${key}`
         );
