@@ -9,6 +9,17 @@ Setup config values via CLI prompt, using memphis-config.
 ```bash
 git clone https://github.com/City-of-Memphis-Wastewater/plantmap-sv.git
 cd plantmap-sv
+```
+
+
+### Running, Standard Approach, with Bun
+```
+bun install
+bun run setup
+```
+
+### Running on Termux and Other Platforms Without Bun
+```
 npm install
 npm run setup
 ```
