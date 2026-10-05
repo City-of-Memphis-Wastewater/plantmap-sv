@@ -25,7 +25,7 @@ export function syncSensorEntities(
 
 	Object.values(sensors).forEach((sensor) => {
 		const entityId = `sensor-${sensor.id}`;
-		let entity = viewer.entities.getById(entityId);
+		const entity = viewer.entities.getById(entityId);
 
 		const pos = CesiumModule.Cartesian3.fromDegrees(sensor.lon, sensor.lat, sensor.altitude ?? 15);
 

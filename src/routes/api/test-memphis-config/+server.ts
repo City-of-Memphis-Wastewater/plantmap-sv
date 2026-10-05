@@ -24,7 +24,7 @@ export const GET: RequestHandler = () => {
 	config.setValue('eds.debug', false);
 	config.setValue('server.port', 5173);
 
-	env.setValue('OVATION_EDS_BASE_URL', 'http://172.19.4.127');
+	env.setValue('OVATION_EDS_BASE_URL', '172.19.4.127');
 
 	return json({
 		app: {
@@ -33,3 +33,4 @@ export const GET: RequestHandler = () => {
 		}
 	});
 };
+
