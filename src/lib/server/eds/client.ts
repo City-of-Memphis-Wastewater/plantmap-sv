@@ -28,7 +28,7 @@ export class ClientEdsSoap {
 		this.auth = new Auth(this);
 		this.points = new Points(this);
 		this.tabular = new Tabular(this);
-		
+
 		this.log('==========================================================================');
 		this.log('Client initialized', {
 			endpoint: this.endpoint,
@@ -36,7 +36,6 @@ export class ClientEdsSoap {
 			timeoutMs: this.timeoutMs,
 			username: this.username ? '<configured>' : '<anonymous>',
 			debug: this.debug
-			
 		});
 	}
 

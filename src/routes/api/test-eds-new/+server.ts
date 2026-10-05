@@ -5,7 +5,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { createEdsClient } from '$lib/server/eds/factory';
 
-
 export const GET: RequestHandler = async () => {
 	const started = Date.now();
 

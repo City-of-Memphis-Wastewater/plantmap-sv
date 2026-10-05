@@ -10,39 +10,32 @@ import { loadPlantMapConfig } from '$lib/plantmap/config';
 
 import { ClientEdsSoap } from './client';
 
-function requiredEnv(
-    env: MemphisEnv,
-    key: string
-): string {
-    const value = env.value(key);
+function requiredEnv(env: MemphisEnv, key: string): string {
+	const value = env.value(key);
 
-    if (value === undefined || value === null) {
-        throw new Error(
-            `Required environment variable is missing: ${key}`
-        );
-    }
+	if (value === undefined || value === null) {
+		throw new Error(`Required environment variable is missing: ${key}`);
+	}
 
-    return value;
+	return value;
 }
 
 export function createEdsClient(): ClientEdsSoap {
-    const appDir = path.join(os.homedir(), '.plantmap');
+	const appDir = path.join(os.homedir(), '.plantmap');
 
-    const memphisConfig = new MemphisConfig({
-        appDir
-    });
+	const memphisConfig = new MemphisConfig({
+		appDir
+	});
 
-    //const memphisSecret = new MemphisSecret({
-    //   appDir
-    //});
+	//const memphisSecret = new MemphisSecret({
+	//   appDir
+	//});
 
-    const memphisEnv = new MemphisEnv();
+	const memphisEnv = new MemphisEnv();
 
-    const plantMapConfig = loadPlantMapConfig(
-        memphisConfig
-    );
+	const plantMapConfig = loadPlantMapConfig(memphisConfig);
 
-    /*
+	/*
     const username = memphisEnv.value(
         'OVATION_EDS_USERNAME'
     );
@@ -55,34 +48,24 @@ export function createEdsClient(): ClientEdsSoap {
         'OVATION_EDS_BASE_URL'
     );
     */
-    
-    const username = requiredEnv(
-        memphisEnv,
-        'OVATION_EDS_USERNAME'
-    );
 
-    const password = requiredEnv(
-        memphisEnv,
-        'OVATION_EDS_PASSWORD'
-    );
+	const username = requiredEnv(memphisEnv, 'OVATION_EDS_USERNAME');
 
-    const baseUrl = requiredEnv(
-        memphisEnv,
-        'OVATION_EDS_BASE_URL'
-    );
+	const password = requiredEnv(memphisEnv, 'OVATION_EDS_PASSWORD');
 
-    const endpoint =
-        `http://${baseUrl}:${plantMapConfig.eds.soapPort}`;
+	const baseUrl = requiredEnv(memphisEnv, 'OVATION_EDS_BASE_URL');
 
-    return new ClientEdsSoap({
-        endpoint,
-        username,
-        password,
-        iessSuffix: plantMapConfig.eds.suffix,
-        debug: plantMapConfig.eds.debug,
+	const endpoint = `http://${baseUrl}:${plantMapConfig.eds.soapPort}`;
 
-        // TODO:
-        // username: memphisSecret.value('eds.username'),
-        // password: memphisSecret.value('eds.password')
-    });
+	return new ClientEdsSoap({
+		endpoint,
+		username,
+		password,
+		iessSuffix: plantMapConfig.eds.suffix,
+		debug: plantMapConfig.eds.debug
+
+		// TODO:
+		// username: memphisSecret.value('eds.username'),
+		// password: memphisSecret.value('eds.password')
+	});
 }

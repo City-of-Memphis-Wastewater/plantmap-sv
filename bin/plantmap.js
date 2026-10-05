@@ -12,14 +12,10 @@ const npmCommands = {
 	preview: ['run', 'preview'],
 	check: ['run', 'check'],
 	lint: ['run', 'lint'],
-	test: ['run', 'test'],
+	test: ['run', 'test']
 };
 
-const plantmapCommands = new Set([
-    'setup',
-    'config',
-    'start'
-]);
+const plantmapCommands = new Set(['setup', 'config', 'start']);
 
 if (command === 'help') {
 	console.log(`

@@ -2,11 +2,11 @@
 import { setup } from './setup';
 
 export async function runCli(command: string) {
-    switch (command) {
-        case 'setup':
-            return setup();
+	switch (command) {
+		case 'setup':
+			return setup();
 
-        default:
-            throw new Error(`Unknown command: ${command}`);
-    }
+		default:
+			throw new Error(`Unknown command: ${command}`);
+	}
 }

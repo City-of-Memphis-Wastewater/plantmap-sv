@@ -65,7 +65,6 @@ export const GET: RequestHandler = async () => {
 	//const client = new ClientEdsSoap();
 	const client = createEdsClient();
 
-
 	try {
 		const liveData = await client.points.getRegex(sensorIds);
 

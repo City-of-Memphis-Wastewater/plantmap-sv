@@ -5,7 +5,6 @@ import { resolve } from 'node:path';
 import { createEdsClient } from '$lib/server/eds/factory';
 const client = createEdsClient();
 
-
 interface SensorConfig {
 	id: string;
 	name?: string;

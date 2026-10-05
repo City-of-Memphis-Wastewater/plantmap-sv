@@ -1,9 +1,9 @@
 export type EnvValue = string;
 
 export interface MemphisEnvOptions {
-    appDir?: string;
+	appDir?: string;
 }
 
 export interface MemphisEnvSetOptions {
-    overwrite?: boolean;
+	overwrite?: boolean;
 }
