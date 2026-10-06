@@ -21,9 +21,8 @@ function loadSensorMap(): Record<string, SensorNode> {
 	return parsed;
 }
 
-const edsClient = createEdsClient();
-
 export const GET: RequestHandler = async () => {
+	const edsClient = createEdsClient();
 	let sensorMap: Record<string, SensorNode>;
 
 	try {
