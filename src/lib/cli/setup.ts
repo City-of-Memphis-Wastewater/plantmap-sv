@@ -5,8 +5,8 @@ import path from 'node:path';
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-import { MemphisConfig } from '$lib/memphis-config';
-import { MemphisEnv } from '$lib/memphis-env';
+import { MemphisConfig } from '../memphis-config/index.ts';
+import { MemphisEnv } from '../memphis-env/index.ts';
 
 export async function setup() {
 	const appDir = path.join(os.homedir(), '.plantmap');

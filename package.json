@@ -5,11 +5,11 @@
 	"license": "MIT",
 	"type": "module",
 	"bin": {
-		"plantmap": "./bin/plantmap.js"
+		"plantmap-sv": "./bin/plantmap-sv.js"
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"plantmap": "tsx bin/plantmap.js",
+		"plantmap-sv": "tsx bin/plantmap-sv.js",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",

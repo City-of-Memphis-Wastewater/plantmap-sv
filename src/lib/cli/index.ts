@@ -1,6 +1,6 @@
 // src/lib/cli/index.ts
 
-import { setup } from './setup';
+import { setup } from './setup.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
