@@ -7,6 +7,8 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 ---
 
 ## [0.0.2] – 2026-10-06
+
 ### Changed:
+
 - Linted successfully.
 - Exposed plantmap-sv CLI entry
