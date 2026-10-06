@@ -4,6 +4,9 @@
 	"version": "0.0.1",
 	"license": "MIT",
 	"type": "module",
+	"bin": {
+		"plantmap": "./bin/plantmap.js"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"plantmap": "tsx bin/plantmap.js",
@@ -61,8 +64,5 @@
 	},
 	"allowScripts": {
 		"three-geo@1.4.5": true
-	},
-	"bin": {
-		"plantmap": "./bin/plantmap.js"
 	}
 }
