@@ -15,19 +15,26 @@ export class MemphisSecret {
 	}
 
 	public value(service: string, item: string): SecretValue | undefined {
+		console.log(service);
+		console.log(item);
 		throw new Error('Not implemented');
 	}
 
 	public setValue(
 		service: string,
 		item: string,
-		value: SecretValue,
+		_value: SecretValue,
 		options: MemphisSecretSetOptions = {}
 	): void {
+		console.log(service);
+		console.log(item);
+		console.log(options);
 		throw new Error('Not implemented');
 	}
 
 	public remove(service: string, item: string): boolean {
+		console.log(service);
+		console.log(item);
 		throw new Error('Not implemented');
 	}
 }

@@ -2,7 +2,7 @@
 <script lang="ts">
 	console.log('[PAGE] module loaded');
 
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import CesiumViewport from '$lib/components/CesiumViewport.svelte';
 	import TelemetryHUD from '$lib/components/TelemetryHUD.svelte';
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
@@ -13,16 +13,12 @@
 
 		return () => {
 			console.log('[PAGE] onMount cleanup');
+			telemetryStore.stopPolling();
 		};
 	});
-	//onDestroy(() => {
-	//	telemetryStore.stopPolling();
-	//});
 </script>
 
 <main class="relative h-screen w-screen overflow-hidden bg-slate-950">
 	<CesiumViewport />
-
-	<!-- Overlay Controls -->
 	<TelemetryHUD />
 </main>
