@@ -167,7 +167,7 @@
 						<span>Sensor Labels</span>
 						<span
 							class="text-[10px] font-bold text-slate-500"
-							class:text-emerald-400={showSensorLabel}
+							class:text-emerald-400={showSensorLabels}
 						>
 							{showSensorLabels ? 'ON' : 'OFF'}
 						</span>

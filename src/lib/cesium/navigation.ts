@@ -37,7 +37,14 @@ export function toggleViewMode(viewer: Viewer, CesiumModule: CesiumModule, mode:
 
 	if (!CesiumModule.defined(targetGroundPos)) {
 		const ray = camera.getPickRay(windowCenter);
-		targetGroundPos = scene.globe.pick(ray, scene);
+		if (!ray) {
+			return;
+		}
+		const pickedPosition = scene.globe.pick(ray, scene);
+		if (!pickedPosition) {
+			return;
+		}
+		targetGroundPos = pickedPosition;
 	}
 
 	if (!CesiumModule.defined(targetGroundPos)) {

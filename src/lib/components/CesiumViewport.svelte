@@ -5,9 +5,7 @@
 
 	import type {
 		Viewer,
-		GeoJsonDataSource,
-		ScreenSpaceEventHandler,
-		ScreenSpaceEventHandlerEvent
+		GeoJsonDataSource
 	} from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
@@ -56,6 +54,10 @@
 
 	// Sync telemetry store to Cesium entities
 	$effect(() => {
+		if (!viewer || !CesiumModule) {
+			return;
+		}
+
 		syncSensorEntities(
 			viewer,
 			CesiumModule,
@@ -67,11 +69,21 @@
 
 	function handleSwitchBasemap(type: 'satellite' | 'streets') {
 		currentBasemap = type;
+
+		if (!viewer || !CesiumModule) {
+			return;
+		}
+
 		applyBasemap(viewer, CesiumModule, type);
 	}
 
 	function handleToggleViewMode(targetMode: '2D' | '3D') {
 		viewMode = targetMode;
+
+		if (!viewer || !CesiumModule) {
+			return;
+		}
+
 		toggleViewMode(viewer, CesiumModule, targetMode);
 	}
 
@@ -103,6 +115,11 @@
 
 	function handleResetCamera() {
 		handleToggleViewMode('2D');
+
+		if (!viewer || !CesiumModule) {
+			return;
+		}
+
 		resetCamera(viewer, CesiumModule);
 	}
 
@@ -151,24 +168,25 @@
 					navigationHelpButton: false,
 					selectionIndicator: false
 				});
+				const currentViewer = viewer;
 				console.log('[Cesium] container after Viewer', {
 					clientWidth: container.clientWidth,
 					clientHeight: container.clientHeight,
 					canvas: {
-						width: viewer.scene.canvas.width,
-						height: viewer.scene.canvas.height
+						width: currentViewer.scene.canvas.width,
+						height: currentViewer.scene.canvas.height
 					}
 				});
-				viewer.scene.globe.enableLighting = false;
-				viewer.scene.globe.depthTestAgainstTerrain = false;
+				currentViewer.scene.globe.enableLighting = false;
+				currentViewer.scene.globe.depthTestAgainstTerrain = false;
 
-				viewer.scene.screenSpaceCameraController.enableRotate = true;
-				viewer.scene.screenSpaceCameraController.enableTranslate = true;
-				viewer.scene.screenSpaceCameraController.enableZoom = true;
-				viewer.scene.screenSpaceCameraController.enableTilt = true;
-				viewer.scene.screenSpaceCameraController.enableLook = true;
+				currentViewer.scene.screenSpaceCameraController.enableRotate = true;
+				currentViewer.scene.screenSpaceCameraController.enableTranslate = true;
+				currentViewer.scene.screenSpaceCameraController.enableZoom = true;
+				currentViewer.scene.screenSpaceCameraController.enableTilt = true;
+				currentViewer.scene.screenSpaceCameraController.enableLook = true;
 
-				applyBasemap(viewer, CesiumModule, currentBasemap);
+				applyBasemap(currentViewer, CesiumModule, currentBasemap);
 
 				statusMsg = 'Loading GeoJSON layer...';
 				const geojson = await Cesium.GeoJsonDataSource.load('/geojson/plant.geojson', {
@@ -178,7 +196,7 @@
 				});
 
 				geojsonDataSource = geojson;
-				await viewer.dataSources.add(geojson);
+				await currentViewer.dataSources.add(geojson);
 				geojson.show = showGeoJson;
 
 				if (!isMounted) return;
@@ -189,21 +207,21 @@
 					rect: container.getBoundingClientRect()
 				});
 
-				viewer.resize();
+				currentViewer.resize();
 
 				console.log('[Cesium] canvas after resize', {
-					width: viewer.scene.canvas.width,
-					height: viewer.scene.canvas.height
+					width: currentViewer.scene.canvas.width,
+					height: currentViewer.scene.canvas.height
 				});
-				resetCamera(viewer, CesiumModule);
+				resetCamera(currentViewer, CesiumModule);
 
 				// Mouse move listener for entity hover and camera position telemetry
-				const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+				const handler = new Cesium.ScreenSpaceEventHandler(currentViewer.scene.canvas);
 
 				handler.setInputAction(
-					(movement: ScreenSpaceEventHandler | ScreenSpaceEventHandlerEvent) => {
+					(movement) => {
 						if (showHoverInfo) {
-							const pickedObject = viewer.scene.pick(movement.endPosition);
+							const pickedObject = currentViewer.scene.pick(movement.endPosition);
 
 							if (Cesium.defined(pickedObject) && pickedObject.id) {
 								const sensor = pickedObject.id.properties?.sensorData?.getValue();
@@ -220,7 +238,7 @@
 							hoverInfo = null;
 						}
 
-						const cartesian = viewer.camera.position;
+						const cartesian = currentViewer.camera.position;
 						const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
 						cameraPos = {
 							lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
@@ -232,8 +250,8 @@
 				);
 
 				// Camera position listener on view changes
-				viewer.camera.changed.addEventListener(() => {
-					const cartesian = viewer.camera.position;
+				currentViewer.camera.changed.addEventListener(() => {
+					const cartesian = currentViewer.camera.position;
 					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
 					cameraPos = {
 						lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),

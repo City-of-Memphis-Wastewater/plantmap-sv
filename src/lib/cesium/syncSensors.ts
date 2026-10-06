@@ -67,21 +67,23 @@ export function syncSensorEntities(
 			});
 		} else {
 			if (entity.label) {
-				entity.label.text = showSensorValues
-					? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
-					: showSensorLabels
-						? sensor.name
-						: '';
+				entity.label.text = new CesiumModule.ConstantProperty(
+					showSensorValues
+						? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
+						: showSensorLabels
+							? sensor.name
+							: ''
+				);
 
-				entity.label.show = showSensorLabels || showSensorValues;
+				entity.label.show = new CesiumModule.ConstantProperty(
+					showSensorLabels || showSensorValues
+				);
 			}
-			//if (entity.label) {
-			//	entity.label.text = `${sensor.name}\n${sensor.value} ${sensor.unit}`;
-			//	entity.label.show = showSensorLabels;
-			//}
+
 			if (entity.point) {
-				entity.point.color =
-					sensor.status === 'alarm' ? CesiumModule.Color.RED : CesiumModule.Color.LIME;
+				entity.point.color = new CesiumModule.ConstantProperty(
+					sensor.status === 'alarm' ? CesiumModule.Color.RED : CesiumModule.Color.LIME
+				);
 			}
 		}
 	});
