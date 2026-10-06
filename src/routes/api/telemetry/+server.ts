@@ -24,7 +24,7 @@ function loadSensorMap(): Record<string, SensorNode> {
 const edsClient = createEdsClient();
 
 export const GET: RequestHandler = async () => {
-	let sensorMap: Record<string, SensorNode> = {};
+	let sensorMap: Record<string, SensorNode>;
 
 	try {
 		sensorMap = loadSensorMap();
@@ -61,7 +61,7 @@ export const GET: RequestHandler = async () => {
 		);
 
 		// Fallback safely to static sensors.json configuration so the UI never crashes
-		const fallbackSensors = Object.entries(sensorMap).map(([id, config]) => ({
+		const fallbackSensors = Object.values(sensorMap).map((config) => ({
 			...config,
 			value: config.value ?? 0,
 			status: config.status ?? 'normal'

@@ -27,7 +27,7 @@ function loadSensorMap(): Record<string, SensorNode> {
 
 export const GET: RequestHandler = async () => {
 	console.log('[API /telemetry-new] GET called');
-	let sensorMap: Record<string, SensorNode> = {};
+	let sensorMap: Record<string, SensorNode>;
 
 	try {
 		sensorMap = loadSensorMap();
@@ -92,7 +92,7 @@ export const GET: RequestHandler = async () => {
 			error instanceof Error ? error.message : error
 		);
 
-		const fallbackSensors = Object.entries(sensorMap).map(([id, config]) => ({
+		const fallbackSensors = Object.values(sensorMap).map((config) => ({
 			...config,
 			value: config.value ?? 0,
 			status: config.status ?? 'normal'
