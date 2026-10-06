@@ -5,7 +5,8 @@
 
 	import type {
 		Viewer,
-		GeoJsonDataSource
+		GeoJsonDataSource,
+		ScreenSpaceEventHandler
 	} from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
@@ -219,7 +220,7 @@
 				const handler = new Cesium.ScreenSpaceEventHandler(currentViewer.scene.canvas);
 
 				handler.setInputAction(
-					(movement) => {
+					(movement: ScreenSpaceEventHandler.MotionEvent) => {
 						if (showHoverInfo) {
 							const pickedObject = currentViewer.scene.pick(movement.endPosition);
 
