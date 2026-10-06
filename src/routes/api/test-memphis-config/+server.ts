@@ -10,7 +10,6 @@ import { MemphisEnv } from '$lib/memphis-env';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = () => {
-
 	const env = new MemphisEnv();
 
 	const config = new MemphisConfig({
@@ -22,8 +21,6 @@ export const GET: RequestHandler = () => {
 	config.setValue('eds.debug', false);
 	config.setValue('server.port', 5173);
 
-	env.setValue('OVATION_EDS_BASE_URL', '172.19.4.127');
-
 	return json({
 		app: {
 			baseUrl: env.value('OVATION_EDS_BASE_URL'),
@@ -31,4 +28,3 @@ export const GET: RequestHandler = () => {
 		}
 	});
 };
-
