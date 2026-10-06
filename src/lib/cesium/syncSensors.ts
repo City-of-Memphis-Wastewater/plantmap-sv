@@ -1,18 +1,14 @@
 // src/lib/cesium/syncSensors.ts
 
+import type { SensorNode } from '$lib/stores/telemetry.svelte';
+
 export function syncSensorEntities(
 	viewer: any,
 	CesiumModule: any,
-	sensors: Record<string, any>,
+	sensors: Record<string, SensorNode>,
 	showSensorLabels: boolean,
 	showSensorValues: boolean
 ) {
-	//export function syncSensorEntities(
-	//	viewer: any,
-	//	CesiumModule: any,
-	//	sensors: Record<string, any>,
-	//	showSensorLabels: boolean
-	//) {
 	console.log(
 		'[Cesium Sync] syncSensorEntities',
 		Object.values(sensors).map((s) => ({

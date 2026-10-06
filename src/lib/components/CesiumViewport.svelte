@@ -232,7 +232,7 @@
 				});
 
 				statusMsg = '3D Scene Operational';
-			} catch (err: any) {
+			} catch (err: unknown) {
 				console.error('Cesium execution error:', err);
 				errorLog = err?.stack || err?.message || String(err);
 			}

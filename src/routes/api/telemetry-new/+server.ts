@@ -2,24 +2,13 @@
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
+import type { SensorNode } from '$lib/stores/telemetry.svelte';
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createEdsClient } from '$lib/server/eds/factory';
 
-interface SensorConfig {
-	id: string;
-	name?: string;
-	lat: number;
-	lon: number;
-	altitude?: number;
-	value?: number;
-	precision?: number;
-	unit: string;
-	status?: 'normal' | 'warning' | 'alarm';
-}
-
-function loadSensorMap(): Record<string, SensorConfig> {
+function loadSensorMap(): Record<string, SensorNode> {
 	const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
 	if (!existsSync(configPath)) {
@@ -30,7 +19,7 @@ function loadSensorMap(): Record<string, SensorConfig> {
 	const parsed = JSON.parse(raw);
 
 	if (Array.isArray(parsed)) {
-		return Object.fromEntries(parsed.map((sensor: SensorConfig) => [sensor.id, sensor]));
+		return Object.fromEntries(parsed.map((sensor: SensorNode) => [sensor.id, sensor]));
 	}
 
 	return parsed;
@@ -38,7 +27,7 @@ function loadSensorMap(): Record<string, SensorConfig> {
 
 export const GET: RequestHandler = async () => {
 	console.log('[API /telemetry-new] GET called');
-	let sensorMap: Record<string, SensorConfig> = {};
+	let sensorMap: Record<string, SensorNode> = {};
 
 	try {
 		sensorMap = loadSensorMap();

@@ -3,19 +3,9 @@ import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createEdsClient } from '$lib/server/eds/factory';
+import type { SensorNode } from '$lib/stores/telemetry.svelte';
 
-interface SensorConfig {
-	id: string;
-	name?: string;
-	lat: number;
-	lon: number;
-	altitude?: number;
-	value?: number;
-	unit: string;
-	status?: 'normal' | 'warning' | 'alarm';
-}
-
-function loadSensorMap(): Record<string, SensorConfig> {
+function loadSensorMap(): Record<string, SensorNode> {
 	const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
 	if (!existsSync(configPath)) {
@@ -34,7 +24,7 @@ function loadSensorMap(): Record<string, SensorConfig> {
 const edsClient = createEdsClient();
 
 export const GET: RequestHandler = async () => {
-	let sensorMap: Record<string, SensorConfig> = {};
+	let sensorMap: Record<string, SensorNode> = {};
 
 	try {
 		sensorMap = loadSensorMap();
