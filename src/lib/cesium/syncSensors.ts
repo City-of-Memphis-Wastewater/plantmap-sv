@@ -75,9 +75,7 @@ export function syncSensorEntities(
 							: ''
 				);
 
-				entity.label.show = new CesiumModule.ConstantProperty(
-					showSensorLabels || showSensorValues
-				);
+				entity.label.show = new CesiumModule.ConstantProperty(showSensorLabels || showSensorValues);
 			}
 
 			if (entity.point) {

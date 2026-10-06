@@ -3,11 +3,7 @@
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 
-	import type {
-		Viewer,
-		GeoJsonDataSource,
-		ScreenSpaceEventHandler
-	} from 'cesium';
+	import type { Viewer, GeoJsonDataSource, ScreenSpaceEventHandler } from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
@@ -219,36 +215,33 @@
 				// Mouse move listener for entity hover and camera position telemetry
 				const handler = new Cesium.ScreenSpaceEventHandler(currentViewer.scene.canvas);
 
-				handler.setInputAction(
-					(movement: ScreenSpaceEventHandler.MotionEvent) => {
-						if (showHoverInfo) {
-							const pickedObject = currentViewer.scene.pick(movement.endPosition);
+				handler.setInputAction((movement: ScreenSpaceEventHandler.MotionEvent) => {
+					if (showHoverInfo) {
+						const pickedObject = currentViewer.scene.pick(movement.endPosition);
 
-							if (Cesium.defined(pickedObject) && pickedObject.id) {
-								const sensor = pickedObject.id.properties?.sensorData?.getValue();
-								hoverInfo = {
-									name: pickedObject.id.name || pickedObject.id.id,
-									value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
-									x: movement.endPosition.x,
-									y: movement.endPosition.y
-								};
-							} else {
-								hoverInfo = null;
-							}
+						if (Cesium.defined(pickedObject) && pickedObject.id) {
+							const sensor = pickedObject.id.properties?.sensorData?.getValue();
+							hoverInfo = {
+								name: pickedObject.id.name || pickedObject.id.id,
+								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
+								x: movement.endPosition.x,
+								y: movement.endPosition.y
+							};
 						} else {
 							hoverInfo = null;
 						}
+					} else {
+						hoverInfo = null;
+					}
 
-						const cartesian = currentViewer.camera.position;
-						const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-						cameraPos = {
-							lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
-							lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
-							alt: Math.round(cartographic.height)
-						};
-					},
-					Cesium.ScreenSpaceEventType.MOUSE_MOVE
-				);
+					const cartesian = currentViewer.camera.position;
+					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+					cameraPos = {
+						lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
+						lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
+						alt: Math.round(cartographic.height)
+					};
+				}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
 				// Camera position listener on view changes
 				currentViewer.camera.changed.addEventListener(() => {
