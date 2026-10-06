@@ -3,7 +3,12 @@
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 
-	import type { Viewer, GeoJsonDataSource, ScreenSpaceEventHandler, ScreenSpaceEventHandlerEvent } from 'cesium';
+	import type {
+		Viewer,
+		GeoJsonDataSource,
+		ScreenSpaceEventHandler,
+		ScreenSpaceEventHandlerEvent
+	} from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
@@ -116,7 +121,7 @@
 				}
 
 				statusMsg = 'Setting asset base route...';
-				(window as any).CESIUM_BASE_URL = '/cesium/';
+				window.CESIUM_BASE_URL = '/cesium/';
 
 				statusMsg = 'Importing Cesium bundle...';
 				const Cesium = await import('cesium');
@@ -195,33 +200,36 @@
 				// Mouse move listener for entity hover and camera position telemetry
 				const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
 
-				handler.setInputAction((movement: ScreenSpaceEventHandler | ScreenSpaceEventHandlerEvent ) => {
-					if (showHoverInfo) {
-						const pickedObject = viewer.scene.pick(movement.endPosition);
+				handler.setInputAction(
+					(movement: ScreenSpaceEventHandler | ScreenSpaceEventHandlerEvent) => {
+						if (showHoverInfo) {
+							const pickedObject = viewer.scene.pick(movement.endPosition);
 
-						if (Cesium.defined(pickedObject) && pickedObject.id) {
-							const sensor = pickedObject.id.properties?.sensorData?.getValue();
-							hoverInfo = {
-								name: pickedObject.id.name || pickedObject.id.id,
-								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
-								x: movement.endPosition.x,
-								y: movement.endPosition.y
-							};
+							if (Cesium.defined(pickedObject) && pickedObject.id) {
+								const sensor = pickedObject.id.properties?.sensorData?.getValue();
+								hoverInfo = {
+									name: pickedObject.id.name || pickedObject.id.id,
+									value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
+									x: movement.endPosition.x,
+									y: movement.endPosition.y
+								};
+							} else {
+								hoverInfo = null;
+							}
 						} else {
 							hoverInfo = null;
 						}
-					} else {
-						hoverInfo = null;
-					}
 
-					const cartesian = viewer.camera.position;
-					const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
-					cameraPos = {
-						lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
-						lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
-						alt: Math.round(cartographic.height)
-					};
-				}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+						const cartesian = viewer.camera.position;
+						const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+						cameraPos = {
+							lon: Number(Cesium.Math.toDegrees(cartographic.longitude).toFixed(4)),
+							lat: Number(Cesium.Math.toDegrees(cartographic.latitude).toFixed(4)),
+							alt: Math.round(cartographic.height)
+						};
+					},
+					Cesium.ScreenSpaceEventType.MOUSE_MOVE
+				);
 
 				// Camera position listener on view changes
 				viewer.camera.changed.addEventListener(() => {

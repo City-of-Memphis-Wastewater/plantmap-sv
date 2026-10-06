@@ -4,7 +4,7 @@ declare global {
 	interface Window {
 		CESIUM_BASE_URL: string;
 	}
-	
+
 	namespace App {
 		// interface Error {}
 		// interface Locals {}
