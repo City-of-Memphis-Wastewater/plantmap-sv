@@ -3,7 +3,7 @@
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 
-	import type { Viewer } from 'cesium';
+	import type { Viewer, GeoJsonDataSource, ScreenSpaceEventHandler, ScreenSpaceEventHandlerEvent } from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
@@ -16,10 +16,10 @@
 	import HoverTooltip from './HoverTooltip.svelte';
 
 	let container: HTMLDivElement;
-	let viewer: Viewer = $state(undefined);
-	let CesiumModule: CesiumModule = $state(undefined);
+	let viewer: Viewer | undefined = $state(undefined);
+	let CesiumModule: CesiumModule | undefined = $state(undefined);
 
-	let geojsonDataSource: any = $state(null);
+	let geojsonDataSource: GeoJsonDataSource | null = $state(null);
 	let showGeoJson = $state(true);
 
 	let statusMsg = $state('Initializing WebGL context...');
@@ -195,7 +195,7 @@
 				// Mouse move listener for entity hover and camera position telemetry
 				const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
 
-				handler.setInputAction((movement: any) => {
+				handler.setInputAction((movement: ScreenSpaceEventHandler | ScreenSpaceEventHandlerEvent ) => {
 					if (showHoverInfo) {
 						const pickedObject = viewer.scene.pick(movement.endPosition);
 
@@ -237,7 +237,11 @@
 				statusMsg = '3D Scene Operational';
 			} catch (err: unknown) {
 				console.error('Cesium execution error:', err);
-				errorLog = err?.stack || err?.message || String(err);
+				if (err instanceof Error) {
+					errorLog = err.stack || err.message;
+				} else {
+					errorLog = String(err);
+				}
 			}
 		})();
 

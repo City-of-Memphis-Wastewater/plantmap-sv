@@ -1,5 +1,5 @@
 // src/lib/cesium/layers.ts
-import type { Viewer } from 'cesium';
+import type { Viewer, DataSource } from 'cesium';
 //import type { Viewer, Cartesian2, Cartesian3, Cartographic } from 'cesium';
 type CesiumModule = typeof import('cesium');
 export function applyBasemap(
@@ -7,8 +7,6 @@ export function applyBasemap(
 	CesiumModule: CesiumModule,
 	type: 'satellite' | 'streets'
 ) {
-	if (!viewer || !CesiumModule) return;
-
 	const layers = viewer.imageryLayers;
 	layers.removeAll();
 
@@ -81,7 +79,9 @@ export async function loadGeoJsonOverlay(
 				entity.label.disableDepthTestDistance = new CesiumModule.ConstantProperty(
 					Number.POSITIVE_INFINITY
 				);
-				entity.label.scaleByDistance = new CesiumModule.NearFarScalar(150, 1.0, 2000, 0.5);
+				entity.label.scaleByDistance = new CesiumModule.ConstantProperty(
+					new CesiumModule.NearFarScalar(150, 1.0, 2000, 0.5)
+				);
 			}
 		}
 
@@ -93,7 +93,7 @@ export async function loadGeoJsonOverlay(
 	}
 }
 
-export function setLayerVisibility(dataSource: any, visible: boolean) {
+export function setLayerVisibility(dataSource: DataSource, visible: boolean) {
 	if (dataSource) {
 		dataSource.show = visible;
 	}
