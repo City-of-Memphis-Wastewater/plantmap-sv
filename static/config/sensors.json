@@ -119,5 +119,16 @@
     "unit": "MPR",
     "precision": 2,
     "status": "normal"
+  },
+  "BR_SYS_RNNG_C": {
+    "id": "BR_SYS_RNNG_C",
+    "name": "BIOREM RUN",
+    "lat": 35.066947,
+    "lon": -90.135372,
+    "altitude": 2,
+    "value": 0,
+    "unit": "",
+    "precision": null,
+    "status": "normal"
   }
 }
