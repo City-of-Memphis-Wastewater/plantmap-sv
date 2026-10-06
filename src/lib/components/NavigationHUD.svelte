@@ -166,9 +166,8 @@
 					>
 						<span>Sensor Labels</span>
 						<span
-							class="text-[10px] font-bold {showSensorLabels
-								? 'text-emerald-400'
-								: 'text-slate-500'}"
+							class="text-[10px] font-bold text-slate-500"
+							class:text-emerald-400={showSensorLabel}
 						>
 							{showSensorLabels ? 'ON' : 'OFF'}
 						</span>
@@ -181,9 +180,8 @@
 					>
 						<span>Sensor Values</span>
 						<span
-							class="text-[10px] font-bold {showSensorValues
-								? 'text-emerald-400'
-								: 'text-slate-500'}"
+							class="text-[10px] font-bold text-slate-500"
+							class:text-emerald-400={showSensorValues}
 						>
 							{showSensorValues ? 'ON' : 'OFF'}
 						</span>
@@ -196,9 +194,8 @@
 					>
 						<span>Hover Info</span>
 						<span
-							class="text-[10px] font-bold {showHoverInfo
-								? 'text-emerald-400'
-								: 'text-slate-500'}"
+							class="text-[10px] font-bold text-slate-500"
+							class:text-emerald-400={showHoverInfo}
 						>
 							{showHoverInfo ? 'ON' : 'OFF'}
 						</span>
