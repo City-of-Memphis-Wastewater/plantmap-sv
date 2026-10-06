@@ -10,9 +10,7 @@ import { MemphisEnv } from '$lib/memphis-env';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = () => {
-	const appConfig = new MemphisConfig({
-		appDir: path.join(os.homedir(), '.plantmap')
-	});
+
 	const env = new MemphisEnv();
 
 	const config = new MemphisConfig({
