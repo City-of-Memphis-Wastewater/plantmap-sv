@@ -1,7 +1,12 @@
 // src/lib/cesium/layers.ts
 import type { Viewer } from 'cesium';
+//import type { Viewer, Cartesian2, Cartesian3, Cartographic } from 'cesium';
 type CesiumModule = typeof import('cesium');
-export function applyBasemap(viewer: Viewer, CesiumModule: CesiumModule, type: 'satellite' | 'streets') {
+export function applyBasemap(
+	viewer: Viewer,
+	CesiumModule: CesiumModule,
+	type: 'satellite' | 'streets'
+) {
 	if (!viewer || !CesiumModule) return;
 
 	const layers = viewer.imageryLayers;
@@ -48,7 +53,11 @@ export async function loadKmlOverlay(viewer: Viewer, CesiumModule: CesiumModule,
 	}
 }
 
-export async function loadGeoJsonOverlay(viewer: Viewer, CesiumModule: CesiumModule, geoJsonPath: string) {
+export async function loadGeoJsonOverlay(
+	viewer: Viewer,
+	CesiumModule: CesiumModule,
+	geoJsonPath: string
+) {
 	if (!viewer || !CesiumModule) return;
 
 	try {
