@@ -3,7 +3,6 @@ import type { RequestHandler } from './$types';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createEdsClient } from '$lib/server/eds/factory';
-const client = createEdsClient();
 
 interface SensorConfig {
 	id: string;
@@ -32,7 +31,6 @@ function loadSensorMap(): Record<string, SensorConfig> {
 	return parsed;
 }
 
-//const edsClient = new ClientEdsSoap();
 const edsClient = createEdsClient();
 
 export const GET: RequestHandler = async () => {
