@@ -1,6 +1,6 @@
 # plantmap-sv
 
-A Cesium-reliant Svelte app for visualizing geolocated live data from the Emerson Ovation EDS SOAP API.
+A Cesium-based Svelte map app for visualizing geolocated live data from the Emerson Ovation EDS SOAP API.
 
 ## Setup
 
@@ -27,7 +27,13 @@ npm run setup
 
 ## Run
 
-Cross-platform approach for Termux, though this project is bun-oriented.
+Recommended entry point.
+
+```bash
+bun run dev
+```
+
+Cross-platform approach, like for Termux.
 
 ```bash
 npm run dev
