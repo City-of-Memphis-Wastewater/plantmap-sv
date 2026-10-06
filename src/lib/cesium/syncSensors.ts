@@ -1,10 +1,12 @@
 // src/lib/cesium/syncSensors.ts
 
+import type { Viewer } from 'cesium';
+type CesiumModule = typeof import('cesium');
 import type { SensorNode } from '$lib/stores/telemetry.svelte';
 
 export function syncSensorEntities(
-	viewer: any,
-	CesiumModule: any,
+	viewer: Viewer,
+	CesiumModule: CesiumModule,
 	sensors: Record<string, SensorNode>,
 	showSensorLabels: boolean,
 	showSensorValues: boolean

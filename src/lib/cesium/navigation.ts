@@ -1,10 +1,13 @@
 // src/lib/cesium/navigation.ts
 
+import type { Viewer } from 'cesium';
+type CesiumModule = typeof import('cesium');
+
 export const SITE_LON = -90.155655;
 export const SITE_LAT = 35.071202;
 export const DEFAULT_CAMERA_ALT = 1100; // Maxson plant scale
 
-export function resetCamera(viewer: any, CesiumModule: any) {
+export function resetCamera(viewer: Viewer, CesiumModule: CesiumModule) {
 	if (!viewer || !CesiumModule) return;
 
 	viewer.camera.flyTo({
@@ -18,7 +21,7 @@ export function resetCamera(viewer: any, CesiumModule: any) {
 	});
 }
 
-export function toggleViewMode(viewer: any, CesiumModule: any, mode: '2D' | '3D') {
+export function toggleViewMode(viewer: Viewer, CesiumModule: CesiumModule, mode: '2D' | '3D') {
 	if (!viewer || !CesiumModule) return;
 
 	const scene = viewer.scene;

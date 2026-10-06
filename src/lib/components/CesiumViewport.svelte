@@ -3,6 +3,9 @@
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
 
+	import type { Viewer } from 'cesium';
+	type CesiumModule = typeof import('cesium');
+
 	import { telemetryStore } from '$lib/stores/telemetry.svelte';
 	import { applyBasemap } from '$lib/cesium/layers';
 	import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
@@ -13,8 +16,8 @@
 	import HoverTooltip from './HoverTooltip.svelte';
 
 	let container: HTMLDivElement;
-	let viewer: any = $state(undefined);
-	let CesiumModule: any = $state(undefined);
+	let viewer: Viewer = $state(undefined);
+	let CesiumModule: CesiumModule = $state(undefined);
 
 	let geojsonDataSource: any = $state(null);
 	let showGeoJson = $state(true);
