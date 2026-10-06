@@ -188,6 +188,21 @@
 							{showSensorValues ? 'ON' : 'OFF'}
 						</span>
 					</button>
+
+					<button
+						type="button"
+						onclick={onToggleHoverInfo}
+						class="flex items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
+					>
+						<span>Hover Info</span>
+						<span
+							class="text-[10px] font-bold {showHoverInfo
+								? 'text-emerald-400'
+								: 'text-slate-500'}"
+						>
+							{showHoverInfo ? 'ON' : 'OFF'}
+						</span>
+					</button>
 				</div>
 
 				<!-- Diagnostics Toggle -->
