@@ -11,7 +11,6 @@ import { loadPlantMapSecret } from '$lib/plantmap/secret';
 import { ClientEdsSoap } from './client';
 
 export function createEdsClient(): ClientEdsSoap {
-
 	const appDir = path.join(os.homedir(), '.plantmap');
 
 	const memphisConfig = new MemphisConfig({

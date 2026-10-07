@@ -53,14 +53,14 @@ export class MemphisEnv {
 	}
 
 	public requiredValue(key: string): string {
-        const value = this.value(key);
+		const value = this.value(key);
 
-        if (value === undefined) {
-            throw new Error(`Required environment variable is missing: ${key}`);
-        }
+		if (value === undefined) {
+			throw new Error(`Required environment variable is missing: ${key}`);
+		}
 
-        return String(value);
-    }
+		return String(value);
+	}
 
 	public setValue(key: string, value: EnvValue, options: MemphisEnvSetOptions = {}): void {
 		if (Object.hasOwn(this.values, key) && options.overwrite === false) {

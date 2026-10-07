@@ -6,8 +6,8 @@ import type { MemphisConfig } from '$lib/memphis-config';
 
 export const PlantMapConfigSchema = z.object({
 	eds: z.object({
-	    protocol: z.string(),
-        host: z.string(),
+		protocol: z.string(),
+		host: z.string(),
 		soapPort: z.number().int(),
 		suffix: z.string(),
 		debug: z.boolean()

@@ -6,7 +6,6 @@ import path from 'node:path';
 import { input, password, confirm, number } from '@inquirer/prompts';
 
 import { MemphisConfig } from '../memphis-config/index.ts';
-import { MemphisEnv } from '../memphis-env/index.ts';
 import { MemphisSecret } from '../memphis-secret/index.ts';
 
 export async function setup() {
@@ -16,29 +15,22 @@ export async function setup() {
 		appDir
 	});
 
-	const env = new MemphisEnv();
-
 	const secret = new MemphisSecret({
 		appDir
 	});
 
 	// --- Inputs ---
 
-	//const baseUrl = await input({
-	//	message: 'Ovation EDS endpoint baseUrl:',
-	//	default: env.value('OVATION_EDS_BASE_URL') ?? '127.0.0.1'
-	//});
-
-	const protocol = await input({
-		message: 'Ovation EDS endpoint protocol:',
-		default: config.value('eds.protocol') ?? 'http://'
-	});
+    const protocol = await input({
+        message: 'Ovation EDS endpoint protocol:',
+        default: (config.value('eds.protocol') as string | undefined) ?? 'http://'
+    });
 
     const host = await input({
-		message: 'Ovation EDS endpoint host address:',
-		default: config.value('eds.host') ?? '127.0.0.1'
-	});
-    
+        message: 'Ovation EDS endpoint host address:',
+        default: (config.value('eds.host') as string | undefined) ?? '127.0.0.1'
+    });
+
 	const soapPort = await number({
 		message: 'Ovation EDS SOAP API port:',
 		default: (config.value('eds.soapPort') as number | undefined) ?? 43080
@@ -73,6 +65,10 @@ export async function setup() {
 		default: (config.value('server.port') as number | undefined) ?? 3000
 	});
 
+    if (appPort === undefined) {
+        throw new Error('Host server port is required');
+    }
+
 	const debug = await confirm({
 		message: 'Enable EDS debugging?',
 		default: (config.value('eds.debug') as boolean | undefined) ?? false
@@ -82,10 +78,10 @@ export async function setup() {
 
 	//env.setValue('OVATION_EDS_BASE_URL', baseUrl);
 
-    config.setValue('eds.protocol', protocol);
-    
-    config.setValue('eds.host', host);
-	
+	config.setValue('eds.protocol', protocol);
+
+	config.setValue('eds.host', host);
+
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
 	}
