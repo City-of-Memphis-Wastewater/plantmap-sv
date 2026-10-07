@@ -23,7 +23,7 @@ class TelemetryStore {
 		console.log('[TelemetryStore] fetchTelemetry START');
 
 		try {
-			const res = await fetch('/api/telemetry-new');
+			const res = await fetch('/api/telemetry-live');
 
 			const data = await res.json();
 

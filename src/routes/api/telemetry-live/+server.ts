@@ -1,4 +1,4 @@
-// src/routes/api/telemetry-new/+server.ts
+// src/routes/api/telemetry-live/+server.ts
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -26,13 +26,13 @@ function loadSensorMap(): Record<string, SensorNode> {
 }
 
 export const GET: RequestHandler = async () => {
-	console.log('[API /telemetry-new] GET called');
+	console.log('[API /telemetry-live] GET called');
 	let sensorMap: Record<string, SensorNode>;
 
 	try {
 		sensorMap = loadSensorMap();
 	} catch (error) {
-		console.error('[API /telemetry-new] Failed reading sensors.json:', error);
+		console.error('[API /telemetry-live] Failed reading sensors.json:', error);
 
 		return json({
 			success: false,
@@ -57,8 +57,8 @@ export const GET: RequestHandler = async () => {
 	try {
 		const liveData = await client.points.getRegex(sensorIds);
 
-		console.log('[API /telemetry-new] AFTER getRegex');
-		console.log('[API /telemetry-new] getRegex result', {
+		console.log('[API /telemetry-live] AFTER getRegex');
+		console.log('[API /telemetry-live] getRegex result', {
 			requested: sensorIds.length,
 			returned: Object.keys(liveData).length,
 			ids: Object.keys(liveData)
@@ -75,7 +75,7 @@ export const GET: RequestHandler = async () => {
 			};
 		});
 
-		console.log('[API /telemetry-new] sensors mapped', {
+		console.log('[API /telemetry-live] sensors mapped', {
 			count: sensors.length,
 			sensors
 		});
@@ -87,7 +87,7 @@ export const GET: RequestHandler = async () => {
 		});
 	} catch (error) {
 		console.warn(
-			'[API /telemetry-new] EDS SOAP endpoint unreachable. ' +
+			'[API /telemetry-live] EDS SOAP endpoint unreachable. ' +
 				'Serving fallback configuration values:',
 			error instanceof Error ? error.message : error
 		);
@@ -106,16 +106,16 @@ export const GET: RequestHandler = async () => {
 			sensors: fallbackSensors
 		});
 	} finally {
-		console.log('[API /telemetry-new] Logging out of EDS...');
+		console.log('[API /telemetry-live] Logging out of EDS...');
 
 		try {
 			await client.auth.logout();
 
-			console.log('[API /telemetry-new] EDS logout complete');
-			console.log('[API /telemetry-new] ========================================');
+			console.log('[API /telemetry-live] EDS logout complete');
+			console.log('[API /telemetry-live] ========================================');
 			console.log('');
 		} catch (error) {
-			console.error('[API /telemetry-new] EDS logout failed:', error);
+			console.error('[API /telemetry-live] EDS logout failed:', error);
 		}
 	}
 };
