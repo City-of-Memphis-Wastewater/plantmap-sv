@@ -1,7 +1,6 @@
 // src/lib/memphis-secret/index.ts
 
 import os from 'node:os';
-import path from 'node:path';
 
 import { decrypt, encrypt, initializeKey } from './crypto.ts';
 import {
