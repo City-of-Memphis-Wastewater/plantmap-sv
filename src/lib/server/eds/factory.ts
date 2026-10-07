@@ -8,15 +8,7 @@ import { ClientEdsSoap } from './client.ts';
 
 let client: ClientEdsSoap | undefined;
 
-export function getEdsClient(): ClientEdsSoap {
-    if (!client) {
-        client = createEdsClient();
-    }
-
-    return client;
-}
-
-export function createEdsClient(): ClientEdsSoap {
+function createEdsClient(): ClientEdsSoap {
 	const config = bootstrapPlantMapConfig();
 	const secret = bootstrapPlantMapSecret();
 
@@ -32,4 +24,13 @@ export function createEdsClient(): ClientEdsSoap {
 		iessSuffix: plantMapConfig.eds.suffix,
 		debug: plantMapConfig.eds.debug
 	});
+
 }
+export function getEdsClient(): ClientEdsSoap {
+    if (!client) {
+        client = createEdsClient();
+    }
+
+    return client;
+}
+
