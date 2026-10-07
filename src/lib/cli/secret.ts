@@ -6,13 +6,13 @@ import path from 'node:path';
 import { MemphisSecret } from '../memphis-secret/index.ts';
 
 export function secret() {
-        const appDir = path.join(os.homedir(), '.plantmap');
+	const appDir = path.join(os.homedir(), '.plantmap');
 
-        const secrets = new MemphisSecret({
-                appDir
-        });
+	const secrets = new MemphisSecret({
+		appDir
+	});
 
-        for (const credential of secrets.list()) {
-                console.log(`${credential.service}/${credential.item}`);
-        }
+	for (const credential of secrets.list()) {
+		console.log(`${credential.service}/${credential.item}`);
+	}
 }

@@ -11,10 +11,10 @@ export async function runCli(args: string[]) {
 			await setup();
 			return;
 
-        case 'secret':
-            secret();
-            return;
-        
+		case 'secret':
+			secret();
+			return;
+
 		case 'start':
 			// await start();
 			return;

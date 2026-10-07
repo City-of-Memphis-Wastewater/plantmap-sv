@@ -28,7 +28,7 @@ export function createEdsClient(): ClientEdsSoap {
 	});
 
 	const memphisSecret = new MemphisSecret({
-	   appDir
+		appDir
 	});
 
 	const memphisEnv = new MemphisEnv();
@@ -39,9 +39,9 @@ export function createEdsClient(): ClientEdsSoap {
 
 	// const password = requiredEnv(memphisEnv, 'OVATION_EDS_PASSWORD');
 
-    const username = memphisSecret.value('eds', 'username');
+	const username = memphisSecret.value('eds', 'username');
 
-    const edsPassword = memphisSecret.value('eds', 'password');
+	const edsPassword = memphisSecret.value('eds', 'password');
 
 	const baseUrl = requiredEnv(memphisEnv, 'OVATION_EDS_BASE_URL');
 

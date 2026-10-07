@@ -11,6 +11,6 @@ export interface MemphisSecretSetOptions {
 }
 
 export interface MemphisSecretItem {
-        service: string;
-        item: string;
+	service: string;
+	item: string;
 }

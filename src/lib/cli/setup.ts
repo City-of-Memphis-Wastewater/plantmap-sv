@@ -18,16 +18,16 @@ export async function setup() {
 
 	const env = new MemphisEnv();
 
-    const secret = new MemphisSecret({
+	const secret = new MemphisSecret({
 		appDir
 	});
-        
-    // --- Inputs ---
-    
+
+	// --- Inputs ---
+
 	const baseUrl = await input({
-        message: 'Ovation EDS endpoint baseUrl:',
-        default: env.value('OVATION_EDS_BASE_URL') ?? '127.0.0.1'
-    });
+		message: 'Ovation EDS endpoint baseUrl:',
+		default: env.value('OVATION_EDS_BASE_URL') ?? '127.0.0.1'
+	});
 
 	const soapPort = await number({
 		message: 'Ovation EDS endpoint port:',
@@ -38,20 +38,20 @@ export async function setup() {
 		throw new Error('Ovation EDS port is required');
 	}
 
-    const existingUsername = secret.value('eds', 'username');
-    const existingPassword = secret.value('eds', 'password');
+	const existingUsername = secret.value('eds', 'username');
+	const existingPassword = secret.value('eds', 'password');
 
-    const username = await password({
-        message: existingUsername
-            ? 'Ovation EDS username (Enter to keep existing):'
-            : 'Ovation EDS username:'
-    });
+	const username = await password({
+		message: existingUsername
+			? 'Ovation EDS username (Enter to keep existing):'
+			: 'Ovation EDS username:'
+	});
 
-    const edsPassword = await password({
-        message: existingPassword
-            ? 'Ovation EDS password (Enter to keep existing):'
-            : 'Ovation EDS password:'
-    });
+	const edsPassword = await password({
+		message: existingPassword
+			? 'Ovation EDS password (Enter to keep existing):'
+			: 'Ovation EDS password:'
+	});
 
 	const suffix = await input({
 		message: 'Ovation EDS suffix:',
@@ -63,21 +63,21 @@ export async function setup() {
 		default: (config.value('eds.debug') as boolean | undefined) ?? false
 	});
 
-    // --- Save ---
-    
-	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
-	
-    if (username !== '' || edsPassword !== '') {
-        secret.initializeVault();
-    }
-    
-    if (username !== '') {
-        secret.setValue('eds', 'username', username);
-    }
+	// --- Save ---
 
-    if (edsPassword !== '') {
-        secret.setValue('eds', 'password', edsPassword);
-    }
+	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
+
+	if (username !== '' || edsPassword !== '') {
+		secret.initializeVault();
+	}
+
+	if (username !== '') {
+		secret.setValue('eds', 'username', username);
+	}
+
+	if (edsPassword !== '') {
+		secret.setValue('eds', 'password', edsPassword);
+	}
 
 	config.setValue('eds.soapPort', soapPort);
 
