@@ -24,13 +24,11 @@ function createEdsClient(): ClientEdsSoap {
 		iessSuffix: plantMapConfig.eds.suffix,
 		debug: plantMapConfig.eds.debug
 	});
-
 }
 export function getEdsClient(): ClientEdsSoap {
-    if (!client) {
-        client = createEdsClient();
-    }
+	if (!client) {
+		client = createEdsClient();
+	}
 
-    return client;
+	return client;
 }
-

@@ -25,7 +25,6 @@ function loadSensorMap(): Record<string, SensorNode> {
 	return parsed;
 }
 
-
 export const GET: RequestHandler = async () => {
 	console.log('[API /telemetry-live] GET called');
 	let sensorMap: Record<string, SensorNode>;
@@ -52,8 +51,8 @@ export const GET: RequestHandler = async () => {
 		});
 	}
 
-    const client = getEdsClient();
-    
+	const client = getEdsClient();
+
 	try {
 		const liveData = await client.points.getRegex(sensorIds);
 
