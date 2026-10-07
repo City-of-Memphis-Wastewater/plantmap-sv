@@ -11,7 +11,7 @@ git clone https://github.com/City-of-Memphis-Wastewater/plantmap-sv.git
 cd plantmap-sv
 ```
 
-### Running, Standard Approach, with Bun
+### Running with Bun
 
 ```bash
 bun install
@@ -44,7 +44,8 @@ npm run dev
 Use the `plantmap-sv` CLI, like to call `plantmap-sv setup`.
 
 ```bash
-bun link plantmap-sv
+npm link plantmap-sv
+npx plantmap-sv
 ```
 
 ## Source
