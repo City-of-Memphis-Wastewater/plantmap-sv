@@ -49,7 +49,10 @@ export function initializeKey(appDir?: string): void {
         return;
     }
 
+    
     const key = randomBytes(KEY_LENGTH);
+
+    mkdirSync(getSecretDir(appDir), { recursive: true });
 
     writeFileSync(keyPath, key, {
         mode: 0o600,
