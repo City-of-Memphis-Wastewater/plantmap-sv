@@ -12,6 +12,6 @@ export interface MemphisConfigSetOptions {
 }
 
 export interface MemphisConfigItem {
-        key: string;
-        value: ConfigValue;
+	key: string;
+	value: ConfigValue;
 }

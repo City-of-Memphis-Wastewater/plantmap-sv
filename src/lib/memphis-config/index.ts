@@ -4,7 +4,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import type { ConfigValue, MemphisConfigItem, MemphisConfigOptions, MemphisConfigSetOptions } from './types';
+import type {
+	ConfigValue,
+	MemphisConfigItem,
+	MemphisConfigOptions,
+	MemphisConfigSetOptions
+} from './types';
 
 export class MemphisConfig {
 	private readonly configFile: string;
@@ -78,32 +83,28 @@ export class MemphisConfig {
 	}
 
 	public list(): MemphisConfigItem[] {
-        const items: MemphisConfigItem[] = [];
+		const items: MemphisConfigItem[] = [];
 
-        const walk = (value: ConfigValue, prefix = ''): void => {
-                if (
-                        typeof value !== 'object' ||
-                        value === null ||
-                        Array.isArray(value)
-                ) {
-                        if (prefix !== '') {
-                                items.push({
-                                        key: prefix,
-                                        value
-                                });
-                        }
+		const walk = (value: ConfigValue, prefix = ''): void => {
+			if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+				if (prefix !== '') {
+					items.push({
+						key: prefix,
+						value
+					});
+				}
 
-                        return;
-                }
+				return;
+			}
 
-                for (const [key, child] of Object.entries(value)) {
-                        const fullKey = prefix ? `${prefix}.${key}` : key;
-                        walk(child, fullKey);
-                }
-        };
+			for (const [key, child] of Object.entries(value)) {
+				const fullKey = prefix ? `${prefix}.${key}` : key;
+				walk(child, fullKey);
+			}
+		};
 
-        walk(this.values);
+		walk(this.values);
 
-        return items;
-    }
+		return items;
+	}
 }

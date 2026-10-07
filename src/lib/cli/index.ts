@@ -17,8 +17,8 @@ export async function runCli(args: string[]) {
 			return;
 
 		case 'config':
-            config();
-            return;
+			config();
+			return;
 
 		case 'start':
 			// await start();
