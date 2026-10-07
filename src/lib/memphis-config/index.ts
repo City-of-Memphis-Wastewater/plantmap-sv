@@ -27,6 +27,10 @@ export class MemphisConfig {
 		}
 	}
 
+    public isInitialized(): boolean {
+        return existsSync(this.configFile);
+    }
+
 	public value(key: string): ConfigValue | undefined {
 		const parts = key.split('.');
 

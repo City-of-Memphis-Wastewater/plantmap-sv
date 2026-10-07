@@ -14,6 +14,10 @@ export interface VaultCredential {
 	encryptedSecret: Buffer;
 }
 
+export function isVaultInitialized(appDir?: string): boolean {
+    return existsSync(getVaultPath(appDir));
+}
+
 function createVault(appDir?: string): DatabaseSync {
 	const secretDir = getSecretDir(appDir);
 	const vaultPath = getVaultPath(appDir);

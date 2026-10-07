@@ -6,6 +6,7 @@ import { decrypt, encrypt, initializeKey } from './crypto.ts';
 import {
 	getCredential,
 	initializeVault,
+	isVaultInitialized,
 	listCredentials,
 	removeCredential,
 	setCredential
@@ -23,7 +24,13 @@ export class MemphisSecret {
 
 	constructor(options: MemphisSecretOptions = {}) {
 		this.appDir = options.appDir ?? os.homedir();
+
 	}
+
+    public isInitialized(): boolean {
+        return isVaultInitialized(this.appDir);
+        //return requireVault(this.appDir);
+    }
 
 	public initializeVault(): void {
 		initializeKey(this.appDir);
