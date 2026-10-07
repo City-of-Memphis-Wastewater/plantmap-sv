@@ -29,8 +29,8 @@ export class MemphisSecret {
     }
 
     public initializeVault(): void {
-        initializeVault(this.appDir);
         initializeKey(this.appDir);
+        initializeVault(this.appDir);
     }
 
     public value(
