@@ -1,6 +1,6 @@
 // src/lib/cli/secret.ts
 
-import { bootstrapPlantMapSecret } from '../plantmap/bootstrap';
+import { bootstrapPlantMapSecret } from '../plantmap/bootstrap.ts';
 
 export function secret() {
 	const secrets = bootstrapPlantMapSecret();

@@ -2,7 +2,7 @@
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap';
+import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap.ts';
 
 export async function setup() {
 	const config = bootstrapPlantMapConfig();

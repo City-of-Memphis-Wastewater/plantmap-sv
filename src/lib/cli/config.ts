@@ -1,6 +1,6 @@
 // src/lib/cli/config.ts
 
-import { bootstrapPlantMapConfig } from '../plantmap/bootstrap';
+import { bootstrapPlantMapConfig } from '../plantmap/bootstrap.ts';
 
 export function config() {
 	const configs = bootstrapPlantMapConfig();
