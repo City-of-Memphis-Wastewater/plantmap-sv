@@ -6,6 +6,15 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
+## [0.0.3] – 2026-10-07
+
+### Changed:
+
+- memphis-secret is now in service.
+- plantmap-sv CLI now supports config and secret listing.
+
+---
+
 ## [0.0.2] – 2026-10-06
 
 ### Changed:
