@@ -6,17 +6,15 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap.ts';
 import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
 
-const plantMapConfig = loadPlantMapConfig(
-    bootstrapPlantMapConfig()
-);
+const plantMapConfig = loadPlantMapConfig(bootstrapPlantMapConfig());
 
 export default defineConfig({
-    server: {
-        port: plantMapConfig.server.port
-    },
-    preview: {
-        port: plantMapConfig.server.port
-    },
+	server: {
+		port: plantMapConfig.server.port
+	},
+	preview: {
+		port: plantMapConfig.server.port
+	},
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),
