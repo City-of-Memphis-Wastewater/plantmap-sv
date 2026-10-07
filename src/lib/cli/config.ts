@@ -1,13 +1,12 @@
 import os from 'node:os';
 import path from 'node:path';
 
-import { MemphisConfig } from '../memphis-config/index.ts';
+import { bootstrapPlantMapConfig } from '../plantmap/bootstrap';
 
 export function config() {
-	const appDir = path.join(os.homedir(), '.plantmap');
-	const values = new MemphisConfig({ appDir });
-
-	for (const item of values.list()) {
+	const configs = bootstrapPlantMapConfig();
+	
+	for (const item of configs.list()) {
 		console.log(`${item.key}=${item.value}`);
 	}
 }

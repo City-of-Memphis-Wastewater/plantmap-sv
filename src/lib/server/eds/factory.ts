@@ -3,26 +3,22 @@
 import os from 'node:os';
 import path from 'node:path';
 
-import { MemphisConfig } from '$lib/memphis-config';
-import { MemphisSecret } from '$lib/memphis-secret';
+import {
+    bootstrapPlantMapConfig,
+    bootstrapPlantMapSecret
+} from '../plantmap/bootstrap';
 import { loadPlantMapConfig } from '$lib/plantmap/config';
 import { loadPlantMapSecret } from '$lib/plantmap/secret';
 
 import { ClientEdsSoap } from './client';
 
 export function createEdsClient(): ClientEdsSoap {
-	const appDir = path.join(os.homedir(), '.plantmap');
-
-	const memphisConfig = new MemphisConfig({
-		appDir
-	});
-
-	const memphisSecret = new MemphisSecret({
-		appDir
-	});
-
-	const plantMapConfig = loadPlantMapConfig(memphisConfig);
-	const plantMapSecret = loadPlantMapSecret(memphisSecret);
+	
+    const config = bootstrapPlantMapConfig();
+    const secret = bootstrapPlantMapSecret();
+            
+	const plantMapConfig = loadPlantMapConfig(config);
+	const plantMapSecret = loadPlantMapSecret(secret);
 
 	const endpoint = `${plantMapConfig.eds.protocol}${plantMapConfig.eds.host}:${plantMapConfig.eds.soapPort}`;
 

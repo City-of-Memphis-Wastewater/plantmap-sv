@@ -5,17 +5,15 @@ import path from 'node:path';
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-//import { MemphisConfig } from '../memphis-config/index.ts';
-//import { MemphisSecret } from '../memphis-secret/index.ts';
 import {
-        bootstrapMemphisConfig,
-        bootstrapMemphisSecret
+        bootstrapPlantMapConfig,
+        bootstrapPlantMapSecret
 } from '../plantmap/bootstrap';
 
 export async function setup() {
 	
-    const config = bootstrapMemphisConfig();
-    const secret = bootstrapMemphisSecret();
+    const config = bootstrapPlantMapConfig();
+    const secret = bootstrapPlantMapSecret();
         
 	// --- Inputs ---
 
