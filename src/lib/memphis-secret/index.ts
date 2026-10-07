@@ -7,19 +7,19 @@ import {
     decrypt,
     encrypt,
     initializeKey,
-} from './crypto';
+} from './crypto.ts';
 import {
     getCredential,
     initializeVault,
     removeCredential,
     setCredential,
-} from './vault';
+} from './vault.ts';
 
 import type {
     MemphisSecretOptions,
     MemphisSecretSetOptions,
     SecretValue,
-} from './types';
+} from './types.ts';
 
 export class MemphisSecret {
     private readonly appDir: string;

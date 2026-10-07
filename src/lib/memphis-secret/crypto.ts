@@ -12,7 +12,7 @@ import {
     writeFileSync,
 } from 'node:fs';
 
-import { getKeyPath } from './paths';
+import { getKeyPath } from './paths.ts';
 
 const ALGORITHM = 'aes-256-gcm';
 const KEY_LENGTH = 32;

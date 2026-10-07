@@ -3,7 +3,7 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 
-import { getSecretDir, getVaultPath } from './paths';
+import { getSecretDir, getVaultPath } from './paths.ts';
 
 const SCHEMA_VERSION = 1;
 
