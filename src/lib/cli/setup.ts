@@ -21,7 +21,6 @@ export async function setup() {
     const secret = new MemphisSecret({
 		appDir
 	});
-    secret.initializeVault();
         
     // --- Inputs ---
     
@@ -63,9 +62,34 @@ export async function setup() {
 
 	//env.setValue('OVATION_EDS_PASSWORD', edsPassword);
 
-    secret.setValue('eds','username', username);
+    secret.initializeVault();
 
-    secret.setValue('eds','password', edsPassword);
+    const existingUsername = secret.value('eds', 'username');
+    const existingPassword = secret.value('eds', 'password');
+
+    const username = await password({
+        message: existingUsername
+            ? 'Ovation EDS username (Enter to keep existing):'
+            : 'Ovation EDS username:'
+    });
+
+    const edsPassword = await password({
+        message: existingPassword
+            ? 'Ovation EDS password (Enter to keep existing):'
+            : 'Ovation EDS password:'
+    });
+
+    //secret.setValue('eds','username', username);
+
+    //secret.setValue('eds','password', edsPassword);
+
+    if (username !== '') {
+        secret.setValue('eds', 'username', username);
+    }
+
+    if (edsPassword !== '') {
+        secret.setValue('eds', 'password', edsPassword);
+    }
 
 	config.setValue('eds.soapPort', soapPort);
 
