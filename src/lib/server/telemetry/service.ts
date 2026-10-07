@@ -56,7 +56,7 @@ class TelemetryService {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
 
-			const sensors = Object.entries(sensorMap).map(([id, config]) => {
+			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
 				const point = liveData[`${id}${client.iessSuffix}`];
 
 				return {
