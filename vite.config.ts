@@ -3,8 +3,8 @@ import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
-import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap';
-import { loadPlantMapConfig } from './src/lib/plantmap/config';
+import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap.ts';
+import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
 
 const plantMapConfig = loadPlantMapConfig(
     bootstrapPlantMapConfig()
