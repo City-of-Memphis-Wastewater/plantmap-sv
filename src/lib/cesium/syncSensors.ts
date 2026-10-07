@@ -5,7 +5,7 @@ type CesiumModule = typeof import('cesium');
 import type {
 	SensorNode
 	//TelemetrySnapshot
-} from '$lib/telemetry/types.ts';
+} from '$lib/telemetry/types';
 
 export function syncSensorEntities(
 	viewer: Viewer,
