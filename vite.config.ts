@@ -4,9 +4,12 @@ import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap';
+import { loadPlantMapConfig } from './src/lib/plantmap/config';
 
-const plantMapConfig = bootstrapPlantMapConfig();        
-        
+const plantMapConfig = loadPlantMapConfig(
+    bootstrapPlantMapConfig()
+);
+
 export default defineConfig({
     server: {
         port: plantMapConfig.server.port
