@@ -5,20 +5,18 @@ import path from 'node:path';
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-import { MemphisConfig } from '../memphis-config/index.ts';
-import { MemphisSecret } from '../memphis-secret/index.ts';
+//import { MemphisConfig } from '../memphis-config/index.ts';
+//import { MemphisSecret } from '../memphis-secret/index.ts';
+import {
+        bootstrapMemphisConfig,
+        bootstrapMemphisSecret
+} from '../plantmap/bootstrap';
 
 export async function setup() {
-	const appDir = path.join(os.homedir(), '.plantmap');
-
-	const config = new MemphisConfig({
-		appDir
-	});
-
-	const secret = new MemphisSecret({
-		appDir
-	});
-
+	
+    const config = bootstrapMemphisConfig();
+    const secret = bootstrapMemphisSecret();
+        
 	// --- Inputs ---
 
 	const protocol = await input({
