@@ -38,30 +38,6 @@ export async function setup() {
 		throw new Error('Ovation EDS port is required');
 	}
 
-	const username = await password({
-		message: 'Ovation EDS username:'
-	});
-
-	const edsPassword = await password({
-		message: 'Ovation EDS password:'
-	});
-
-	const suffix = await input({
-		message: 'Ovation EDS suffix:',
-		default: (config.value('eds.suffix') as string | undefined) ?? '.UNIT0@NET0'
-	});
-
-	const debug = await confirm({
-		message: 'Enable EDS debugging?',
-		default: (config.value('eds.debug') as boolean | undefined) ?? false
-	});
-
-	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
-
-	//env.setValue('OVATION_EDS_USERNAME', username);
-
-	//env.setValue('OVATION_EDS_PASSWORD', edsPassword);
-
     secret.initializeVault();
 
     const existingUsername = secret.value('eds', 'username');
@@ -78,6 +54,22 @@ export async function setup() {
             ? 'Ovation EDS password (Enter to keep existing):'
             : 'Ovation EDS password:'
     });
+
+	const suffix = await input({
+		message: 'Ovation EDS suffix:',
+		default: (config.value('eds.suffix') as string | undefined) ?? '.UNIT0@NET0'
+	});
+
+	const debug = await confirm({
+		message: 'Enable EDS debugging?',
+		default: (config.value('eds.debug') as boolean | undefined) ?? false
+	});
+
+	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
+
+	//env.setValue('OVATION_EDS_USERNAME', username);
+
+	//env.setValue('OVATION_EDS_PASSWORD', edsPassword);
 
     //secret.setValue('eds','username', username);
 
