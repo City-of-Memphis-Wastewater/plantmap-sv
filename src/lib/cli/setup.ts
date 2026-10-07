@@ -51,7 +51,7 @@ export async function setup() {
 
 	const appPort = await number({
 		message: 'Host server port for this app:',
-		default: (config.value('server.port') as number | undefined) ?? 3000
+		default: (config.value('server.port') as number | undefined) ?? 4000
 	});
 
 	if (appPort === undefined) {

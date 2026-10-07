@@ -31,7 +31,7 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 		},
 
 		server: {
-			port: config.value('server.port') ?? 3000 // 5173
+			port: config.value('server.port') ?? 4000 // 5173
 		}
 	});
 }
