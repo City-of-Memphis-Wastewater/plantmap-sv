@@ -5,11 +5,11 @@
 	import { onMount } from 'svelte';
 	import CesiumViewport from '$lib/components/CesiumViewport.svelte';
 	import TelemetryHUD from '$lib/components/TelemetryHUD.svelte';
-	import { telemetryStore } from '$lib/stores/telemetry.svelte';
+	import { telemetryStore } from '$lib/stores/telemetry-client.svelte';
 
 	onMount(() => {
 		console.log('[PAGE] onMount');
-		telemetryStore.startPolling(10000);
+		telemetryStore.startPolling(2000);
 
 		return () => {
 			console.log('[PAGE] onMount cleanup');

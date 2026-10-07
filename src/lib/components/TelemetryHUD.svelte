@@ -1,6 +1,6 @@
 <!-- src/lib/components/TelemetryHUD.svelte -->
 <script lang="ts">
-	import { telemetryStore } from '$lib/stores/telemetry.svelte';
+	import { telemetryStore } from '$lib/stores/telemetry-client.svelte';
 
 	let showTelemetryHud = $state(false);
 </script>
