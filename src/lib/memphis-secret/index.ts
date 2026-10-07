@@ -1,8 +1,19 @@
 // src/lib/memphis-secret/index.ts
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+
+import {
+    decrypt,
+    encrypt,
+    initializeKey,
+} from './crypto';
+import {
+    getCredential,
+    initializeVault,
+    removeCredential,
+    setCredential,
+} from './vault';
 
 import type {
     MemphisSecretOptions,
@@ -11,33 +22,32 @@ import type {
 } from './types';
 
 export class MemphisSecret {
-    private readonly secretDir: string;
-    private readonly vaultFile: string;
-    private readonly keyFile: string;
+    private readonly appDir: string;
 
     constructor(options: MemphisSecretOptions = {}) {
-        const baseDir = options.appDir ?? os.homedir();
-
-        this.secretDir = path.join(baseDir, '.memphis-secret');
-        this.vaultFile = path.join(this.secretDir, 'vault.db');
-        this.keyFile = path.join(this.secretDir, '.key');
+        this.appDir = options.appDir ?? os.homedir();
     }
 
-    public initialize(): void {
-        mkdirSync(this.secretDir, { recursive: true });
-
-        if (!existsSync(this.vaultFile)) {
-            // Create vault database.
-        }
-
-        if (!existsSync(this.keyFile)) {
-            // Generate and store encryption key.
-        }
+    public initializeVault(): void {
+        initializeVault(this.appDir);
+        initializeKey(this.appDir);
     }
 
-    public value(service: string, item: string): SecretValue | undefined {
-        // Read/decrypt service + item from vault.db.
-        throw new Error('Not implemented');
+    public value(
+        service: string,
+        item: string
+    ): SecretValue | undefined {
+        const encrypted = getCredential(
+            service,
+            item,
+            this.appDir
+        );
+
+        if (!encrypted) {
+            return undefined;
+        }
+
+        return decrypt(encrypted, this.appDir);
     }
 
     public setValue(
@@ -46,12 +56,25 @@ export class MemphisSecret {
         value: SecretValue,
         options: MemphisSecretSetOptions = {}
     ): void {
-        // Encrypt and store service + item in vault.db.
-        throw new Error('Not implemented');
+        const encrypted = encrypt(value, this.appDir);
+
+        setCredential(
+            service,
+            item,
+            encrypted,
+            this.appDir,
+            options.overwrite ?? true
+        );
     }
 
-    public remove(service: string, item: string): boolean {
-        // Remove service + item from vault.db.
-        throw new Error('Not implemented');
+    public remove(
+        service: string,
+        item: string
+    ): boolean {
+        return removeCredential(
+            service,
+            item,
+            this.appDir
+        );
     }
 }
