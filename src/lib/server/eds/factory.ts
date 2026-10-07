@@ -5,7 +5,7 @@ import path from 'node:path';
 
 import { MemphisConfig } from '$lib/memphis-config';
 import { MemphisEnv } from '$lib/memphis-env';
-//import { MemphisSecret } from '$lib/memphis-secret';
+import { MemphisSecret } from '$lib/memphis-secret';
 import { loadPlantMapConfig } from '$lib/plantmap/config';
 
 import { ClientEdsSoap } from './client';
@@ -35,23 +35,13 @@ export function createEdsClient(): ClientEdsSoap {
 
 	const plantMapConfig = loadPlantMapConfig(memphisConfig);
 
-	/*
-    const username = memphisEnv.value(
-        'OVATION_EDS_USERNAME'
-    );
+	// const username = requiredEnv(memphisEnv, 'OVATION_EDS_USERNAME');
 
-    const password = memphisEnv.value(
-        'OVATION_EDS_PASSWORD'
-    );
+	// const password = requiredEnv(memphisEnv, 'OVATION_EDS_PASSWORD');
 
-    const baseUrl = memphisEnv.value(
-        'OVATION_EDS_BASE_URL'
-    );
-    */
+    const username = memphisSecret.value('eds', 'username');
 
-	const username = requiredEnv(memphisEnv, 'OVATION_EDS_USERNAME');
-
-	const password = requiredEnv(memphisEnv, 'OVATION_EDS_PASSWORD');
+    const password = memphisSecret.value('eds', 'password');
 
 	const baseUrl = requiredEnv(memphisEnv, 'OVATION_EDS_BASE_URL');
 

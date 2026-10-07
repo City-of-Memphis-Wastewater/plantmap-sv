@@ -7,6 +7,7 @@ import { input, password, confirm, number } from '@inquirer/prompts';
 
 import { MemphisConfig } from '../memphis-config/index.ts';
 import { MemphisEnv } from '../memphis-env/index.ts';
+import { MemphisSecret } from '../memphis-secret/index.ts';
 
 export async function setup() {
 	const appDir = path.join(os.homedir(), '.plantmap');
@@ -17,6 +18,13 @@ export async function setup() {
 
 	const env = new MemphisEnv();
 
+    const secret = new MemphisSecret({
+		appDir
+	});
+    secret.initializeVault();
+        
+    // --- Inputs ---
+    
 	const baseUrl = await input({
 		message: 'Ovation EDS endpoint baseUrl:',
 		default: 'http://127.0.0.1'
@@ -51,9 +59,13 @@ export async function setup() {
 
 	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
 
-	env.setValue('OVATION_EDS_USERNAME', username);
+	//env.setValue('OVATION_EDS_USERNAME', username);
 
-	env.setValue('OVATION_EDS_PASSWORD', edsPassword);
+	//env.setValue('OVATION_EDS_PASSWORD', edsPassword);
+
+    secret.setValue('eds','username', username);
+
+    secret.setValue('eds','password', edsPassword);
 
 	config.setValue('eds.soapPort', soapPort);
 
