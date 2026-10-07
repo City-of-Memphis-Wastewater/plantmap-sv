@@ -2,7 +2,7 @@
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
-import type { SensorNode } from '$lib/stores/telemetry.svelte';
+import type { SensorNode } from '$lib/stores/telemetry-client.svelte';
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';

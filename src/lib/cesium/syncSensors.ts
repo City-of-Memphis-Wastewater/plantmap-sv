@@ -2,7 +2,7 @@
 
 import type { Viewer } from 'cesium';
 type CesiumModule = typeof import('cesium');
-import type { SensorNode } from '$lib/stores/telemetry.svelte';
+import type { SensorNode } from '$lib/stores/telemetry-client.svelte';
 
 export function syncSensorEntities(
 	viewer: Viewer,
