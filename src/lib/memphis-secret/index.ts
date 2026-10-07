@@ -11,6 +11,7 @@ import {
 import {
     getCredential,
     initializeVault,
+    listCredentials,
     removeCredential,
     setCredential,
 } from './vault.ts';
@@ -76,5 +77,9 @@ export class MemphisSecret {
             item,
             this.appDir
         );
+    }
+
+    public list(): Array<{ service: string; item: string }> {
+        return listCredentials(this.appDir);
     }
 }
