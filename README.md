@@ -15,19 +15,21 @@ cd plantmap-sv
 
 ```bash
 bun install
-bun run setup
+bun link plantmap-sv
+bunx plantmap-sv setup
 ```
 
 ### Running on Termux and Other Platforms Without Bun
 
 ```bash
 npm install
-npm run setup
+npm link plantmap-sv
+npx plantmap-sv setup
 ```
 
-## Run
+## Run, Dev
 
-Recommended entry point.
+Bun entry point.
 
 ```bash
 bun run dev
@@ -37,15 +39,6 @@ Cross-platform approach, like for Termux.
 
 ```bash
 npm run dev
-```
-
-## Local CLI Installation
-
-Use the `plantmap-sv` CLI, like to call `plantmap-sv setup`.
-
-```bash
-npm link plantmap-sv
-npx plantmap-sv
 ```
 
 ## Source
