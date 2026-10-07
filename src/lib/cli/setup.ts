@@ -21,15 +21,15 @@ export async function setup() {
 
 	// --- Inputs ---
 
-    const protocol = await input({
-        message: 'Ovation EDS endpoint protocol:',
-        default: (config.value('eds.protocol') as string | undefined) ?? 'http://'
-    });
+	const protocol = await input({
+		message: 'Ovation EDS endpoint protocol:',
+		default: (config.value('eds.protocol') as string | undefined) ?? 'http://'
+	});
 
-    const host = await input({
-        message: 'Ovation EDS endpoint host address:',
-        default: (config.value('eds.host') as string | undefined) ?? '127.0.0.1'
-    });
+	const host = await input({
+		message: 'Ovation EDS endpoint host address:',
+		default: (config.value('eds.host') as string | undefined) ?? '127.0.0.1'
+	});
 
 	const soapPort = await number({
 		message: 'Ovation EDS SOAP API port:',
@@ -65,9 +65,9 @@ export async function setup() {
 		default: (config.value('server.port') as number | undefined) ?? 3000
 	});
 
-    if (appPort === undefined) {
-        throw new Error('Host server port is required');
-    }
+	if (appPort === undefined) {
+		throw new Error('Host server port is required');
+	}
 
 	const debug = await confirm({
 		message: 'Enable EDS debugging?',
