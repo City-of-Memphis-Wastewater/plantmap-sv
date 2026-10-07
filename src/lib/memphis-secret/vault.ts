@@ -51,6 +51,16 @@ function requireVault(appDir?: string): void {
     }
 }
 
+function openVaultIfExists(appDir?: string): DatabaseSync | undefined {
+    const vaultPath = getVaultPath(appDir);
+
+    if (!existsSync(vaultPath)) {
+        return undefined;
+    }
+
+    return new DatabaseSync(vaultPath);
+}
+
 function openVault(appDir?: string): DatabaseSync {
     requireVault(appDir);
 
@@ -74,7 +84,16 @@ export function getCredential(
     item: string,
     appDir?: string
 ): Buffer | undefined {
-    const database = openVault(appDir);
+    //const database = openVault(appDir);
+
+    // ---
+    const database = openVaultIfExists(appDir);
+
+    if (!database) {
+        console.log(`[memphis-secret] Vault does not exist: ${getVaultPath(appDir)}`);
+        return undefined;
+    }
+    // ---
 
     try {
         const statement = database.prepare(`
