@@ -1,8 +1,5 @@
 // src/lib/server/eds/factory.ts
 
-import os from 'node:os';
-import path from 'node:path';
-
 import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap';
 import { loadPlantMapConfig } from '$lib/plantmap/config';
 import { loadPlantMapSecret } from '$lib/plantmap/secret';

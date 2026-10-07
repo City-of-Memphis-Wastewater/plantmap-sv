@@ -1,5 +1,4 @@
-import os from 'node:os';
-import path from 'node:path';
+// src/lib/cli/config.ts
 
 import { bootstrapPlantMapConfig } from '../plantmap/bootstrap';
 

@@ -1,8 +1,5 @@
 // src/lib/cli/secret.ts
 
-import os from 'node:os';
-import path from 'node:path';
-
 import { bootstrapPlantMapSecret } from '../plantmap/bootstrap';
 
 export function secret() {

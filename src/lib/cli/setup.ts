@@ -1,8 +1,5 @@
 // src/lib/cli/setup.ts
 
-import os from 'node:os';
-import path from 'node:path';
-
 import { input, password, confirm, number } from '@inquirer/prompts';
 
 import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap';
