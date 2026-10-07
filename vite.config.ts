@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap';
+
 const plantMapConfig = bootstrapPlantMapConfig();        
         
 export default defineConfig({

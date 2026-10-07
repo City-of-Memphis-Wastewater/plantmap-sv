@@ -8,9 +8,6 @@ import packageJson from '../../../package.json' with { type: 'json' };
 import { MemphisConfig } from '$lib/memphis-config';
 import { MemphisSecret } from '$lib/memphis-secret';
 
-import { loadPlantMapConfig } from './config';
-import { loadPlantMapSecret } from './secret';
-
 const appDir = path.join(os.homedir(), `.${packageJson.name}`);
 
 export function bootstrapPlantMapConfig() {

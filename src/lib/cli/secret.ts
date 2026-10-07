@@ -3,7 +3,7 @@
 import os from 'node:os';
 import path from 'node:path';
 
-import { bootstrapPlantMapConfig } from '../plantmap/bootstrap';
+import { bootstrapPlantMapSecret } from '../plantmap/bootstrap';
 
 export function secret() {
 	const secrets = bootstrapPlantMapSecret();
