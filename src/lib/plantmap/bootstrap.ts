@@ -5,8 +5,8 @@ import path from 'node:path';
 
 import packageJson from '../../../package.json' with { type: 'json' };
 
-import { MemphisConfig } from '../memphis-config.ts';
-import { MemphisSecret } from '../memphis-secret.ts';
+import { MemphisConfig } from '../memphis-config/index.ts';
+import { MemphisSecret } from '../memphis-secret/index.ts';
 
 const appDir = path.join(os.homedir(), `.${packageJson.name}`);
 
