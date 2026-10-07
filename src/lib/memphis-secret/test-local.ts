@@ -29,6 +29,9 @@ try {
         'super-secret'
     );
 
+    console.log('\n--- list ---');
+    console.log(secret.list());
+
     console.log('\n--- get ---');
     console.log(
         'username:',
