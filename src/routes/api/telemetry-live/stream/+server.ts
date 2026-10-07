@@ -13,9 +13,7 @@ export const GET: RequestHandler = ({ request }) => {
 	const stream = new ReadableStream({
 		start(controller) {
 			const send = (snapshot: unknown) => {
-				controller.enqueue(
-					encoder.encode(`data: ${JSON.stringify(snapshot)}\n\n`)
-				);
+				controller.enqueue(encoder.encode(`data: ${JSON.stringify(snapshot)}\n\n`));
 			};
 
 			send(telemetryService.getLatest());

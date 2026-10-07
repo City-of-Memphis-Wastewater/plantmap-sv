@@ -1,25 +1,5 @@
 // src/lib/stores/telemetry-client.svelte.ts
-import { TelemetrySnapshot, SensorNode } from '$lib/server/telemetry/types.ts'
-
-export interface SensorNode {
-	id: string;
-	name: string;
-	lat: number;
-	lon: number;
-	altitude?: number;
-	value: number | null;
-	unit?: string;
-	precision?: number;
-	status: 'normal' | 'warning' | 'alarm' | 'missing';
-}
-
-interface TelemetrySnapshot {
-	success: boolean;
-	degraded?: boolean;
-	warning?: string;
-	timestamp: string;
-	sensors: SensorNode[];
-}
+import type { TelemetrySnapshot, SensorNode } from '$lib/telemetry/types.ts';
 
 class TelemetryStore {
 	sensors = $state<Record<string, SensorNode>>({});
@@ -59,18 +39,13 @@ class TelemetryStore {
 				this.error = data.warning ?? null;
 
 				if (Array.isArray(data.sensors)) {
-					this.sensors = Object.fromEntries(
-						data.sensors.map((sensor) => [sensor.id, sensor])
-					);
+					this.sensors = Object.fromEntries(data.sensors.map((sensor) => [sensor.id, sensor]));
 				}
 			} catch (error) {
 				this.isDegraded = true;
 				this.error = 'Invalid telemetry response';
 
-				console.error(
-					'[TelemetryStore] Failed to parse telemetry:',
-					error
-				);
+				console.error('[TelemetryStore] Failed to parse telemetry:', error);
 			}
 		};
 

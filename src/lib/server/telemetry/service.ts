@@ -3,16 +3,9 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { SensorNode } from './types.ts';
-import { getEdsClient } from '$lib/server/eds/factory';
+import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types.ts';
 
-export interface TelemetrySnapshot {
-	success: boolean;
-	degraded?: boolean;
-	warning?: string;
-	timestamp: string;
-	sensors: SensorNode[];
-}
+import { getEdsClient } from '$lib/server/eds/factory';
 
 type Subscriber = (snapshot: TelemetrySnapshot) => void;
 
@@ -38,9 +31,7 @@ class TelemetryService {
 		const parsed = JSON.parse(raw);
 
 		if (Array.isArray(parsed)) {
-			return Object.fromEntries(
-				parsed.map((sensor: SensorNode) => [sensor.id, sensor])
-			);
+			return Object.fromEntries(parsed.map((sensor: SensorNode) => [sensor.id, sensor]));
 		}
 
 		return parsed;
@@ -70,14 +61,8 @@ class TelemetryService {
 
 				return {
 					...config,
-					value:
-						point?.value != null
-							? Number(point.value.toFixed(config.precision ?? 2))
-							: null,
-					status:
-						point?.quality === 'QUALITY-GOOD'
-							? 'normal'
-							: 'warning'
+					value: point?.value != null ? Number(point.value.toFixed(config.precision ?? 2)) : null,
+					status: point?.quality === 'QUALITY-GOOD' ? 'normal' : 'warning'
 				};
 			});
 
@@ -141,13 +126,13 @@ class TelemetryService {
 		void this.pollLoop();
 	}
 
-    subscribe(subscriber: Subscriber): () => void {
-    	this.subscribers.add(subscriber);
+	subscribe(subscriber: Subscriber): () => void {
+		this.subscribers.add(subscriber);
 
-    	return () => {
-    		this.subscribers.delete(subscriber);
-    	};
-    }
+		return () => {
+			this.subscribers.delete(subscriber);
+		};
+	}
 
 	getLatest(): TelemetrySnapshot {
 		return this.snapshot;
