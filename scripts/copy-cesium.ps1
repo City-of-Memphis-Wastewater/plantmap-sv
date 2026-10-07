@@ -1,4 +1,9 @@
+
 $ErrorActionPreference = "Stop"
+
+param(
+    [switch]$Force
+)
 
 $Root = Split-Path -Parent $PSScriptRoot
 $Source = Join-Path $Root "node_modules\cesium\Build\Cesium"
@@ -9,7 +14,11 @@ if (-not (Test-Path -LiteralPath $Source -PathType Container)) {
 }
 
 if (Test-Path -LiteralPath $Destination) {
-    throw "Destination already exists: $Destination`nRemove it manually before copying Cesium assets."
+    if (-not $Force) {
+        throw "Destination already exists: $Destination`nRemove it manually or rerun with -Force."
+    }
+
+    Remove-Item -LiteralPath $Destination -Recurse -Force
 }
 
 Copy-Item -LiteralPath $Source -Destination $Destination -Recurse
