@@ -47,7 +47,8 @@ function requireVault(appDir?: string): void {
 		throw new Error(
 			`[memphis-secret] Vault does not exist: ${vaultPath}\n` +
 				`[memphis-secret] Initialize it explicitly before storing or retrieving secrets.`,
-		{ cause: error });
+			{ cause: error }
+		);
 	}
 }
 
@@ -145,8 +146,9 @@ export function setCredential(
 			statement.run(service, item, encryptedSecret);
 		} catch (error) {
 			if (error instanceof Error && error.message.includes('UNIQUE')) {
-				throw new Error(`[memphis-secret] Credential already exists: ${service}/${item}`,
-				{ cause: error });
+				throw new Error(`[memphis-secret] Credential already exists: ${service}/${item}`, {
+					cause: error
+				});
 			}
 
 			throw error;
