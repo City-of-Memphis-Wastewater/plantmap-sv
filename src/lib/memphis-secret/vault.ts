@@ -196,6 +196,11 @@ export function listCredentials(
             ORDER BY service, item
         `);
 
+        const rows = statement.all() as Array<{
+            service: string;
+            item: string;
+        }>;
+        
         const credentials: MemphisSecretItem[] = rows.map((row) => ({
             service: row.service,
             item: row.item,
