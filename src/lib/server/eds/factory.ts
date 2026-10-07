@@ -47,10 +47,16 @@ export function createEdsClient(): ClientEdsSoap {
 
 	const endpoint = `http://${baseUrl}:${plantMapConfig.eds.soapPort}`;
 
+    if (username === undefined || edsPassword === undefined) {
+        throw new Error(
+            'Ovation EDS credentials are not configured. Run `plantmap setup`.'
+        );
+    }
+
 	return new ClientEdsSoap({
 		endpoint,
 		username,
-		edsPassword,
+		password: edsPassword,
 		iessSuffix: plantMapConfig.eds.suffix,
 		debug: plantMapConfig.eds.debug
 	});
