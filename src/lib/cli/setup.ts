@@ -36,11 +36,11 @@ export async function setup() {
 
     const host = await input({
 		message: 'Ovation EDS endpoint host address:',
-		default: config.value('eds.host') ?? '0.0.0.0'
+		default: config.value('eds.host') ?? '127.0.0.1'
 	});
     
 	const soapPort = await number({
-		message: 'Ovation EDS endpoint port:',
+		message: 'Ovation EDS SOAP API port:',
 		default: (config.value('eds.soapPort') as number | undefined) ?? 43080
 	});
 
@@ -68,9 +68,9 @@ export async function setup() {
 		default: (config.value('eds.suffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
-	const appPort = await input({
+	const appPort = await number({
 		message: 'Host server port for this app:',
-		default: (config.value('server.port') as string | undefined) ?? '3000'
+		default: (config.value('server.port') as number | undefined) ?? '3000'
 	});
 
 	const debug = await confirm({
