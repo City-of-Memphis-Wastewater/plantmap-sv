@@ -1,6 +1,7 @@
 // src/lib/cli/index.ts
 
 import { setup } from './setup.ts';
+import { secret } from './secret.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -10,10 +11,10 @@ export async function runCli(args: string[]) {
 			await setup();
 			return;
 
-		case 'config':
-			// await config();
-			return;
-
+        case 'secret':
+            secret();
+            return;
+        
 		case 'start':
 			// await start();
 			return;
@@ -39,7 +40,8 @@ Usage:
 
 Commands:
   setup     Configure PlantMap
-  config    Show or edit configuration
+  secret    List secrets stored in app dir
+  config    List config values stored in app dir
   start     Start PlantMap
   help      Show this help
 `);
