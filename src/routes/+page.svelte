@@ -9,11 +9,11 @@
 
 	onMount(() => {
 		console.log('[PAGE] onMount');
-		telemetryStore.startPolling(2000);
+		telemetryStore.start();
 
 		return () => {
 			console.log('[PAGE] onMount cleanup');
-			telemetryStore.stopPolling();
+			telemetryStore.stop();
 		};
 	});
 </script>
@@ -22,3 +22,4 @@
 	<CesiumViewport />
 	<TelemetryHUD />
 </main>
+

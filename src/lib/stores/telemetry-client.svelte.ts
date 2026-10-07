@@ -1,4 +1,5 @@
 // src/lib/stores/telemetry-client.svelte.ts
+import { TelemetrySnapshot, SensorNode } from '$lib/server/telemetry/types.ts'
 
 export interface SensorNode {
 	id: string;
@@ -12,83 +13,80 @@ export interface SensorNode {
 	status: 'normal' | 'warning' | 'alarm' | 'missing';
 }
 
+interface TelemetrySnapshot {
+	success: boolean;
+	degraded?: boolean;
+	warning?: string;
+	timestamp: string;
+	sensors: SensorNode[];
+}
+
 class TelemetryStore {
 	sensors = $state<Record<string, SensorNode>>({});
 	isPolling = $state(false);
 	isDegraded = $state(true);
 	error = $state<string | null>(null);
 
-	private timer: ReturnType<typeof setTimeout> | null = null;
+	private eventSource: EventSource | null = null;
 
-	async fetchTelemetry() {
-		console.log('[TelemetryStore] fetchTelemetry START');
+	start() {
+		if (this.eventSource) return;
 
-		try {
-			const res = await fetch('/api/telemetry-live');
-
-			const data = await res.json();
-
-			console.log('[TelemetryStore] response', {
-				ok: res.ok,
-				success: data.success,
-				sensorCount: data.sensors?.length
-			});
-
-			if (!res.ok || !data.success) {
-				this.isDegraded = true;
-				this.error = data.warning || data.error || `Server error (${res.status})`;
-				return;
-			}
-
-			this.isDegraded = false;
-			this.error = null;
-
-			if (Array.isArray(data.sensors)) {
-				this.sensors = Object.fromEntries(
-					data.sensors.map((sensor: SensorNode) => [sensor.id, sensor])
-				);
-			}
-
-			console.log('[TelemetryStore] sensors updated', this.sensors);
-		} catch (err) {
-			this.isDegraded = true;
-			this.error = `Connection offline: ${(err as Error).message}`;
-
-			console.error('[TelemetryStore] fetchTelemetry FAILED', err);
-		}
-	}
-
-	private async poll(intervalMs: number) {
-		if (!this.isPolling) return;
-
-		console.log('[TelemetryStore] POLL');
-
-		await this.fetchTelemetry();
-
-		if (!this.isPolling) return;
-
-		this.timer = setTimeout(() => {
-			this.poll(intervalMs);
-		}, intervalMs);
-	}
-
-	startPolling(intervalMs = 2000) {
-		console.log('[TelemetryStore] START POLLING');
-
-		if (this.isPolling) return;
+		console.log('[TelemetryStore] CONNECTING');
 
 		this.isPolling = true;
-		this.poll(intervalMs);
+		this.error = null;
+
+		const eventSource = new EventSource('/api/telemetry-live/stream');
+		this.eventSource = eventSource;
+
+		eventSource.onopen = () => {
+			console.log('[TelemetryStore] CONNECTED');
+			this.error = null;
+		};
+
+		eventSource.onmessage = (event) => {
+			try {
+				const data = JSON.parse(event.data) as TelemetrySnapshot;
+
+				if (!data.success) {
+					this.isDegraded = true;
+					this.error = data.warning ?? 'Telemetry service error';
+					return;
+				}
+
+				this.isDegraded = data.degraded ?? false;
+				this.error = data.warning ?? null;
+
+				if (Array.isArray(data.sensors)) {
+					this.sensors = Object.fromEntries(
+						data.sensors.map((sensor) => [sensor.id, sensor])
+					);
+				}
+			} catch (error) {
+				this.isDegraded = true;
+				this.error = 'Invalid telemetry response';
+
+				console.error(
+					'[TelemetryStore] Failed to parse telemetry:',
+					error
+				);
+			}
+		};
+
+		eventSource.onerror = () => {
+			this.isDegraded = true;
+			this.error = 'Telemetry connection lost';
+
+			console.warn('[TelemetryStore] CONNECTION ERROR');
+		};
 	}
 
-	stopPolling() {
-		console.log('[TelemetryStore] STOP POLLING');
+	stop() {
+		console.log('[TelemetryStore] DISCONNECTING');
 
-		if (this.timer) {
-			clearTimeout(this.timer);
-			this.timer = null;
-		}
-
+		this.eventSource?.close();
+		this.eventSource = null;
 		this.isPolling = false;
 	}
 }
