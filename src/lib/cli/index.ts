@@ -20,10 +20,6 @@ export async function runCli(args: string[]) {
 			config();
 			return;
 
-		case 'start':
-			// await start();
-			return;
-
 		case 'help':
 			printHelp();
 			return;
@@ -47,7 +43,6 @@ Commands:
   setup     Configure PlantMap
   secret    List secrets stored in app dir
   config    List config values stored in app dir
-  start     Start PlantMap
   help      Show this help
 `);
 }
