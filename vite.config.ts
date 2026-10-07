@@ -3,7 +3,16 @@ import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
+import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap';
+const plantMapConfig = bootstrapPlantMapConfig();        
+        
 export default defineConfig({
+    server: {
+        port: plantMapConfig.server.port
+    },
+    preview: {
+        port: plantMapConfig.server.port
+    },
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),

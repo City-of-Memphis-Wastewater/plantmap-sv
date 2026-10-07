@@ -3,16 +3,25 @@
 import os from 'node:os';
 import path from 'node:path';
 
-import { MemphisConfig } from '$lib/memphis-config';
-import { loadPlantMapConfig } from './config';
+import packageJson from '../../../package.json' with { type: 'json' };
 
+import { MemphisConfig } from '$lib/memphis-config';
 import { MemphisSecret } from '$lib/memphis-secret';
+
+import { loadPlantMapConfig } from './config';
 import { loadPlantMapSecret } from './secret';
 
-export function bootstrapPlantMapSecret() {
-        const packageName = 'plantmap-sv';
-        const appDir = path.join(os.homedir(), `.${packageName}`);
+const appDir = path.join(os.homedir(), `.${packageJson.name}`);
 
+export function bootstrapPlantMapConfig() {
+        return loadPlantMapConfig(
+                new MemphisConfig({
+                        appDir
+                })
+        );
+}
+
+export function bootstrapPlantMapSecret() {
         return loadPlantMapSecret(
                 new MemphisSecret({
                         appDir
