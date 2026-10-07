@@ -24,13 +24,12 @@ export class MemphisSecret {
 
 	constructor(options: MemphisSecretOptions = {}) {
 		this.appDir = options.appDir ?? os.homedir();
-
 	}
 
-    public isInitialized(): boolean {
-        return isVaultInitialized(this.appDir);
-        //return requireVault(this.appDir);
-    }
+	public isInitialized(): boolean {
+		return isVaultInitialized(this.appDir);
+		//return requireVault(this.appDir);
+	}
 
 	public initializeVault(): void {
 		initializeKey(this.appDir);

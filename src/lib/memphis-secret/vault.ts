@@ -15,7 +15,7 @@ export interface VaultCredential {
 }
 
 export function isVaultInitialized(appDir?: string): boolean {
-    return existsSync(getVaultPath(appDir));
+	return existsSync(getVaultPath(appDir));
 }
 
 function createVault(appDir?: string): DatabaseSync {

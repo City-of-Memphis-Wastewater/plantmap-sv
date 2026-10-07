@@ -1,4 +1,4 @@
- import os from 'node:os';
+import os from 'node:os';
 import path from 'node:path';
 
 export function getSecretDir(appDir?: string): string {
