@@ -10,6 +10,7 @@ import {
     existsSync,
     readFileSync,
     writeFileSync,
+    mkdirSync,
 } from 'node:fs';
 
 import { getKeyPath } from './paths.ts';
