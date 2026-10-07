@@ -5,16 +5,12 @@ import path from 'node:path';
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-import {
-        bootstrapPlantMapConfig,
-        bootstrapPlantMapSecret
-} from '../plantmap/bootstrap';
+import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap';
 
 export async function setup() {
-	
-    const config = bootstrapPlantMapConfig();
-    const secret = bootstrapPlantMapSecret();
-        
+	const config = bootstrapPlantMapConfig();
+	const secret = bootstrapPlantMapSecret();
+
 	// --- Inputs ---
 
 	const protocol = await input({

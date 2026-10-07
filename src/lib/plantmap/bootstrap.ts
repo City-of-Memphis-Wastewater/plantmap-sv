@@ -13,22 +13,14 @@ import { loadPlantMapSecret } from './secret';
 
 const appDir = path.join(os.homedir(), `.${packageJson.name}`);
 
-export function bootstrapMemphisConfig() {
-        return new MemphisConfig({
-                appDir
-        });
-}
-
-export function bootstrapMemphisSecret() {
-        return new MemphisSecret({
-                appDir
-        });
-}
-
 export function bootstrapPlantMapConfig() {
-        return loadPlantMapConfig(bootstrapMemphisConfig());
+	return new MemphisConfig({
+		appDir
+	});
 }
 
 export function bootstrapPlantMapSecret() {
-        return loadPlantMapSecret(bootstrapMemphisSecret());
+	return new MemphisSecret({
+		appDir
+	});
 }
