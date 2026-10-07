@@ -58,14 +58,14 @@ export async function setup() {
 		default: (config.value('eds.suffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
-	const debug = await confirm({
-		message: 'Enable EDS debugging?',
-		default: (config.value('eds.debug') as boolean | undefined) ?? false
-	});
-
 	const appPort = await input({
 		message: 'Host server port for this app:',
 		default: (config.value('server.port') as string | undefined) ?? '3000'
+	});
+
+	const debug = await confirm({
+		message: 'Enable EDS debugging?',
+		default: (config.value('eds.debug') as boolean | undefined) ?? false
 	});
 
 	// --- Save ---
@@ -88,7 +88,7 @@ export async function setup() {
 
 	config.setValue('eds.suffix', suffix);
 
-	config.setValue('eds.debug', debug);
+	config.setValue('server.port', appPort);
 
-    config.setValue('server.port', appPort);
+	config.setValue('eds.debug', debug);
 }
