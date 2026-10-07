@@ -10,3 +10,8 @@ export interface MemphisConfigOptions {
 export interface MemphisConfigSetOptions {
 	overwrite?: boolean;
 }
+
+export interface MemphisConfigItem {
+        key: string;
+        value: ConfigValue;
+}

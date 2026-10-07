@@ -2,6 +2,7 @@
 
 import { setup } from './setup.ts';
 import { secret } from './secret.ts';
+import { config } from './config.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -14,6 +15,10 @@ export async function runCli(args: string[]) {
 		case 'secret':
 			secret();
 			return;
+
+		case 'config':
+            config();
+            return;
 
 		case 'start':
 			// await start();
