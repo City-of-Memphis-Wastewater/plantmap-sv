@@ -17,6 +17,7 @@ import {
 } from './vault.ts';
 
 import type {
+    MemphisSecretItem,
     MemphisSecretOptions,
     MemphisSecretSetOptions,
     SecretValue,
@@ -79,7 +80,7 @@ export class MemphisSecret {
         );
     }
 
-    public list(): Array<{ service: string; item: string }> {
+    public list(): MemphisSecretItem[] {
         return listCredentials(this.appDir);
     }
 }

@@ -9,3 +9,8 @@ export interface MemphisSecretOptions {
 export interface MemphisSecretSetOptions {
 	overwrite?: boolean;
 }
+
+export interface MemphisSecretItem {
+        service: string;
+        item: string;
+}

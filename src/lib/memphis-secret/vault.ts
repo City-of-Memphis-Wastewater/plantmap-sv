@@ -4,6 +4,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 
 import { getSecretDir, getVaultPath } from './paths.ts';
+import type { MemphisSecretItem } from './types.ts';
 
 const SCHEMA_VERSION = 1;
 
@@ -185,7 +186,7 @@ export function removeCredential(
 
 export function listCredentials(
     appDir?: string
-): Array<{ service: string; item: string }> {
+): MemphisSecretItem[] {
     const database = openVault(appDir);
 
     try {
@@ -195,10 +196,10 @@ export function listCredentials(
             ORDER BY service, item
         `);
 
-        const credentials = statement.all() as Array<{
-            service: string;
-            item: string;
-        }>;
+        const credentials: MemphisSecretItem[] = rows.map((row) => ({
+            service: row.service,
+            item: row.item,
+        }));
 
         console.log(
             `[memphis-secret] Found ${credentials.length} credential${
