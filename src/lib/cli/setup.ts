@@ -24,11 +24,21 @@ export async function setup() {
 
 	// --- Inputs ---
 
-	const baseUrl = await input({
-		message: 'Ovation EDS endpoint baseUrl:',
-		default: env.value('OVATION_EDS_BASE_URL') ?? '127.0.0.1'
+	//const baseUrl = await input({
+	//	message: 'Ovation EDS endpoint baseUrl:',
+	//	default: env.value('OVATION_EDS_BASE_URL') ?? '127.0.0.1'
+	//});
+
+	const protocol = await input({
+		message: 'Ovation EDS endpoint protocol:',
+		default: config.value('eds.protocol') ?? 'http://'
 	});
 
+    const host = await input({
+		message: 'Ovation EDS endpoint host address:',
+		default: config.value('eds.host') ?? '0.0.0.0'
+	});
+    
 	const soapPort = await number({
 		message: 'Ovation EDS endpoint port:',
 		default: (config.value('eds.soapPort') as number | undefined) ?? 43080
@@ -70,8 +80,12 @@ export async function setup() {
 
 	// --- Save ---
 
-	env.setValue('OVATION_EDS_BASE_URL', baseUrl);
+	//env.setValue('OVATION_EDS_BASE_URL', baseUrl);
 
+    config.setValue('eds.protocol', protocol);
+    
+    config.setValue('eds.host', host);
+	
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
 	}

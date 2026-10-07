@@ -35,17 +35,19 @@ export function createEdsClient(): ClientEdsSoap {
 
 	const plantMapConfig = loadPlantMapConfig(memphisConfig);
 
-	// const username = requiredEnv(memphisEnv, 'OVATION_EDS_USERNAME');
-
-	// const password = requiredEnv(memphisEnv, 'OVATION_EDS_PASSWORD');
-
 	const username = memphisSecret.value('eds', 'username');
 
 	const edsPassword = memphisSecret.value('eds', 'password');
 
-	const baseUrl = requiredEnv(memphisEnv, 'OVATION_EDS_BASE_URL');
+    const protocol = memphisConfig.value('eds', 'protocol');
 
-	const endpoint = `http://${baseUrl}:${plantMapConfig.eds.soapPort}`;
+    const host = memphisConfig.value('eds', 'host');
+    
+	//const baseUrl = requiredEnv(memphisEnv, 'OVATION_EDS_BASE_URL'); //rename var. move to config ? 
+
+    //const renamePrefix = `http://` // rename this var and the base url var, which is a misnomer. host? ip?
+    
+	const endpoint = `${protocol}${host}:${plantMapConfig.eds.soapPort}`;
 
 	if (username === undefined || edsPassword === undefined) {
 		throw new Error('Ovation EDS credentials are not configured. Run `plantmap setup`.');
