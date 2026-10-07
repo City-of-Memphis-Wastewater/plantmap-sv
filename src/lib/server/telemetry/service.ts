@@ -3,7 +3,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types.ts';
+import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
 
 import { getEdsClient } from '$lib/server/eds/factory';
 
