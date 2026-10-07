@@ -1,4 +1,4 @@
-// src/routes/api/test-eds-new/+server.ts
+// src/routes/api/debug/test-eds/+server.ts
 
 import { json } from '@sveltejs/kit';
 

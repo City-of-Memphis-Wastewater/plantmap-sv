@@ -1,4 +1,5 @@
-// route/api/test-memphis-config
+// route/api/debug/test-memphis-config/+server.ts
+
 import os from 'node:os';
 import path from 'node:path';
 
