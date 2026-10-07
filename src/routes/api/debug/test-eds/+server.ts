@@ -3,7 +3,7 @@
 import { json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
-import { createEdsClient } from '$lib/server/eds/factory';
+import { getEdsClient } from '$lib/server/eds/factory';
 
 export const GET: RequestHandler = async () => {
 	const started = Date.now();
@@ -13,8 +13,7 @@ export const GET: RequestHandler = async () => {
 	console.log('[TestRoute] GET /api/test-eds-new');
 	console.log('[TestRoute] Starting EDS test');
 
-	//const client = new ClientEdsSoap();
-	const client = createEdsClient();
+	const client = getEdsClient();
 
 	try {
 		const sampleTags = ['m100fi', 'fi8001', 'si1000-6'];

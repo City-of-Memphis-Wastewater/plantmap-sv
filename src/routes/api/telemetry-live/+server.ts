@@ -6,7 +6,7 @@ import type { SensorNode } from '$lib/stores/telemetry.svelte';
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { createEdsClient } from '$lib/server/eds/factory';
+import { getEdsClient } from '$lib/server/eds/factory';
 
 function loadSensorMap(): Record<string, SensorNode> {
 	const configPath = resolve(process.cwd(), 'static/config/sensors.json');
@@ -24,6 +24,7 @@ function loadSensorMap(): Record<string, SensorNode> {
 
 	return parsed;
 }
+
 
 export const GET: RequestHandler = async () => {
 	console.log('[API /telemetry-live] GET called');
@@ -51,9 +52,8 @@ export const GET: RequestHandler = async () => {
 		});
 	}
 
-	//const client = new ClientEdsSoap();
-	const client = createEdsClient();
-
+    const client = getEdsClient();
+    
 	try {
 		const liveData = await client.points.getRegex(sensorIds);
 
@@ -105,17 +105,5 @@ export const GET: RequestHandler = async () => {
 			timestamp: new Date().toISOString(),
 			sensors: fallbackSensors
 		});
-	} finally {
-		console.log('[API /telemetry-live] Logging out of EDS...');
-
-		try {
-			await client.auth.logout();
-
-			console.log('[API /telemetry-live] EDS logout complete');
-			console.log('[API /telemetry-live] ========================================');
-			console.log('');
-		} catch (error) {
-			console.error('[API /telemetry-live] EDS logout failed:', error);
-		}
 	}
 };

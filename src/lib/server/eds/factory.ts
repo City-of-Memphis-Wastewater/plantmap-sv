@@ -4,7 +4,17 @@ import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '$lib/plantmap/
 import { loadPlantMapConfig } from '$lib/plantmap/config';
 import { loadPlantMapSecret } from '$lib/plantmap/secret';
 
-import { ClientEdsSoap } from './client';
+import { ClientEdsSoap } from './client.ts';
+
+let client: ClientEdsSoap | undefined;
+
+export function getEdsClient(): ClientEdsSoap {
+    if (!client) {
+        client = createEdsClient();
+    }
+
+    return client;
+}
 
 export function createEdsClient(): ClientEdsSoap {
 	const config = bootstrapPlantMapConfig();
