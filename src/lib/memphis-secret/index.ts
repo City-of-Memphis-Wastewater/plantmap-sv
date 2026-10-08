@@ -28,7 +28,6 @@ export class MemphisSecret {
 
 	public isInitialized(): boolean {
 		return isVaultInitialized(this.appDir);
-		//return requireVault(this.appDir);
 	}
 
 	public initializeVault(): void {
@@ -36,8 +35,14 @@ export class MemphisSecret {
 		initializeVault(this.appDir);
 	}
 
-	public value(service: string, item: string): SecretValue | undefined {
-		const encrypted = getCredential(service, item, this.appDir);
+	public value(key: string): SecretValue | undefined;
+	public value(service: string, item: string): SecretValue | undefined;
+
+	public value(keyOrService: string, item?: string): SecretValue | undefined {
+		const [service, secretItem] =
+			item === undefined ? this.parseKey(keyOrService) : [keyOrService, item];
+
+		const encrypted = getCredential(service, secretItem, this.appDir);
 
 		if (!encrypted) {
 			return undefined;
@@ -46,22 +51,63 @@ export class MemphisSecret {
 		return decrypt(encrypted, this.appDir);
 	}
 
+	public setValue(key: string, value: SecretValue, options?: MemphisSecretSetOptions): void;
+
 	public setValue(
 		service: string,
 		item: string,
 		value: SecretValue,
+		options?: MemphisSecretSetOptions
+	): void;
+
+	public setValue(
+		keyOrService: string,
+		valueOrItem: string,
+		valueOrOptions?: SecretValue | MemphisSecretSetOptions,
 		options: MemphisSecretSetOptions = {}
 	): void {
+		let service: string;
+		let item: string;
+		let value: SecretValue;
+		let setOptions: MemphisSecretSetOptions;
+
+		if (typeof valueOrOptions === 'string') {
+			service = keyOrService;
+			item = valueOrItem;
+			value = valueOrOptions;
+			setOptions = options;
+		} else {
+			[service, item] = this.parseKey(keyOrService);
+			value = valueOrItem;
+			setOptions = valueOrOptions ?? {};
+		}
+
 		const encrypted = encrypt(value, this.appDir);
 
-		setCredential(service, item, encrypted, this.appDir, options.overwrite ?? true);
+		setCredential(service, item, encrypted, this.appDir, setOptions.overwrite ?? true);
 	}
 
-	public remove(service: string, item: string): boolean {
-		return removeCredential(service, item, this.appDir);
+	public remove(key: string): boolean;
+	public remove(service: string, item: string): boolean;
+
+	public remove(keyOrService: string, item?: string): boolean {
+		const [service, secretItem] =
+			item === undefined ? this.parseKey(keyOrService) : [keyOrService, item];
+
+		return removeCredential(service, secretItem, this.appDir);
 	}
 
 	public list(): MemphisSecretItem[] {
 		return listCredentials(this.appDir);
+	}
+
+	private parseKey(key: string): [string, string] {
+		const parts = key.split('.');
+
+		if (key.trim() === '' || parts.length !== 2 || parts.some((part) => part.trim() === '')) {
+			throw new Error('[memphis-secret] Secret key must use "service.item" format.');
+		}
+
+		return [parts[0], parts[1]];
 	}
 }
