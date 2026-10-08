@@ -5,110 +5,264 @@ import os from 'node:os';
 import path from 'node:path';
 
 import type {
-	ConfigValue,
-	MemphisConfigItem,
-	MemphisConfigOptions,
-	MemphisConfigSetOptions
-} from './types.ts';
+        ConfigValue,
+        MemphisConfigItem,
+        MemphisConfigOptions,
+        MemphisConfigSetOptions
+} from './types';
 
 export class MemphisConfig {
-	private readonly configFile: string;
-	private values: Record<string, ConfigValue> = {};
+        private readonly configFile: string;
+        private values: Record<string, ConfigValue> = {};
 
-	constructor(options: MemphisConfigOptions = {}) {
-		const configDir = options.appDir
-			? path.join(options.appDir, '.memphis-config')
-			: path.join(os.homedir(), '.memphis-config');
+        constructor(options: MemphisConfigOptions = {}) {
+                const configDir = options.appDir
+                        ? path.join(options.appDir, '.memphis-config')
+                        : path.join(os.homedir(), '.memphis-config');
 
-		this.configFile = path.join(configDir, 'values.json');
+                this.configFile = path.join(configDir, 'values.json');
 
-		if (existsSync(this.configFile)) {
-			this.values = JSON.parse(readFileSync(this.configFile, 'utf8'));
-		}
-	}
+                if (existsSync(this.configFile)) {
+                        this.values = JSON.parse(
+                                readFileSync(this.configFile, 'utf8')
+                        );
+                }
+        }
 
-	public isInitialized(): boolean {
-		return existsSync(this.configFile);
-	}
+        public isInitialized(): boolean {
+                return existsSync(this.configFile);
+        }
 
-	public value(key: string): ConfigValue | undefined {
-		const parts = key.split('.');
+        /**
+         * Read a configuration value using dot notation.
+         *
+         * Example:
+         *
+         *     config.value('eds.host');
+         */
+        public value(key: string): ConfigValue | undefined;
 
-		let current: ConfigValue = this.values;
+        /**
+         * Read a configuration value using separate path components.
+         *
+         * Example:
+         *
+         *     config.value('eds', 'host');
+         */
+        public value(service: string, item: string): ConfigValue | undefined;
 
-		for (const part of parts) {
-			if (
-				typeof current !== 'object' ||
-				current === null ||
-				Array.isArray(current) ||
-				!(part in current)
-			) {
-				return undefined;
-			}
+        public value(
+                keyOrService: string,
+                item?: string
+        ): ConfigValue | undefined {
+                const key =
+                        item === undefined
+                                ? keyOrService
+                                : `${keyOrService}.${item}`;
 
-			current = current[part];
-		}
+                const parts = this.parseKey(key);
 
-		return current;
-	}
+                let current: ConfigValue = this.values;
 
-	public setValue(key: string, value: ConfigValue, options: MemphisConfigSetOptions = {}): void {
-		const parts = key.split('.');
+                for (const part of parts) {
+                        if (
+                                typeof current !== 'object' ||
+                                current === null ||
+                                Array.isArray(current) ||
+                                !(part in current)
+                        ) {
+                                return undefined;
+                        }
 
-		if (key.trim() === '' || parts.some((part) => part.trim() === '')) {
-			throw new Error('Configuration key cannot be empty');
-		}
+                        current = current[part];
+                }
 
-		const existing = this.value(key);
+                return current;
+        }
 
-		if (existing !== undefined && options.overwrite === false) {
-			return;
-		}
+        /**
+         * Store a configuration value using dot notation.
+         *
+         * Existing values are overwritten by default.
+         *
+         * Example:
+         *
+         *     config.setValue('eds.host', 'test');
+         *
+         * Set `overwrite: false` to preserve an existing value.
+         *
+         *     config.setValue('eds.host', 'new-host', {
+         *         overwrite: false
+         *     });
+         */
+        public setValue(
+                key: string,
+                value: ConfigValue,
+                options?: MemphisConfigSetOptions
+        ): void;
 
-		let current: Record<string, ConfigValue> = this.values;
+        /**
+         * Store a configuration value using separate path components.
+         *
+         * This is equivalent to the dot-notation form:
+         *
+         *     config.setValue('eds', 'host', 'test');
+         *
+         * is equivalent to:
+         *
+         *     config.setValue('eds.host', 'test');
+         */
+        public setValue(
+                service: string,
+                item: string,
+                value: ConfigValue,
+                options?: MemphisConfigSetOptions
+        ): void;
 
-		for (const part of parts.slice(0, -1)) {
-			const child = current[part];
+        public setValue(
+                keyOrService: string,
+                valueOrItem: ConfigValue,
+                valueOrOptions?: ConfigValue | MemphisConfigSetOptions,
+                options: MemphisConfigSetOptions = {}
+        ): void {
+                let key: string;
+                let value: ConfigValue;
+                let setOptions: MemphisConfigSetOptions;
 
-			if (typeof child !== 'object' || child === null || Array.isArray(child)) {
-				current[part] = {};
-			}
+                /*
+                 * Two supported forms:
+                 *
+                 *   setValue('eds.host', value, options?)
+                 *
+                 *   setValue('eds', 'host', value, options?)
+                 *
+                 * The presence of a third argument determines which
+                 * runtime form was supplied.
+                 */
+                if (valueOrOptions !== undefined) {
+                        key = `${keyOrService}.${String(valueOrItem)}`;
+                        value = valueOrOptions as ConfigValue;
+                        setOptions = options;
+                } else {
+                        key = keyOrService;
+                        value = valueOrItem;
+                        setOptions = {};
+                }
 
-			current = current[part] as Record<string, ConfigValue>;
-		}
+                const parts = this.parseKey(key);
+                const existing = this.value(key);
 
-		current[parts[parts.length - 1]] = value;
+                if (existing !== undefined && setOptions.overwrite === false) {
+                        console.log(
+                                `[memphis-config] Configuration already exists: ${key}`
+                        );
+                        return;
+                }
 
-		const configDir = path.dirname(this.configFile);
+                let current: Record<string, ConfigValue> = this.values;
 
-		mkdirSync(configDir, { recursive: true });
+                for (const part of parts.slice(0, -1)) {
+                        const child = current[part];
 
-		writeFileSync(this.configFile, JSON.stringify(this.values, null, 2) + '\n', 'utf8');
-	}
+                        if (
+                                typeof child !== 'object' ||
+                                child === null ||
+                                Array.isArray(child)
+                        ) {
+                                current[part] = {};
+                        }
 
-	public list(): MemphisConfigItem[] {
-		const items: MemphisConfigItem[] = [];
+                        current = current[part] as Record<string, ConfigValue>;
+                }
 
-		const walk = (value: ConfigValue, prefix = ''): void => {
-			if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-				if (prefix !== '') {
-					items.push({
-						key: prefix,
-						value
-					});
-				}
+                current[parts[parts.length - 1]] = value;
 
-				return;
-			}
+                const configDir = path.dirname(this.configFile);
 
-			for (const [key, child] of Object.entries(value)) {
-				const fullKey = prefix ? `${prefix}.${key}` : key;
-				walk(child, fullKey);
-			}
-		};
+                mkdirSync(configDir, { recursive: true });
 
-		walk(this.values);
+                writeFileSync(
+                        this.configFile,
+                        JSON.stringify(this.values, null, 2) + '\n',
+                        'utf8'
+                );
 
-		return items;
-	}
+                if (existing !== undefined) {
+                        console.log(
+                                `[memphis-config] Configuration overwritten: ${key}`
+                        );
+                } else {
+                        console.log(
+                                `[memphis-config] Configuration stored: ${key}`
+                        );
+                }
+        }
+
+        /**
+         * Return all leaf configuration values.
+         *
+         * Nested values are returned using dot notation.
+         *
+         * Example:
+         *
+         *     [
+         *         { key: 'eds.host', value: 'test' },
+         *         { key: 'server.port', value: '4000' }
+         *     ]
+         */
+        public list(): MemphisConfigItem[] {
+                const items: MemphisConfigItem[] = [];
+
+                const walk = (value: ConfigValue, prefix = ''): void => {
+                        if (
+                                typeof value !== 'object' ||
+                                value === null ||
+                                Array.isArray(value)
+                        ) {
+                                if (prefix !== '') {
+                                        items.push({
+                                                key: prefix,
+                                                value
+                                        });
+                                }
+
+                                return;
+                        }
+
+                        for (const [key, child] of Object.entries(value)) {
+                                const fullKey = prefix
+                                        ? `${prefix}.${key}`
+                                        : key;
+
+                                walk(child, fullKey);
+                        }
+                };
+
+                walk(this.values);
+
+                return items;
+        }
+
+        /**
+         * Convert either a dot-notation key or a single configuration
+         * component into validated path components.
+         *
+         * Configuration keys must contain at least two non-empty
+         * components when used through the overloaded API.
+         */
+        private parseKey(key: string): string[] {
+                const parts = key.split('.');
+
+                if (
+                        key.trim() === '' ||
+                        parts.length < 2 ||
+                        parts.some((part) => part.trim() === '')
+                ) {
+                        throw new Error(
+                                '[memphis-config] Configuration key must use "service.item" format.'
+                        );
+                }
+
+                return parts;
+        }
 }
