@@ -1,9 +1,8 @@
-
-$ErrorActionPreference = "Stop"
-
 param(
     [switch]$Force
 )
+
+$ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $PSScriptRoot
 $Source = Join-Path $Root "node_modules\cesium\Build\Cesium"
