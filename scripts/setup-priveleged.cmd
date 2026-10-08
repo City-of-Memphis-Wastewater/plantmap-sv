@@ -2,7 +2,7 @@
 
 set "SCRIPTDIR=%~dp0"
 set "APPDIR=%SCRIPTDIR%.."
-set "LOGFILE=%SCRIPTDIR%log-creds.txt"
+set "LOGFILE=%SCRIPTDIR%log-priveleged.txt"
 
 cd /d "%APPDIR%"
 
