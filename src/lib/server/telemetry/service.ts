@@ -150,4 +150,4 @@ class TelemetryService {
 
 export const telemetryService = new TelemetryService();
 
-telemetryService.startPolling(); // always on
+// telemetryService.startPolling(); // always on
