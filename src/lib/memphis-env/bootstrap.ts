@@ -1,12 +1,11 @@
-import os from 'node:os';
-import path from 'node:path';
+// the standard approach is for .env to be in root
 
 import { MemphisEnv } from './index.ts';
 
-export function bootstrapMemphisEnv(appName: string): MemphisEnv {
-    const appDir = path.join(os.homedir(), `.${appName}`);
-
-    return new MemphisEnv({
-        appDir
-    });
+export function bootstrapMemphisEnv(): MemphisEnv {
+    return new MemphisEnv();
 }
+
+/* 
+import { bootstrapMemphisEnv } from 'memphis-env/bootstrap';
+*/
