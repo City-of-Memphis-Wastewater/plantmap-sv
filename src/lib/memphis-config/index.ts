@@ -9,7 +9,7 @@ import type {
 	MemphisConfigItem,
 	MemphisConfigOptions,
 	MemphisConfigSetOptions
-} from './types';
+} from './types.ts';
 
 export class MemphisConfig {
 	private readonly configFile: string;
