@@ -60,6 +60,11 @@ export function initializeKey(appDir?: string): void {
 }
 
 export function encrypt(value: string, appDir?: string): Buffer {
+    if (typeof value !== 'string') {
+        throw new TypeError(
+            `[memphis-secret] Cannot encrypt non-string value: received ${typeof value}`
+        );
+    }
 	const key = loadKey(appDir);
 	const iv = randomBytes(IV_LENGTH);
 
