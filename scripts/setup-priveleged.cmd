@@ -22,7 +22,7 @@ if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"
 echo === Setup credentials and configuration === >> "%LOGFILE%"
-"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%setup.js" >> "%LOGFILE%" 2>&1
+"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%setup-creds.js" >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"

@@ -9,4 +9,4 @@ cd /d "%APPDIR%"
 echo Starting script at %DATE% %TIME% > "%LOGFILE%"
 echo %LOGFILE% >> "%LOGFILE%"
 
-"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%setup.js" >> "%LOGFILE%" 2>&1
+"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%setup-creds.js" >> "%LOGFILE%" 2>&1
