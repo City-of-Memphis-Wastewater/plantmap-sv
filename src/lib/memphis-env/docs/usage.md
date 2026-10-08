@@ -17,7 +17,7 @@ import { bootstrapMemphisEnv} from 'memphis-env/bootstrap';
 const env = bootstrapMemphisEnv()
 ```
 
-This sets us the config file reference for `./.env` in the root or the current working directory.
+This sets us the env file reference for `./.env` in the root or the current working directory.
 
 This has the same outcome as:
 
