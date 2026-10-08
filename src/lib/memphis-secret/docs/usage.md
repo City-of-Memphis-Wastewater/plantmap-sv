@@ -2,7 +2,7 @@
 
 ### Explicit app directory
 
-```ts
+````ts
 import { MemphisSecret } from 'memphis-secret';
 
 const config = new MemphisSecret({
@@ -16,11 +16,11 @@ import { bootstrapMemphisSecret } from 'memphis-secret/bootstrap';
 import packageJson from '../../../package.json' with { type: 'json' };
 
 const config = bootstrapMemphisSecret(packageJson.name)
-```
+````
 
 This sets up the secret file reference for `~/.my-package/.memphis-secret/vault.db`.
 
-## Default directory 
+## Default directory
 
 ```ts
 import { MemphisSecret } from 'memphis-secret';
@@ -35,5 +35,5 @@ This sets up the secret vault file reference for `~/.memphis-secret/values.json`
 However you set up the vault, you must initialize it before you can use it.
 
 ```ts
-secret.initializeVault()
+secret.initializeVault();
 ```

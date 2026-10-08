@@ -2,7 +2,7 @@
 
 ### Explicit app directory
 
-```ts
+````ts
 import { MemphisConfig } from 'memphis-config';
 
 const config = new MemphisConfig({
@@ -16,11 +16,11 @@ import { bootstrapMemphisConfig } from 'memphis-config/bootstrap';
 import packageJson from '../../../package.json' with { type: 'json' };
 
 const config = bootstrapMemphisConfig(packageJson.name)
-```
+````
 
 This sets up the config file reference for `~/.my-package/.memphis-config/values.json`.
 
-## Default directory 
+## Default directory
 
 ```ts
 import { MemphisConfig } from 'memphis-config';
@@ -31,4 +31,3 @@ const config = new MemphisConfig();
 This sets up the config file reference for `~/.memphis-config/values.json`.
 
 ---
-

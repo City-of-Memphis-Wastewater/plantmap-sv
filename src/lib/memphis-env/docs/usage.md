@@ -2,7 +2,7 @@
 
 ### Explicit app directory, if you were so inclined
 
-```ts
+````ts
 import { MemphisEnv } from 'memphis-env';
 
 const env = new MemphisEnv({
@@ -15,7 +15,7 @@ const env = new MemphisEnv({
 import { bootstrapMemphisEnv} from 'memphis-env/bootstrap';
 
 const env = bootstrapMemphisEnv()
-```
+````
 
 This sets us the env file reference for `./.env` in the root or the current working directory.
 
