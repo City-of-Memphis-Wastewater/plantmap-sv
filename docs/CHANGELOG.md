@@ -15,6 +15,7 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 - hook entry point
 - bootstrappers for memphis-config, memphis-secret, and memphis-env
+- memphis-secret machination, to replace memphis-env usage
 
 ---
 
