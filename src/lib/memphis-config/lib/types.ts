@@ -12,6 +12,7 @@ export interface MemphisConfigSetOptions {
 }
 
 export interface MemphisConfigItem {
-	key: string;
-	value: ConfigValue;
+        service: string;
+        item: string;
+        value: ConfigValue;
 }
