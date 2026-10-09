@@ -4,6 +4,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import { deleteConfigValue } from './operations//delete.ts';
+import { setConfigValue } from './operations/set.ts';
+
 import type {
 	ConfigValue,
 	MemphisConfigItem,
@@ -104,71 +107,71 @@ export class MemphisConfig {
 		options?: MemphisConfigSetOptions
 	): void;
 
-	public setValue(
-		keyOrService: string,
-		valueOrItem: ConfigValue,
-		valueOrOptions?: ConfigValue | MemphisConfigSetOptions,
-		options: MemphisConfigSetOptions = {}
-	): void {
-		let key: string;
-		let value: ConfigValue;
-		let setOptions: MemphisConfigSetOptions;
 
-		/*
-		 * Two supported forms:
-		 *
-		 *   setValue('eds.host', value, options?)
-		 *
-		 *   setValue('eds', 'host', value, options?)
-		 *
-		 * The presence of a third argument determines which
-		 * runtime form was supplied.
-		 */
-		if (valueOrOptions !== undefined) {
-			key = `${keyOrService}.${String(valueOrItem)}`;
-			value = valueOrOptions as ConfigValue;
-			setOptions = options;
-		} else {
-			key = keyOrService;
-			value = valueOrItem;
-			setOptions = {};
-		}
+    public setValue(
+        keyOrService: string,
+        valueOrItem: ConfigValue,
+        valueOrOptions?: ConfigValue | MemphisConfigSetOptions,
+        options: MemphisConfigSetOptions = {}
+    ): void {
+        let key: string;
+        let value: ConfigValue;
+        let setOptions: MemphisConfigSetOptions;
 
-		const parts = this.parseKey(key);
-		const existing = this.value(key);
+        if (arguments.length >= 3) {
+                key = `${keyOrService}.${String(valueOrItem)}`;
+                value = valueOrOptions as ConfigValue;
+                setOptions = options;
+        } else {
+                key = keyOrService;
+                value = valueOrItem;
+                setOptions = {};
+        }
 
-		if (existing !== undefined && setOptions.overwrite !== true) {
-			console.log(`[memphis-config] Configuration already exists: ${key}`);
-			return;
-		}
+        setConfigValue(
+                this.values,
+                this.configFile,
+                key,
+                value,
+                setOptions
+        );
+    }
 
-		let current: Record<string, ConfigValue> = this.values;
+    //---
 
-		for (const part of parts.slice(0, -1)) {
-			const child = current[part];
+    /**
+     * Delete a configuration value using dot notation.
+     *
+     * Example:
+     *     config.deleteValue('eds.host');
+     */
+    public deleteValue(key: string): boolean;
 
-			if (typeof child !== 'object' || child === null || Array.isArray(child)) {
-				current[part] = {};
-			}
+    /**
+     * Delete a configuration value using separate path components.
+     *
+     * Example:
+     *     config.deleteValue('eds', 'host');
+     */
+    public deleteValue(service: string, item: string): boolean;
 
-			current = current[part] as Record<string, ConfigValue>;
-		}
+    public deleteValue(
+            keyOrService: string,
+            item?: string
+    ): boolean {
+            const key = item === undefined
+                    ? keyOrService
+                    : `${keyOrService}.${item}`;
 
-		current[parts[parts.length - 1]] = value;
+            return deleteConfigValue(
+                    this.values,
+                    this.configFile,
+                    key
+            );
+    }
 
-		const configDir = path.dirname(this.configFile);
-
-		mkdirSync(configDir, { recursive: true });
-
-		writeFileSync(this.configFile, JSON.stringify(this.values, null, 2) + '\n', 'utf8');
-
-		if (existing !== undefined) {
-			console.log(`[memphis-config] Configuration overwritten: ${key}`);
-		} else {
-			console.log(`[memphis-config] Configuration stored: ${key}`);
-		}
-	}
-
+    //---
+    
 	/**
 	 * Return all leaf configuration values.
 	 *
