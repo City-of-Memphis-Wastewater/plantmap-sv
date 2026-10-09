@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-import type { MemphisSecret } from '$lib/memphis-secret';
+import type { MemphisSecret } from 'memphis-settings';
 
 const PlantMapSecretSchema = z.object({
 	eds: z.object({

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-import type { MemphisConfig } from '$lib/memphis-config';
+import type { MemphisConfig } from 'memphis-settings';
 
 export const PlantMapConfigSchema = z.object({
 	eds: z.object({
