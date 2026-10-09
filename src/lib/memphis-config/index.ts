@@ -76,14 +76,14 @@ export class MemphisConfig {
 	 * Store a configuration value using dot notation.
 	 *
 	 * Existing values are preserved by default.
-     *
-     * Set `overwrite: true` to explicitly replace an existing value.
-     *
-     *     config.setValue('eds.host', 'new-host', {
-     *         overwrite: true
-     *     });
-     *
-     /
+	 *
+	 * Set `overwrite: true` to explicitly replace an existing value.
+	 *
+	 *     config.setValue('eds.host', 'new-host', {
+	 *         overwrite: true
+	 *     });
+	 *
+	 */
 	public setValue(key: string, value: ConfigValue, options?: MemphisConfigSetOptions): void;
 
 	/**
