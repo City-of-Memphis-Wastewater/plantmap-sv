@@ -11,6 +11,6 @@ export function config() {
 		return;
 	}
 	for (const item of configs.list()) {
-		console.log(`${item.key}=${item.value}`);
+		console.log(`${item.service},${item.item}=${item.value}`);
 	}
 }
