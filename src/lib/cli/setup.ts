@@ -12,17 +12,17 @@ export async function setup() {
 
 	const protocol = await input({
 		message: 'Ovation EDS endpoint protocol:',
-		default: (config.value('eds.protocol') as string | undefined) ?? 'http://'
+		default: (config.value('eds','protocol') as string | undefined) ?? 'http://'
 	});
 
 	const host = await input({
 		message: 'Ovation EDS endpoint host address:',
-		default: (config.value('eds.host') as string | undefined) ?? '127.0.0.1'
+		default: (config.value('eds','host') as string | undefined) ?? '127.0.0.1'
 	});
 
 	const soapPort = await number({
 		message: 'Ovation EDS SOAP API port:',
-		default: (config.value('eds.soapPort') as number | undefined) ?? 43080
+		default: (config.value('eds','soapPort') as number | undefined) ?? 43080
 	});
 
 	if (soapPort === undefined) {
@@ -46,12 +46,12 @@ export async function setup() {
 
 	const suffix = await input({
 		message: 'Ovation EDS suffix:',
-		default: (config.value('eds.suffix') as string | undefined) ?? '.UNIT0@NET0'
+		default: (config.value('eds','suffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
 	const appPort = await number({
 		message: 'Host server port for this app:',
-		default: (config.value('server.port') as number | undefined) ?? 4000
+		default: (config.value('server','port') as number | undefined) ?? 4000
 	});
 
 	if (appPort === undefined) {
@@ -60,16 +60,16 @@ export async function setup() {
 
 	const debug = await confirm({
 		message: 'Enable EDS debugging?',
-		default: (config.value('eds.debug') as boolean | undefined) ?? false
+		default: (config.value('eds','debug') as boolean | undefined) ?? false
 	});
 
 	// --- Save ---
 
 	//env.setValue('OVATION_EDS_BASE_URL', baseUrl);
 
-	config.setValue('eds.protocol', protocol);
+	config.setValue('eds','protocol', protocol);
 
-	config.setValue('eds.host', host);
+	config.setValue('eds','host', host);
 
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
@@ -83,11 +83,11 @@ export async function setup() {
 		secret.setValue('eds', 'password', edsPassword);
 	}
 
-	config.setValue('eds.soapPort', soapPort);
+	config.setValue('eds','soapPort', soapPort);
 
-	config.setValue('eds.suffix', suffix);
+	config.setValue('eds','suffix', suffix);
 
-	config.setValue('server.port', appPort);
+	config.setValue('server','port', appPort);
 
-	config.setValue('eds.debug', debug);
+	config.setValue('eds','debug', debug);
 }

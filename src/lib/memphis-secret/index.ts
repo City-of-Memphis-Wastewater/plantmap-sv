@@ -60,7 +60,7 @@ export class MemphisSecret {
 	 *
 	 * Example:
 	 *
-	 *     secret.value('eds.username');
+	 *     secret.value('eds','username');
 	 *
 	 * The first component identifies the service and the
 	 * second component identifies the secret within that service.
@@ -76,7 +76,7 @@ export class MemphisSecret {
 	 *
 	 * is equivalent to:
 	 *
-	 *     secret.value('eds.username');
+	 *     secret.value('eds','username');
 	 */
 	public value(service: string, item: string): SecretValue | undefined;
 
@@ -100,12 +100,12 @@ export class MemphisSecret {
 	 *
 	 * Example:
 	 *
-	 *     secret.setValue('eds.username', 'operator');
+	 *     secret.setValue('eds','username', 'operator');
 	 *
 	 * Pass `{ overwrite: false }` to preserve an existing
 	 * secret instead.
 	 *
-	 *     secret.setValue('eds.username', 'operator', {
+	 *     secret.setValue('eds','username', 'operator', {
 	 *         overwrite: false
 	 *     });
 	 */
@@ -120,7 +120,7 @@ export class MemphisSecret {
 	 *
 	 * is equivalent to:
 	 *
-	 *     secret.setValue('eds.username', 'operator');
+	 *     secret.setValue('eds','username', 'operator');
 	 *
 	 * Options may be supplied as the fourth argument.
 	 */
@@ -166,7 +166,7 @@ export class MemphisSecret {
 	 *
 	 * Example:
 	 *
-	 *     secret.remove('eds.username');
+	 *     secret.remove('eds','username');
 	 */
 	public remove(key: string): boolean;
 
@@ -175,7 +175,7 @@ export class MemphisSecret {
 	 *
 	 * This is equivalent to:
 	 *
-	 *     secret.remove('eds.username');
+	 *     secret.remove('eds','username');
 	 */
 	public remove(service: string, item: string): boolean;
 

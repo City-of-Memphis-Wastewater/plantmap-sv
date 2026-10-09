@@ -23,15 +23,15 @@ export type PlantMapConfig = z.infer<typeof PlantMapConfigSchema>;
 export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 	return PlantMapConfigSchema.parse({
 		eds: {
-			protocol: config.value('eds.protocol') ?? 'http://',
-			host: config.value('eds.host') ?? '127.0.0.1',
-			soapPort: config.value('eds.soapPort') ?? 43080,
-			suffix: config.value('eds.suffix') ?? '.UNIT0@NET0',
-			debug: config.value('eds.debug') ?? false
+			protocol: config.value('eds','protocol') ?? 'http://',
+			host: config.value('eds','host') ?? '127.0.0.1',
+			soapPort: config.value('eds','soapPort') ?? 43080,
+			suffix: config.value('eds','suffix') ?? '.UNIT0@NET0',
+			debug: config.value('eds','debug') ?? false
 		},
 
 		server: {
-			port: config.value('server.port') ?? 4000 // 5173
+			port: config.value('server','port') ?? 4000 // 5173
 		}
 	});
 }
