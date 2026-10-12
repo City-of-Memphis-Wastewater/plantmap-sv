@@ -65,9 +65,9 @@ export async function setup() {
 
 	// --- Save ---
 
-	//env.setValue('OVATION_EDS_BASE_URL', baseUrl, true);
+	//env.setValue('OVATION_EDS_BASE_URL', baseUrl, { overwrite: true });
 
-	config.setValue('eds', 'protocol', protocol, true);
+	config.setValue('eds', 'protocol', protocol, { overwrite: true });
 
 	config.setValue('eds', 'host', host, true);
 
@@ -76,18 +76,18 @@ export async function setup() {
 	}
 
 	if (username !== '') {
-		secret.setValue('eds', 'username', username, true);
+		secret.setValue('eds', 'username', username, { overwrite: true });
 	}
 
 	if (edsPassword !== '') {
-		secret.setValue('eds', 'password', edsPassword, true);
+		secret.setValue('eds', 'password', edsPassword, { overwrite: true });
 	}
 
-	config.setValue('eds', 'soapPort', soapPort, true);
+	config.setValue('eds', 'soapPort', soapPort, { overwrite: true });
 
-	config.setValue('eds', 'suffix', suffix, true);
+	config.setValue('eds', 'suffix', suffix, { overwrite: true });
 
-	config.setValue('server', 'port', appPort, true);
+	config.setValue('server', 'port', appPort, { overwrite: true });
 
-	config.setValue('eds', 'debug', debug, true);
+	config.setValue('eds', 'debug', debug, { overwrite: true });
 }
