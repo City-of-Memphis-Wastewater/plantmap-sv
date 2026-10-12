@@ -65,29 +65,29 @@ export async function setup() {
 
 	// --- Save ---
 
-	//env.setValue('OVATION_EDS_BASE_URL', baseUrl);
+	//env.setValue('OVATION_EDS_BASE_URL', baseUrl, true);
 
-	config.setValue('eds', 'protocol', protocol);
+	config.setValue('eds', 'protocol', protocol, true);
 
-	config.setValue('eds', 'host', host);
+	config.setValue('eds', 'host', host, true);
 
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
 	}
 
 	if (username !== '') {
-		secret.setValue('eds', 'username', username);
+		secret.setValue('eds', 'username', username, true);
 	}
 
 	if (edsPassword !== '') {
-		secret.setValue('eds', 'password', edsPassword);
+		secret.setValue('eds', 'password', edsPassword, true);
 	}
 
-	config.setValue('eds', 'soapPort', soapPort);
+	config.setValue('eds', 'soapPort', soapPort, true);
 
-	config.setValue('eds', 'suffix', suffix);
+	config.setValue('eds', 'suffix', suffix, true);
 
-	config.setValue('server', 'port', appPort);
+	config.setValue('server', 'port', appPort, true);
 
-	config.setValue('eds', 'debug', debug);
+	config.setValue('eds', 'debug', debug, true);
 }
