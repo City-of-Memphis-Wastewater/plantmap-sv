@@ -69,7 +69,7 @@ export async function setup() {
 
 	config.setValue('eds', 'protocol', protocol, { overwrite: true });
 
-	config.setValue('eds', 'host', host, true);
+	config.setValue('eds', 'host', host, { overwrite: true });
 
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
