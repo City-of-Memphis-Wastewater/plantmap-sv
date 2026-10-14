@@ -1,8 +1,16 @@
 // src/lib/cli/start.ts
 
 import { spawn } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { bootstrapPlantMapConfig } from '../plantmap/bootstrap.ts';
 import { loadPlantMapConfig } from '../plantmap/config.ts';
+
+const projectDir = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    '../../../..'
+);
 
 export function start(args: string[] = []) {
     //let port = process.env.PORT ?? '4000';
@@ -30,7 +38,8 @@ export function start(args: string[] = []) {
         }
     }
 
-    const child = spawn(process.execPath, ['build/index.js'], {
+    const child = spawn(process.execPath, [path.join(projectDir, 'build/index.js')], {
+        cwd: projectDir,
         env: {
             ...process.env,
             NODE_ENV: 'production',
