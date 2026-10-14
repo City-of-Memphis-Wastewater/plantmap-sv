@@ -1,10 +1,16 @@
 // src/lib/cli/start.ts
 
 import { spawn } from 'node:child_process';
+import { bootstrapPlantMapConfig } from '../plantmap/bootstrap.ts';
+import { loadPlantMapConfig } from '../plantmap/config.ts';
 
 export function start(args: string[] = []) {
-    let port = process.env.PORT ?? '4000';
+    //let port = process.env.PORT ?? '4000';
+    const config = bootstrapPlantMapConfig();
+    const plantMapConfig = loadPlantMapConfig(config);
 
+    let port = process.env.PORT ?? String(plantMapConfig.prodServer.port);
+    
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--port') {
             const value = args[++i];

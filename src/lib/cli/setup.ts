@@ -60,7 +60,7 @@ export async function setup() {
 
 	const devPort = await number({
 		message: 'Development server port for this app:',
-		default: (config.value('devServer', 'port') as number | undefined) ?? 4000
+		default: (config.value('devServer', 'port') as number | undefined) ?? 5173
 	});
 
 	if (devPort === undefined) {
