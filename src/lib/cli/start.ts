@@ -9,7 +9,7 @@ import { loadPlantMapConfig } from '../plantmap/config.ts';
 
 const projectDir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
-    '../../../..'
+    '../../..'
 );
 
 export function start(args: string[] = []) {
