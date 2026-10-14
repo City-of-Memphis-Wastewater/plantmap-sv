@@ -54,7 +54,7 @@ The application does not require Bun.
 ## Dependencies
 
 - cesium
-- memphis-settings: https://github.com/City-of-Memphis-Wastewater/plantmap-sv
+- memphis-settings: https://github.com/City-of-Memphis-Wastewater/memphis-settings
 - three
 - three-geo
 - proj4
