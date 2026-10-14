@@ -3,6 +3,7 @@
 import { setup } from './setup.ts';
 import { secret } from './secret.ts';
 import { config } from './config.ts';
+import { start } from './start.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -19,6 +20,10 @@ export async function runCli(args: string[]) {
 		case 'config':
 			config();
 			return;
+
+	    case 'start':
+            start(args.slice(1));
+            return;
 
 		case 'help':
 			printHelp();
@@ -40,6 +45,7 @@ Usage:
   plantmap <command>
 
 Commands:
+  start     Start the production server
   setup     Configure PlantMap
   secret    List secrets stored in app dir
   config    List config values stored in app dir
