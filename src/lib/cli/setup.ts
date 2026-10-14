@@ -49,13 +49,22 @@ export async function setup() {
 		default: (config.value('eds', 'suffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
-	const appPort = await number({
-		message: 'Host server port for this app:',
-		default: (config.value('server', 'port') as number | undefined) ?? 4000
+	const prodPort = await number({
+		message: 'Production server port for this app:',
+		default: (config.value('prodServer', 'port') as number | undefined) ?? 4000
 	});
 
-	if (appPort === undefined) {
-		throw new Error('Host server port is required');
+	if (prodPort === undefined) {
+		throw new Error('Production server port is required');
+	}
+
+	const devPort = await number({
+		message: 'Development server port for this app:',
+		default: (config.value('devServer', 'port') as number | undefined) ?? 4000
+	});
+
+	if (devPort === undefined) {
+		throw new Error('Development server port is required');
 	}
 
 	const debug = await confirm({
@@ -87,7 +96,9 @@ export async function setup() {
 
 	config.setValue('eds', 'suffix', suffix, { overwrite: true });
 
-	config.setValue('server', 'port', appPort, { overwrite: true });
+	config.setValue('devServer', 'port', devPort, { overwrite: true });
 
+    config.setValue('prodServer', 'port', prodPort, { overwrite: true });
+    
 	config.setValue('eds', 'debug', debug, { overwrite: true });
 }
