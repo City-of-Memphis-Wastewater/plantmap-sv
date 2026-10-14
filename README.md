@@ -51,6 +51,15 @@ bun run dev
 
 The application does not require Bun.
 
+## Dependencies
+
+- cesium
+- memphis-settings: https://github.com/City-of-Memphis-Wastewater/plantmap-sv
+- three
+- three-geo
+- proj4
+- zod
+
 ## Source
 
 https://github.com/City-of-Memphis-Wastewater/plantmap-sv
