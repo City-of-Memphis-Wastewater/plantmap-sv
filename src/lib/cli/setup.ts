@@ -2,7 +2,21 @@
 
 import { input, password, confirm, number } from '@inquirer/prompts';
 
-import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap/bootstrap.ts';
+import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap-sv/bootstrap.ts';
+
+
+function validatePort(value: number | undefined, name: string): number {
+	if (
+		value === undefined ||
+		!Number.isInteger(value) ||
+		value < 1 ||
+		value > 65535
+	) {
+		throw new Error(`${name} must be an integer between 1 and 65535`);
+	}
+
+	return value;
+}
 
 export async function setup() {
 	const config = bootstrapPlantMapConfig();
@@ -20,14 +34,14 @@ export async function setup() {
 		default: (config.value('eds', 'host') as string | undefined) ?? '127.0.0.1'
 	});
 
-	const soapPort = await number({
-		message: 'Ovation EDS SOAP API port:',
-		default: (config.value('eds', 'soapPort') as number | undefined) ?? 43080
-	});
-
-	if (soapPort === undefined) {
-		throw new Error('Ovation EDS port is required');
-	}
+	
+	const soapPort = validatePort(
+		await number({
+			message: 'Ovation EDS SOAP API port:',
+			default: (config.value('eds', 'soapPort') as number | undefined) ?? 43080
+		}),
+		'Ovation EDS SOAP API port'
+	);
 
 	const existingUsername = secret.value('eds', 'username');
 	const existingPassword = secret.value('eds', 'password');
@@ -49,23 +63,21 @@ export async function setup() {
 		default: (config.value('eds', 'iessSuffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
-	const prodPort = await number({
-		message: 'Production server port for this app:',
-		default: (config.value('prodServer', 'port') as number | undefined) ?? 4000
-	});
+	const prodPort = validatePort(
+		await number({
+			message: 'Production server port for this app:',
+			default: (config.value('prodServer', 'port') as number | undefined) ?? 4000
+		}),
+		'Production server port'
+	);
 
-	if (prodPort === undefined) {
-		throw new Error('Production server port is required');
-	}
-
-	const devPort = await number({
-		message: 'Development server port for this app:',
-		default: (config.value('devServer', 'port') as number | undefined) ?? 5173
-	});
-
-	if (devPort === undefined) {
-		throw new Error('Development server port is required');
-	}
+	const devPort = validatePort(
+		await number({
+			message: 'Development server port for this app:',
+			default: (config.value('devServer', 'port') as number | undefined) ?? 5173
+		}),
+		'Development server port'
+	);
 
 	const debug = await confirm({
 		message: 'Enable EDS debugging?',
