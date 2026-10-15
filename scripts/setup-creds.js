@@ -9,7 +9,7 @@ const secret = bootstrapPlantMapSecret();
 config.setValue('eds', 'host', env.requiredValue('EDS_HOST'));
 config.setValue('eds', 'protocol', env.requiredValue('EDS_PROTOCOL'));
 config.setValue('eds', 'soapPort', env.requiredValue('EDS_SOAP_PORT'));
-config.setValue('eds', 'suffix', env.requiredValue('EDS_SUFFIX'));
+config.setValue('eds', 'iessSuffix', env.requiredValue('EDS_IESS_SUFFIX'));
 config.setValue('eds', 'debug', env.requiredValue('EDS_DEBUG'));
 config.setValue('devServer', 'port', env.requiredValue('DEV_SERVER_PORT'));
 config.setValue('prodServer', 'port', env.requiredValue('PROD_SERVER_PORT'));
