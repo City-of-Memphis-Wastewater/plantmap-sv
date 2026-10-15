@@ -1,134 +1,86 @@
-{
-  "SWG-100": {
-    "id": "SWG-100",
-    "name": "SWG 100 Biogas Analyzer",
-    "lat": 35.067038,
-    "lon": -90.135478,
-    "altitude": 3,
-    "value": 450,
-    "unit": "ppm H2S",
-    "precision": 2,
-    "status": "normal"
-  },
-  "BIOREM-01": {
-    "id": "BIOREM-01",
-    "name": "BioRem Scrubber Stage 1",
-    "lat": 35.067049,
-    "lon": -90.135734,
-    "altitude": 10,
-    "value": 12.4,
-    "unit": "in. w.c.",
-    "precision": 2,
-    "status": "normal"
-  },
-  "M100FI": {
-    "id": "M100FI",
-    "name": "Plant Influent",
-    "lat":  35.071853,
-    "lon": -90.154216,
-    "altitude": -12,
-    "value": 66.7,
-    "unit": "MGD",
-    "precision": 2,
-    "status": "normal"
-  },
-  "FI8001": {
-    "id": "FI8001",
-    "name": "Plant Effluent",
-    "lat": 35.071363,
-    "lon": -90.160027,
-    "altitude": 4,
-    "value": 55.4,
-    "unit": "MGD",
-    "precision": 2,
-    "status": "normal"
-  },
-  "M310LI": {
-    "id": "M310LI",
-    "name": "Wetwell After",
-    "lat": 35.071714,
-    "lon": -90.153946,
-    "altitude": 10,
-    "value": 44.1,
-    "unit": "inches",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-1": {
-    "id": "SI1000-1",
-    "name": "TF 1",
-    "lat": 35.070129,
-    "lon": -90.156360,
-    "altitude": 10,
-    "value": 9.9,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-2": {
-    "id": "SI1000-2",
-    "name": "TF 2",
-    "lat": 35.070590,
-    "lon": -90.156327,
-    "altitude": 10,
-    "value": 9.9,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-3": {
-    "id": "SI1000-3",
-    "name": "TF 3",
-    "lat": 35.070642,
-    "lon": -90.156906,
-    "altitude": 10,
-    "value": 9.9,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-4": {
-    "id": "SI1000-4",
-    "name": "TF 4",
-    "lat": 35.070182,
-    "lon": -90.156943,
-    "altitude": 10,
-    "value": 0.2,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-5": {
-    "id": "SI1000-5",
-    "name": "TF 5",
-    "lat": 35.069324,
-    "lon": -90.157036,
-    "altitude": 10,
-    "value": 9.9,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "SI1000-6": {
-    "id": "SI1000-6",
-    "name": "TF 6",
-    "lat": 35.069279,
-    "lon": -90.156485,
-    "altitude": 10,
-    "value": 9.9,
-    "unit": "MPR",
-    "precision": 2,
-    "status": "normal"
-  },
-  "BR_SYS_RNNG_C": {
-    "id": "BR_SYS_RNNG_C",
-    "name": "BIOREM RUN",
-    "lat": 35.066947,
-    "lon": -90.135372,
-    "altitude": 2,
-    "value": 0,
-    "unit": "",
-    "precision": null,
-    "status": "normal"
-  }
-}
+// src/routes/api/telemetry-live/stream/+server.ts
+
+import type { RequestHandler } from './$types';
+
+import { telemetryService } from '$lib/server/telemetry/service';
+
+const encoder = new TextEncoder();
+
+export const GET: RequestHandler = ({ request }) => {
+    let unsubscribe: (() => void) | undefined;
+    let heartbeat: ReturnType<typeof setInterval> | undefined;
+    let controllerRef: ReadableStreamDefaultController<Uint8Array> | undefined;
+    let closed = false;
+
+    const cleanup = () => {
+        if (closed) {
+            return;
+        }
+
+        closed = true;
+
+        if (heartbeat) {
+            clearInterval(heartbeat);
+            heartbeat = undefined;
+        }
+
+        unsubscribe?.();
+        unsubscribe = undefined;
+    };
+
+    const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+            controllerRef = controller;
+
+            const send = (snapshot: unknown) => {
+                if (closed) {
+                    return;
+                }
+
+                try {
+                    controller.enqueue(
+                        encoder.encode(`data: ${JSON.stringify(snapshot)}\n\n`)
+                    );
+                } catch {
+                    cleanup();
+                }
+            };
+
+            send(telemetryService.getLatest());
+
+            unsubscribe = telemetryService.subscribe(send);
+
+            heartbeat = setInterval(() => {
+                if (closed) {
+                    return;
+                }
+
+                try {
+                    controller.enqueue(encoder.encode(': heartbeat\n\n'));
+                } catch {
+                    cleanup();
+                }
+            }, 15_000);
+
+            request.signal.addEventListener('abort', cleanup, {
+                once: true
+            });
+
+            if (request.signal.aborted) {
+                cleanup();
+            }
+        },
+
+        cancel() {
+            cleanup();
+        }
+    });
+
+    return new Response(stream, {
+        headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive'
+        }
+    });
+};

@@ -10,144 +10,175 @@ import { getEdsClient } from '$lib/server/eds/factory';
 type Subscriber = (snapshot: TelemetrySnapshot) => void;
 
 class TelemetryService {
-	private snapshot: TelemetrySnapshot = {
-		success: true,
-		timestamp: new Date(0).toISOString(),
-		sensors: []
-	};
+    private snapshot: TelemetrySnapshot = {
+        success: true,
+        timestamp: new Date(0).toISOString(),
+        sensors: []
+    };
 
-	private timer: ReturnType<typeof setTimeout> | null = null;
-	private polling = false;
-	private subscribers = new Set<Subscriber>();
+    private timer: ReturnType<typeof setTimeout> | null = null;
+    private polling = false;
+    private subscribers = new Set<Subscriber>();
 
-	private loadSensorMap(): Record<string, SensorNode> {
-		const configPath = resolve(process.cwd(), 'static/config/sensors.json');
+    private loadSensorMap(): Record<string, SensorNode> {
+        const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
-		if (!existsSync(configPath)) {
-			return {};
-		}
+        if (!existsSync(configPath)) {
+            console.warn(`[TelemetryService] Sensor configuration not found: ${configPath}`);
+            return {};
+        }
 
-		const raw = readFileSync(configPath, 'utf-8');
-		const parsed = JSON.parse(raw);
+        const raw = readFileSync(configPath, 'utf-8');
+        const parsed = JSON.parse(raw);
 
-		if (Array.isArray(parsed)) {
-			return Object.fromEntries(parsed.map((sensor: SensorNode) => [sensor.id, sensor]));
-		}
+        if (Array.isArray(parsed)) {
+            return Object.fromEntries(
+                parsed.map((sensor: SensorNode) => [sensor.id, sensor])
+            );
+        }
 
-		return parsed;
-	}
+        return parsed as Record<string, SensorNode>;
+    }
 
-	private async poll(): Promise<void> {
-		const sensorMap = this.loadSensorMap();
-		const sensorIds = Object.keys(sensorMap);
+    /**
+     * Build a complete sensor snapshot using configured fallback values.
+     */
+    private buildFallbackSensors(
+        sensorMap: Record<string, SensorNode>
+    ): SensorNode[] {
+        return Object.values(sensorMap).map((sensor) => ({
+            ...sensor
+        }));
+    }
 
-		if (sensorIds.length === 0) {
-			this.snapshot = {
-				success: true,
-				timestamp: new Date().toISOString(),
-				sensors: []
-			};
+    private async poll(): Promise<void> {
+        const sensorMap = this.loadSensorMap();
+        const sensorIds = Object.keys(sensorMap);
 
-			this.broadcast();
-			return;
-		}
+        // Make configured fallback values available even before the first
+        // successful connection to EDS.
+        const fallbackSensors = this.buildFallbackSensors(sensorMap);
 
-		try {
-			const client = getEdsClient();
-			const liveData = await client.points.getRegex(sensorIds);
+        if (sensorIds.length === 0) {
+            this.snapshot = {
+                success: true,
+                timestamp: new Date().toISOString(),
+                sensors: []
+            };
 
-			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
-				const point = liveData[`${id}${client.iessSuffix}`];
+            this.broadcast();
+            return;
+        }
 
-				return {
-					...config,
-					value: point?.value != null ? Number(point.value.toFixed(config.precision ?? 2)) : null,
-					status: point?.quality === 'QUALITY-GOOD' ? 'normal' : 'warning'
-				};
-			});
+        try {
+            const client = getEdsClient();
+            const liveData = await client.points.getRegex(sensorIds);
 
-			this.snapshot = {
-				success: true,
-				timestamp: new Date().toISOString(),
-				sensors
-			};
+            const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
+                const point = liveData[`${id}${client.iessSuffix}`];
 
-			this.broadcast();
-		} catch (error) {
-			console.warn(
-				'[TelemetryService] EDS SOAP endpoint unreachable:',
-				error instanceof Error ? error.message : error
-			);
+                if (point?.value == null || point.quality !== 'QUALITY-GOOD') {
+                    return {
+                        ...config,
+                        value: '-' as unknown as number,
+                        status: 'warning'
+                    };
+                }
 
-			this.snapshot = {
-				success: true,
-				degraded: true,
-				warning: 'Ovation EDS endpoint unreachable',
-				timestamp: new Date().toISOString(),
-				sensors: this.snapshot.sensors
-			};
+                return {
+                    ...config,
+                    value: Number(point.value.toFixed(config.precision ?? 2)),
+                    status: 'normal'
+                };
+            });
+            
+            this.snapshot = {
+                success: true,
+                timestamp: new Date().toISOString(),
+                sensors
+            };
 
-			this.broadcast();
-		}
-	}
+            this.broadcast();
+        } catch (error) {
+            console.warn(
+                '[TelemetryService] EDS SOAP endpoint unreachable:',
+                error instanceof Error ? error.message : error
+            );
 
-	private async pollLoop(): Promise<void> {
-		if (!this.polling) {
-			return;
-		}
+            // Retain the configured dummy values when EDS is unavailable.
+            this.snapshot = {
+                success: true,
+                degraded: true,
+                warning: 'Ovation EDS endpoint unreachable',
+                timestamp: new Date().toISOString(),
+                sensors: fallbackSensors
+            };
 
-		try {
-			await this.poll();
-		} catch (error) {
-			console.error('[TelemetryService] Poll failed:', error);
-		}
+            this.broadcast();
+        }
+    }
 
-		if (!this.polling) {
-			return;
-		}
+    private async pollLoop(): Promise<void> {
+        if (!this.polling) {
+            return;
+        }
 
-		this.timer = setTimeout(() => {
-			void this.pollLoop();
-		}, 2000);
-	}
+        try {
+            await this.poll();
+        } catch (error) {
+            console.error('[TelemetryService] Poll failed:', error);
+        }
 
-	private broadcast(): void {
-		for (const subscriber of this.subscribers) {
-			subscriber(this.snapshot);
-		}
-	}
+        if (!this.polling) {
+            return;
+        }
 
-	startPolling(): void {
-		if (this.polling) {
-			return;
-		}
+        this.timer = setTimeout(() => {
+            void this.pollLoop();
+        }, 2000);
+    }
 
-		this.polling = true;
-		void this.pollLoop();
-	}
+    private broadcast(): void {
+        for (const subscriber of this.subscribers) {
+            try {
+                subscriber(this.snapshot);
+            } catch (error) {
+                console.error('[TelemetryService] Subscriber failed:', error);
+            }
+        }
+    }
 
-	subscribe(subscriber: Subscriber): () => void {
-		this.subscribers.add(subscriber);
+    startPolling(): void {
+        if (this.polling) {
+            return;
+        }
 
-		return () => {
-			this.subscribers.delete(subscriber);
-		};
-	}
+        this.polling = true;
+        void this.pollLoop();
+    }
 
-	getLatest(): TelemetrySnapshot {
-		return this.snapshot;
-	}
+    subscribe(subscriber: Subscriber): () => void {
+        this.subscribers.add(subscriber);
 
-	stopPolling(): void {
-		this.polling = false;
+        return () => {
+            this.subscribers.delete(subscriber);
+        };
+    }
 
-		if (this.timer) {
-			clearTimeout(this.timer);
-			this.timer = null;
-		}
-	}
+    getLatest(): TelemetrySnapshot {
+        return this.snapshot;
+    }
+
+    stopPolling(): void {
+        this.polling = false;
+
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+    }
 }
 
 export const telemetryService = new TelemetryService();
 
-// telemetryService.startPolling(); // always on
+// telemetryService.startPolling(); // Start explicitly from application lifecycle.

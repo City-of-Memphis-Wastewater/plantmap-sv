@@ -6,7 +6,7 @@ export interface SensorNode {
 	lat: number;
 	lon: number;
 	altitude?: number;
-	value: number | null;
+	value: number | '-' | null;
 	unit?: string;
 	precision?: number;
 	status: 'normal' | 'warning' | 'alarm' | 'missing';
