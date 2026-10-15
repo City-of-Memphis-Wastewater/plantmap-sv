@@ -1,8 +1,5 @@
 // src/lib/plantmap-sv/bootstrap.ts
 
-import os from 'node:os';
-import path from 'node:path';
-
 import packageJson from '../../../package.json' with { type: 'json' };
 
 import {
@@ -14,17 +11,13 @@ import {
 const appName = packageJson.name;
 
 export function bootstrapPlantMapConfig() {
-	return new bootstrapMemphisConfig({
-		appName
-	});
+	return bootstrapMemphisConfig(appName);
 }
 
 export function bootstrapPlantMapSecret() {
-	return new bootstrapMemphisSecret({
-		appName
-	});
+	return bootstrapMemphisSecret(appName);
 }
 
 export function bootstrapPlantMapEnv() {
-	return new bootstrapMemphisEnv();
+	return bootstrapMemphisEnv();
 }
