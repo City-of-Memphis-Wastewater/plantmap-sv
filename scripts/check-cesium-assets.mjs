@@ -4,7 +4,8 @@ import path from 'node:path';
 const directories = ['Workers', 'ThirdParty', 'Assets', 'Widgets'];
 
 const source = path.resolve('node_modules/cesium/Build/Cesium');
-const output = path.resolve('build/client/cesium');
+//const output = path.resolve('build/client/cesium');
+const output = path.resolve('.svelte-kit/output/client/cesium');
 
 let failed = false;
 
