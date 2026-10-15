@@ -97,7 +97,7 @@ async function main() {
 
 	// Avoid copying when the destination already matches the source.
 	if (await directoriesMatch(SOURCE, STATIC_DESTINATION)) {
-		console.log('[Cesium] Assets are current; copy skipped.');
+		console.log('[copy-cesium.mjs] Assets are current; copy skipped.');
 	} else {
 		await fs.mkdir(path.dirname(STATIC_DESTINATION), {
 			recursive: true
@@ -124,7 +124,7 @@ async function main() {
 
 		await fs.rename(temporaryDestination, STATIC_DESTINATION);
 
-		console.log('[Cesium] Assets copied successfully.');
+		console.log('[copy-cesium.mjs] Assets copied successfully.');
 	}
 
 	console.log(`  Source:      ${SOURCE}`);
@@ -135,6 +135,6 @@ async function main() {
 }
 
 main().catch((error) => {
-	console.error('[Cesium] Copy failed:', error.message);
+	console.error('[copy-cesium.mjs] Copy failed:', error.message);
 	process.exitCode = 1;
 });
