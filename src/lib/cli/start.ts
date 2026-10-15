@@ -4,8 +4,8 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { bootstrapPlantMapConfig } from '../plantmap/bootstrap.ts';
-import { loadPlantMapConfig } from '../plantmap/config.ts';
+import { bootstrapPlantMapConfig } from '../plantmap-sv/bootstrap.ts';
+import { loadPlantMapConfig } from '../plantmap-sv/config.ts';
 
 const projectDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 

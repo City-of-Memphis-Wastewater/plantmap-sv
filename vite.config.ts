@@ -7,8 +7,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 //import path from 'node:path';
 //import { fileURLToPath } from 'node:url';
 
-import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap.ts';
-import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
+import { bootstrapPlantMapConfig } from './src/lib/plantmap-sv/bootstrap.ts';
+import { loadPlantMapConfig } from './src/lib/plantmap-sv/config.ts';
 
 const plantMapConfig = loadPlantMapConfig(bootstrapPlantMapConfig());
 
