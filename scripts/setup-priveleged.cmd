@@ -14,10 +14,9 @@ echo === npm install === >> "%LOGFILE%"
 call npm install  >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
-
 echo. >> "%LOGFILE%"
 echo === Copy Cesium assets === >> "%LOGFILE%"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTDIR%copy-cesium.ps1" -Force >> "%LOGFILE%" 2>&1
+"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%copy-cesium.mjs" >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"
