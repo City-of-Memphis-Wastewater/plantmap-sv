@@ -18,22 +18,22 @@ const cesiumSource = normalizePath(path.resolve(projectRoot, 'node_modules/cesiu
 const cesiumBaseUrl = 'cesium';
 
 const cesiumTargets = [
-    {
-        src: `${cesiumSource}/ThirdParty`,
-        dest: cesiumBaseUrl
-    },
-    {
-        src: `${cesiumSource}/Workers`,
-        dest: cesiumBaseUrl
-    },
-    {
-        src: `${cesiumSource}/Assets`,
-        dest: cesiumBaseUrl
-    },
-    {
-        src: `${cesiumSource}/Widgets`,
-        dest: cesiumBaseUrl
-    }
+	{
+		src: `${cesiumSource}/ThirdParty`,
+		dest: cesiumBaseUrl
+	},
+	{
+		src: `${cesiumSource}/Workers`,
+		dest: cesiumBaseUrl
+	},
+	{
+		src: `${cesiumSource}/Assets`,
+		dest: cesiumBaseUrl
+	},
+	{
+		src: `${cesiumSource}/Widgets`,
+		dest: cesiumBaseUrl
+	}
 ];
 export default defineConfig({
 	server: {
