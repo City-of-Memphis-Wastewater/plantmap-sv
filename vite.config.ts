@@ -10,11 +10,9 @@ import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
 
 const plantMapConfig = loadPlantMapConfig(bootstrapPlantMapConfig());
 
-const cesiumSource = normalizePath(
-    path.resolve('node_modules/cesium/Build/Cesium')
-);
+const cesiumSource = normalizePath(path.resolve('node_modules/cesium/Build/Cesium'));
 
-const cesiumBaseUrl = 'cesium'
+const cesiumBaseUrl = 'cesium';
 
 export default defineConfig({
 	server: {
@@ -27,14 +25,14 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit(), // Must remain empty so svelte.config.js is read
-        viteStaticCopy({
-            targets: [
-                { src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-                { src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-                { src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-                { src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-            ]
-        }),
+		viteStaticCopy({
+			targets: [
+				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
+				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
+				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
+				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl }
+			]
+		})
 	],
 	optimizeDeps: {
 		include: ['cesium', 'mersenne-twister']
