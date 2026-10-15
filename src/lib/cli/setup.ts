@@ -4,14 +4,8 @@ import { input, password, confirm, number } from '@inquirer/prompts';
 
 import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap-sv/bootstrap.ts';
 
-
 function validatePort(value: number | undefined, name: string): number {
-	if (
-		value === undefined ||
-		!Number.isInteger(value) ||
-		value < 1 ||
-		value > 65535
-	) {
+	if (value === undefined || !Number.isInteger(value) || value < 1 || value > 65535) {
 		throw new Error(`${name} must be an integer between 1 and 65535`);
 	}
 
@@ -34,7 +28,6 @@ export async function setup() {
 		default: (config.value('eds', 'host') as string | undefined) ?? '127.0.0.1'
 	});
 
-	
 	const soapPort = validatePort(
 		await number({
 			message: 'Ovation EDS SOAP API port:',

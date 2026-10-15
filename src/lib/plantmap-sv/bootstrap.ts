@@ -5,7 +5,11 @@ import path from 'node:path';
 
 import packageJson from '../../../package.json' with { type: 'json' };
 
-import { bootstrapMemphisConfig, bootstrapMemphisSecret, bootstrapMemphisEnv } from 'memphis-settings';
+import {
+	bootstrapMemphisConfig,
+	bootstrapMemphisSecret,
+	bootstrapMemphisEnv
+} from 'memphis-settings';
 
 const appName = packageJson.name;
 
