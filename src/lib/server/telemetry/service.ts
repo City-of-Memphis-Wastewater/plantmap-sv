@@ -24,22 +24,34 @@ class TelemetryService {
 		const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
 		if (!existsSync(configPath)) {
-			console.warn(`[TelemetryService] Sensor configuration not found: ${configPath}`);
-			return {};
+			throw new Error(`Sensor configuration not found: ${configPath}`);
 		}
 
-		const raw = readFileSync(configPath, 'utf-8');
-		const parsed = JSON.parse(raw);
+		let parsed: unknown;
+
+		try {
+			parsed = JSON.parse(readFileSync(configPath, 'utf-8'));
+		} catch (error) {
+			throw new Error(
+				`Unable to parse sensor configuration at ${configPath}: ${
+					error instanceof Error ? error.message : String(error)
+				}`
+			);
+		}
 
 		if (Array.isArray(parsed)) {
 			return Object.fromEntries(parsed.map((sensor: SensorNode) => [sensor.id, sensor]));
+		}
+
+		if (parsed === null || typeof parsed !== 'object') {
+			throw new Error(`Invalid sensor configuration format: ${configPath}`);
 		}
 
 		return parsed as Record<string, SensorNode>;
 	}
 
 	/**
-	 * Build a complete sensor snapshot using configured fallback values.
+	 * Return the configured fallback values without modifying them.
 	 */
 	private buildFallbackSensors(sensorMap: Record<string, SensorNode>): SensorNode[] {
 		return Object.values(sensorMap).map((sensor) => ({
@@ -48,12 +60,10 @@ class TelemetryService {
 	}
 
 	private async poll(): Promise<void> {
+		// Configuration errors are reported by pollLoop instead of being
+		// mistaken for an EDS connection failure.
 		const sensorMap = this.loadSensorMap();
 		const sensorIds = Object.keys(sensorMap);
-
-		// Make configured fallback values available even before the first
-		// successful connection to EDS.
-		const fallbackSensors = this.buildFallbackSensors(sensorMap);
 
 		if (sensorIds.length === 0) {
 			this.snapshot = {
@@ -66,6 +76,8 @@ class TelemetryService {
 			return;
 		}
 
+		const fallbackSensors = this.buildFallbackSensors(sensorMap);
+
 		try {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
@@ -73,17 +85,21 @@ class TelemetryService {
 			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
 				const point = liveData[`${id}${client.iessSuffix}`];
 
-				if (point?.value == null || point.quality !== 'QUALITY-GOOD') {
+				// Ignore quality for now. Only a missing point or value
+				// should result in a placeholder.
+				if (point?.value == null) {
 					return {
 						...config,
-						value: '-' as unknown as number,
+						value: '-',
 						status: 'warning'
 					};
 				}
 
+				const precision = config.precision ?? 2;
+
 				return {
 					...config,
-					value: Number(point.value.toFixed(config.precision ?? 2)),
+					value: Number(point.value.toFixed(precision)),
 					status: 'normal'
 				};
 			});
@@ -101,7 +117,6 @@ class TelemetryService {
 				error instanceof Error ? error.message : error
 			);
 
-			// Retain the configured dummy values when EDS is unavailable.
 			this.snapshot = {
 				success: true,
 				degraded: true,
@@ -177,4 +192,4 @@ class TelemetryService {
 
 export const telemetryService = new TelemetryService();
 
-// telemetryService.startPolling(); // Start explicitly from application lifecycle.
+// Polling is started explicitly by the application lifecycle.
