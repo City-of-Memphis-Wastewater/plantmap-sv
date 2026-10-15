@@ -34,7 +34,6 @@ export default defineConfig({
 			]
 		}),
 		sveltekit() // Must remain empty so svelte.config.js is read
-		
 	],
 	optimizeDeps: {
 		include: ['cesium', 'mersenne-twister']
