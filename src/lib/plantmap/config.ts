@@ -19,7 +19,7 @@ export const PlantMapConfigSchema = z.object({
 
 	devServer: z.object({
 		port: z.number().int()
-	}),
+	})
 });
 
 export type PlantMapConfig = z.infer<typeof PlantMapConfigSchema>;
@@ -35,7 +35,7 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 		},
 
 		prodServer: {
-			port: config.value('prodServer', 'port') ?? 4000 
+			port: config.value('prodServer', 'port') ?? 4000
 		},
 
 		devServer: {

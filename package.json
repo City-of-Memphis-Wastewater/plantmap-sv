@@ -15,7 +15,7 @@
 		"prepare": "svelte-kit sync",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "check:cesium": "node scripts/check-cesium-assets.mjs",
+		"check:cesium": "node scripts/check-cesium-assets.mjs",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test": "vitest run --project server",

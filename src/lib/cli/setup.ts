@@ -98,7 +98,7 @@ export async function setup() {
 
 	config.setValue('devServer', 'port', devPort, { overwrite: true });
 
-    config.setValue('prodServer', 'port', prodPort, { overwrite: true });
-    
+	config.setValue('prodServer', 'port', prodPort, { overwrite: true });
+
 	config.setValue('eds', 'debug', debug, { overwrite: true });
 }

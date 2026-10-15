@@ -21,9 +21,9 @@ export async function runCli(args: string[]) {
 			config();
 			return;
 
-	    case 'start':
-            start(args.slice(1));
-            return;
+		case 'start':
+			start(args.slice(1));
+			return;
 
 		case 'help':
 			printHelp();
