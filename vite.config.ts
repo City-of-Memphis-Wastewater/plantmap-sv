@@ -4,6 +4,7 @@ import { normalizePath } from 'vite';
 import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'node:path';
 
 import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap.ts';
 import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
