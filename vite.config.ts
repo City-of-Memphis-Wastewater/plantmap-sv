@@ -25,7 +25,6 @@ export default defineConfig({
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),
-		sveltekit(), // Must remain empty so svelte.config.js is read
 		viteStaticCopy({
 			targets: [
 				{ src: `${cesiumSource}/ThirdParty/**/*`, dest: `${cesiumBaseUrl}/ThirdParty` },
@@ -33,7 +32,9 @@ export default defineConfig({
 				{ src: `${cesiumSource}/Assets/**/*`, dest: `${cesiumBaseUrl}/Assets` },
 				{ src: `${cesiumSource}/Widgets/**/*`, dest: `${cesiumBaseUrl}/Widgets` }
 			]
-		})
+		}),
+		sveltekit() // Must remain empty so svelte.config.js is read
+		
 	],
 	optimizeDeps: {
 		include: ['cesium', 'mersenne-twister']
