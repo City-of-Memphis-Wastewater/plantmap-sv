@@ -44,9 +44,9 @@ export async function setup() {
 			: 'Ovation EDS password:'
 	});
 
-	const suffix = await input({
-		message: 'Ovation EDS suffix:',
-		default: (config.value('eds', 'suffix') as string | undefined) ?? '.UNIT0@NET0'
+	const iessSuffix = await input({
+		message: 'Ovation EDS IDCS to IESS suffix:',
+		default: (config.value('eds', 'iessSuffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
 	const prodPort = await number({
@@ -94,7 +94,7 @@ export async function setup() {
 
 	config.setValue('eds', 'soapPort', soapPort, { overwrite: true });
 
-	config.setValue('eds', 'suffix', suffix, { overwrite: true });
+	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
 	config.setValue('devServer', 'port', devPort, { overwrite: true });
 
