@@ -5,18 +5,22 @@ import path from 'node:path';
 
 import packageJson from '../../../package.json' with { type: 'json' };
 
-import { MemphisConfig, MemphisSecret } from 'memphis-settings';
+import { bootstrapMemphisConfig, bootstrapMemphisSecret, bootstrapMemphisEnv } from 'memphis-settings';
 
-const appDir = path.join(os.homedir(), `.${packageJson.name}`);
+const appName = packageJson.name;
 
 export function bootstrapPlantMapConfig() {
-	return new MemphisConfig({
-		appDir
+	return new bootstrapMemphisConfig({
+		appName
 	});
 }
 
 export function bootstrapPlantMapSecret() {
-	return new MemphisSecret({
-		appDir
+	return new bootstrapMemphisSecret({
+		appName
 	});
+}
+
+export function bootstrapPlantMapEnv() {
+	return new bootstrapMemphisEnv();
 }

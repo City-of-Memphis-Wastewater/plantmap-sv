@@ -1,6 +1,6 @@
 // scripts/setup.js
 
-import { MemphisEnv, bootstrapPlantMapConfig, bootstrapPlantMapSecret } from 'memphis-settings';
+import { MemphisEnv, bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../src/lib/plantmap/bootrap.ts'
 
 const env = new MemphisEnv();
 const config = bootstrapPlantMapConfig();
