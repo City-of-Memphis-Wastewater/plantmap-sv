@@ -6,8 +6,8 @@ import shutil
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "node_modules" / "cesium" / "Build" / "Cesium"
-DESTINATION = ROOT / "static" / "cesium"
-
+#DESTINATION = ROOT / "static" / "cesium"
+DESTINATION = ".svelte-kit" / "output" / "client" / "cesium"
 
 def main() -> None:
     if not SOURCE.is_dir():
