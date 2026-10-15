@@ -1,4 +1,4 @@
-// src/lib/plantmap/bootstrap.ts
+// src/lib/plantmap-sv/bootstrap.ts
 
 import os from 'node:os';
 import path from 'node:path';

@@ -1,4 +1,4 @@
-// src/lib/plantmap/secret.ts
+// src/lib/plantmap-sv/secret.ts
 
 import { z } from 'zod';
 

@@ -1,4 +1,4 @@
-// src/lib/plantmap/config.ts
+// src/lib/plantmap-sv/config.ts
 
 import { z } from 'zod';
 
