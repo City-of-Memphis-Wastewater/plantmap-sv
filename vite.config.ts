@@ -18,8 +18,6 @@ const cesiumSource = normalizePath(path.resolve(projectRoot, 'node_modules/cesiu
 
 const cesiumBaseUrl = 'cesium';
 
-const cesiumBaseUrl = 'cesium';
-
 const cesiumTargets = [
 	{
 		src: 'node_modules/cesium/Build/Cesium/ThirdParty/**/*',
