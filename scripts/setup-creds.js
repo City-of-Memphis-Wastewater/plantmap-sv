@@ -1,12 +1,12 @@
 // scripts/setup-creds.js
 
 import {
-	MemphisEnv,
+	bootstrapPlantMapEnv,
 	bootstrapPlantMapConfig,
 	bootstrapPlantMapSecret
 } from '../src/lib/plantmap-sv/bootstrap.ts';
 
-const env = new MemphisEnv();
+const env = bootstrapPlantMapEnv();
 const config = bootstrapPlantMapConfig();
 const secret = bootstrapPlantMapSecret();
 
