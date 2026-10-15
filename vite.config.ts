@@ -18,6 +18,27 @@ const cesiumSource = normalizePath(path.resolve(projectRoot,'node_modules/cesium
 
 const cesiumBaseUrl = 'cesium';
 
+const cesiumBaseUrl = 'cesium';
+
+const cesiumTargets = [
+    {
+        src: 'node_modules/cesium/Build/Cesium/ThirdParty/**/*',
+        dest: `${cesiumBaseUrl}/ThirdParty`
+    },
+    {
+        src: 'node_modules/cesium/Build/Cesium/Workers/**/*',
+        dest: `${cesiumBaseUrl}/Workers`
+    },
+    {
+        src: 'node_modules/cesium/Build/Cesium/Assets/**/*',
+        dest: `${cesiumBaseUrl}/Assets`
+    },
+    {
+        src: 'node_modules/cesium/Build/Cesium/Widgets/**/*',
+        dest: `${cesiumBaseUrl}/Widgets`
+    }
+];
+
 export default defineConfig({
 	server: {
 		port: plantMapConfig.devServer.port
@@ -29,13 +50,8 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		viteStaticCopy({
-			targets: [
-				{ src: `${cesiumSource}/ThirdParty/**/*`, dest: `${cesiumBaseUrl}/ThirdParty` },
-				{ src: `${cesiumSource}/Workers/**/*`, dest: `${cesiumBaseUrl}/Workers` },
-				{ src: `${cesiumSource}/Assets/**/*`, dest: `${cesiumBaseUrl}/Assets` },
-				{ src: `${cesiumSource}/Widgets/**/*`, dest: `${cesiumBaseUrl}/Widgets` }
-			]
-		}),
+            targets: cesiumTargets
+        }),
 		sveltekit() // Must remain empty so svelte.config.js is read
 	],
 	optimizeDeps: {
