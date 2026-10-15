@@ -3,21 +3,21 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { normalizePath } from 'vite';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+//import { normalizePath } from 'vite';
+//import path from 'node:path';
+//import { fileURLToPath } from 'node:url';
 
 import { bootstrapPlantMapConfig } from './src/lib/plantmap/bootstrap.ts';
 import { loadPlantMapConfig } from './src/lib/plantmap/config.ts';
 
 const plantMapConfig = loadPlantMapConfig(bootstrapPlantMapConfig());
 
-const projectRoot = path.dirname(fileURLToPath(import.meta.url));
-const cesiumSource = normalizePath(path.resolve(projectRoot, 'node_modules/cesium/Build/Cesium'));
+//const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+//const cesiumSource = normalizePath(path.resolve(projectRoot, 'node_modules/cesium/Build/Cesium'));
 
-const cesiumBaseUrl = 'cesium';
+//const cesiumBaseUrl = 'cesium';
 
-const cesiumTargets = [
+/**const cesiumTargets = [
 	{
 		src: `${cesiumSource}/ThirdParty`,
 		dest: cesiumBaseUrl
@@ -35,6 +35,7 @@ const cesiumTargets = [
 		dest: cesiumBaseUrl
 	}
 ];
+*/
 export default defineConfig({
 	server: {
 		port: plantMapConfig.devServer.port
@@ -45,9 +46,9 @@ export default defineConfig({
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),
-		viteStaticCopy({
-			targets: cesiumTargets
-		}),
+		//viteStaticCopy({
+		//	targets: cesiumTargets
+		//}),
 		sveltekit() // Must remain empty so svelte.config.js is read
 	],
 	optimizeDeps: {
