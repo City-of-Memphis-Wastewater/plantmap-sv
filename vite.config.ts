@@ -29,9 +29,9 @@ export default defineConfig({
 		viteStaticCopy({
 			targets: [
 				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl },
-				{ src: `${cesiumSource}/ThirdParty`, dest: cesiumBaseUrl }
+				{ src: `${cesiumSource}/Workers`, dest: cesiumBaseUrl },
+				{ src: `${cesiumSource}/Assets`, dest: cesiumBaseUrl },
+				{ src: `${cesiumSource}/Widgets`, dest: cesiumBaseUrl }
 			]
 		})
 	],
