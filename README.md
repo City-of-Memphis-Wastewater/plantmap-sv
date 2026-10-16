@@ -60,6 +60,14 @@ The application does not require Bun.
 - proj4
 - zod
 
+## Screenshot
+
+Self-hosted and configured instance and `plantmap-sv` for T.E. Maxson Wastewater Treatment Plant in Memphis, Tennessee
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/City-of-Memphis-Wastewater/plantmap-sv/main/assets/plantmap-sv-v0.0.08-maxson.png" width="900">
+</p>
+
 ## Source
 
 https://github.com/City-of-Memphis-Wastewater/plantmap-sv
