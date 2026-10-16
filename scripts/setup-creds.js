@@ -11,7 +11,8 @@ const config = bootstrapPlantMapConfig();
 const secret = bootstrapPlantMapSecret();
 
 function requiredInteger(name) {
-	const value = env.requiredValue(name);
+	//const value = env.requiredValue(name);
+	const value = env.value(name);
 	const parsed = Number(value);
 
 	if (!Number.isInteger(parsed)) {
@@ -22,7 +23,8 @@ function requiredInteger(name) {
 }
 
 function requiredBoolean(name) {
-	const value = env.requiredValue(name).toLowerCase();
+	//const value = env.requiredValue(name).toLowerCase();
+    const value = env.value(name).toLowerCase();
 
 	if (!['true', 'false'].includes(value)) {
 		throw new Error(`${name} must be true or false`);
