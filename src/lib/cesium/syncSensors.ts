@@ -1,11 +1,10 @@
 // src/lib/cesium/syncSensors.ts
 
 import type { Viewer } from 'cesium';
+
 type CesiumModule = typeof import('cesium');
-import type {
-	SensorNode
-	//TelemetrySnapshot
-} from '$lib/telemetry/types';
+
+import type { SensorNode } from '$lib/telemetry/types';
 
 export function syncSensorEntities(
 	viewer: Viewer,
@@ -16,9 +15,9 @@ export function syncSensorEntities(
 ) {
 	console.log(
 		'[Cesium Sync] syncSensorEntities',
-		Object.values(sensors).map((s) => ({
-			id: s.id,
-			value: s.value
+		Object.values(sensors).map((sensor) => ({
+			id: sensor.id,
+			value: sensor.value
 		}))
 	);
 
@@ -29,6 +28,16 @@ export function syncSensorEntities(
 		const entity = viewer.entities.getById(entityId);
 
 		const pos = CesiumModule.Cartesian3.fromDegrees(sensor.lon, sensor.lat, sensor.altitude ?? 15);
+
+		// Build the label text independently of its visibility.
+		const labelText = [
+			showSensorLabels ? sensor.name : '',
+			showSensorValues ? `${sensor.value} ${sensor.unit}` : ''
+		]
+			.filter(Boolean)
+			.join('\n');
+
+		const labelVisible = showSensorLabels || showSensorValues;
 
 		if (!entity) {
 			viewer.entities.add({
@@ -45,40 +54,26 @@ export function syncSensorEntities(
 					outlineWidth: 2
 				},
 				label: {
-					text: showSensorValues
-						? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
-						: showSensorLabels
-							? sensor.name
-							: '',
+					text: labelText,
 					font: '13px monospace',
 					style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
 					outlineWidth: 3,
 					verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
 					pixelOffset: new CesiumModule.Cartesian2(0, -22),
-					show: showSensorLabels || showSensorValues
+					show: labelVisible
 				}
-
-				//label: {
-				//	text: `${sensor.name}\n${sensor.value} ${sensor.unit}`,
-				//	font: '13px monospace',
-				//	style: CesiumModule.LabelStyle.FILL_AND_OUTLINE,
-				//	outlineWidth: 3,
-				//	verticalOrigin: CesiumModule.VerticalOrigin.BOTTOM,
-				//	pixelOffset: new CesiumModule.Cartesian2(0, -22),
-				//	show: showSensorLabels
-				//}
 			});
 		} else {
-			if (entity.label) {
-				entity.label.text = new CesiumModule.ConstantProperty(
-					showSensorValues
-						? `${showSensorLabels ? sensor.name + '\n' : ''}${sensor.value} ${sensor.unit}`
-						: showSensorLabels
-							? sensor.name
-							: ''
-				);
+			// Update the existing entity's position and sensor data.
+			entity.position = new CesiumModule.ConstantPositionProperty(pos);
+			entity.name = sensor.name;
+			entity.properties = new CesiumModule.PropertyBag({
+				sensorData: sensor
+			});
 
-				entity.label.show = new CesiumModule.ConstantProperty(showSensorLabels || showSensorValues);
+			if (entity.label) {
+				entity.label.text = new CesiumModule.ConstantProperty(labelText);
+				entity.label.show = new CesiumModule.ConstantProperty(labelVisible);
 			}
 
 			if (entity.point) {
