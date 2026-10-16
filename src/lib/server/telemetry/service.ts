@@ -32,13 +32,13 @@ class TelemetryService {
 		try {
 			parsed = JSON.parse(readFileSync(configPath, 'utf-8'));
 		} catch (error) {
-            throw new Error(
-                `Unable to parse sensor configuration at ${configPath}: ${
-                    error instanceof Error ? error.message : String(error)
-                }`,
-                { cause: error }
-            );
-        } 
+			throw new Error(
+				`Unable to parse sensor configuration at ${configPath}: ${
+					error instanceof Error ? error.message : String(error)
+				}`,
+				{ cause: error }
+			);
+		}
 
 		if (Array.isArray(parsed)) {
 			return Object.fromEntries(parsed.map((sensor: SensorNode) => [sensor.id, sensor]));
