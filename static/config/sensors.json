@@ -395,14 +395,11 @@
 "precision": null,
 "status": "normal"
 },
-
-
-// ------ DO Meters ----
 "AI20081": {
 "id": "AI20081",
 "name": "Aer DO 1N",
-"lat": 
-"lon": 
+"lat": 35.072145,
+"lon": -90.155599,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -412,8 +409,8 @@
 "AI20082": {
 "id": "AI20082",
 "name": "Aer DO 2N",
-"lat": 
-"lon": 
+"lat": 35.072150,
+"lon": -90.155640,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -423,8 +420,8 @@
 "AI20091": {
 "id": "AI20091",
 "name": "Aer DO 3N",
-"lat": 
-"lon": 
+"lat": 35.072163,
+"lon": -90.155764,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -434,8 +431,8 @@
 "AI20092": {
 "id": "AI20092",
 "name": "Aer DO 4N",
-"lat": 
-"lon": 
+"lat": 35.072165,
+"lon": -90.155802,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -445,8 +442,8 @@
 "AI20101": {
 "id": "AI20101",
 "name": "Aer DO 5N",
-"lat": 
-"lon": 
+"lat": 35.072172,
+"lon": -90.155936,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -456,8 +453,8 @@
 "AI20102": {
 "id": "AI20102",
 "name": "Aer DO 6N",
-"lat": 
-"lon": 
+"lat": 35.072175,
+"lon": -90.155976,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -467,8 +464,8 @@
 "AI20111": {
 "id": "AI20111",
 "name": "Aer DO 7N",
-"lat": 
-"lon": 
+"lat": 35.072188,
+"lon": -90.156104,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -478,8 +475,8 @@
 "AI20112": {
 "id": "AI20112",
 "name": "Aer DO 8N",
-"lat": 
-"lon": 
+"lat": 35.072189,
+"lon": -90.156154,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -489,8 +486,8 @@
 "AI20121": {
 "id": "AI20121",
 "name": "Aer DO 9N",
-"lat": 
-"lon": 
+"lat": 35.072206,
+"lon": -90.156274,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -500,8 +497,8 @@
 "AI20122": {
 "id": "AI20122",
 "name": "Aer DO 10N",
-"lat": 
-"lon": 
+"lat": 35.072209,
+"lon": -90.156315,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -511,8 +508,8 @@
 "AI20131": {
 "id": "AI20131",
 "name": "Aer DO 11N",
-"lat": 
-"lon": 
+"lat": 35.072215,
+"lon": -90.156446,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -522,8 +519,8 @@
 "AI20132": {
 "id": "AI20132",
 "name": "Aer DO 12N",
-"lat": 
-"lon": 
+"lat": 35.072341,
+"lon": -90.156464,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -533,8 +530,8 @@
 "AI20141": {
 "id": "AI20141",
 "name": "Aer DO 13N",
-"lat": 
-"lon": 
+"lat": 35.072354,
+"lon": -90.156597,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -544,20 +541,19 @@
 "AI20142": {
 "id": "AI20142",
 "name": "Aer DO 14N",
-"lat": 
-"lon": 
+"lat": 35.072225,
+"lon": -90.156647,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
 "precision": null,
 "status": "normal"
 },
-//--SOUTH --
 "AI20011": {
 "id": "AI20011",
 "name": "Aer DO 1S",
-"lat": 
-"lon": 
+"lat": 35.071761,
+"lon": -90.155644,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -567,8 +563,8 @@
 "AI20012": {
 "id": "AI20012",
 "name": "Aer DO 2S",
-"lat": 
-"lon": 
+"lat": 35.071761,
+"lon": -90.155684,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -578,8 +574,8 @@
 "AI20021": {
 "id": "AI20021",
 "name": "Aer DO 3S",
-"lat": 
-"lon": 
+"lat": 35.071777,
+"lon": -90.155817,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -589,8 +585,8 @@
 "AI20022": {
 "id": "AI20022",
 "name": "Aer DO 4S",
-"lat": 
-"lon": 
+"lat": 35.071784,
+"lon": -90.155853,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -600,8 +596,8 @@
 "AI20031": {
 "id": "AI20031",
 "name": "Aer DO 5S",
-"lat": 
-"lon": 
+"lat": 35.071787,
+"lon": -90.155980,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -611,8 +607,8 @@
 "AI20032": {
 "id": "AI20032",
 "name": "Aer DO 6S",
-"lat": 
-"lon": 
+"lat": 35.071798,
+"lon": -90.156023,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -622,8 +618,8 @@
 "AI20041": {
 "id": "AI20041",
 "name": "Aer DO 7S",
-"lat": 
-"lon": 
+"lat": 35.071802,
+"lon": -90.156149,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -633,8 +629,8 @@
 "AI20042": {
 "id": "AI20042",
 "name": "Aer DO 8S",
-"lat": 
-"lon": 
+"lat": 35.071804,
+"lon": -90.156190,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -644,8 +640,8 @@
 "AI20051": {
 "id": "AI20051",
 "name": "Aer DO 9S",
-"lat": 
-"lon": 
+"lat": 35.071810,
+"lon": -90.156321,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -655,8 +651,8 @@
 "AI20052": {
 "id": "AI20052",
 "name": "Aer DO 10S",
-"lat": 
-"lon": 
+"lat": 35.071814,
+"lon": -90.156363,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -666,8 +662,8 @@
 "AI20061": {
 "id": "AI20061",
 "name": "Aer DO 11S",
-"lat": 
-"lon": 
+"lat": 35.071822,
+"lon": -90.156495,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -677,8 +673,8 @@
 "AI20062": {
 "id": "AI20062",
 "name": "Aer DO 12S",
-"lat": 
-"lon": 
+"lat": 35.071772,
+"lon": -90.156529,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -688,8 +684,8 @@
 "AI20071": {
 "id": "AI20071",
 "name": "Aer DO 13S",
-"lat": 
-"lon": 
+"lat": 35.071782,
+"lon": -90.156665,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
@@ -699,12 +695,12 @@
 "AI20072": {
 "id": "AI20072",
 "name": "Aer DO 14S",
-"lat": 
-"lon": 
+"lat": 35.071845,
+"lon": -90.156693,
 "altitude": 1,
 "value": 3.4,
 "unit": "mg/L",
 "precision": null,
 "status": "normal"
-},
+}
 }
