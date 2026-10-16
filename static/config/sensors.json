@@ -130,5 +130,115 @@
 "unit": "",
 "precision": null,
 "status": "normal"
+},
+"Z011AX-skip": {
+"id": "Z011AX-skip",
+"name": "Sec Clar 5N",
+"lat": 35.072494,
+"lon": -90.159076,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"Z014AX-skip": {
+"id": "Z014AX-skip",
+"name": "Sec Clar 5S",
+"lat": 35.071947,
+"lon": -90.159133,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M108FI": {
+"id": "M108FI",
+"name": "Sec Clar 1S",
+"lat": 35.071757,
+"lon": -90.157659,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M110FI": {
+"id": "M110FI",
+"name": "Sec Clar 2S",
+"lat": 35.071305,
+"lon": -90.157721,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M112FI": {
+"id": "M112FI",
+"name": "Sec Clar 3S",
+"lat": 35.071366,
+"lon": -90.158325,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M114FI": {
+"id": "M114FI",
+"name": "Sec Clar 4S",
+"lat": 35.071803,
+"lon": -90.158271,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M107FI": {
+"id": "M107FI",
+"name": "Sec Clar 1N",
+"lat": 35.072463,
+"lon": -90.157570,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M109FI": {
+"id": "M109FI",
+"name": "Sec Clar 2N",
+"lat": 35.072906,
+"lon": -90.157527,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M111FI": {
+"id": "M111FI",
+"name": "Sec Clar 3N",
+"lat": 35.072961,
+"lon": -90.158141,
+"altitude": 2,
+"value": 10,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M113FI": {
+"id": "M113FI",
+"name": "Sec Clar 4N",
+"lat": 35.072511,
+"lon": -90.158190,
+"altitude": 2,
+"value": 0,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
 }
 }
