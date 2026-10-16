@@ -3,7 +3,7 @@ setlocal
 
 set "SCRIPTDIR=%~dp0"
 set "APPDIR=%SCRIPTDIR%.."
-set "LOGFILE=%SCRIPTDIR%log.txt"
+set "LOGFILE=%SCRIPTDIR%log-start.txt"
 
 cd /d "%APPDIR%"
 if errorlevel 1 (
