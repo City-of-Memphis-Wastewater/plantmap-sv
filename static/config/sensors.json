@@ -240,5 +240,159 @@
 "unit": "MGD",
 "precision": null,
 "status": "normal"
+},
+"M135FI": {
+"id": "M135FI",
+"name": "Aer Basin 1/2N",
+"lat": 35.072074,
+"lon": -90.155584,
+"altitude": 1,
+"value": 5.5,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M137FI": {
+"id": "M137FI",
+"name": "Aer Basin 3/4N",
+"lat": 35.072085,
+"lon": -90.155755,
+"altitude": 1,
+"value": 0.0,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M139FI": {
+"id": "M139FI",
+"name": "Aer Basin 5/6N",
+"lat": 35.072129,
+"lon": -90.155924,
+"altitude": 1,
+"value": 6.9,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M119FI": {
+"id": "M119FI",
+"name": "Aer Basin 7/8N",
+"lat": 35.072158,
+"lon": -90.156096,
+"altitude": 1,
+"value": 6.1,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M121FI": {
+"id": "M121FI",
+"name": "Aer Basin 9/10N",
+"lat": 35.072159,
+"lon": -90.156247,
+"altitude": 1,
+"value": 4.2,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M123FI": {
+"id": "M123FI",
+"name": "Aer Basin 11/12N",
+"lat": 35.072193,
+"lon": -90.156415,
+"altitude": 1,
+"value": 7.7,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M125FI": {
+"id": "M125FI",
+"name": "Aer Basin 13/14N",
+"lat": 35.072192,
+"lon": -90.156695,
+"altitude": 1,
+"value": 2.4,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M136FI": {
+"id": "M136FI",
+"name": "Aer Basin 1/2S",
+"lat": 35.071827,
+"lon": -90.155630,
+"altitude": 1,
+"value": 6.1,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M138FI": {
+"id": "M138FI",
+"name": "Aer Basin 3/4S",
+"lat": 35.071821,
+"lon": -90.155781,
+"altitude": 1,
+"value": 6.2,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M140FI": {
+"id": "M140FI",
+"name": "Aer Basin 5/6S",
+"lat": 35.071844,
+"lon": -90.155957,
+"altitude": 1,
+"value": 6.6,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M120FI": {
+"id": "M120FI",
+"name": "Aer Basin 7/8S",
+"lat": 35.071852,
+"lon": -90.156127,
+"altitude": 1,
+"value": 4.1,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M122FI": {
+"id": "M122FI",
+"name": "Aer Basin 9/10S",
+"lat": 35.071866,
+"lon": -90.156292,
+"altitude": 1,
+"value": 8.0,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M124FI": {
+"id": "M124FI",
+"name": "Aer Basin 11/12S",
+"lat": 35.071889,
+"lon": -90.156459,
+"altitude": 1,
+"value": 0.2,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
+},
+"M126FI": {
+"id": "M126FI",
+"name": "Aer Basin 13/14S",
+"lat": 35.071902,
+"lon": -90.156695,
+"altitude": 1,
+"value": 3.2,
+"unit": "MGD",
+"precision": null,
+"status": "normal"
 }
 }
