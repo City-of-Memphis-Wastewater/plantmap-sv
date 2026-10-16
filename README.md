@@ -2,6 +2,12 @@
 
 A Cesium-based Svelte map app for visualizing geolocated live data from the Emerson Ovation EDS SOAP API.
 
+City of Memphis Wastewater is now self-hosting an instance of plantmap-sv, for T.E Maxson Wastewater Treatment Facility.
+
+Instead of blocky, proprietary SCADA graphics that are limited to a few expensive workstations, we can now give operators something intuitive that they can see on their phones and laptops.
+
+Emerson Ovation users, notice that the project is free, open-source, permissively licensed, and configurable.
+
 ## Setup
 
 Setup config and secret values via CLI prompt, using `memphis-config` and `memphis-secret` libraries.
@@ -38,16 +44,7 @@ node build
 
 The production server listens on the port configured by the SvelteKit/Node adapter.
 
-## Bun
-
 Bun may also be used as an alternative JavaScript runtime/package manager where available.
-
-```bash
-bun install
-bun link plantmap-sv
-bunx plantmap-sv setup
-bun run dev
-```
 
 The application does not require Bun.
 
@@ -62,7 +59,7 @@ The application does not require Bun.
 
 ## Screenshot
 
-Self-hosted and configured instance and `plantmap-sv` for T.E. Maxson Wastewater Treatment Plant in Memphis, Tennessee
+Self-hosted and configured instance of `plantmap-sv` for T.E. Maxson Wastewater Treatment Plant in Memphis, Tennessee
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/City-of-Memphis-Wastewater/plantmap-sv/main/assets/plantmap-sv-v0.0.08-maxson.png" width="900">
