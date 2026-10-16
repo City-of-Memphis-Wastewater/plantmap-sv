@@ -394,5 +394,317 @@
 "unit": "MGD",
 "precision": null,
 "status": "normal"
-}
+},
+
+
+// ------ DO Meters ----
+"AI20081": {
+"id": "AI20081",
+"name": "Aer DO 1N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20082": {
+"id": "AI20082",
+"name": "Aer DO 2N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20091": {
+"id": "AI20091",
+"name": "Aer DO 3N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20092": {
+"id": "AI20092",
+"name": "Aer DO 4N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20101": {
+"id": "AI20101",
+"name": "Aer DO 5N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20102": {
+"id": "AI20102",
+"name": "Aer DO 6N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20111": {
+"id": "AI20111",
+"name": "Aer DO 7N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20112": {
+"id": "AI20112",
+"name": "Aer DO 8N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20121": {
+"id": "AI20121",
+"name": "Aer DO 9N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20122": {
+"id": "AI20122",
+"name": "Aer DO 10N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20131": {
+"id": "AI20131",
+"name": "Aer DO 11N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20132": {
+"id": "AI20132",
+"name": "Aer DO 12N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20141": {
+"id": "AI20141",
+"name": "Aer DO 13N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20142": {
+"id": "AI20142",
+"name": "Aer DO 14N",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+//--SOUTH --
+"AI20011": {
+"id": "AI20011",
+"name": "Aer DO 1S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20012": {
+"id": "AI20012",
+"name": "Aer DO 2S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20021": {
+"id": "AI20021",
+"name": "Aer DO 3S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20022": {
+"id": "AI20022",
+"name": "Aer DO 4S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20031": {
+"id": "AI20031",
+"name": "Aer DO 5S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20032": {
+"id": "AI20032",
+"name": "Aer DO 6S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20041": {
+"id": "AI20041",
+"name": "Aer DO 7S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20042": {
+"id": "AI20042",
+"name": "Aer DO 8S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20051": {
+"id": "AI20051",
+"name": "Aer DO 9S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20052": {
+"id": "AI20052",
+"name": "Aer DO 10S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20061": {
+"id": "AI20061",
+"name": "Aer DO 11S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20062": {
+"id": "AI20062",
+"name": "Aer DO 12S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20071": {
+"id": "AI20071",
+"name": "Aer DO 13S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"AI20072": {
+"id": "AI20072",
+"name": "Aer DO 14S",
+"lat": 
+"lon": 
+"altitude": 1,
+"value": 3.4,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
 }
