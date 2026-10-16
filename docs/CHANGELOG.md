@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 
 The format is (read: strives to be) based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+---
+
+## [0.0.5] – 2026-10-15
+
+### Changed:
+
+- Increase memphis-settings to v0.0.8, to use MemphisEnv.requireValue()
+- Copy cesium assets in run dev and run build calls, namely targeted at Windows pathing gaps. `node scripts/copy-cesium.mjs`.
+
 ---
 
 ## [0.0.4] – 2026-10-08
