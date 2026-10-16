@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+//import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
