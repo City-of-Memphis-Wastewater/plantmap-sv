@@ -20,6 +20,10 @@ npm link
 npx plantmap-sv setup
 ```
 
+## Plant Configuration
+
+Edit the `static/config/sensors.json` file to reflect the sensor location and IDCS values for your plant.
+
 ## Development
 
 Run the SvelteKit development server:
