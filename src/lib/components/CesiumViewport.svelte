@@ -45,8 +45,8 @@
 	// UI state
 	let showNavigation = $state(false);
 	let showDebugger = $state(false);
-	let showHoverInfo = $state(true);
-	let showSensorLabels = $state(true);
+	let showHoverInfo = $state(false);
+	let showSensorLabels = $state(false);
 	let showSensorValues = $state(true);
 
 	// Sync telemetry store to Cesium entities
