@@ -22,7 +22,9 @@ npx plantmap-sv setup
 
 ## Plant Configuration
 
-Edit the `static/config/sensors.json` file to reflect the sensor location and IDCS values for your plant.
+Edit the `static/config/sensors.json` file to reflect the sensor location and Ovation IDCS values for your plant.
+
+Your Emerson Ovatiom EDS must expose the EDS SOAP API.
 
 ## Development
 
