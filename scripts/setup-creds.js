@@ -11,26 +11,24 @@ const config = bootstrapPlantMapConfig();
 const secret = bootstrapPlantMapSecret();
 
 function requiredInteger(name) {
-	//const value = env.requiredValue(name);
-	const value = env.value(name);
-	const parsed = Number(value);
+    const value = env.requiredValue(name);
+    const parsed = Number(value);
 
-	if (!Number.isInteger(parsed)) {
-		throw new Error(`${name} must be an integer`);
-	}
+    if (!Number.isInteger(parsed)) {
+        throw new Error(`${name} must be an integer`);
+    }
 
-	return parsed;
+    return parsed;
 }
 
 function requiredBoolean(name) {
-	//const value = env.requiredValue(name).toLowerCase();
-    const value = env.value(name).toLowerCase();
+    const value = env.requiredValue(name).toLowerCase();
 
-	if (!['true', 'false'].includes(value)) {
-		throw new Error(`${name} must be true or false`);
-	}
+    if (!['true', 'false'].includes(value)) {
+        throw new Error(`${name} must be true or false`);
+    }
 
-	return value === 'true';
+    return value === 'true';
 }
 
 // EDS configuration
