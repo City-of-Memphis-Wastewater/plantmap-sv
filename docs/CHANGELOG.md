@@ -6,6 +6,11 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
+- Telemetry HUD needs a vertical scrollbar, ans for the minimization key to possibly be lower and unmoving.
+- We need text size adjustment, ans possibly roll controls.
+
+---
+
 ## [0.0.5] – 2026-10-15
 
 ### Changed:
