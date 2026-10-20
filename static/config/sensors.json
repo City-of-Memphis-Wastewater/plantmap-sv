@@ -406,17 +406,6 @@
 "precision": null,
 "status": "normal"
 },
-"MI-AI1008COD-AV-skip": {
-"id": "MI-AI1008COD-AV-skip",
-"name": "Pre Dis COD",
-"lat": 35.072257,
-"lon": -90.159703,
-"altitude": 1,
-"value": 0.0,
-"unit": "mg/L",
-"precision": null,
-"status": "normal"
-},
 "MI-AI1008TMP-AV-skip": {
 "id": "MI-AI1008TMP-AV-skip",
 "name": "Pre Dis Temp",
@@ -424,13 +413,24 @@
 "lon": -90.159703,
 "altitude": 1,
 "value": 0.0,
-"unit": "mg/L",
+"unit": "deg C",
 "precision": null,
 "status": "normal"
 },
 "MI-AI1008BOD-AV-skip": {
 "id": "MI-AI1008BOD-AV-skip",
 "name": "Pre Dis BOD",
+"lat": 35.072257,
+"lon": -90.159703,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1008COD-AV-skip": {
+"id": "MI-AI1008COD-AV-skip",
+"name": "Pre Dis COD",
 "lat": 35.072257,
 "lon": -90.159703,
 "altitude": 1,
@@ -457,7 +457,7 @@
 "lon": -90.159967,
 "altitude": 1,
 "value": 0.0,
-"unit": "mg/L",
+"unit": "deg C",
 "precision": null,
 "status": "normal"
 },
