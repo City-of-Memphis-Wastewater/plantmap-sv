@@ -394,5 +394,93 @@
 "unit": "MGD",
 "precision": null,
 "status": "normal"
+},
+"MI-AI1008TSS-AV": {
+"id": "MI-AI1008TSS-AV",
+"name": "Pre Dis TSS",
+"lat": 35.072257,
+"lon": -90.159703,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1008COD-AV": {
+"id": "MI-AI1008COD-AV",
+"name": "Pre Dis COD",
+"lat": 35.072257,
+"lon": -90.159703,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1008TMP-AV": {
+"id": "MI-AI1008TMP-AV",
+"name": "Pre Dis Temp",
+"lat": 35.072257,
+"lon": -90.159703,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1008BOD-AV": {
+"id": "MI-AI1008BOD-AV",
+"name": "Pre Dis BOD",
+"lat": 35.072257,
+"lon": -90.159703,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1009TSS-AV": {
+"id": "MI-AI1009TSS-AV",
+"name": "Post Dis TSS",
+"lat": 35.072279,
+"lon": -90.159967,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1009TMP-AV": {
+"id": "MI-AI1009TMP-AV",
+"name": "Post Dis Temp",
+"lat": 35.072279,
+"lon": -90.159967,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1009BOD-AV": {
+"id": "MI-AI1009BOD-AV",
+"name": "Post Dis BOD",
+"lat": 35.072279,
+"lon": -90.159967,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
+},
+"MI-AI1009COD-AV": {
+"id": "MI-AI1009COD-AV",
+"name": "Post Dis COD",
+"lat": 35.072279,
+"lon": -90.159967,
+"altitude": 1,
+"value": 0.0,
+"unit": "mg/L",
+"precision": null,
+"status": "normal"
 }
 }
