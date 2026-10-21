@@ -9,10 +9,13 @@ export interface TabularPeriod {
 
 export interface EDSTelemetryValue {
 	iessTag: string;
-	value: number;
+	value: number | null;
 	quality: string;
-	timestamp: string;
+	timestamp: string | null;
 }
+
+/** One series of historical samples for a sensor. */
+export type EDSTelemetrySeries = Record<string, EDSTelemetryValue[]>;
 
 export interface EdsPointTelemetry {
 	sid: string;
@@ -20,9 +23,9 @@ export interface EdsPointTelemetry {
 	idcs: string;
 	description: string;
 	units: string;
-	value: number;
+	value: number | null;
 	quality: string;
-	timestamp: string;
+	timestamp: string | null;
 }
 
 export interface EDSClientOptions {
