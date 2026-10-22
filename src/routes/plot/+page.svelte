@@ -19,7 +19,7 @@
 
 	let tagsInput = $state('M100FI');
 	let days = $state('1');
-	let stepSeconds = $state('60');
+	let stepSeconds = $state('900');
 	let functionType = $state('AVG');
 
 	let loading = $state(false);
