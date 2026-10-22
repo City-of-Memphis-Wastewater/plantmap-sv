@@ -230,10 +230,7 @@
 				<label for="function">Aggregation</label>
 				<select id="function" bind:value={functionType}>
 					<option value="AVG">Average</option>
-					<option value="MIN">Minimum</option>
-					<option value="MAX">Maximum</option>
-					<option value="SUM">Sum</option>
-					<option value="LAST">Last</option>
+					<option value="VALUE">Value</option>
 				</select>
 			</div>
 
