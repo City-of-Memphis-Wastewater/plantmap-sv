@@ -2,6 +2,14 @@
 
 import type { EDSTelemetryValue } from '../types';
 
+import {
+        getXmlBlocks,
+        getXmlText,
+        parseNumericValue,
+        parseXmlTimestamp,
+        parseXmlQuality
+} from './common';
+
 export function parseTabularResponse(
 	xml: string,
 	requestedTags: string[]
