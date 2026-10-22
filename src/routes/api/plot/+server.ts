@@ -30,14 +30,15 @@ function positiveNumber(
 export const GET: RequestHandler = async ({ url }) => {
 	const rawTags = url.searchParams.getAll('tags').join(',');
 
-	const tags = [
-		...new Set(
-			rawTags
-				.split(',')
-				.map((tag) => tag.trim())
-				.filter(Boolean)
-		)
-	];
+    const tags = [
+        ...new Set(
+            url.searchParams
+                .getAll('tags')
+                .flatMap((value) => value.split(','))
+                .map((tag) => tag.trim())
+                .filter(Boolean)
+        )
+    ];
 
 	if (tags.length === 0) {
 		return json(
