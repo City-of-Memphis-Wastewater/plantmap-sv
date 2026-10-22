@@ -9,7 +9,8 @@ import type { EDSClientOptions, EdsPointTelemetry } from './types';
 export class ClientEdsSoap {
 	public readonly endpoint: string;
 	public readonly iessSuffix: string;
-	public readonly timeoutMs: number;
+	public readonly tabularMaxPolls: number;
+    public readonly tabularPollTimeout: number;
 	public readonly username: string;
 	public readonly password: string;
 	public readonly debug: boolean;
@@ -21,7 +22,8 @@ export class ClientEdsSoap {
 	constructor(options: EDSClientOptions) {
 		this.endpoint = options.endpoint;
 		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
-		this.timeoutMs = options.timeoutMs ?? 3000;
+		this.tabularPollTimeout = options.tabularPollTimeout ?? 3000;
+        this.tabularMaxPolls = options.tabularMaxPolls ?? 20;
 		this.username = options.username;
 		this.password = options.password;
 		this.debug = options.debug ?? false;
@@ -33,7 +35,6 @@ export class ClientEdsSoap {
 		this.log('Client initialized', {
 			endpoint: this.endpoint,
 			iessSuffix: this.iessSuffix,
-			timeoutMs: this.timeoutMs,
 			username: this.username ? '<configured>' : '<anonymous>',
 			debug: this.debug
 		});
@@ -64,9 +65,6 @@ export class ClientEdsSoap {
 		return this.points.getRegex(idcsTags);
 	}
 
-	/**
-	 * Convenience API matching the old client's fetchTabularValues().
-	 */
 	public async fetchTabularValues(
 		sensorIds: string[],
 		windowSeconds: number = 600,

@@ -22,7 +22,8 @@ function createEdsClient(): ClientEdsSoap {
 		username: plantMapSecret.eds.username,
 		password: plantMapSecret.eds.password,
 		iessSuffix: plantMapConfig.eds.iessSuffix,
-        timeoutMs: plantMapConfig.eds.timeoutMs,
+        tabularMaxPolls: plantMapConfig.eds.tabularMaxPolls,
+		tabularPollTimeout: plantMapConfig.eds.tabularPollTimeout,
 		debug: plantMapConfig.eds.debug
 	});
 }

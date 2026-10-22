@@ -117,10 +117,11 @@ export class Tabular {
 
 		// 2. Poll status
 		let isReady = false;
-		const maxPolls = 10;
+		const maxPolls = this.client.tabularMaxPolls; // 20;
+        const pollTimeout =  this.client.tabularPollTimeout; // 500;
 
 		for (let i = 0; i < maxPolls; i++) {
-			await new Promise((resolve) => setTimeout(resolve, 500));
+			await new Promise((resolve) => setTimeout(resolve, pollTimeout));
 
 			const statusEnvelope = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope
