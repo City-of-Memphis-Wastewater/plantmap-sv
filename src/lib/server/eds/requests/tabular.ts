@@ -12,7 +12,8 @@ export class Tabular {
 		sensorIds: string[],
 		windowSeconds: number = 600,
 		stepSeconds: number = 60,
-		functionType: string = 'AVG'
+		functionType: string = 'AVG',
+         debug: boolean = false
 	): Promise<Record<string, EDSTelemetryValue>> {
 		if (sensorIds.length === 0) {
 			return {};
@@ -21,6 +22,23 @@ export class Tabular {
 		const token = await this.client.auth.getToken();
 
 		const iessTags = sensorIds.map((id) => formatIessTag(id, this.client.iessSuffix));
+        
+        const log = (message: string, details?: unknown) => {
+            if (!debug) return;
+
+            if (details === undefined) {
+                console.log(`[EDS Tabular DEBUG] ${message}`);
+            } else {
+                console.log(`[EDS Tabular DEBUG] ${message}`, details);
+            }
+        };
+
+        log('Input sensor IDs:', sensorIds);
+        log('Formatted IESS tags:', iessTags);
+        log('Endpoint:', this.client.endpoint);
+        log('Window seconds:', windowSeconds);
+        log('Step seconds:', stepSeconds);
+        log('Function:', functionType);
 
 		const now = Math.floor(Date.now() / 1000);
 		const startTime = now - windowSeconds;
@@ -84,9 +102,11 @@ export class Tabular {
 
 		if (!requestIdMatch) {
 			throw new Error(`Failed to submit tabular request: ${reqXml}`);
+            log('No request ID found; submission did not return the expected response.');
 		}
 
-		const requestId = requestIdMatch[1].trim();
+		const requestId = requestIdMatch[1].trim();        
+        log('Request ID:', requestId);
 
 		// 2. Poll status
 		let isReady = false;
@@ -123,7 +143,11 @@ export class Tabular {
 			);
 
 			const status = statusMatch ? statusMatch[1].trim() : '';
-
+            log(`Poll ${i + 1}/${maxPolls}`, {
+                status,
+                httpStatus: statusResp.status,
+                response: statusXml
+            });
 			if (status === 'REQUEST-SUCCESS') {
 				isReady = true;
 				break;
@@ -150,7 +174,8 @@ export class Tabular {
     </tns:getTabular>
   </soap:Body>
 </soap:Envelope>`;
-
+        
+        log('Retrieving completed tabular result');
 		const dataResp = await fetch(this.client.endpoint, {
 			method: 'POST',
 			headers: {
@@ -161,6 +186,14 @@ export class Tabular {
 		});
 
 		const dataXml = await dataResp.text();
+
+        log('getTabular HTTP response:', {
+            status: dataResp.status,
+            statusText: dataResp.statusText,
+            ok: dataResp.ok
+        });
+
+        log('getTabular SOAP response body:', dataXml);
 
 		return parseTabularResponse(dataXml, iessTags);
 	}
