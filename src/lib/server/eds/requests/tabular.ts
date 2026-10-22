@@ -76,9 +76,7 @@ export class Tabular {
         <tns:step>
           <tns:seconds>${stepSeconds}</tns:seconds>
         </tns:step>
-        <tns:items>
           ${itemsXml}
-        </tns:items>
       </tns:request>
     </tns:requestTabular>
   </soap:Body>
