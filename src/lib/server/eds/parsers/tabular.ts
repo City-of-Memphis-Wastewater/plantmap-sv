@@ -52,11 +52,12 @@ export function parseTabularResponse(
 		}
 
 		const tag = activeTags[index];
-
-		const value =
-			parseNumericValue(getXmlText(valueBlock, 'value')) ??
-			parseNumericValue(getXmlText(valueBlock, 'av')) ??
-			parseNumericValue(getXmlText(valueBlock, 'dv'));
+        
+        const value =
+            parseNumericValue(getXmlText(valueBlock, 'dav')) ??
+            parseNumericValue(getXmlText(valueBlock, 'value')) ??
+            parseNumericValue(getXmlText(valueBlock, 'av')) ??
+            parseNumericValue(getXmlText(valueBlock, 'dv'));
 
 		results[tag] = {
 			iessTag: tag,
