@@ -35,6 +35,6 @@ export interface EDSClientOptions {
 	iessSuffix: string;
 	timeoutMs?: number;
     tabularMaxPolls?: number;
-    tabularPollTimeout?: number;
+    tabularPollTimeoutMs?: number;
 	debug?: boolean;
 }

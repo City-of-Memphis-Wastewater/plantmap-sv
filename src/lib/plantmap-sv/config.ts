@@ -11,7 +11,7 @@ export const PlantMapConfigSchema = z.object({
 		soapPort: z.number().int(),
 		iessSuffix: z.string(),
 		tabularMaxPolls: z.number().int().positive(),
-		tabularPollTimeout: z.number().int().positive(),
+		tabularPollTimeoutMs: z.number().int().positive(),
 		debug: z.boolean()
 	}),
 
@@ -33,8 +33,8 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 			host: config.value('eds', 'host') ?? '127.0.0.1',
 			soapPort: config.value('eds', 'soapPort') ?? 43080,
 			iessSuffix: config.value('eds', 'iessSuffix') ?? '.UNIT0@NET0',
-			tabularMaxPolls: config.value('eds', 'tabularMaxPolls') ?? 20,
-		    tabularPollTimeout: config.value('eds', 'tabularPollTimeout') ?? 3000,
+			tabularMaxPolls: config.value('eds', 'tabularMaxPolls') ?? 10,
+		    tabularPollTimeoutMs: config.value('eds', 'tabularPollTimeoutMs') ?? 1000,
 		    debug: config.value('eds', 'debug') ?? false
 		},
 

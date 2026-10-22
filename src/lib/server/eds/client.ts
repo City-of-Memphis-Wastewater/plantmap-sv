@@ -10,7 +10,7 @@ export class ClientEdsSoap {
 	public readonly endpoint: string;
 	public readonly iessSuffix: string;
 	public readonly tabularMaxPolls: number;
-    public readonly tabularPollTimeout: number;
+    public readonly tabularPollTimeoutMs: number;
 	public readonly username: string;
 	public readonly password: string;
 	public readonly debug: boolean;
@@ -22,7 +22,7 @@ export class ClientEdsSoap {
 	constructor(options: EDSClientOptions) {
 		this.endpoint = options.endpoint;
 		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
-		this.tabularPollTimeout = options.tabularPollTimeout ?? 3000;
+		this.tabularPollTimeoutMs = options.tabularPollTimeoutMs ?? 3000;
         this.tabularMaxPolls = options.tabularMaxPolls ?? 20;
 		this.username = options.username;
 		this.password = options.password;
