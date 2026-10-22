@@ -202,6 +202,12 @@ export class Tabular {
 
 		// log('getTabular SOAP response body:', dataXml);
 
+        log('getTabular SOAP response body (head/tail):', {
+                length: dataXml.length,
+                head: dataXml.slice(0, 1000),
+                tail: dataXml.slice(-1000)
+        });
+
 		return parseTabularResponse(dataXml, iessTags);
 	}
 }
