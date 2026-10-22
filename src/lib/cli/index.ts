@@ -4,6 +4,7 @@ import { setup } from './setup.ts';
 import { secret } from './secret.ts';
 import { config } from './config.ts';
 import { start } from './start.ts';
+import { plot } from './plot.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -11,6 +12,10 @@ export async function runCli(args: string[]) {
 	switch (command) {
 		case 'setup':
 			await setup();
+			return;
+
+        case 'plot':
+			plot(args.slice(1));
 			return;
 
 		case 'secret':
