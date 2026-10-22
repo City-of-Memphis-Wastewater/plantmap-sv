@@ -101,9 +101,7 @@ export function parseXmlTimestamp(block: string): string | null {
 	}
 
 	// Support responses that provide an ISO-like timestamp directly.
-	const directTimestamp =
-		getXmlText(block, 'timestamp') ??
-		getXmlText(block, 'timeStamp');
+	const directTimestamp = getXmlText(block, 'timestamp') ?? getXmlText(block, 'timeStamp');
 
 	if (directTimestamp == null || directTimestamp === '') {
 		return null;
@@ -111,9 +109,7 @@ export function parseXmlTimestamp(block: string): string | null {
 
 	const milliseconds = Date.parse(directTimestamp);
 
-	return Number.isFinite(milliseconds)
-		? new Date(milliseconds).toISOString()
-		: null;
+	return Number.isFinite(milliseconds) ? new Date(milliseconds).toISOString() : null;
 }
 
 /**
