@@ -6,8 +6,9 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
-- Telemetry HUD needs a vertical scrollbar, ans for the minimization key to possibly be lower and unmoving.
-- We need text size adjustment, ans possibly roll controls.
+- Telemetry HUD needs a vertical scrollbar, and for the minimization key to possibly be lower and unmoving.
+- We need text size adjustment, and possibly roll controls.
+- Plotting HUD, independent with pipeline-eds style CLI call, and in map view on hover, and in separate panel.
 
 ---
 
