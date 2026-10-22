@@ -34,8 +34,8 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 			soapPort: config.value('eds', 'soapPort') ?? 43080,
 			iessSuffix: config.value('eds', 'iessSuffix') ?? '.UNIT0@NET0',
 			tabularMaxPolls: config.value('eds', 'tabularMaxPolls') ?? 10,
-		    tabularPollTimeoutMs: config.value('eds', 'tabularPollTimeoutMs') ?? 1000,
-		    debug: config.value('eds', 'debug') ?? false
+			tabularPollTimeoutMs: config.value('eds', 'tabularPollTimeoutMs') ?? 1000,
+			debug: config.value('eds', 'debug') ?? false
 		},
 
 		prodServer: {

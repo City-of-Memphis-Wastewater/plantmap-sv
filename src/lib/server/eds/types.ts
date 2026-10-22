@@ -34,7 +34,7 @@ export interface EDSClientOptions {
 	password: string;
 	iessSuffix: string;
 	timeoutMs?: number;
-    tabularMaxPolls?: number;
-    tabularPollTimeoutMs?: number;
+	tabularMaxPolls?: number;
+	tabularPollTimeoutMs?: number;
 	debug?: boolean;
 }

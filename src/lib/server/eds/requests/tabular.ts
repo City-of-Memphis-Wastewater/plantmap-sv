@@ -118,7 +118,7 @@ export class Tabular {
 		// 2. Poll status
 		let isReady = false;
 		const maxPolls = this.client.tabularMaxPolls; // 20;
-        const pollTimeoutMs =  this.client.tabularPollTimeoutMs; // 500;
+		const pollTimeoutMs = this.client.tabularPollTimeoutMs; // 500;
 
 		for (let i = 0; i < maxPolls; i++) {
 			await new Promise((resolve) => setTimeout(resolve, pollTimeoutMs));
