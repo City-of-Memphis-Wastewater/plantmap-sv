@@ -10,7 +10,7 @@ export const PlantMapConfigSchema = z.object({
 		host: z.string(),
 		soapPort: z.number().int(),
 		iessSuffix: z.string(),
-		timeoutMs: z.number().int(),
+		timeoutMs: z.number().int().positive(),
 		debug: z.boolean()
 	}),
 
