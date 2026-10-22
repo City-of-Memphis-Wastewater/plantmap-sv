@@ -147,20 +147,10 @@ function parseArgs(args: string[]): PlotOptions {
 				daysProvided = true;
 				break;
 			case 'datapointCount':
-				datapointCount = parsePositiveNumber(
-					value,
-					arg,
-					1_000_000,
-					true
-				);
+				datapointCount = parsePositiveNumber(value, arg, 1_000_000, true);
 				break;
 			case 'secondsBetweenPoints':
-				secondsBetweenPoints = parsePositiveNumber(
-					value,
-					arg,
-					MAX_STEP_SECONDS,
-					true
-				);
+				secondsBetweenPoints = parsePositiveNumber(value, arg, MAX_STEP_SECONDS, true);
 				break;
 		}
 	}
@@ -195,13 +185,9 @@ function resolveTimeRange(options: PlotOptions): TimeRange {
 	const hasStart = options.start !== undefined;
 	const hasEnd = options.end !== undefined;
 
-	const start = hasStart
-		? parseTime(options.start!, '--start')
-		: undefined;
+	const start = hasStart ? parseTime(options.start!, '--start') : undefined;
 
-	const end = hasEnd
-		? parseTime(options.end!, '--end')
-		: undefined;
+	const end = hasEnd ? parseTime(options.end!, '--end') : undefined;
 
 	let startSeconds: number;
 	let endSeconds: number;
@@ -214,9 +200,7 @@ function resolveTimeRange(options: PlotOptions): TimeRange {
 		startSeconds = start;
 
 		// A start without --days ends now, not two days after the start.
-		endSeconds = options.daysProvided
-			? start + Math.round(options.days! * SECONDS_PER_DAY)
-			: now;
+		endSeconds = options.daysProvided ? start + Math.round(options.days! * SECONDS_PER_DAY) : now;
 	} else if (end !== undefined) {
 		endSeconds = end;
 		const days = options.days ?? DEFAULT_DAYS;
@@ -242,13 +226,8 @@ function resolveTimeRange(options: PlotOptions): TimeRange {
 	return { startSeconds, endSeconds };
 }
 
-function buildPlotUrl(
-	options: PlotOptions,
-	range: TimeRange
-): URL {
-	const baseUrl =
-		process.env.PLANTMAP_URL ??
-		`http://localhost:${process.env.PORT ?? '5173'}`;
+function buildPlotUrl(options: PlotOptions, range: TimeRange): URL {
+	const baseUrl = process.env.PLANTMAP_URL ?? `http://localhost:${process.env.PORT ?? '5173'}`;
 
 	let url: URL;
 
@@ -263,30 +242,18 @@ function buildPlotUrl(
 	}
 
 	if (options.start !== undefined) {
-		url.searchParams.set(
-			'start',
-			new Date(range.startSeconds * 1000).toISOString()
-		);
+		url.searchParams.set('start', new Date(range.startSeconds * 1000).toISOString());
 	}
 
 	if (options.end !== undefined) {
-		url.searchParams.set(
-			'end',
-			new Date(range.endSeconds * 1000).toISOString()
-		);
+		url.searchParams.set('end', new Date(range.endSeconds * 1000).toISOString());
 	}
 
 	// Send a relative duration only when it determines the range.
-	if (
-		options.start === undefined ||
-		options.end === undefined
-	) {
+	if (options.start === undefined || options.end === undefined) {
 		if (options.daysProvided) {
 			url.searchParams.set('days', String(options.days));
-		} else if (
-			options.start === undefined &&
-			options.end === undefined
-		) {
+		} else if (options.start === undefined && options.end === undefined) {
 			url.searchParams.set('days', String(options.days ?? DEFAULT_DAYS));
 		}
 	}
@@ -296,15 +263,9 @@ function buildPlotUrl(
 	// Explicit datapoint count wins if both sampling options are supplied.
 	const stepSeconds =
 		options.datapointCount !== undefined
-			? Math.max(
-					1,
-					Math.ceil(windowSeconds / options.datapointCount)
-				)
-			: options.secondsBetweenPoints ??
-				Math.max(
-					1,
-					Math.ceil(windowSeconds / DEFAULT_DATAPOINT_COUNT)
-				);
+			? Math.max(1, Math.ceil(windowSeconds / options.datapointCount))
+			: (options.secondsBetweenPoints ??
+				Math.max(1, Math.ceil(windowSeconds / DEFAULT_DATAPOINT_COUNT)));
 
 	url.searchParams.set('stepSeconds', String(stepSeconds));
 
@@ -322,9 +283,7 @@ function openUrl(url: string): void {
 	} else if (process.platform === 'darwin') {
 		commands = [{ command: 'open', args: [url] }];
 	} else if (process.platform === 'win32') {
-		commands = [
-			{ command: 'cmd.exe', args: ['/c', 'start', '', url] }
-		];
+		commands = [{ command: 'cmd.exe', args: ['/c', 'start', '', url] }];
 	} else {
 		commands = [{ command: 'xdg-open', args: [url] }];
 	}
@@ -333,9 +292,7 @@ function openUrl(url: string): void {
 		const entry = commands[index];
 
 		if (!entry) {
-			console.error(
-				'Could not launch a browser. Open this URL manually:\n' + url
-			);
+			console.error('Could not launch a browser. Open this URL manually:\n' + url);
 			return;
 		}
 

@@ -13,7 +13,7 @@ export class Tabular {
 		windowSeconds: number = 600,
 		stepSeconds: number = 60,
 		functionType: string = 'AVG',
-        period?: { from: number; till: number },        
+		period?: { from: number; till: number },
 		debug: boolean = false
 	): Promise<EDSTelemetrySeries> {
 		if (sensorIds.length === 0) {
@@ -42,11 +42,11 @@ export class Tabular {
 		log('Function:', functionType);
 
 		const now = Math.floor(Date.now() / 1000);
-        const startTime = period?.from ?? now - windowSeconds;
-        const endTime = period?.till ?? now;
+		const startTime = period?.from ?? now - windowSeconds;
+		const endTime = period?.till ?? now;
 
-        log('From (Unix seconds):', startTime);
-        log('Till (Unix seconds):', endTime);
+		log('From (Unix seconds):', startTime);
+		log('Till (Unix seconds):', endTime);
 		const itemsXml = iessTags
 			.map(
 				(tag) => `

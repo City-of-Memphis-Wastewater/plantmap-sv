@@ -21,9 +21,9 @@
 	let days = $state('1');
 	let stepSeconds = $state('900');
 	let functionType = $state('AVG');
-    let startTime = $state('');
-    let endTime = $state('');
-    let daysExplicit = $state(false);
+	let startTime = $state('');
+	let endTime = $state('');
+	let daysExplicit = $state(false);
 
 	let loading = $state(false);
 	let errorMessage = $state('');
@@ -31,7 +31,7 @@
 	let sampleCount = $state(0);
 
 	async function loadTrend(autoLoad = false) {
-        const tags = [
+		const tags = [
 			...new Set(
 				tagsInput
 					.split(',')
@@ -39,29 +39,29 @@
 					.filter(Boolean)
 			)
 		];
-        
+
 		if (tags.length === 0) {
 			errorMessage = 'Enter at least one IDCS tag.';
 			return;
 		}
 
-        const hasBounds = Boolean(startTime || endTime);
+		const hasBounds = Boolean(startTime || endTime);
 
-        const parsedDays = Number(days);
-        const parsedStep = Number(stepSeconds);
+		const parsedDays = Number(days);
+		const parsedStep = Number(stepSeconds);
 
-        if (
-            (!hasBounds || daysExplicit) &&
-            (!Number.isFinite(parsedDays) || parsedDays <= 0 || parsedDays > 365)
-        ) {
-            errorMessage = 'Days must be greater than 0 and no more than 365.';
-            return;
-        }
+		if (
+			(!hasBounds || daysExplicit) &&
+			(!Number.isFinite(parsedDays) || parsedDays <= 0 || parsedDays > 365)
+		) {
+			errorMessage = 'Days must be greater than 0 and no more than 365.';
+			return;
+		}
 
-        if (!Number.isInteger(parsedStep) || parsedStep <= 0 || parsedStep > 86400) {
-            errorMessage = 'Step seconds must be a positive integer no greater than 86400.';
-            return;
-        }
+		if (!Number.isInteger(parsedStep) || parsedStep <= 0 || parsedStep > 86400) {
+			errorMessage = 'Step seconds must be a positive integer no greater than 86400.';
+			return;
+		}
 
 		if (tags.length > 25) {
 			errorMessage = 'A maximum of 25 tags may be requested at once.';
@@ -71,24 +71,24 @@
 		loading = true;
 		errorMessage = '';
 		statusMessage = autoLoad
-            ? 'Loading the requested CLI plot from EDS...'
-            : 'Requesting historical data from EDS...';
+			? 'Loading the requested CLI plot from EDS...'
+			: 'Requesting historical data from EDS...';
 
 		try {
-            const params = new URLSearchParams({
-                tags: tags.join(','),
-                stepSeconds: String(parsedStep),
-                function: functionType
-            });
+			const params = new URLSearchParams({
+				tags: tags.join(','),
+				stepSeconds: String(parsedStep),
+				function: functionType
+			});
 
-            if (startTime) params.set('start', startTime);
-            if (endTime) params.set('end', endTime);
+			if (startTime) params.set('start', startTime);
+			if (endTime) params.set('end', endTime);
 
-            // Preserve the CLI/API semantics: don't invent a days constraint
-            // for an explicit start/end request.
-            if (!hasBounds || daysExplicit) {
-                params.set('days', String(parsedDays));
-            }
+			// Preserve the CLI/API semantics: don't invent a days constraint
+			// for an explicit start/end request.
+			if (!hasBounds || daysExplicit) {
+				params.set('days', String(parsedDays));
+			}
 
 			const response = await fetch(`/api/plot?${params.toString()}`);
 			const result = (await response.json()) as PlotResponse;
@@ -164,8 +164,8 @@
 			chart?.setOption(option, true);
 
 			const returnedTags = Object.keys(seriesData);
-			
-            statusMessage =
+
+			statusMessage =
 				`${sampleCount.toLocaleString()} samples returned across ` +
 				`${returnedTags.length} tag(s).`;
 		} catch (error) {
@@ -175,65 +175,62 @@
 			loading = false;
 		}
 	}
-    //---
-    onMount(() => {
-        let disposed = false;
+	//---
+	onMount(() => {
+		let disposed = false;
 
-        const resizeChart = () => chart?.resize();
+		const resizeChart = () => chart?.resize();
 
-        const params = new URLSearchParams(window.location.search);
+		const params = new URLSearchParams(window.location.search);
 
-        if (params.has('tags')) tagsInput = params.get('tags') ?? tagsInput;
-        if (params.has('start')) startTime = params.get('start') ?? '';
-        if (params.has('end')) endTime = params.get('end') ?? '';
+		//if (params.has('tags')) tagsInput = params.get('tags') ?? tagsInput;
+		if (params.has('tags')) {
+			tagsInput = params.getAll('tags').join(',');
+		}
+		if (params.has('start')) startTime = params.get('start') ?? '';
+		if (params.has('end')) endTime = params.get('end') ?? '';
 
-        if (params.has('days')) {
-            days = params.get('days') ?? days;
-            daysExplicit = true;
-        }
+		if (params.has('days')) {
+			days = params.get('days') ?? days;
+			daysExplicit = true;
+		}
 
-        if (params.has('stepSeconds')) {
-            stepSeconds = params.get('stepSeconds') ?? stepSeconds;
-        }
+		if (params.has('stepSeconds')) {
+			stepSeconds = params.get('stepSeconds') ?? stepSeconds;
+		}
 
-        if (params.has('function')) {
-            functionType = params.get('function') ?? functionType;
-        }
+		if (params.has('function')) {
+			functionType = params.get('function') ?? functionType;
+		}
 
-        const hasPlotRequest = [
-            'tags',
-            'start',
-            'end',
-            'days',
-            'stepSeconds',
-            'function'
-        ].some((key) => params.has(key));
+		const hasPlotRequest = ['tags', 'start', 'end', 'days', 'stepSeconds', 'function'].some((key) =>
+			params.has(key)
+		);
 
-        void import('echarts')
-            .then((echarts) => {
-                if (disposed || !chartElement) return;
+		void import('echarts')
+			.then((echarts) => {
+				if (disposed || !chartElement) return;
 
-                chart = echarts.init(chartElement);
-                window.addEventListener('resize', resizeChart);
+				chart = echarts.init(chartElement);
+				window.addEventListener('resize', resizeChart);
 
-                if (hasPlotRequest) {
-                    void loadTrend(true);
-                }
-            })
-            .catch((error: unknown) => {
-                errorMessage = `Could not initialize ECharts: ${
-                    error instanceof Error ? error.message : String(error)
-                }`;
-            });
+				if (hasPlotRequest) {
+					void loadTrend(true);
+				}
+			})
+			.catch((error: unknown) => {
+				errorMessage = `Could not initialize ECharts: ${
+					error instanceof Error ? error.message : String(error)
+				}`;
+			});
 
-        return () => {
-            disposed = true;
-            window.removeEventListener('resize', resizeChart);
-            chart?.dispose();
-            chart = undefined;
-        };
-    });
-    
+		return () => {
+			disposed = true;
+			window.removeEventListener('resize', resizeChart);
+			chart?.dispose();
+			chart = undefined;
+		};
+	});
 </script>
 
 // src/routes/plot/+page.svelte
@@ -270,16 +267,16 @@
 		<div class="settings">
 			<div class="field">
 				<label for="days">Days</label>
-			    <input
-                    id="days"
-                    type="number"
-                    min="0.001"
-                    max="365"
-                    step="any"
-                    bind:value={days}
-                    oninput={() => (daysExplicit = true)}
-                />
-            </div>
+				<input
+					id="days"
+					type="number"
+					min="0.001"
+					max="365"
+					step="any"
+					bind:value={days}
+					oninput={() => (daysExplicit = true)}
+				/>
+			</div>
 
 			<div class="field">
 				<label for="step">Step (seconds)</label>

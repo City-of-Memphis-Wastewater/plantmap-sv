@@ -67,7 +67,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			Math.round(days * 86400),
 			stepSeconds,
 			functionType,
-            undefined,
+			undefined,
 			true
 		);
 

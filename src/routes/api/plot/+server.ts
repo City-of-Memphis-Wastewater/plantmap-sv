@@ -11,11 +11,7 @@ const MAX_TAGS = 25;
 const MAX_STEP_SECONDS = 86_400;
 const SECONDS_PER_DAY = 86_400;
 
-function positiveNumber(
-	value: string | null,
-	fallback: number,
-	maximum: number
-): number | null {
+function positiveNumber(value: string | null, fallback: number, maximum: number): number | null {
 	if (value === null) return fallback;
 
 	const parsed = Number(value);
@@ -30,15 +26,15 @@ function positiveNumber(
 export const GET: RequestHandler = async ({ url }) => {
 	const rawTags = url.searchParams.getAll('tags').join(',');
 
-    const tags = [
-        ...new Set(
-            url.searchParams
-                .getAll('tags')
-                .flatMap((value) => value.split(','))
-                .map((tag) => tag.trim())
-                .filter(Boolean)
-        )
-    ];
+	const tags = [
+		...new Set(
+			url.searchParams
+				.getAll('tags')
+				.flatMap((value) => value.split(','))
+				.map((tag) => tag.trim())
+				.filter(Boolean)
+		)
+	];
 
 	if (tags.length === 0) {
 		return json(
@@ -51,10 +47,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 
 	if (tags.length > MAX_TAGS) {
-		return json(
-			{ error: `A maximum of ${MAX_TAGS} tags may be requested.` },
-			{ status: 400 }
-		);
+		return json({ error: `A maximum of ${MAX_TAGS} tags may be requested.` }, { status: 400 });
 	}
 
 	const startRaw = url.searchParams.get('start');
@@ -90,13 +83,9 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ error: 'Invalid end time.' }, { status: 400 });
 	}
 
-	const explicitStart = startRaw
-		? Math.floor(parsedStart / 1000)
-		: null;
+	const explicitStart = startRaw ? Math.floor(parsedStart / 1000) : null;
 
-	const explicitEnd = endRaw
-		? Math.floor(parsedEnd / 1000)
-		: null;
+	const explicitEnd = endRaw ? Math.floor(parsedEnd / 1000) : null;
 
 	let startSeconds: number;
 	let endSeconds: number;
@@ -108,36 +97,25 @@ export const GET: RequestHandler = async ({ url }) => {
 	} else if (explicitStart !== null) {
 		// Start alone: extend by explicit days, or end at now.
 		startSeconds = explicitStart;
-		endSeconds =
-			daysRaw !== null
-				? explicitStart + Math.round(days! * SECONDS_PER_DAY)
-				: now;
+		endSeconds = daysRaw !== null ? explicitStart + Math.round(days! * SECONDS_PER_DAY) : now;
 	} else if (explicitEnd !== null) {
 		// End alone: use explicit days, or the default duration.
 		endSeconds = explicitEnd;
-		startSeconds =
-			endSeconds - Math.round(days! * SECONDS_PER_DAY);
+		startSeconds = endSeconds - Math.round(days! * SECONDS_PER_DAY);
 	} else {
 		// Neither bound: end now and look back by days/default days.
 		endSeconds = now;
-		startSeconds =
-			endSeconds - Math.round(days! * SECONDS_PER_DAY);
+		startSeconds = endSeconds - Math.round(days! * SECONDS_PER_DAY);
 	}
 
 	if (startSeconds >= endSeconds) {
-		return json(
-			{ error: 'Start time must be earlier than end time.' },
-			{ status: 400 }
-		);
+		return json({ error: 'Start time must be earlier than end time.' }, { status: 400 });
 	}
 
 	const windowSeconds = endSeconds - startSeconds;
 
 	if (windowSeconds > MAX_DAYS * SECONDS_PER_DAY) {
-		return json(
-			{ error: `The time range cannot exceed ${MAX_DAYS} days.` },
-			{ status: 400 }
-		);
+		return json({ error: `The time range cannot exceed ${MAX_DAYS} days.` }, { status: 400 });
 	}
 
 	const stepSeconds = positiveNumber(
@@ -155,11 +133,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		);
 	}
 
-	const functionType = (
-		url.searchParams.get('function') ?? 'AVG'
-	)
-		.trim()
-		.toUpperCase();
+	const functionType = (url.searchParams.get('function') ?? 'AVG').trim().toUpperCase();
 
 	if (!/^[A-Z][A-Z0-9_]{0,19}$/.test(functionType)) {
 		return json({ error: 'Invalid function parameter.' }, { status: 400 });
@@ -168,13 +142,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	try {
 		const eds = getEdsClient();
 
-		const values = await eds.tabular.fetch(
-			tags,
-			windowSeconds,
-			stepSeconds,
-			functionType,
-			{ from: startSeconds, till: endSeconds }
-		);
+		const values = await eds.tabular.fetch(tags, windowSeconds, stepSeconds, functionType, {
+			from: startSeconds,
+			till: endSeconds
+		});
 
 		return json(
 			{
