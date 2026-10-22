@@ -47,13 +47,13 @@ export class Tabular {
 		const itemsXml = iessTags
 			.map(
 				(tag) => `
-        <tns:item>
+        <tns:items>
           <tns:pointId>
             <tns:iess>${tag}</tns:iess>
           </tns:pointId>
           <tns:shadePriority>0</tns:shadePriority>
           <tns:function>${functionType}</tns:function>
-        </tns:item>`
+        </tns:items>`
 			)
 			.join('');
 
@@ -81,7 +81,16 @@ export class Tabular {
     </tns:requestTabular>
   </soap:Body>
 </soap:Envelope>`;
-
+        
+        if (debug) {
+          console.log(
+            '[EDS Tabular DEBUG] Outgoing request envelope:\n',
+            requestTabularEnvelope.replace(
+              /(<(?:\w+:)?authString>)[\s\S]*?(<\/(?:\w+:)?authString>)/,
+              '$1[REDACTED]$2'
+            )
+          );
+        }
 		// 1. Submit request
 		const reqResponse = await fetch(this.client.endpoint, {
 			method: 'POST',
