@@ -21,7 +21,7 @@ export class ClientEdsSoap {
 	constructor(options: EDSClientOptions) {
 		this.endpoint = options.endpoint;
 		this.iessSuffix = options.iessSuffix ?? '.UNIT0@NET0';
-		this.timeoutMs = options.timeoutMs ?? 1000;
+		this.timeoutMs = options.timeoutMs ?? 3000;
 		this.username = options.username;
 		this.password = options.password;
 		this.debug = options.debug ?? false;

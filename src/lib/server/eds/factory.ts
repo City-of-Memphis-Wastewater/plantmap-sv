@@ -22,6 +22,7 @@ function createEdsClient(): ClientEdsSoap {
 		username: plantMapSecret.eds.username,
 		password: plantMapSecret.eds.password,
 		iessSuffix: plantMapConfig.eds.iessSuffix,
+        timeoutMs: plantMapConfig.eds.timeoutMs,
 		debug: plantMapConfig.eds.debug
 	});
 }
