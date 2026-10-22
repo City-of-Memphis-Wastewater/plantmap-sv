@@ -1,378 +1,217 @@
+// requests/tabular.ts
 
- // src/lib/cli/plot.ts
+import type { ClientEdsSoap } from '../client';
+import { formatIessTag } from '../helpers';
+import { parseTabularResponse } from '../parsers/tabular';
+import type { EDSTelemetrySeries } from '../types';
 
-import { spawn } from 'node:child_process';
-import process from 'node:process';
+export class Tabular {
+	constructor(private readonly client: ClientEdsSoap) {}
 
-const DEFAULT_DAYS = 2;
-const DEFAULT_DATAPOINT_COUNT = 400;
-const MAX_DAYS = 365;
-const MAX_STEP_SECONDS = 86_400;
-const SECONDS_PER_DAY = 86_400;
-
-interface PlotOptions {
-	tags: string[];
-	start?: string;
-	end?: string;
-	days?: number;
-	daysProvided: boolean;
-	datapointCount?: number;
-	secondsBetweenPoints?: number;
-}
-
-interface TimeRange {
-	startSeconds: number;
-	endSeconds: number;
-}
-
-function printHelp(): void {
-	console.log(`
-Usage:
-  plantmap-sv plot <IDCS...> [options]
-
-Time options:
-  --start, -s <time>                 Start time (independent of --end)
-  --end, -e <time>                   End time (independent of --start)
-  --days, -ds <number>               Relative range in days (default: ${DEFAULT_DAYS})
-
-Sampling options:
-  --datapoint-count, -dp <number>    Desired sample count (default: ${DEFAULT_DATAPOINT_COUNT})
-  --seconds-between-points, -sec <n> Sample interval in seconds
-
-Time-range behavior:
-  No bounds                           Default lookback through now
-  --start TIME                        Start through now
-  --start TIME --days N               Start through N days later
-  --end TIME                          Default lookback ending at TIME
-  --end TIME --days N                 N days before TIME through TIME
-  --start TIME --end TIME             Use both explicit bounds; ignore --days
-
-Sampling behavior:
-  --datapoint-count takes precedence over --seconds-between-points.
-  Without either option, the default sample count is ${DEFAULT_DATAPOINT_COUNT}.
-
-Examples:
-  plantmap-sv plot M100FI
-  plantmap-sv plot M100FI --days 1
-  plantmap-sv plot M100FI FI8001 --days 7 -dp 400
-  plantmap-sv plot M100FI --start "2026-10-21"
-  plantmap-sv plot M100FI --start "2026-10-21" --days 3
-  plantmap-sv plot M100FI --end "2026-10-22"
-  plantmap-sv plot M100FI --start "2026-10-21" --end "2026-10-22"
-  plantmap-sv plot M100FI --days 7 -sec 900
-`);
-}
-
-function parsePositiveNumber(
-	value: string,
-	option: string,
-	maximum: number,
-	integer = false
-): number {
-	const parsed = Number(value);
-
-	if (
-		!Number.isFinite(parsed) ||
-		parsed <= 0 ||
-		parsed > maximum ||
-		(integer && !Number.isInteger(parsed))
-	) {
-		throw new Error(
-			`${option} must be a positive ${integer ? 'integer' : 'number'} no greater than ${maximum}.`
-		);
-	}
-
-	return parsed;
-}
-
-function parseArgs(args: string[]): PlotOptions {
-	const tags: string[] = [];
-	let start: string | undefined;
-	let end: string | undefined;
-	let days: number | undefined;
-	let daysProvided = false;
-	let datapointCount: number | undefined;
-	let secondsBetweenPoints: number | undefined;
-
-	const valueOptions = new Map<string, string>([
-		['--start', 'start'],
-		['-s', 'start'],
-		['--end', 'end'],
-		['-e', 'end'],
-		['--days', 'days'],
-		['-ds', 'days'],
-		['--datapoint-count', 'datapointCount'],
-		['-dp', 'datapointCount'],
-		['--seconds-between-points', 'secondsBetweenPoints'],
-		['-sec', 'secondsBetweenPoints']
-	]);
-
-	for (let i = 0; i < args.length; i++) {
-		const arg = args[i];
-
-		if (arg === '--help' || arg === '-h') {
-			printHelp();
-			process.exitCode = 0;
-			return {
-				tags: [],
-				daysProvided: false
-			};
+	public async fetch(
+		sensorIds: string[],
+		windowSeconds: number = 600,
+		stepSeconds: number = 60,
+		functionType: string = 'AVG',
+        period?: { from: number; till: number },        
+		debug: boolean = false
+	): Promise<EDSTelemetrySeries> {
+		if (sensorIds.length === 0) {
+			return {};
 		}
 
-		const option = valueOptions.get(arg);
+		const token = await this.client.auth.getToken();
 
-		if (!option) {
-			if (arg.startsWith('-')) {
-				throw new Error(`Unknown option: ${arg}`);
+		const iessTags = sensorIds.map((id) => formatIessTag(id, this.client.iessSuffix));
+
+		const log = (message: string, details?: unknown) => {
+			if (!debug) return;
+
+			if (details === undefined) {
+				console.log(`[EDS Tabular DEBUG] ${message}`);
+			} else {
+				console.log(`[EDS Tabular DEBUG] ${message}`, details);
+			}
+		};
+
+		log('Input sensor IDs:', sensorIds);
+		log('Formatted IESS tags:', iessTags);
+		log('Endpoint:', this.client.endpoint);
+		log('Window seconds:', windowSeconds);
+		log('Step seconds:', stepSeconds);
+		log('Function:', functionType);
+
+		const now = Math.floor(Date.now() / 1000);
+        const startTime = period?.from ?? now - windowSeconds;
+        const endTime = period?.till ?? now;
+
+        log('From (Unix seconds):', startTime);
+        log('Till (Unix seconds):', endTime);
+		const itemsXml = iessTags
+			.map(
+				(tag) => `
+        <tns:items>
+          <tns:pointId>
+            <tns:iess>${tag}</tns:iess>
+          </tns:pointId>
+          <tns:shadePriority>0</tns:shadePriority>
+          <tns:function>${functionType}</tns:function>
+        </tns:items>`
+			)
+			.join('');
+
+		const requestTabularEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+    xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:requestTabular>
+      <tns:authString>${token}</tns:authString>
+      <tns:request>
+        <tns:period>
+          <tns:from>
+            <tns:second>${startTime}</tns:second>
+          </tns:from>
+          <tns:till>
+            <tns:second>${endTime}</tns:second>
+          </tns:till>
+        </tns:period>
+        <tns:step>
+          <tns:seconds>${stepSeconds}</tns:seconds>
+        </tns:step>
+          ${itemsXml}
+      </tns:request>
+    </tns:requestTabular>
+  </soap:Body>
+</soap:Envelope>`;
+
+		if (debug) {
+			console.log(
+				'[EDS Tabular DEBUG] Outgoing request envelope:\n',
+				requestTabularEnvelope.replace(
+					/(<(?:\w+:)?authString>)[\s\S]*?(<\/(?:\w+:)?authString>)/,
+					'$1[REDACTED]$2'
+				)
+			);
+		}
+		// 1. Submit request
+		const reqResponse = await fetch(this.client.endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type':
+					'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/requestTabular"'
+			},
+			body: requestTabularEnvelope
+		});
+
+		const reqXml = await reqResponse.text();
+
+		const requestIdMatch =
+			reqXml.match(/<(?:[a-zA-Z0-9]+:)?return[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?return>/i) ||
+			reqXml.match(/<(?:[a-zA-Z0-9]+:)?requestId[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?requestId>/i);
+
+		if (!requestIdMatch) {
+			throw new Error(`Failed to submit tabular request: ${reqXml}`);
+			log('No request ID found; submission did not return the expected response.');
+		}
+
+		const requestId = requestIdMatch[1].trim();
+		log('Request ID:', requestId);
+
+		// 2. Poll status
+		let isReady = false;
+		const maxPolls = this.client.tabularMaxPolls; // 20;
+		const pollTimeoutMs = this.client.tabularPollTimeoutMs; // 500;
+
+		for (let i = 0; i < maxPolls; i++) {
+			await new Promise((resolve) => setTimeout(resolve, pollTimeoutMs));
+
+			const statusEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+    xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getRequestStatus>
+      <tns:authString>${token}</tns:authString>
+      <tns:requestId>${requestId}</tns:requestId>
+    </tns:getRequestStatus>
+  </soap:Body>
+</soap:Envelope>`;
+
+			const statusResp = await fetch(this.client.endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type':
+						'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getRequestStatus"'
+				},
+				body: statusEnvelope
+			});
+
+			const statusXml = await statusResp.text();
+
+			const statusMatch = statusXml.match(
+				/<(?:[a-zA-Z0-9]+:)?status[^>]*>([^<]+)<\/(?:[a-zA-Z0-9]+:)?status>/i
+			);
+
+			const status = statusMatch ? statusMatch[1].trim() : '';
+			log(`Poll ${i + 1}/${maxPolls}`, {
+				status,
+				httpStatus: statusResp.status,
+				response: statusXml
+			});
+			if (status === 'REQUEST-SUCCESS') {
+				isReady = true;
+				break;
 			}
 
-			tags.push(arg);
-			continue;
+			if (status === 'REQUEST-FAILURE') {
+				throw new Error(`EDS Tabular Request Failed for requestId: ${requestId}`);
+			}
 		}
 
-		const value = args[++i];
-
-		if (value === undefined || value.startsWith('--')) {
-			throw new Error(`Option ${arg} requires a value.`);
+		if (!isReady) {
+			throw new Error(`EDS Tabular Request timed out for requestId: ${requestId}`);
 		}
 
-		switch (option) {
-			case 'start':
-				start = value;
-				break;
-			case 'end':
-				end = value;
-				break;
-			case 'days':
-				days = parsePositiveNumber(value, arg, MAX_DAYS);
-				daysProvided = true;
-				break;
-			case 'datapointCount':
-				datapointCount = parsePositiveNumber(
-					value,
-					arg,
-					1_000_000,
-					true
-				);
-				break;
-			case 'secondsBetweenPoints':
-				secondsBetweenPoints = parsePositiveNumber(
-					value,
-					arg,
-					MAX_STEP_SECONDS,
-					true
-				);
-				break;
-		}
-	}
+		// 3. Retrieve data
+		const getTabularEnvelope = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+    xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:tns="http://tt.com.pl/eds/">
+  <soap:Body>
+    <tns:getTabular>
+      <tns:authString>${token}</tns:authString>
+      <tns:requestId>${requestId}</tns:requestId>
+    </tns:getTabular>
+  </soap:Body>
+</soap:Envelope>`;
 
-	if (tags.length === 0) {
-		throw new Error('Provide at least one IDCS tag.');
-	}
-
-	return {
-		tags: [...new Set(tags)],
-		start,
-		end,
-		days,
-		daysProvided,
-		datapointCount,
-		secondsBetweenPoints
-	};
-}
-
-function parseTime(value: string, option: string): number {
-	const milliseconds = Date.parse(value);
-
-	if (!Number.isFinite(milliseconds)) {
-		throw new Error(`Invalid ${option} time: ${value}`);
-	}
-
-	return Math.floor(milliseconds / 1000);
-}
-
-function resolveTimeRange(options: PlotOptions): TimeRange {
-	const now = Math.floor(Date.now() / 1000);
-	const hasStart = options.start !== undefined;
-	const hasEnd = options.end !== undefined;
-
-	const start = hasStart
-		? parseTime(options.start!, '--start')
-		: undefined;
-
-	const end = hasEnd
-		? parseTime(options.end!, '--end')
-		: undefined;
-
-	let startSeconds: number;
-	let endSeconds: number;
-
-	if (start !== undefined && end !== undefined) {
-		// Both explicit bounds win; --days does not affect this range.
-		startSeconds = start;
-		endSeconds = end;
-	} else if (start !== undefined) {
-		startSeconds = start;
-
-		// A start without --days ends now, not two days after the start.
-		endSeconds = options.daysProvided
-			? start + Math.round(options.days! * SECONDS_PER_DAY)
-			: now;
-	} else if (end !== undefined) {
-		endSeconds = end;
-		const days = options.days ?? DEFAULT_DAYS;
-
-		startSeconds = end - Math.round(days * SECONDS_PER_DAY);
-	} else {
-		endSeconds = now;
-		const days = options.days ?? DEFAULT_DAYS;
-
-		startSeconds = now - Math.round(days * SECONDS_PER_DAY);
-	}
-
-	if (startSeconds >= endSeconds) {
-		throw new Error('--start must be earlier than --end.');
-	}
-
-	const windowSeconds = endSeconds - startSeconds;
-
-	if (windowSeconds > MAX_DAYS * SECONDS_PER_DAY) {
-		throw new Error(`The time range cannot exceed ${MAX_DAYS} days.`);
-	}
-
-	return { startSeconds, endSeconds };
-}
-
-function buildPlotUrl(
-	options: PlotOptions,
-	range: TimeRange
-): URL {
-	const baseUrl =
-		process.env.PLANTMAP_URL ??
-		`http://localhost:${process.env.PORT ?? '5173'}`;
-
-	let url: URL;
-
-	try {
-		url = new URL('/plot', baseUrl);
-	} catch {
-		throw new Error(`Invalid PlantMap base URL: ${baseUrl}`);
-	}
-
-	for (const tag of options.tags) {
-		url.searchParams.append('tags', tag);
-	}
-
-	if (options.start !== undefined) {
-		url.searchParams.set(
-			'start',
-			new Date(range.startSeconds * 1000).toISOString()
-		);
-	}
-
-	if (options.end !== undefined) {
-		url.searchParams.set(
-			'end',
-			new Date(range.endSeconds * 1000).toISOString()
-		);
-	}
-
-	// Send a relative duration only when it determines the range.
-	if (
-		options.start === undefined ||
-		options.end === undefined
-	) {
-		if (options.daysProvided) {
-			url.searchParams.set('days', String(options.days));
-		} else if (
-			options.start === undefined &&
-			options.end === undefined
-		) {
-			url.searchParams.set('days', String(options.days ?? DEFAULT_DAYS));
-		}
-	}
-
-	const windowSeconds = range.endSeconds - range.startSeconds;
-
-	// Explicit datapoint count wins if both sampling options are supplied.
-	const stepSeconds =
-		options.datapointCount !== undefined
-			? Math.max(
-					1,
-					Math.ceil(windowSeconds / options.datapointCount)
-				)
-			: options.secondsBetweenPoints ??
-				Math.max(
-					1,
-					Math.ceil(windowSeconds / DEFAULT_DATAPOINT_COUNT)
-				);
-
-	url.searchParams.set('stepSeconds', String(stepSeconds));
-
-	return url;
-}
-
-function openUrl(url: string): void {
-	let commands: Array<{ command: string; args: string[] }>;
-
-	if (process.env.TERMUX_VERSION) {
-		commands = [
-			{ command: 'termux-open-url', args: [url] },
-			{ command: 'xdg-open', args: [url] }
-		];
-	} else if (process.platform === 'darwin') {
-		commands = [{ command: 'open', args: [url] }];
-	} else if (process.platform === 'win32') {
-		commands = [
-			{ command: 'cmd.exe', args: ['/c', 'start', '', url] }
-		];
-	} else {
-		commands = [{ command: 'xdg-open', args: [url] }];
-	}
-
-	const tryCommand = (index: number): void => {
-		const entry = commands[index];
-
-		if (!entry) {
-			console.error(
-				'Could not launch a browser. Open this URL manually:\n' + url
-			);
-			return;
-		}
-
-		const child = spawn(entry.command, entry.args, {
-			detached: true,
-			stdio: 'ignore'
+		log('Retrieving completed tabular result');
+		const dataResp = await fetch(this.client.endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type':
+					'application/soap+xml; charset=utf-8; action="http://tt.com.pl/eds/getTabular"'
+			},
+			body: getTabularEnvelope
 		});
 
-		child.once('error', () => {
-			tryCommand(index + 1);
+		const dataXml = await dataResp.text();
+
+		log('getTabular HTTP response:', {
+			status: dataResp.status,
+			statusText: dataResp.statusText,
+			ok: dataResp.ok
 		});
 
-		child.once('spawn', () => {
-			child.unref();
+		// log('getTabular SOAP response body:', dataXml);
+
+		log('getTabular SOAP response body (head/tail):', {
+			length: dataXml.length,
+			head: dataXml.slice(0, 1000),
+			tail: dataXml.slice(-1000)
 		});
-	};
 
-	tryCommand(0);
-}
-
-export function plot(args: string[] = []): void {
-	try {
-		const options = parseArgs(args);
-
-		// --help has already printed its output.
-		if (options.tags.length === 0) return;
-
-		const range = resolveTimeRange(options);
-		const url = buildPlotUrl(options, range);
-
-		console.log(`Opening PlantMap plot:\n${url.toString()}`);
-		openUrl(url.toString());
-	} catch (error) {
-		console.error(error instanceof Error ? error.message : String(error));
-		console.error('');
-		printHelp();
-		process.exitCode = 1;
+		return parseTabularResponse(dataXml, iessTags);
 	}
 }

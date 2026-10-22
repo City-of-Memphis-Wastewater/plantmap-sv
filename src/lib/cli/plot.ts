@@ -1,217 +1,377 @@
-
- // src/lib/cli/plot.ts
+// src/lib/cli/plot.ts
 
 import { spawn } from 'node:child_process';
+import process from 'node:process';
 
-function printUsage() {
-        console.log(`
+const DEFAULT_DAYS = 2;
+const DEFAULT_DATAPOINT_COUNT = 400;
+const MAX_DAYS = 365;
+const MAX_STEP_SECONDS = 86_400;
+const SECONDS_PER_DAY = 86_400;
+
+interface PlotOptions {
+	tags: string[];
+	start?: string;
+	end?: string;
+	days?: number;
+	daysProvided: boolean;
+	datapointCount?: number;
+	secondsBetweenPoints?: number;
+}
+
+interface TimeRange {
+	startSeconds: number;
+	endSeconds: number;
+}
+
+function printHelp(): void {
+	console.log(`
 Usage:
   plantmap-sv plot <IDCS...> [options]
 
-Options:
-  --start, -s <time>                 Start time (requires --end)
-  --end, -e <time>                   End time (requires --start)
-  --days, -ds <number>               Relative time range (default: 1)
-  --datapoint-count, -dp <number>    Desired sample count (default: 400)
+Time options:
+  --start, -s <time>                 Start time (independent of --end)
+  --end, -e <time>                   End time (independent of --start)
+  --days, -ds <number>               Relative range in days (default: ${DEFAULT_DAYS})
+
+Sampling options:
+  --datapoint-count, -dp <number>    Desired sample count (default: ${DEFAULT_DATAPOINT_COUNT})
   --seconds-between-points, -sec <n> Sample interval in seconds
 
+Time-range behavior:
+  No bounds                           Default lookback through now
+  --start TIME                        Start through now
+  --start TIME --days N               Start through N days later
+  --end TIME                          Default lookback ending at TIME
+  --end TIME --days N                 N days before TIME through TIME
+  --start TIME --end TIME             Use both explicit bounds; ignore --days
+
+Sampling behavior:
+  --datapoint-count takes precedence over --seconds-between-points.
+  Without either option, the default sample count is ${DEFAULT_DATAPOINT_COUNT}.
+
 Examples:
+  plantmap-sv plot M100FI
   plantmap-sv plot M100FI --days 1
   plantmap-sv plot M100FI FI8001 --days 7 -dp 400
+  plantmap-sv plot M100FI --start "2026-10-21"
+  plantmap-sv plot M100FI --start "2026-10-21" --days 3
+  plantmap-sv plot M100FI --end "2026-10-22"
   plantmap-sv plot M100FI --start "2026-10-21" --end "2026-10-22"
   plantmap-sv plot M100FI --days 7 -sec 900
 `);
 }
 
-function parsePositiveNumber(value: string, option: string): number {
-        const parsed = Number(value);
+function parsePositiveNumber(
+	value: string,
+	option: string,
+	maximum: number,
+	integer = false
+): number {
+	const parsed = Number(value);
 
-        if (!Number.isFinite(parsed) || parsed <= 0) {
-                throw new Error(`${option} must be a positive number.`);
-        }
+	if (
+		!Number.isFinite(parsed) ||
+		parsed <= 0 ||
+		parsed > maximum ||
+		(integer && !Number.isInteger(parsed))
+	) {
+		throw new Error(
+			`${option} must be a positive ${integer ? 'integer' : 'number'} no greater than ${maximum}.`
+		);
+	}
 
-        return parsed;
+	return parsed;
 }
 
-function openBrowser(url: string) {
-        let command: string;
-        let args: string[];
+function parseArgs(args: string[]): PlotOptions {
+	const tags: string[] = [];
+	let start: string | undefined;
+	let end: string | undefined;
+	let days: number | undefined;
+	let daysProvided = false;
+	let datapointCount: number | undefined;
+	let secondsBetweenPoints: number | undefined;
 
-        if (process.platform === 'win32') {
-                command = 'cmd.exe';
-                args = ['/c', 'start', '', url];
-        } else if (process.platform === 'darwin') {
-                command = 'open';
-                args = [url];
-        } else {
-                command = process.env.TERMUX_VERSION ? 'termux-open-url' : 'xdg-open';
-                args = [url];
-        }
+	const valueOptions = new Map<string, string>([
+		['--start', 'start'],
+		['-s', 'start'],
+		['--end', 'end'],
+		['-e', 'end'],
+		['--days', 'days'],
+		['-ds', 'days'],
+		['--datapoint-count', 'datapointCount'],
+		['-dp', 'datapointCount'],
+		['--seconds-between-points', 'secondsBetweenPoints'],
+		['-sec', 'secondsBetweenPoints']
+	]);
 
-        const child = spawn(command, args, {
-                detached: true,
-                stdio: 'ignore'
-        });
+	for (let i = 0; i < args.length; i++) {
+		const arg = args[i];
 
-        child.on('error', () => {
-                console.error('Could not open a browser automatically.');
-                console.error(`Open this URL manually: ${url}`);
-        });
+		if (arg === '--help' || arg === '-h') {
+			printHelp();
+			process.exitCode = 0;
+			return {
+				tags: [],
+				daysProvided: false
+			};
+		}
 
-        child.unref();
+		const option = valueOptions.get(arg);
+
+		if (!option) {
+			if (arg.startsWith('-')) {
+				throw new Error(`Unknown option: ${arg}`);
+			}
+
+			tags.push(arg);
+			continue;
+		}
+
+		const value = args[++i];
+
+		if (value === undefined || value.startsWith('--')) {
+			throw new Error(`Option ${arg} requires a value.`);
+		}
+
+		switch (option) {
+			case 'start':
+				start = value;
+				break;
+			case 'end':
+				end = value;
+				break;
+			case 'days':
+				days = parsePositiveNumber(value, arg, MAX_DAYS);
+				daysProvided = true;
+				break;
+			case 'datapointCount':
+				datapointCount = parsePositiveNumber(
+					value,
+					arg,
+					1_000_000,
+					true
+				);
+				break;
+			case 'secondsBetweenPoints':
+				secondsBetweenPoints = parsePositiveNumber(
+					value,
+					arg,
+					MAX_STEP_SECONDS,
+					true
+				);
+				break;
+		}
+	}
+
+	if (tags.length === 0) {
+		throw new Error('Provide at least one IDCS tag.');
+	}
+
+	return {
+		tags: [...new Set(tags)],
+		start,
+		end,
+		days,
+		daysProvided,
+		datapointCount,
+		secondsBetweenPoints
+	};
 }
 
-export async function plot(args: string[] = []) {
-        const tags: string[] = [];
+function parseTime(value: string, option: string): number {
+	const milliseconds = Date.parse(value);
 
-        let start: string | undefined;
-        let end: string | undefined;
-        let days: number | undefined;
-        let datapointCount: number | undefined;
-        let secondsBetweenPoints: number | undefined;
-        let daysWasProvided = false;
+	if (!Number.isFinite(milliseconds)) {
+		throw new Error(`Invalid ${option} time: ${value}`);
+	}
 
-        try {
-                for (let i = 0; i < args.length; i++) {
-                        const arg = args[i];
-
-                        const readValue = () => {
-                                const value = args[++i];
-
-                                if (!value || value.startsWith('--')) {
-                                        throw new Error(`Missing value for ${arg}.`);
-                                }
-
-                                return value;
-                        };
-
-                        switch (arg) {
-                                case '--start':
-                                case '-s':
-                                        start = readValue();
-                                        break;
-
-                                case '--end':
-                                case '-e':
-                                        end = readValue();
-                                        break;
-
-                                case '--days':
-                                case '-ds':
-                                        days = parsePositiveNumber(readValue(), arg);
-                                        daysWasProvided = true;
-                                        break;
-
-                                case '--datapoint-count':
-                                case '-dp':
-                                        datapointCount = parsePositiveNumber(readValue(), arg);
-
-                                        if (!Number.isInteger(datapointCount)) {
-                                                throw new Error(`${arg} must be an integer.`);
-                                        }
-                                        break;
-
-                                case '--seconds-between-points':
-                                case '-sec':
-                                        secondsBetweenPoints = parsePositiveNumber(readValue(), arg);
-
-                                        if (!Number.isInteger(secondsBetweenPoints)) {
-                                                throw new Error(`${arg} must be an integer.`);
-                                        }
-                                        break;
-
-                                case '--help':
-                                case '-h':
-                                        printUsage();
-                                        return;
-
-                                default:
-                                        if (arg.startsWith('-')) {
-                                                throw new Error(`Unknown option: ${arg}`);
-                                        }
-
-                                        tags.push(
-                                                ...arg
-                                                        .split(',')
-                                                        .map((tag) => tag.trim())
-                                                        .filter(Boolean)
-                                        );
-                        }
-                }
-
-                const uniqueTags = [...new Set(tags)];
-
-                if (uniqueTags.length === 0) {
-                        throw new Error('Provide at least one IDCS tag.');
-                }
-
-                if (uniqueTags.length > 25) {
-                        throw new Error('A maximum of 25 tags may be requested.');
-                }
-
-                if (Boolean(start) !== Boolean(end)) {
-                        throw new Error('--start and --end must be supplied together.');
-                }
-
-                if (start && end && daysWasProvided) {
-                        throw new Error('Use either --start/--end or --days, not both.');
-                }
-
-                if (!start && !end) {
-                        days ??= 1;
-                }
-
-                let windowSeconds: number;
-
-                if (start && end) {
-                        const startMs = Date.parse(start);
-                        const endMs = Date.parse(end);
-
-                        if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) {
-                                throw new Error(
-                                        'Could not parse --start or --end. ISO dates are recommended.'
-                                );
-                        }
-
-                        if (startMs >= endMs) {
-                                throw new Error('--start must be earlier than --end.');
-                        }
-
-                        windowSeconds = Math.ceil((endMs - startMs) / 1000);
-                } else {
-                        windowSeconds = Math.round(days! * 86_400);
-                }
-
-                // If both sampling options are supplied, datapoint count takes precedence.
-                const count = datapointCount ?? 400;
-                const stepSeconds =
-                        datapointCount !== undefined || secondsBetweenPoints === undefined
-                                ? Math.max(1, Math.ceil(windowSeconds / count))
-                                : secondsBetweenPoints;
-
-                if (windowSeconds > 365 * 86_400) {
-                        throw new Error('The requested time range cannot exceed 365 days.');
-                }
-
-                const port = process.env.PORT ?? '5173';
-                const url = new URL('/plot', `http://localhost:${port}`);
-
-                url.searchParams.set('tags', uniqueTags.join(','));
-                url.searchParams.set('stepSeconds', String(stepSeconds));
-
-                if (start && end) {
-                        url.searchParams.set('start', start);
-                        url.searchParams.set('end', end);
-                } else {
-                        url.searchParams.set('days', String(days));
-                }
-
-                console.log(`Opening historical plot: ${url.toString()}`);
-                openBrowser(url.toString());
-        } catch (error) {
-                console.error(error instanceof Error ? error.message : String(error));
-                printUsage();
-                process.exitCode = 1;
-        }
+	return Math.floor(milliseconds / 1000);
 }
 
+function resolveTimeRange(options: PlotOptions): TimeRange {
+	const now = Math.floor(Date.now() / 1000);
+	const hasStart = options.start !== undefined;
+	const hasEnd = options.end !== undefined;
+
+	const start = hasStart
+		? parseTime(options.start!, '--start')
+		: undefined;
+
+	const end = hasEnd
+		? parseTime(options.end!, '--end')
+		: undefined;
+
+	let startSeconds: number;
+	let endSeconds: number;
+
+	if (start !== undefined && end !== undefined) {
+		// Both explicit bounds win; --days does not affect this range.
+		startSeconds = start;
+		endSeconds = end;
+	} else if (start !== undefined) {
+		startSeconds = start;
+
+		// A start without --days ends now, not two days after the start.
+		endSeconds = options.daysProvided
+			? start + Math.round(options.days! * SECONDS_PER_DAY)
+			: now;
+	} else if (end !== undefined) {
+		endSeconds = end;
+		const days = options.days ?? DEFAULT_DAYS;
+
+		startSeconds = end - Math.round(days * SECONDS_PER_DAY);
+	} else {
+		endSeconds = now;
+		const days = options.days ?? DEFAULT_DAYS;
+
+		startSeconds = now - Math.round(days * SECONDS_PER_DAY);
+	}
+
+	if (startSeconds >= endSeconds) {
+		throw new Error('--start must be earlier than --end.');
+	}
+
+	const windowSeconds = endSeconds - startSeconds;
+
+	if (windowSeconds > MAX_DAYS * SECONDS_PER_DAY) {
+		throw new Error(`The time range cannot exceed ${MAX_DAYS} days.`);
+	}
+
+	return { startSeconds, endSeconds };
+}
+
+function buildPlotUrl(
+	options: PlotOptions,
+	range: TimeRange
+): URL {
+	const baseUrl =
+		process.env.PLANTMAP_URL ??
+		`http://localhost:${process.env.PORT ?? '5173'}`;
+
+	let url: URL;
+
+	try {
+		url = new URL('/plot', baseUrl);
+	} catch {
+		throw new Error(`Invalid PlantMap base URL: ${baseUrl}`);
+	}
+
+	for (const tag of options.tags) {
+		url.searchParams.append('tags', tag);
+	}
+
+	if (options.start !== undefined) {
+		url.searchParams.set(
+			'start',
+			new Date(range.startSeconds * 1000).toISOString()
+		);
+	}
+
+	if (options.end !== undefined) {
+		url.searchParams.set(
+			'end',
+			new Date(range.endSeconds * 1000).toISOString()
+		);
+	}
+
+	// Send a relative duration only when it determines the range.
+	if (
+		options.start === undefined ||
+		options.end === undefined
+	) {
+		if (options.daysProvided) {
+			url.searchParams.set('days', String(options.days));
+		} else if (
+			options.start === undefined &&
+			options.end === undefined
+		) {
+			url.searchParams.set('days', String(options.days ?? DEFAULT_DAYS));
+		}
+	}
+
+	const windowSeconds = range.endSeconds - range.startSeconds;
+
+	// Explicit datapoint count wins if both sampling options are supplied.
+	const stepSeconds =
+		options.datapointCount !== undefined
+			? Math.max(
+					1,
+					Math.ceil(windowSeconds / options.datapointCount)
+				)
+			: options.secondsBetweenPoints ??
+				Math.max(
+					1,
+					Math.ceil(windowSeconds / DEFAULT_DATAPOINT_COUNT)
+				);
+
+	url.searchParams.set('stepSeconds', String(stepSeconds));
+
+	return url;
+}
+
+function openUrl(url: string): void {
+	let commands: Array<{ command: string; args: string[] }>;
+
+	if (process.env.TERMUX_VERSION) {
+		commands = [
+			{ command: 'termux-open-url', args: [url] },
+			{ command: 'xdg-open', args: [url] }
+		];
+	} else if (process.platform === 'darwin') {
+		commands = [{ command: 'open', args: [url] }];
+	} else if (process.platform === 'win32') {
+		commands = [
+			{ command: 'cmd.exe', args: ['/c', 'start', '', url] }
+		];
+	} else {
+		commands = [{ command: 'xdg-open', args: [url] }];
+	}
+
+	const tryCommand = (index: number): void => {
+		const entry = commands[index];
+
+		if (!entry) {
+			console.error(
+				'Could not launch a browser. Open this URL manually:\n' + url
+			);
+			return;
+		}
+
+		const child = spawn(entry.command, entry.args, {
+			detached: true,
+			stdio: 'ignore'
+		});
+
+		child.once('error', () => {
+			tryCommand(index + 1);
+		});
+
+		child.once('spawn', () => {
+			child.unref();
+		});
+	};
+
+	tryCommand(0);
+}
+
+export function plot(args: string[] = []): void {
+	try {
+		const options = parseArgs(args);
+
+		// --help has already printed its output.
+		if (options.tags.length === 0) return;
+
+		const range = resolveTimeRange(options);
+		const url = buildPlotUrl(options, range);
+
+		console.log(`Opening PlantMap plot:\n${url.toString()}`);
+		openUrl(url.toString());
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		console.error('');
+		printHelp();
+		process.exitCode = 1;
+	}
+}
