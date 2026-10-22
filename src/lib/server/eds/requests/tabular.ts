@@ -3,7 +3,7 @@
 import type { ClientEdsSoap } from '../client';
 import { formatIessTag } from '../helpers';
 import { parseTabularResponse } from '../parsers/tabular';
-import type { EDSTelemetryValue } from '../types';
+import type { EDSTelemetrySeries } from '../types';
 
 export class Tabular {
 	constructor(private readonly client: ClientEdsSoap) {}
@@ -14,7 +14,7 @@ export class Tabular {
 		stepSeconds: number = 60,
 		functionType: string = 'AVG',
 		debug: boolean = false
-	): Promise<Record<string, EDSTelemetryValue>> {
+	): Promise<EDSTelemetrySeries> {
 		if (sensorIds.length === 0) {
 			return {};
 		}
@@ -81,16 +81,16 @@ export class Tabular {
     </tns:requestTabular>
   </soap:Body>
 </soap:Envelope>`;
-        
-        if (debug) {
-          console.log(
-            '[EDS Tabular DEBUG] Outgoing request envelope:\n',
-            requestTabularEnvelope.replace(
-              /(<(?:\w+:)?authString>)[\s\S]*?(<\/(?:\w+:)?authString>)/,
-              '$1[REDACTED]$2'
-            )
-          );
-        }
+
+		if (debug) {
+			console.log(
+				'[EDS Tabular DEBUG] Outgoing request envelope:\n',
+				requestTabularEnvelope.replace(
+					/(<(?:\w+:)?authString>)[\s\S]*?(<\/(?:\w+:)?authString>)/,
+					'$1[REDACTED]$2'
+				)
+			);
+		}
 		// 1. Submit request
 		const reqResponse = await fetch(this.client.endpoint, {
 			method: 'POST',
@@ -202,11 +202,11 @@ export class Tabular {
 
 		// log('getTabular SOAP response body:', dataXml);
 
-        log('getTabular SOAP response body (head/tail):', {
-                length: dataXml.length,
-                head: dataXml.slice(0, 1000),
-                tail: dataXml.slice(-1000)
-        });
+		log('getTabular SOAP response body (head/tail):', {
+			length: dataXml.length,
+			head: dataXml.slice(0, 1000),
+			tail: dataXml.slice(-1000)
+		});
 
 		return parseTabularResponse(dataXml, iessTags);
 	}
