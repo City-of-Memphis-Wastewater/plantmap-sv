@@ -1,76 +1,75 @@
 // parsers/tabular.ts
 
+import {
+getXmlBlocks,
+getXmlText,
+parseNumericValue,
+parseXmlQuality,
+parseXmlTimestamp
+} from './common';
 import type { EDSTelemetryValue } from '../types';
 
-import {
-        getXmlBlocks,
-        getXmlText,
-        parseNumericValue,
-        parseXmlTimestamp,
-        parseXmlQuality
-} from './common';
+/**
+* Parse an Ovation EDS getTabular response.
+* The latest row is used, matching the behavior of the original parser.
+* Values are never replaced with zero, and quality does not determine
+* whether a reading is retained.
+*/
+  
+  export function parseTabularResponse(
+  xml: string,
+  requestedTags: string[]
+  ): Record<string, EDSTelemetryValue> {
+  const results: Record<string, EDSTelemetryValue> = {};
+  
+  // Extract point IDs in the order returned by EDS.
+  const pointTags = getXmlBlocks(xml, 'pointsIds')
+  .map((block) => getXmlText(block, 'iess') ?? getXmlText(block, 'idcs'))
+  .filter((tag): tag is string => tag !== null && tag !== '')
+  .map((tag) => tag.trim().toUpperCase());
+  
+  const activeTags = pointTags.length > 0 ? pointTags : requestedTags;
+  
+  // Support both known row element names.
+  const rows = [
+  ...getXmlBlocks(xml, 'rows'),
+  ...getXmlBlocks(xml, 'TabularRow')
+  ];
+  
+  if (rows.length === 0) {
+  return results;
+  }
+  
+  const lastRow = rows[rows.length - 1];
+  const timestamp = parseXmlTimestamp(lastRow);
+  
+  // Support both known value container element names.
+  const valueBlocks = [
+  ...getXmlBlocks(lastRow, 'values'),
+  ...getXmlBlocks(lastRow, 'TabularValue')
+  ];
+  
+  valueBlocks.forEach((valueBlock, index) => {
+  if (index >= activeTags.length) {
+  return;
+  }
+  
+   const tag = activeTags[index];
 
-export function parseTabularResponse(
-	xml: string,
-	requestedTags: string[]
-): Record<string, EDSTelemetryValue> {
-	const results: Record<string, EDSTelemetryValue> = {};
+ const value =
+ 	parseNumericValue(getXmlText(valueBlock, 'value')) ??
+ 	parseNumericValue(getXmlText(valueBlock, 'av')) ??
+ 	parseNumericValue(getXmlText(valueBlock, 'dv'));
 
-	const pointsMatch = xml.match(/<pointsIds[^>]*>([\s\S]*?)<\/pointsIds>/gi) || [];
-
-	const pointTags: string[] = [];
-
-	for (const pBlock of pointsMatch) {
-		const tagMatch =
-			pBlock.match(/<iess[^>]*>([^<]+)<\/iess>/i) || pBlock.match(/<idcs[^>]*>([^<]+)<\/idcs>/i);
-
-		if (tagMatch) {
-			pointTags.push(tagMatch[1].trim().toUpperCase());
-		}
-	}
-
-	const activeTags = pointTags.length > 0 ? pointTags : requestedTags;
-
-	const rowBlocks =
-		xml.match(/<rows[^>]*>([\s\S]*?)<\/rows>/gi) ||
-		xml.match(/<TabularRow[^>]*>([\s\S]*?)<\/TabularRow>/gi) ||
-		[];
-
-	if (rowBlocks.length > 0) {
-		const lastRow = rowBlocks[rowBlocks.length - 1];
-
-		const tsMatch = lastRow.match(/<second[^>]*>([^<]+)<\/second>/i);
-
-		const timestamp = tsMatch
-			? new Date(parseInt(tsMatch[1], 10) * 1000).toISOString()
-			: new Date().toISOString();
-
-		const valueBlocks =
-			lastRow.match(/<values[^>]*>([\s\S]*?)<\/values>/gi) ||
-			lastRow.match(/<TabularValue[^>]*>([\s\S]*?)<\/TabularValue>/gi) ||
-			[];
-
-		valueBlocks.forEach((valBlock, idx) => {
-			if (idx < activeTags.length) {
-				const tag = activeTags[idx];
-
-				const valMatch = valBlock.match(/<value[^>]*>([^<]+)<\/value>/i);
-
-				const qualMatch = valBlock.match(/<quality[^>]*>([^<]+)<\/quality>/i);
-
-				const rawVal = valMatch ? parseFloat(valMatch[1]) : 0;
-
-				const qualityStr = qualMatch ? qualMatch[1].toUpperCase() : 'GOOD';
-
-				results[tag] = {
-					iessTag: tag,
-					value: Number.isNaN(rawVal) ? 0 : rawVal,
-					quality: qualityStr.includes('NONE') || qualityStr.includes('BAD') ? 'BAD' : 'GOOD',
-					timestamp
-				};
-			}
-		});
-	}
-
-	return results;
-}
+ results[tag] = {
+ 	iessTag: tag,
+ 	value,
+ 	quality: parseXmlQuality(valueBlock),
+ 	timestamp
+ };
+  
+  });
+  
+  return results;
+  }
+  
