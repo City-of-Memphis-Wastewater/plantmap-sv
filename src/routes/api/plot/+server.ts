@@ -1,5 +1,4 @@
-
- // src/routes/api/plot/+server.ts
+// src/routes/api/plot/+server.ts
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -13,22 +12,14 @@ const MAX_DAYS = 365;
 const MAX_TAGS = 25;
 const MAX_STEP_SECONDS = 86_400;
 
-function positiveNumber(
-	value: string | null,
-	fallback: number,
-	maximum: number
-): number | null {
+function positiveNumber(value: string | null, fallback: number, maximum: number): number | null {
 	if (value === null) {
 		return fallback;
 	}
 
 	const parsed = Number(value);
 
-	if (
-		!Number.isFinite(parsed) ||
-		parsed <= 0 ||
-		parsed > maximum
-	) {
+	if (!Number.isFinite(parsed) || parsed <= 0 || parsed > maximum) {
 		return null;
 	}
 
@@ -58,17 +49,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 
 	if (tags.length > MAX_TAGS) {
-		return json(
-			{ error: `A maximum of ${MAX_TAGS} tags may be requested.` },
-			{ status: 400 }
-		);
+		return json({ error: `A maximum of ${MAX_TAGS} tags may be requested.` }, { status: 400 });
 	}
 
-	const days = positiveNumber(
-		url.searchParams.get('days'),
-		DEFAULT_DAYS,
-		MAX_DAYS
-	);
+	const days = positiveNumber(url.searchParams.get('days'), DEFAULT_DAYS, MAX_DAYS);
 
 	const stepSeconds = positiveNumber(
 		url.searchParams.get('stepSeconds'),
@@ -77,10 +61,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	);
 
 	if (days === null) {
-		return json(
-			{ error: `days must be greater than 0 and at most ${MAX_DAYS}.` },
-			{ status: 400 }
-		);
+		return json({ error: `days must be greater than 0 and at most ${MAX_DAYS}.` }, { status: 400 });
 	}
 
 	if (stepSeconds === null || !Number.isInteger(stepSeconds)) {
@@ -92,17 +73,12 @@ export const GET: RequestHandler = async ({ url }) => {
 		);
 	}
 
-	const functionType = (
-		url.searchParams.get('function') ?? 'AVG'
-	).trim().toUpperCase();
+	const functionType = (url.searchParams.get('function') ?? 'AVG').trim().toUpperCase();
 
 	// Restrict this parameter to the characters expected in an EDS
 	// aggregation/function name. Confirm supported values against EDS.
 	if (!/^[A-Z][A-Z0-9_]{0,19}$/.test(functionType)) {
-		return json(
-			{ error: 'Invalid function parameter.' },
-			{ status: 400 }
-		);
+		return json({ error: 'Invalid function parameter.' }, { status: 400 });
 	}
 
 	const windowSeconds = Math.round(days * 86_400);
@@ -110,12 +86,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	try {
 		const eds = getEdsClient();
 
-		const values = await eds.tabular.fetch(
-			tags,
-			windowSeconds,
-			stepSeconds,
-			functionType
-		);
+		const values = await eds.tabular.fetch(tags, windowSeconds, stepSeconds, functionType);
 
 		return json(
 			{
@@ -146,4 +117,3 @@ export const GET: RequestHandler = async ({ url }) => {
 		);
 	}
 };
-

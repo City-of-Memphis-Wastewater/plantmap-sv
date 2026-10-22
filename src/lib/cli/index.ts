@@ -14,7 +14,7 @@ export async function runCli(args: string[]) {
 			await setup();
 			return;
 
-        case 'plot':
+		case 'plot':
 			plot(args.slice(1));
 			return;
 
