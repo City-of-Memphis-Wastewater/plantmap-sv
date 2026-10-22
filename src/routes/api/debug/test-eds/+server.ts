@@ -75,15 +75,5 @@ export const GET: RequestHandler = async () => {
 			},
 			{ status: 500 }
 		);
-	} finally {
-		console.log('[TestRoute] Logging out of EDS...');
-
-		try {
-			await client.auth.logout();
-
-			console.log('[TestRoute] EDS logout complete');
-		} catch (error) {
-			console.error('[TestRoute] EDS logout failed:', error);
-		}
 	}
 };

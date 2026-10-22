@@ -9,12 +9,11 @@ import {
 import type { EdsPointTelemetry } from '../types';
 
 /**
-
-* Parse individual point records from an Ovation EDS getPoints response.
-* Values and quality are independent: a bad-quality reading is retained
-* whenever a numeric value is available. 
-* Missing numeric values and timestamps remain null.
-*/
+ * Parse individual point records from an Ovation EDS getPoints response.
+ * Values and quality are independent: a bad-quality reading is retained
+ * whenever a numeric value is available.
+ * Missing numeric values and timestamps remain null.
+ */
 
 export function parseGetPointsResponse(xml: string): Record<string, EdsPointTelemetry> {
 	const results: Record<string, EdsPointTelemetry> = {};
