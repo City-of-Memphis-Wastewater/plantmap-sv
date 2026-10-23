@@ -34,7 +34,6 @@ export interface TimeRangeInput {
 export interface ResolvedTimeRange {
 	startSeconds: number;
 	endSeconds: number;
-	windowSeconds: number;
 }
 
 function parseTimestamp(value: string, name: string): number {
@@ -112,7 +111,6 @@ export function assessTimeRange(
 
 	return {
 		startSeconds,
-		endSeconds,
-		windowSeconds
+		endSeconds
 	};
 }
