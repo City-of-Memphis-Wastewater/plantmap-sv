@@ -3,11 +3,13 @@
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 
-const DEFAULT_DAYS = 2;
-const DEFAULT_DATAPOINT_COUNT = 400;
-const MAX_DAYS = 365;
-const MAX_STEP_SECONDS = 86_400;
-const SECONDS_PER_DAY = 86_400;
+import {
+    DEFAULT_DAYS,
+    DEFAULT_DATAPOINT_COUNT,
+    MAX_DAYS,
+    MAX_STEP_SECONDS,
+    SECONDS_PER_DAY,
+} from './context';
 
 interface PlotOptions {
 	tags: string[];

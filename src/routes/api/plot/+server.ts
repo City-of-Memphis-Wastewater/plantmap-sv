@@ -2,20 +2,19 @@
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import type { AllTimeInputs, ResolvedTimeAspects } from '$lib/plot/types';
 
 import { getEdsClient } from '$lib/server/eds/factory';
 import { parsePlotUrl } from '$lib/plot/url';
-import { assessTimeRange } from '$lib/plot/time-range';
-import { resolveSamplingInterval } from '$lib/plot/sampling';
-import { DEFAULT_FUNCTION_TYPE } from '$lib/plot/context';
+import { resolveTimeAspects } from '$lib/plot/resolve-time';
+import { 
+    DEFAULT_FUNCTION_TYPE,
+    SECONDS_PER_DAY
+ } from '$lib/plot/context';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Preserve compatibility with callers using the previous parameter name.
 	const params = new URLSearchParams(url.searchParams);
-
-	if (!params.has('secondsBetweenPoints') && params.has('stepSeconds')) {
-		params.set('secondsBetweenPoints', params.get('stepSeconds')!);
-	}
 
 	// Parse and validate the URL using the shared plot contract.
 	let options;
@@ -31,45 +30,24 @@ export const GET: RequestHandler = async ({ url }) => {
 		);
 	}
 
-	// Resolve the effective time range in one place.
-	let timeRange;
+	let timeAspects;
 
-	try {
-		timeRange = assessTimeRange({
-			start: options.start,
-			end: options.end,
-			days: options.days
-		});
-	} catch (error) {
-		return json(
-			{
-				error: error instanceof Error ? error.message : String(error)
-			},
-			{ status: 400 }
-		);
-	}
-
-	const { startSeconds, endSeconds } = timeRange;
-	const windowSeconds = endSeconds - startSeconds;
-
-	// Resolve the effective sampling interval.
-	// datapointCount takes precedence over secondsBetweenPoints.
-	let stepSeconds: number;
-
-	try {
-		stepSeconds = resolveSamplingInterval(
-			windowSeconds,
-			options.datapointCount,
-			options.secondsBetweenPoints
-		);
-	} catch (error) {
-		return json(
-			{
-				error: error instanceof Error ? error.message : String(error)
-			},
-			{ status: 400 }
-		);
-	}
+    try {
+        timeAspects = resolveTimeAspects({
+            start: options.start,
+            end: options.end,
+            windowDays: options.days,
+            datapointCount: options.datapointCount,
+            secondsBetweenPoints: options.secondsBetweenPoints
+        });
+    } catch (error) {
+        return json(
+            {
+                error: error instanceof Error ? error.message : String(error)
+            },
+            { status: 400 }
+        );
+    }
 
 	const functionType = options.functionType ?? DEFAULT_FUNCTION_TYPE;
 
@@ -79,9 +57,9 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		const values = await eds.tabular.fetch(
 			options.tags,
-			startSeconds,
-			endSeconds,
-			stepSeconds,
+			timeAspects.startSeconds,
+			timeAspects.endSeconds,
+			timeAspects.secondsBetweenPoints,
 			functionType
 		);
 
@@ -89,11 +67,10 @@ export const GET: RequestHandler = async ({ url }) => {
 			{
 				request: {
 					tags: options.tags,
-					start: new Date(startSeconds * 1000).toISOString(),
-					end: new Date(endSeconds * 1000).toISOString(),
-					days: windowSeconds / 86_400,
-					windowSeconds,
-					stepSeconds,
+					start: new Date(timeAspects.startSeconds * 1000).toISOString(),
+					end: new Date(timeAspects.endSeconds * 1000).toISOString(),
+                    windowDays: windowDays: timeAspects.windowSeconds / SECONDS_PER_DAY,
+					secondsBetweenPoints:timeAspects.secondsBetweenPoints,
 					function: functionType
 				},
 				values

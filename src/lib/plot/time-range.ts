@@ -22,16 +22,14 @@
     */
 
 import { DEFAULT_DAYS, SECONDS_PER_DAY, MAX_DAYS } from './context';
+import { TimeRangeInput, ResolvedTimeRange } from './types';
 
-export interface TimeRangeInput {
-	start?: string;
-	end?: string;
-	days?: number;
-}
+export function daysToSeconds(days: number): number {
+    if (!Number.isFinite(days) || days <= 0) {
+        throw new Error('days must be a positive finite number.');
+    }
 
-export interface ResolvedTimeRange {
-	startSeconds: number;
-	endSeconds: number;
+    return Math.round(days * SECONDS_PER_DAY);
 }
 
 function parseTimestamp(value: string, name: string): number {
@@ -79,7 +77,7 @@ export function assessTimeRange(
 		startSeconds = explicitStart;
 
 		if (days !== undefined) {
-			endSeconds = startSeconds + Math.round(days * SECONDS_PER_DAY);
+			endSeconds = startSeconds + daysToSeconds(days);
 		} else {
 			endSeconds = nowSeconds;
 		}
@@ -88,13 +86,13 @@ export function assessTimeRange(
 
 		const durationDays = days ?? DEFAULT_DAYS;
 
-		startSeconds = endSeconds - Math.round(durationDays * SECONDS_PER_DAY);
+		startSeconds = endSeconds - daysToSeconds(durationDays);
 	} else {
 		endSeconds = nowSeconds;
 
 		const durationDays = days ?? DEFAULT_DAYS;
 
-		startSeconds = endSeconds - Math.round(durationDays * SECONDS_PER_DAY);
+		startSeconds = endSeconds - daysToSeconds(durationDays);
 	}
 
 	if (startSeconds >= endSeconds) {
@@ -103,12 +101,13 @@ export function assessTimeRange(
 
 	const windowSeconds = endSeconds - startSeconds;
 
-	if (windowSeconds > MAX_DAYS * SECONDS_PER_DAY) {
+	if (windowSeconds > daysToSeconds(MAX_DAYS)) {
 		throw new Error(`The time range cannot exceed ${MAX_DAYS} days.`);
 	}
 
 	return {
 		startSeconds,
-		endSeconds
+		endSeconds,
+		windowSeconds
 	};
 }
