@@ -405,12 +405,14 @@
             chart = undefined;
         };
     });
-</script>"svelte:head" (svelte:head)
-<title>Historical Telemetry Plot</title>
-<meta
-name="description"
-content="Plot historical Ovation EDS telemetry readings over time."
-/>
+</script>
+
+<svelte:head>
+    <title>Historical Telemetry Plot</title>
+    <meta
+        name="description"
+        content="Plot historical Ovation EDS telemetry readings over time."
+    />
 </svelte:head>
 
 <main>
