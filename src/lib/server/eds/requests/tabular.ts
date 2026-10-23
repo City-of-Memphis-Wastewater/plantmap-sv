@@ -14,7 +14,7 @@ export class Tabular {
         secondsBetweenPoints: number,
         functionType: string = 'AVG',
         debug: boolean = false
-    ): Promise<EDSTelemetrySeries>
+    ): Promise<EDSTelemetrySeries> {
 	    if (sensorIds.length === 0) {
 			return {};
 		}
