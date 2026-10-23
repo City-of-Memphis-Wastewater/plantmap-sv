@@ -409,7 +409,7 @@
 
 				<div class="field">
 					<label for="windowDays">Days</label>
-					<input id="windoDays" type="number" min="0.001" max={MAX_DAYS} step="any" bind:value={days} />
+					<input id="windoDays" type="number" min="0.001" max={MAX_DAYS} step="any" bind:value={windowDays} />
 				</div>
 			</div>
 

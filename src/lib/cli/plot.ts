@@ -9,7 +9,7 @@ import {
 	MAX_DAYS,
 	MAX_STEP_SECONDS,
 	SECONDS_PER_DAY
-} from './context';
+} from '../plot/context';
 import type { PlotOptions, ResolvedTimeRange } from '../plot/types';
 import { resolveTimeAspects } from '../plot/resolve-time';
 import { buildPlotUrl } from '../plot/url';
