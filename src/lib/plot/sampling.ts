@@ -1,10 +1,10 @@
 // src/lib/plot/sampling.ts
 
 import {
-    DEFAULT_DATAPOINT_COUNT,
-    MAX_DATAPOINT_COUNT,
-    MAX_SECONDS_BETWEEN_POINTS,
-    NICE_SAMPLING_INTERVALS
+	DEFAULT_DATAPOINT_COUNT,
+	MAX_DATAPOINT_COUNT,
+	MAX_SECONDS_BETWEEN_POINTS,
+	NICE_SAMPLING_INTERVALS
 } from './context';
 
 // -----------------------------------------------------------------------------
@@ -19,15 +19,13 @@ import {
  * exceeds all supported intervals.
  */
 function niceStep(minimumSeconds: number): number {
-    for (const interval of NICE_SAMPLING_INTERVALS) {
-        if (interval >= minimumSeconds) {
-            return interval;
-        }
-    }
+	for (const interval of NICE_SAMPLING_INTERVALS) {
+		if (interval >= minimumSeconds) {
+			return interval;
+		}
+	}
 
-    return NICE_SAMPLING_INTERVALS[
-        NICE_SAMPLING_INTERVALS.length - 1
-    ];
+	return NICE_SAMPLING_INTERVALS[NICE_SAMPLING_INTERVALS.length - 1];
 }
 
 /**
@@ -46,51 +44,43 @@ function niceStep(minimumSeconds: number): number {
  * @returns A supported sampling interval, in seconds.
  */
 export function resolveSamplingInterval(
-    windowSeconds: number,
-    datapointCount?: number,
-    secondsBetweenPoints?: number
+	windowSeconds: number,
+	datapointCount?: number,
+	secondsBetweenPoints?: number
 ): number {
-    if (!Number.isFinite(windowSeconds) || windowSeconds <= 0) {
-        throw new Error('windowSeconds must be a positive finite number.');
-    }
+	if (!Number.isFinite(windowSeconds) || windowSeconds <= 0) {
+		throw new Error('windowSeconds must be a positive finite number.');
+	}
 
-    if (datapointCount !== undefined) {
-        if (
-            !Number.isInteger(datapointCount) ||
-            datapointCount <= 0 ||
-            datapointCount > MAX_DATAPOINT_COUNT
-        ) {
-            throw new Error(
-                `datapointCount must be an integer between 1 and ${MAX_DATAPOINT_COUNT}.`
-            );
-        }
+	if (datapointCount !== undefined) {
+		if (
+			!Number.isInteger(datapointCount) ||
+			datapointCount <= 0 ||
+			datapointCount > MAX_DATAPOINT_COUNT
+		) {
+			throw new Error(`datapointCount must be an integer between 1 and ${MAX_DATAPOINT_COUNT}.`);
+		}
 
-        const minimumSeconds = Math.max(
-            1,
-            Math.floor(windowSeconds / datapointCount)
-        );
+		const minimumSeconds = Math.max(1, Math.floor(windowSeconds / datapointCount));
 
-        return niceStep(minimumSeconds);
-    }
+		return niceStep(minimumSeconds);
+	}
 
-    if (secondsBetweenPoints !== undefined) {
-        if (
-            !Number.isFinite(secondsBetweenPoints) ||
-            secondsBetweenPoints <= 0 ||
-            secondsBetweenPoints > MAX_SECONDS_BETWEEN_POINTS
-        ) {
-            throw new Error(
-                `secondsBetweenPoints must be greater than 0 and no greater than ${MAX_SECONDS_BETWEEN_POINTS}.`
-            );
-        }
+	if (secondsBetweenPoints !== undefined) {
+		if (
+			!Number.isFinite(secondsBetweenPoints) ||
+			secondsBetweenPoints <= 0 ||
+			secondsBetweenPoints > MAX_SECONDS_BETWEEN_POINTS
+		) {
+			throw new Error(
+				`secondsBetweenPoints must be greater than 0 and no greater than ${MAX_SECONDS_BETWEEN_POINTS}.`
+			);
+		}
 
-        return niceStep(secondsBetweenPoints);
-    }
+		return niceStep(secondsBetweenPoints);
+	}
 
-    const minimumSeconds = Math.max(
-        1,
-        Math.floor(windowSeconds / DEFAULT_DATAPOINT_COUNT)
-    );
+	const minimumSeconds = Math.max(1, Math.floor(windowSeconds / DEFAULT_DATAPOINT_COUNT));
 
-    return niceStep(minimumSeconds);
+	return niceStep(minimumSeconds);
 }

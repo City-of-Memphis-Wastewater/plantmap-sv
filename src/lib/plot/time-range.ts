@@ -21,11 +21,7 @@
 * - Neither boundary: default to two days ending now.
     */
 
-import {
-    DEFAULT_DAYS,
-    SECONDS_PER_DAY,
-    MAX_DAYS
-} from './context';
+import { DEFAULT_DAYS, SECONDS_PER_DAY, MAX_DAYS } from './context';
 
 export interface TimeRangeInput {
 	start?: string;
@@ -50,9 +46,7 @@ function parseTimestamp(value: string, name: string): number {
 
 function validateDays(days: number): void {
 	if (!Number.isFinite(days) || days <= 0 || days > MAX_DAYS) {
-		throw new Error(
-            `days must be greater than 0 and no greater than ${MAX_DAYS}.`
-        );
+		throw new Error(`days must be greater than 0 and no greater than ${MAX_DAYS}.`);
 	}
 }
 

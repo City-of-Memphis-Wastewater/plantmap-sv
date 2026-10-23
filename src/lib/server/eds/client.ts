@@ -64,25 +64,25 @@ export class ClientEdsSoap {
 	public async getRegex(idcsTags: string[]): Promise<Record<string, EdsPointTelemetry>> {
 		return this.points.getRegex(idcsTags);
 	}
-    /**
-     * Fetch historical tabular values for the specified time range.
-     */
-    public async fetchTabularValues(
-            sensorIds: string[],
-            startSeconds: number,
-            endSeconds: number,
-            secondsBetweenPoints: number = 60,
-            functionType: string = 'AVG'
-    ) {
-            return this.tabular.fetch(
-                    sensorIds,
-                    startSeconds,
-                    endSeconds,
-                    secondsBetweenPoints,
-                    functionType
-            );
-    }
-    
+	/**
+	 * Fetch historical tabular values for the specified time range.
+	 */
+	public async fetchTabularValues(
+		sensorIds: string[],
+		startSeconds: number,
+		endSeconds: number,
+		secondsBetweenPoints: number = 60,
+		functionType: string = 'AVG'
+	) {
+		return this.tabular.fetch(
+			sensorIds,
+			startSeconds,
+			endSeconds,
+			secondsBetweenPoints,
+			functionType
+		);
+	}
+
 	public async logout(): Promise<void> {
 		return this.auth.logout();
 	}

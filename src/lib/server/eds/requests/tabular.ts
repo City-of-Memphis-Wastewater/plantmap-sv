@@ -7,15 +7,15 @@ import type { EDSTelemetrySeries } from '../types';
 
 export class Tabular {
 	constructor(private readonly client: ClientEdsSoap) {}
-    public async fetch(
-        sensorIds: string[],
-        startSeconds: number,
-        endSeconds: number,
-        secondsBetweenPoints: number,
-        functionType: string = 'AVG',
-        debug: boolean = false
-    ): Promise<EDSTelemetrySeries> {
-	    if (sensorIds.length === 0) {
+	public async fetch(
+		sensorIds: string[],
+		startSeconds: number,
+		endSeconds: number,
+		secondsBetweenPoints: number,
+		functionType: string = 'AVG',
+		debug: boolean = false
+	): Promise<EDSTelemetrySeries> {
+		if (sensorIds.length === 0) {
 			return {};
 		}
 

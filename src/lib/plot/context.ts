@@ -25,32 +25,13 @@ export const SECONDS_PER_DAY = 86_400;
 
 // Supported sampling intervals, in seconds
 export const NICE_SAMPLING_INTERVALS = [
-    1,
-    2,
-    5,
-    10,
-    15,
-    30,
-    60,
-    120,
-    300,
-    600,
-    900,
-    1800,
-    3600,
-    7200,
-    14_400,
-    28_800,
-    86_400
+	1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800, 3600, 7200, 14_400, 28_800, 86_400
 ] as const;
 
 // Aggregation function validation
 export const VALID_FUNCTION_TYPE = /^[A-Z][A-Z0-9_]{0,19}$/;
 
-export const SUPPORTED_FUNCTION_TYPES = [
-    'AVG',
-    'VALUE'
-] as const;
+export const SUPPORTED_FUNCTION_TYPES = ['AVG', 'VALUE'] as const;
 
 // API and page paths
 export const PLOT_PAGE_PATH = '/plot';
