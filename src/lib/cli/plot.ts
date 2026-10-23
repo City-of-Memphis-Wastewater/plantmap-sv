@@ -7,10 +7,10 @@ import {
 	DEFAULT_DAYS,
 	DEFAULT_DATAPOINT_COUNT,
 	MAX_DAYS,
-	MAX_STEP_SECONDS,
+	MAX_SECONDS_BETWEEN_POINTS,
 	SECONDS_PER_DAY
 } from '../plot/context';
-import type { PlotOptions, ResolvedTimeRange } from '../plot/types';
+import type { PlotOptions, ResolvedTimeRange, TimeRange } from '../plot/types';
 import { resolveTimeAspects } from '../plot/resolve-time';
 import { buildPlotUrl } from '../plot/url';
 
@@ -79,7 +79,7 @@ function parseArgs(args: string[]): PlotOptions {
 	let start: string | undefined;
 	let end: string | undefined;
 	let windowDays: number | undefined;
-	let daysProvided = false;
+	//let daysProvided = false;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
 
@@ -103,8 +103,8 @@ function parseArgs(args: string[]): PlotOptions {
 			printHelp();
 			process.exitCode = 0;
 			return {
-				tags: [],
-				daysProvided: false
+				tags: []
+				//daysProvided: false
 			};
 		}
 
@@ -134,13 +134,13 @@ function parseArgs(args: string[]): PlotOptions {
 				break;
 			case 'windowDays':
 				windowDays = parsePositiveNumber(value, arg, MAX_DAYS);
-				daysProvided = true;
+				//daysProvided = true;
 				break;
 			case 'datapointCount':
 				datapointCount = parsePositiveNumber(value, arg, 1_000_000, true);
 				break;
 			case 'secondsBetweenPoints':
-				secondsBetweenPoints = parsePositiveNumber(value, arg, MAX_STEP_SECONDS, true);
+				secondsBetweenPoints = parsePositiveNumber(value, arg, MAX_SECONDS_BETWEEN_POINTS, true);
 				break;
 		}
 	}
@@ -169,7 +169,7 @@ function parseTime(value: string, option: string): number {
 	return Math.floor(milliseconds / 1000);
 }
 
-function buildPlotUrl(options: PlotOptions, range: TimeRange): URL {
+function buildPlotUrlDefunct(options: PlotOptions, range: TimeRange): URL {
 	const baseUrl = process.env.PLANTMAP_URL ?? `http://localhost:${process.env.PORT ?? '5173'}`;
 
 	let url: URL;
