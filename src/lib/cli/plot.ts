@@ -7,10 +7,11 @@ import {
 	DEFAULT_DAYS,
 	DEFAULT_DATAPOINT_COUNT,
 	MAX_DAYS,
-	MAX_SECONDS_BETWEEN_POINTS,
-	SECONDS_PER_DAY
+	MAX_SECONDS_BETWEEN_POINTS
 } from '../plot/context';
-import type { PlotOptions, ResolvedTimeRange, TimeRange } from '../plot/types';
+
+
+import type { PlotOptions } from '../plot/types';
 import { resolveTimeAspects } from '../plot/resolve-time';
 import { buildPlotUrl } from '../plot/url';
 
@@ -157,62 +158,6 @@ function parseArgs(args: string[]): PlotOptions {
 		datapointCount,
 		secondsBetweenPoints
 	};
-}
-
-function parseTime(value: string, option: string): number {
-	const milliseconds = Date.parse(value);
-
-	if (!Number.isFinite(milliseconds)) {
-		throw new Error(`Invalid ${option} time: ${value}`);
-	}
-
-	return Math.floor(milliseconds / 1000);
-}
-
-function buildPlotUrlDefunct(options: PlotOptions, range: TimeRange): URL {
-	const baseUrl = process.env.PLANTMAP_URL ?? `http://localhost:${process.env.PORT ?? '5173'}`;
-
-	let url: URL;
-
-	try {
-		url = new URL('/plot', baseUrl);
-	} catch {
-		throw new Error(`Invalid PlantMap base URL: ${baseUrl}`);
-	}
-
-	for (const tag of options.tags) {
-		url.searchParams.append('tags', tag);
-	}
-
-	if (options.start !== undefined) {
-		url.searchParams.set('start', new Date(range.startSeconds * 1000).toISOString());
-	}
-
-	if (options.end !== undefined) {
-		url.searchParams.set('end', new Date(range.endSeconds * 1000).toISOString());
-	}
-
-	// Send a relative duration only when it determines the range.
-	if (options.start === undefined || options.end === undefined) {
-		if (options.daysProvided) {
-			url.searchParams.set('windowDays', String(options.windowDays));
-		} else if (options.start === undefined && options.end === undefined) {
-			url.searchParams.set('windowDays', String(options.windowDays ?? DEFAULT_DAYS));
-		}
-	}
-
-	const windowSeconds = range.endSeconds - range.startSeconds;
-
-	// Explicit datapoint count wins if both sampling options are supplied.
-	const stepSeconds =
-		options.datapointCount !== undefined
-			? Math.max(1, Math.ceil(windowSeconds / options.datapointCount))
-			: (options.secondsBetweenPoints ??
-				Math.max(1, Math.ceil(windowSeconds / DEFAULT_DATAPOINT_COUNT)));
-
-	url.searchParams.set('stepSeconds', String(stepSeconds));
-
-	return url;
 }
 
 function openUrl(url: string): void {
