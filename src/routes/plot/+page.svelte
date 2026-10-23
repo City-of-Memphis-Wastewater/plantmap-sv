@@ -24,7 +24,7 @@
 			tags: string[];
 			start: string;
 			end: string;
-			days: number;
+			windowDays: number;
 			windowSeconds: number;
 			stepSeconds: number;
 			function: string;
@@ -41,7 +41,7 @@
 	let tagsInput = $state(DEFAULT_TAGS.join(','));
 	let startTime = $state('');
 	let endTime = $state('');
-	let days = $state('');
+	let windowDays = $state('');
 
 	let datapointCount = $state(String(DEFAULT_DATAPOINT_COUNT));
 	let secondsBetweenPoints = $state('');
@@ -123,7 +123,7 @@
 		const start = toIsoTimestamp(startTime);
 		const end = toIsoTimestamp(endTime);
 
-		const parsedDays = days.trim() === '' ? undefined : Number(days);
+		const parsedDays = windowDays.trim() === '' ? undefined : Number(windowDays);
 
 		const parsedDatapointCount = datapointCount.trim() === '' ? undefined : Number(datapointCount);
 
@@ -161,7 +161,7 @@
 			tags,
 			start,
 			end,
-			days: parsedDays,
+			windowDays: parsedDays,
 			datapointCount: parsedDatapointCount,
 			secondsBetweenPoints: parsedSecondsBetweenPoints,
 			functionType
@@ -308,7 +308,7 @@
 				tagsInput = options.tags.join(',');
 				startTime = toLocalDateTimeInput(options.start);
 				endTime = toLocalDateTimeInput(options.end);
-				days = options.days === undefined ? '' : String(options.days);
+				windowDays = options.windowDays === undefined ? '' : String(options.windowDays);
 
 				datapointCount =
 					options.datapointCount !== undefined
@@ -408,8 +408,8 @@
 				</div>
 
 				<div class="field">
-					<label for="days">Days</label>
-					<input id="days" type="number" min="0.001" max={MAX_DAYS} step="any" bind:value={days} />
+					<label for="windowDays">Days</label>
+					<input id="windoDays" type="number" min="0.001" max={MAX_DAYS} step="any" bind:value={days} />
 				</div>
 			</div>
 

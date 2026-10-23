@@ -36,7 +36,7 @@ export const GET: RequestHandler = async ({ url }) => {
         timeAspects = resolveTimeAspects({
             start: options.start,
             end: options.end,
-            windowDays: options.days,
+            windowDays: options.windowDays,
             datapointCount: options.datapointCount,
             secondsBetweenPoints: options.secondsBetweenPoints
         });

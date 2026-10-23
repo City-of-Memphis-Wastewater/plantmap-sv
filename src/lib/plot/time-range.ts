@@ -22,7 +22,7 @@
     */
 
 import { DEFAULT_DAYS, SECONDS_PER_DAY, MAX_DAYS } from './context';
-import { TimeRangeInput, ResolvedTimeRange } from './types';
+import type { TimeRangeInput, ResolvedTimeRange } from './types';
 
 export function daysToSeconds(days: number): number {
 	if (!Number.isFinite(days) || days <= 0) {
@@ -52,14 +52,14 @@ export function assessTimeRange(
 	input: TimeRangeInput,
 	nowSeconds = Math.floor(Date.now() / 1000)
 ): ResolvedTimeRange {
-	const { start, end, days } = input;
+	const { start, end, windowDays } = input;
 
 	if (!Number.isFinite(nowSeconds)) {
 		throw new Error('nowSeconds must be a finite number.');
 	}
 
-	if (days !== undefined) {
-		validateDays(days);
+	if (windowDays !== undefined) {
+		validateDays(windowDays);
 	}
 
 	const explicitStart = start === undefined ? undefined : parseTimestamp(start, 'start');
@@ -76,21 +76,21 @@ export function assessTimeRange(
 	} else if (explicitStart !== undefined) {
 		startSeconds = explicitStart;
 
-		if (days !== undefined) {
-			endSeconds = startSeconds + daysToSeconds(days);
+		if (windowDays !== undefined) {
+			endSeconds = startSeconds + daysToSeconds(windowDays);
 		} else {
 			endSeconds = nowSeconds;
 		}
 	} else if (explicitEnd !== undefined) {
 		endSeconds = explicitEnd;
 
-		const durationDays = days ?? DEFAULT_DAYS;
+		const durationDays = windowDays ?? DEFAULT_DAYS;
 
 		startSeconds = endSeconds - daysToSeconds(durationDays);
 	} else {
 		endSeconds = nowSeconds;
 
-		const durationDays = days ?? DEFAULT_DAYS;
+		const durationDays = windowDays ?? DEFAULT_DAYS;
 
 		startSeconds = endSeconds - daysToSeconds(durationDays);
 	}
