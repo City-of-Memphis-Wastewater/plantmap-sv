@@ -1,16 +1,7 @@
 // src/lib/plot/url.ts
 
-export interface PlotUrlOptions {
-	tags: string[];
-	start?: string;
-	end?: string;
-	days?: number;
-	datapointCount?: number;
-	secondsBetweenPoints?: number;
-	functionType?: string;
-}
-
 import { MAX_DAYS, MAX_DATAPOINT_COUNT, MAX_SECONDS_BETWEEN_POINTS, MAX_TAGS } from './context';
+import type { PlotOptions } from './types';
 
 function parsePositiveNumber(
 	value: string | null,
@@ -81,7 +72,7 @@ function parseFunctionType(params: URLSearchParams): string | undefined {
  * Unspecified options remain undefined so downstream request resolution
  * can apply defaults and sampling precedence consistently.
  */
-export function parsePlotUrl(params: URLSearchParams): PlotUrlOptions {
+export function parsePlotUrl(params: URLSearchParams): PlotOptions {
 	const tags = parseTags(params);
 
 	const start = params.get('start') ?? undefined;
@@ -119,7 +110,7 @@ export function parsePlotUrl(params: URLSearchParams): PlotUrlOptions {
 		tags,
 		start,
 		end,
-		days,
+		windowDays: days,
 		datapointCount,
 		secondsBetweenPoints,
 		functionType
@@ -131,7 +122,7 @@ export function parsePlotUrl(params: URLSearchParams): PlotUrlOptions {
  *
  * Undefined options are omitted. Tags are emitted as repeated parameters.
  */
-export function buildPlotSearchParams(options: PlotUrlOptions): URLSearchParams {
+export function buildPlotSearchParams(options: PlotOptions): URLSearchParams {
 	const params = new URLSearchParams();
 
 	for (const tag of [...new Set(options.tags.map((tag) => tag.trim()).filter(Boolean))]) {
@@ -169,7 +160,7 @@ export function buildPlotSearchParams(options: PlotUrlOptions): URLSearchParams 
  * Build a plot URL against an absolute base URL.
  * Useful for the CLI; browser code can use buildPlotSearchParams directly.
  */
-export function buildPlotUrl(baseUrl: string, options: PlotUrlOptions): URL {
+export function buildPlotUrl(baseUrl: string, options: PlotOptions): URL {
 	let url: URL;
 
 	try {

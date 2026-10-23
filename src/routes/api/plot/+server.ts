@@ -69,7 +69,7 @@ export const GET: RequestHandler = async ({ url }) => {
 					tags: options.tags,
 					start: new Date(timeAspects.startSeconds * 1000).toISOString(),
 					end: new Date(timeAspects.endSeconds * 1000).toISOString(),
-                    windowDays: windowDays: timeAspects.windowSeconds / SECONDS_PER_DAY,
+                    windowDays: timeAspects.windowSeconds / SECONDS_PER_DAY,
 					secondsBetweenPoints:timeAspects.secondsBetweenPoints,
 					function: functionType
 				},

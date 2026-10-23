@@ -4,27 +4,15 @@ import { spawn } from 'node:child_process';
 import process from 'node:process';
 
 import {
-    DEFAULT_DAYS,
-    DEFAULT_DATAPOINT_COUNT,
-    MAX_DAYS,
-    MAX_STEP_SECONDS,
-    SECONDS_PER_DAY,
+	DEFAULT_DAYS,
+	DEFAULT_DATAPOINT_COUNT,
+	MAX_DAYS,
+	MAX_STEP_SECONDS,
+	SECONDS_PER_DAY
 } from './context';
-
-interface PlotOptions {
-	tags: string[];
-	start?: string;
-	end?: string;
-	days?: number;
-	daysProvided: boolean;
-	datapointCount?: number;
-	secondsBetweenPoints?: number;
-}
-
-interface TimeRange {
-	startSeconds: number;
-	endSeconds: number;
-}
+import type { PlotOptions, ResolvedTimeRange } from '../plot/types';
+import { resolveTimeAspects } from '../plot/resolve-time';
+import { buildPlotUrl } from '../plot/url';
 
 function printHelp(): void {
 	console.log(`
@@ -165,8 +153,7 @@ function parseArgs(args: string[]): PlotOptions {
 		tags: [...new Set(tags)],
 		start,
 		end,
-		days,
-		daysProvided,
+		windowDays: days,
 		datapointCount,
 		secondsBetweenPoints
 	};
@@ -180,52 +167,6 @@ function parseTime(value: string, option: string): number {
 	}
 
 	return Math.floor(milliseconds / 1000);
-}
-
-function resolveTimeRange(options: PlotOptions): TimeRange {
-	const now = Math.floor(Date.now() / 1000);
-	const hasStart = options.start !== undefined;
-	const hasEnd = options.end !== undefined;
-
-	const start = hasStart ? parseTime(options.start!, '--start') : undefined;
-
-	const end = hasEnd ? parseTime(options.end!, '--end') : undefined;
-
-	let startSeconds: number;
-	let endSeconds: number;
-
-	if (start !== undefined && end !== undefined) {
-		// Both explicit bounds win; --days does not affect this range.
-		startSeconds = start;
-		endSeconds = end;
-	} else if (start !== undefined) {
-		startSeconds = start;
-
-		// A start without --days ends now, not two days after the start.
-		endSeconds = options.daysProvided ? start + Math.round(options.days! * SECONDS_PER_DAY) : now;
-	} else if (end !== undefined) {
-		endSeconds = end;
-		const days = options.days ?? DEFAULT_DAYS;
-
-		startSeconds = end - Math.round(days * SECONDS_PER_DAY);
-	} else {
-		endSeconds = now;
-		const days = options.days ?? DEFAULT_DAYS;
-
-		startSeconds = now - Math.round(days * SECONDS_PER_DAY);
-	}
-
-	if (startSeconds >= endSeconds) {
-		throw new Error('--start must be earlier than --end.');
-	}
-
-	const windowSeconds = endSeconds - startSeconds;
-
-	if (windowSeconds > MAX_DAYS * SECONDS_PER_DAY) {
-		throw new Error(`The time range cannot exceed ${MAX_DAYS} days.`);
-	}
-
-	return { startSeconds, endSeconds };
 }
 
 function buildPlotUrl(options: PlotOptions, range: TimeRange): URL {
@@ -322,7 +263,7 @@ export function plot(args: string[] = []): void {
 		// --help has already printed its output.
 		if (options.tags.length === 0) return;
 
-		const range = resolveTimeRange(options);
+		const range = resolveTimeAspects(options);
 		const url = buildPlotUrl(options, range);
 
 		console.log(`Opening PlantMap plot:\n${url.toString()}`);

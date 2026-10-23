@@ -25,11 +25,11 @@ import { DEFAULT_DAYS, SECONDS_PER_DAY, MAX_DAYS } from './context';
 import { TimeRangeInput, ResolvedTimeRange } from './types';
 
 export function daysToSeconds(days: number): number {
-    if (!Number.isFinite(days) || days <= 0) {
-        throw new Error('days must be a positive finite number.');
-    }
+	if (!Number.isFinite(days) || days <= 0) {
+		throw new Error('days must be a positive finite number.');
+	}
 
-    return Math.round(days * SECONDS_PER_DAY);
+	return Math.round(days * SECONDS_PER_DAY);
 }
 
 function parseTimestamp(value: string, name: string): number {
