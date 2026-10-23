@@ -24,8 +24,7 @@ function positiveNumber(value: string | null, fallback: number, maximum: number)
 }
 
 export const GET: RequestHandler = async ({ url }) => {
-	const rawTags = url.searchParams.getAll('tags').join(',');
-
+	
 	const tags = [
 		...new Set(
 			url.searchParams
