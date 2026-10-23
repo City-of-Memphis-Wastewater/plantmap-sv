@@ -61,13 +61,13 @@ export const GET: RequestHandler = async ({ url }) => {
 		console.log('[TabularDebug] Calling client.tabular.fetch()');
 
 		const requestStarted = Date.now();
-
+        //mustupdate
 		const data = await client.tabular.fetch(
 			tags,
+			Math.round(days-1 * 86400),
 			Math.round(days * 86400),
 			stepSeconds,
 			functionType,
-			undefined,
 			true
 		);
 

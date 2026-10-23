@@ -139,11 +139,8 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	try {
 		const eds = getEdsClient();
-
-		const values = await eds.tabular.fetch(tags, windowSeconds, stepSeconds, functionType, {
-			from: startSeconds,
-			till: endSeconds
-		});
+        // mustupdate
+		const values = await eds.tabular.fetch(tags, startSeconds, endSeconds, stepSeconds, functionType);
 
 		return json(
 			{

@@ -67,10 +67,13 @@ export class ClientEdsSoap {
 
 	public async fetchTabularValues(
 		sensorIds: string[],
-		windowSeconds: number = 600,
-		stepSeconds: number = 60,
+		//windowSeconds: number = 600,
+		startSeconds: number,
+		endSeconds: number,
+		secondsBetweenPoints: number = 60,
 		functionType: string = 'AVG'
 	) {
+	    //mustupdate
 		return this.tabular.fetch(sensorIds, windowSeconds, stepSeconds, functionType);
 	}
 

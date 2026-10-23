@@ -7,16 +7,15 @@ import type { EDSTelemetrySeries } from '../types';
 
 export class Tabular {
 	constructor(private readonly client: ClientEdsSoap) {}
-
-	public async fetch(
-		sensorIds: string[],
-		windowSeconds: number = 600,
-		stepSeconds: number = 60,
-		functionType: string = 'AVG',
-		period?: { from: number; till: number },
-		debug: boolean = false
-	): Promise<EDSTelemetrySeries> {
-		if (sensorIds.length === 0) {
+    public async fetch(
+        sensorIds: string[],
+        startSeconds: number,
+        endSeconds: number,
+        secondsBetweenPoints: number,
+        functionType: string = 'AVG',
+        debug: boolean = false
+    ): Promise<EDSTelemetrySeries>
+	    if (sensorIds.length === 0) {
 			return {};
 		}
 
@@ -37,13 +36,11 @@ export class Tabular {
 		log('Input sensor IDs:', sensorIds);
 		log('Formatted IESS tags:', iessTags);
 		log('Endpoint:', this.client.endpoint);
-		log('Window seconds:', windowSeconds);
-		log('Step seconds:', stepSeconds);
+		log('Seconds between points:', secondsBetweenPoints);
 		log('Function:', functionType);
 
-		const now = Math.floor(Date.now() / 1000);
-		const startTime = period?.from ?? now - windowSeconds;
-		const endTime = period?.till ?? now;
+		const startTime = startSeconds;
+		const endTime = endSeconds;
 
 		log('From (Unix seconds):', startTime);
 		log('Till (Unix seconds):', endTime);
@@ -77,7 +74,7 @@ export class Tabular {
           </tns:till>
         </tns:period>
         <tns:step>
-          <tns:seconds>${stepSeconds}</tns:seconds>
+          <tns:seconds>${secondsBetweenPoints}</tns:seconds>
         </tns:step>
           ${itemsXml}
       </tns:request>
