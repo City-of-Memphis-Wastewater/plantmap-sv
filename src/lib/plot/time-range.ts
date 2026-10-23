@@ -21,9 +21,11 @@
 * - Neither boundary: default to two days ending now.
     */
 
-export const SECONDS_PER_DAY = 86_400;
-export const DEFAULT_DAYS = 2;
-export const MAX_DAYS = 365;
+import {
+    DEFAULT_DAYS,
+    SECONDS_PER_DAY,
+    MAX_DAYS
+} from './context';
 
 export interface TimeRangeInput {
 	start?: string;
@@ -48,7 +50,9 @@ function parseTimestamp(value: string, name: string): number {
 
 function validateDays(days: number): void {
 	if (!Number.isFinite(days) || days <= 0 || days > MAX_DAYS) {
-		throw new Error('days must be greater than 0 and no greater than ${MAX_DAYS}.');
+		throw new Error(
+            `days must be greater than 0 and no greater than ${MAX_DAYS}.`
+        );
 	}
 }
 

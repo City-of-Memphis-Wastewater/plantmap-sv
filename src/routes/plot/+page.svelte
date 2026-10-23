@@ -2,7 +2,19 @@
 	import { onMount } from 'svelte';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
-
+    import { parsePlotUrl, buildPlotSearchParams } from '$lib/plot/url';
+    import {
+        DEFAULT_TAGS,
+        DEFAULT_DAYS,
+        DEFAULT_DATAPOINT_COUNT,
+        DEFAULT_FUNCTION_TYPE,
+        MAX_TAGS,
+        MAX_DAYS,
+        MAX_DATAPOINT_COUNT,
+        MAX_SECONDS_BETWEEN_POINTS,
+        SUPPORTED_FUNCTION_TYPES,
+        PLOT_API_PATH
+    } from '$lib/plot/context';    
 	type PlotResponse = {
 		request?: {
 			tags: string[];
@@ -177,34 +189,37 @@
 	}
 	//---
 	onMount(() => {
-		let disposed = false;
+        try {
+            const options = parsePlotUrl(
+                new URLSearchParams(window.location.search)
+            );
+
+            tagsInput = options.tags.join(',');
+            startTime = options.start ?? '';
+            endTime = options.end ?? '';
+            days = options.days === undefined ? '' : String(options.days);
+            datapointCount =
+                options.datapointCount === undefined
+                    ? '400'
+                    : String(options.datapointCount);
+            secondsBetweenPoints =
+                options.secondsBetweenPoints === undefined
+                    ? ''
+                    : String(options.secondsBetweenPoints);
+            functionType = options.functionType ?? 'AVG';
+
+            if (window.location.search.length > 1) {
+                void loadTrend();
+            }
+        } catch (error) {
+            errorMessage =
+                error instanceof Error ? error.message : String(error);
+        }
+    	let disposed = false;
 
 		const resizeChart = () => chart?.resize();
 
-		const params = new URLSearchParams(window.location.search);
-
-		//if (params.has('tags')) tagsInput = params.get('tags') ?? tagsInput;
-		if (params.has('tags')) {
-			tagsInput = params.getAll('tags').join(',');
-		}
-		if (params.has('start')) startTime = params.get('start') ?? '';
-		if (params.has('end')) endTime = params.get('end') ?? '';
-
-		if (params.has('days')) {
-			days = params.get('days') ?? days;
-			daysExplicit = true;
-		}
-
-		if (params.has('stepSeconds')) {
-			stepSeconds = params.get('stepSeconds') ?? stepSeconds;
-		}
-
-		if (params.has('function')) {
-			functionType = params.get('function') ?? functionType;
-		}
-
-		const hasPlotRequest = ['tags', 'start', 'end', 'days', 'stepSeconds', 'function'].some((key) =>
-			params.has(key)
+		const hasPlotRequest = ['tags', 'startTime', 'endTime'].notnull()
 		);
 
 		void import('echarts')

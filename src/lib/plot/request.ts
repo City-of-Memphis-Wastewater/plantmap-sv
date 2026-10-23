@@ -3,8 +3,7 @@ interface ResolvedPlotRequest {
 	tags: string[];
 	startSeconds: number;
 	endSeconds: number;
-	windowSeconds: number;
-	datapointCount: number;
-	stepSeconds: number;
+	//datapointCount: number;
+	secondsBetweenPoints: number;
 	functionType: string;
 }
