@@ -78,7 +78,7 @@ function parseArgs(args: string[]): PlotOptions {
 	const tags: string[] = [];
 	let start: string | undefined;
 	let end: string | undefined;
-	let days: number | undefined;
+	let windowDays: number | undefined;
 	let daysProvided = false;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
@@ -88,8 +88,8 @@ function parseArgs(args: string[]): PlotOptions {
 		['-s', 'start'],
 		['--end', 'end'],
 		['-e', 'end'],
-		['--days', 'days'],
-		['-ds', 'days'],
+		['--days', 'windowDays'],
+		['-ds', 'windowDays'],
 		['--datapoint-count', 'datapointCount'],
 		['-dp', 'datapointCount'],
 		['--seconds-between-points', 'secondsBetweenPoints'],
@@ -132,8 +132,8 @@ function parseArgs(args: string[]): PlotOptions {
 			case 'end':
 				end = value;
 				break;
-			case 'days':
-				days = parsePositiveNumber(value, arg, MAX_DAYS);
+			case 'windowDays':
+				windowDays = parsePositiveNumber(value, arg, MAX_DAYS);
 				daysProvided = true;
 				break;
 			case 'datapointCount':
@@ -153,7 +153,7 @@ function parseArgs(args: string[]): PlotOptions {
 		tags: [...new Set(tags)],
 		start,
 		end,
-		windowDays: days,
+		windowDays: windowDays,
 		datapointCount,
 		secondsBetweenPoints
 	};
@@ -195,9 +195,9 @@ function buildPlotUrl(options: PlotOptions, range: TimeRange): URL {
 	// Send a relative duration only when it determines the range.
 	if (options.start === undefined || options.end === undefined) {
 		if (options.daysProvided) {
-			url.searchParams.set('days', String(options.days));
+			url.searchParams.set('windowDays', String(options.windowDays));
 		} else if (options.start === undefined && options.end === undefined) {
-			url.searchParams.set('days', String(options.days ?? DEFAULT_DAYS));
+			url.searchParams.set('windowDays', String(options.windowDays ?? DEFAULT_DAYS));
 		}
 	}
 
