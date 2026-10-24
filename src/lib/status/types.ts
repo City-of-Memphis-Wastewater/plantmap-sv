@@ -1,5 +1,5 @@
 export interface Status {
-	protocolVersion: 1;
+	protocolVersion: number;
 
 	application: {
 		name: string;

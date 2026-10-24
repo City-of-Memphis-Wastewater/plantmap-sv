@@ -13,6 +13,7 @@ import {
 import type { PlotOptions } from '../plot/types.ts';
 //import { resolveTimeAspects } from '../plot/resolve-time.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
+import { discoverServer } from '../status/probe.ts';
 
 function printHelp(): void {
 	console.log(`
@@ -200,7 +201,7 @@ function openUrl(url: string): void {
 	tryCommand(0);
 }
 
-export function plot(args: string[] = []): void {
+export async function plot(args: string[] = []): void {
 	try {
 		const options = parseArgs(args);
 
@@ -214,9 +215,15 @@ export function plot(args: string[] = []): void {
 
 		//const range = resolveTimeAspects(options);
 		//const url = buildPlotUrl(options, range);
+        const server = await discoverServer();
 
-		console.log(`Opening PlantMap plot:\n${url.toString()}`);
-		openUrl(url.toString());
+        if (!server) {
+        	throw new Error('PlantMap server is not running.');
+        }
+
+        const plotUrl = `${server.url}/plot?tags=m100fi,fi8001,m310li&days=4`;
+		console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
+		openUrl(plotUrl.toString());
 	} catch (error) {
 		console.error(error instanceof Error ? error.message : String(error));
 		console.error('');
