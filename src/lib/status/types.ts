@@ -1,9 +1,8 @@
-export interface PlantMapStatus {
+export interface Status {
     protocolVersion: 1;
 
     application: {
-        name: 'PlantMap';
-        package: 'plantmap-sv';
+        name: string;
         version: string;
     };
 
