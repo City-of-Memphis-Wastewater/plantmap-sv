@@ -1,12 +1,23 @@
 // src/lib/database/index.ts
 
-import { ensureLocalDatabase, DATABASE_PATH } from './build.ts';
-import { cacheToLocalDatabase } from './crud.ts';
+export {
+    DATABASE_PATH,
+    buildLocalDatabase,
+    checkStatusLocalDatabase,
+    ensureLocalDatabase
+} from './build.ts';
 
-import type { DatabasePayload } from './types.ts';
+export {
+    cacheToLocalDatabase,
+    readCachedSensorReadings,
+    readLatestCachedSensorReadings
+} from './crud.ts';
 
 export const VALID_MINUTE_INT_LIST = [0, 15, 30, 45] as const;
 
-export { ensureLocalDatabase, cacheToLocalDatabase };
-
-export type { DatabasePayload };
+export type {
+    CachedSensorReading,
+    DatabasePayload,
+    DatabaseStatus,
+    WriteConfirmation
+} from './types.ts';
