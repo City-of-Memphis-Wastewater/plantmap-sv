@@ -1,7 +1,7 @@
 // src/lib/plot/url.ts
 
-import { MAX_DAYS, MAX_DATAPOINT_COUNT, MAX_SECONDS_BETWEEN_POINTS, MAX_TAGS } from './context';
-import type { PlotOptions } from './types';
+import { MAX_DAYS, MAX_DATAPOINT_COUNT, MAX_SECONDS_BETWEEN_POINTS, MAX_TAGS } from './context.ts';
+import type { PlotOptions } from './types.ts';
 
 function parsePositiveNumber(
 	value: string | null,

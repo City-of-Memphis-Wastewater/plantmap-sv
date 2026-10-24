@@ -8,11 +8,11 @@ import {
 	DEFAULT_DATAPOINT_COUNT,
 	MAX_DAYS,
 	MAX_SECONDS_BETWEEN_POINTS
-} from '../plot/context';
+} from '../plot/context.ts';
 
-import type { PlotOptions } from '../plot/types';
-//import { resolveTimeAspects } from '../plot/resolve-time';
-import { buildPlotSearchParams } from '../plot/url';
+import type { PlotOptions } from '../plot/types.ts';
+//import { resolveTimeAspects } from '../plot/resolve-time.ts';
+import { buildPlotSearchParams } from '../plot/url.ts';
 
 function printHelp(): void {
 	console.log(`
