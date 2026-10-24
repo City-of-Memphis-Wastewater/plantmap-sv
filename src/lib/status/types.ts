@@ -17,9 +17,4 @@ export interface Status {
 		startedAt: string;
 	};
 
-	capabilities: {
-		plot: boolean;
-		telemetry: boolean;
-		liveStream: boolean;
-	};
 }

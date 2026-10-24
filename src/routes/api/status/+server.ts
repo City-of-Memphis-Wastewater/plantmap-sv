@@ -27,12 +27,6 @@ export const GET: RequestHandler = () => {
 		server: {
 			status: 'ready',
 			startedAt
-		},
-
-		capabilities: {
-			plot: true,
-			telemetry: true,
-			liveStream: true
 		}
 	};
 
