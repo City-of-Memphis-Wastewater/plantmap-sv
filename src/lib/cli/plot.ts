@@ -10,10 +10,9 @@ import {
 	MAX_SECONDS_BETWEEN_POINTS
 } from '../plot/context';
 
-
 import type { PlotOptions } from '../plot/types';
-import { resolveTimeAspects } from '../plot/resolve-time';
-import { buildPlotUrl } from '../plot/url';
+//import { resolveTimeAspects } from '../plot/resolve-time';
+import { buildPlotSearchParams } from '../plot/url';
 
 function printHelp(): void {
 	console.log(`
@@ -208,8 +207,9 @@ export function plot(args: string[] = []): void {
 		// --help has already printed its output.
 		if (options.tags.length === 0) return;
 
-		const range = resolveTimeAspects(options);
-		const url = buildPlotUrl(options, range);
+		//const range = resolveTimeAspects(options);
+		const url = `/plot?${buildPlotSearchParams(options).toString()}`;
+		//const url = buildPlotUrl(options, range);
 
 		console.log(`Opening PlantMap plot:\n${url.toString()}`);
 		openUrl(url.toString());
