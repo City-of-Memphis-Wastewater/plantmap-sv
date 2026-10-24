@@ -208,13 +208,11 @@ export function plot(args: string[] = []): void {
 		if (options.tags.length === 0) return;
 
 		//const url = `/plot?${buildPlotSearchParams(options).toString()}`;
-		const query = buildPlotSearchParams(options)
-            .toString()
-            .replace(/%2C/gi, ',');
+		const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
 
-        const url = `/plot?${query}`;
-        
-        //const range = resolveTimeAspects(options);
+		const url = `/plot?${query}`;
+
+		//const range = resolveTimeAspects(options);
 		//const url = buildPlotUrl(options, range);
 
 		console.log(`Opening PlantMap plot:\n${url.toString()}`);

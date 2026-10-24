@@ -10,35 +10,35 @@ import type { Status } from '$lib/status/types';
 const startedAt = new Date().toISOString();
 
 export const GET: RequestHandler = () => {
-    const status: Status = {
-        protocolVersion: 1,
+	const status: Status = {
+		protocolVersion: 1,
 
-        application: {
-            name: packageJson.name,
-            version: packageJson.version
-        },
+		application: {
+			name: packageJson.name,
+			version: packageJson.version
+		},
 
-        runtime: {
-            environment: dev ? 'development' : 'production',
-            pid: process.pid,
-            uptimeSeconds: Math.floor(process.uptime())
-        },
+		runtime: {
+			environment: dev ? 'development' : 'production',
+			pid: process.pid,
+			uptimeSeconds: Math.floor(process.uptime())
+		},
 
-        server: {
-            status: 'ready',
-            startedAt
-        },
+		server: {
+			status: 'ready',
+			startedAt
+		},
 
-        capabilities: {
-            plot: true,
-            telemetry: true,
-            liveStream: true
-        }
-    };
+		capabilities: {
+			plot: true,
+			telemetry: true,
+			liveStream: true
+		}
+	};
 
-    return json(status, {
-        headers: {
-            'Cache-Control': 'no-store'
-        }
-    });
+	return json(status, {
+		headers: {
+			'Cache-Control': 'no-store'
+		}
+	});
 };

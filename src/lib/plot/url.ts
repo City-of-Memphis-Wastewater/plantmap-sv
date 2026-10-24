@@ -128,11 +128,14 @@ export function buildPlotSearchParams(options: PlotOptions): URLSearchParams {
 	//for (const tag of [...new Set(options.tags.map((tag) => tag.trim()).filter(Boolean))]) {
 	//	params.append('tags', tag);
 	//}
-	
+
 	if (options.tags !== undefined) {
-	    params.set('tags', [...new Set(options.tags.map((tag) => tag.trim()).filter(Boolean))].join(','));
-    }
-    
+		params.set(
+			'tags',
+			[...new Set(options.tags.map((tag) => tag.trim()).filter(Boolean))].join(',')
+		);
+	}
+
 	if (options.start !== undefined) {
 		params.set('start', options.start);
 	}
