@@ -1,7 +1,21 @@
-//
+// src/lib/database/types.ts
 
-DatabasePayload
+export interface DatabasePayload {
+    sensorId: string;
+    timestamp: number;
+    value: number | null;
+    quality: string | null;
+}
 
-DatabaseStatus
+export interface DatabaseStatus {
+    ready: boolean;
+    path: string;
+    error?: string;
+}
 
-WroteConfirmation
+export interface WriteConfirmation {
+    sensorId: string;
+    timestamp: number;
+    written: boolean;
+    error?: string;
+}
