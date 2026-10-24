@@ -63,7 +63,7 @@ export function buildLocalDatabase(): DatabaseSync {
 /**
  * Check whether the database can be opened and queried.
  */
-export function checkStatusLocalDatabase(): DatabaseStatus {
+export function checkStatusLocalDatabaseDefunct(): DatabaseStatus {
     try {
         const db = buildLocalDatabase();
 
@@ -87,10 +87,64 @@ export function checkStatusLocalDatabase(): DatabaseStatus {
 }
 
 /**
+ * Check whether the local database exists and is usable.
+ * Does not create or initialize the database.
+ */
+export function checkStatusLocalDatabase(): DatabaseStatus {
+    if (!existsSync(DATABASE_PATH)) {
+        return {
+            ready: false,
+            path: DATABASE_PATH,
+            error: 'Database does not exist.'
+        };
+    }
+
+    try {
+        const db = new DatabaseSync(DATABASE_PATH, { readOnly: true });
+
+        try {
+            db.prepare('SELECT 1 FROM sensor_readings LIMIT 1').get();
+        } finally {
+            db.close();
+        }
+
+        return {
+            ready: true,
+            path: DATABASE_PATH
+        };
+    } catch (error) {
+        return {
+            ready: false,
+            path: DATABASE_PATH,
+            error: error instanceof Error ? error.message : String(error)
+        };
+    }
+}
+
+/**
+ * Create and initialize the local database if necessary.
+ * Existing tables and readings are preserved.
+ */
+export function createLocalDatabase(): DatabaseStatus {
+    try {
+        const db = buildLocalDatabase();
+        db.close();
+
+        return checkStatusLocalDatabase();
+    } catch (error) {
+        return {
+            ready: false,
+            path: DATABASE_PATH,
+            error: error instanceof Error ? error.message : String(error)
+        };
+    }
+}
+
+/**
  * Ensure the local database exists and is initialized.
  * Initialize it only when the database file does not exist.
  */
-export function ensureLocalDatabase(): DatabaseStatus {
+export function ensureLocalDatabaseDefunct(): DatabaseStatus {
     try {
         if (!existsSync(DATABASE_PATH)) {
             const db = buildLocalDatabase();
@@ -105,4 +159,23 @@ export function ensureLocalDatabase(): DatabaseStatus {
             error: error instanceof Error ? error.message : String(error)
         };
     }
+}
+
+/**
+ * Ensure the local database exists and is usable.
+ * Creates and initializes it only when it does not exist.
+ */
+export function ensureLocalDatabase(): DatabaseStatus {
+    const status = checkStatusLocalDatabase();
+
+    if (status.ready) {
+        return status;
+    }
+
+    if (!existsSync(DATABASE_PATH)) {
+        return createLocalDatabase();
+    }
+
+    // The file exists but is unusable. Do not overwrite it.
+    return status;
 }

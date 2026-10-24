@@ -3,6 +3,7 @@
 export {
     DATABASE_PATH,
     buildLocalDatabase,
+    createLocalDatabase,
     checkStatusLocalDatabase,
     ensureLocalDatabase
 } from './build.ts';
