@@ -201,7 +201,7 @@ function openUrl(url: string): void {
 	tryCommand(0);
 }
 
-export async function plot(args: string[] = []): void {
+export async function plot(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
 
