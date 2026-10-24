@@ -157,8 +157,8 @@ export function buildPlotSearchParams(options: PlotOptions): URLSearchParams {
 		params.set('function', options.functionType);
 	}
 
-	//return params;
-	return params.toString().replace(/%2C/gi, ',');
+	return params;
+	//return params.toString().replace(/%2C/gi, ',');
 }
 
 /**

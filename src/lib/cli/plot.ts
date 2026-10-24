@@ -207,8 +207,14 @@ export function plot(args: string[] = []): void {
 		// --help has already printed its output.
 		if (options.tags.length === 0) return;
 
-		//const range = resolveTimeAspects(options);
-		const url = `/plot?${buildPlotSearchParams(options).toString()}`;
+		//const url = `/plot?${buildPlotSearchParams(options).toString()}`;
+		const query = buildPlotSearchParams(options)
+            .toString()
+            .replace(/%2C/gi, ',');
+
+        const url = `/plot?${query}`;
+        
+        //const range = resolveTimeAspects(options);
 		//const url = buildPlotUrl(options, range);
 
 		console.log(`Opening PlantMap plot:\n${url.toString()}`);
