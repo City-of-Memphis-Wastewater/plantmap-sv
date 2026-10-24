@@ -3,9 +3,11 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
-
 import { getEdsClient } from '$lib/server/eds/factory';
+import { VALID_MINUTE_INT_LIST, cacheToLocalDatabase, ensureLocalDatabase } from '$lib/database/index';
+
+import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
+import type { DatabasePayload } from '$lib/database/types';
 
 type Subscriber = (snapshot: TelemetrySnapshot) => void;
 
