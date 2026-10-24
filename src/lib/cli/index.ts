@@ -50,10 +50,11 @@ Usage:
   plantmap <command>
 
 Commands:
-  start     Start the production server
-  setup     Configure PlantMap
-  secret    List secrets stored in app dir
-  config    List config values stored in app dir
-  help      Show this help
+  start     Start the production server.
+  setup     Configure PlantMap.
+  plot      Call plant data by tags and time aspects.
+  secret    List secrets stored in app dir.
+  config    List config values stored in app dir.
+  help      Show this help.
 `);
 }
