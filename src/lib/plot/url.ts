@@ -88,7 +88,7 @@ export function parsePlotUrl(params: URLSearchParams): PlotOptions {
 		throw new Error(`Invalid end time: ${end}`);
 	}
 
-	const windowDays = parsePositiveNumber(params.get('windowDays'), 'windowDays', MAX_DAYS);
+	const windowDays = parsePositiveNumber(params.get('days'), 'windowDays', MAX_DAYS);
 
 	const datapointCount = parsePositiveNumber(
 		params.get('datapointCount'),
@@ -138,7 +138,7 @@ export function buildPlotSearchParams(options: PlotOptions): URLSearchParams {
 	}
 
 	if (options.windowDays !== undefined) {
-		params.set('windowDays', String(options.windowDays));
+		params.set('days', String(options.windowDays));
 	}
 
 	if (options.datapointCount !== undefined) {
