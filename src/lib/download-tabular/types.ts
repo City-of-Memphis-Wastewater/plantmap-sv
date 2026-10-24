@@ -1,1 +1,1 @@
-filetypeslost =  [XLSX, CSV, JSON, PNG]
+filetypeslost = [XLSX, CSV, JSON, PNG];

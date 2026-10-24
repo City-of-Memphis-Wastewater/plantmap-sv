@@ -4,7 +4,11 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { getEdsClient } from '$lib/server/eds/factory';
-import { VALID_MINUTE_INT_LIST, cacheToLocalDatabase, ensureLocalDatabase } from '$lib/database/index';
+import {
+	VALID_MINUTE_INT_LIST,
+	cacheToLocalDatabase,
+	ensureLocalDatabase
+} from '$lib/database/index';
 
 import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
 import type { DatabasePayload } from '$lib/database/types';

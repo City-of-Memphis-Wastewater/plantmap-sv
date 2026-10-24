@@ -9,28 +9,28 @@ import type { EdsPointTelemetry } from '$lib/server/eds/types';
  * PlantMap supplies the map sensor ID and sampling timestamp.
  */
 export interface DatabasePayload {
-    sensorId: string;
-    sampledAt: number;
-    sourceTimestamp: EdsPointTelemetry['timestamp'];
-    value: EdsPointTelemetry['value'];
-    quality: EdsPointTelemetry['quality'];
+	sensorId: string;
+	sampledAt: number;
+	sourceTimestamp: EdsPointTelemetry['timestamp'];
+	value: EdsPointTelemetry['value'];
+	quality: EdsPointTelemetry['quality'];
 }
 
 /**
  * Result of attempting to persist a batch of sensor readings.
  */
 export interface WriteConfirmation {
-    written: number;
-    sampledAt: number;
+	written: number;
+	sampledAt: number;
 }
 
 /**
  * A reading retrieved from the local database.
  */
 export interface CachedSensorReading {
-    sensorId: string;
-    sampledAt: number;
-    sourceTimestamp: string | null;
-    value: number | null;
-    quality: string | null;
+	sensorId: string;
+	sampledAt: number;
+	sourceTimestamp: string | null;
+	value: number | null;
+	quality: string | null;
 }
