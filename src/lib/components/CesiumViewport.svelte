@@ -225,7 +225,7 @@
 							hoverInfo = {
 								name: pickedObject.id.name || pickedObject.id.id,
 								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
-								tag: pickedObject.id.id,
+								tag: sensor.id,
 								x: movement.endPosition.x,
 								y: movement.endPosition.y
 							};
