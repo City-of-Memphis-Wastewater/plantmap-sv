@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is (read: strives to be) based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+
 - plotting, cli, status, and tabular requests.
 - Telemetry HUD needs a vertical scrollbar, and for the minimization key to possibly be lower and unmoving.
 - We need text size adjustment, and possibly roll controls.

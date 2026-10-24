@@ -16,5 +16,4 @@ export interface Status {
 		status: 'ready';
 		startedAt: string;
 	};
-
 }

@@ -215,13 +215,13 @@ export async function plot(args: string[] = []): void {
 
 		//const range = resolveTimeAspects(options);
 		//const url = buildPlotUrl(options, range);
-        const server = await discoverServer();
+		const server = await discoverServer();
 
-        if (!server) {
-        	throw new Error('PlantMap server is not running.');
-        }
+		if (!server) {
+			throw new Error('PlantMap server is not running.');
+		}
 
-        const plotUrl = `${server.url}/plot?tags=m100fi,fi8001,m310li&days=4`;
+		const plotUrl = `${server.url}/plot?tags=m100fi,fi8001,m310li&days=4`;
 		console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
 		openUrl(plotUrl.toString());
 	} catch (error) {

@@ -1,7 +1,7 @@
 import { bootstrapPlantMapConfig } from '../plantmap-sv/bootstrap.ts';
 import { loadPlantMapConfig } from '../plantmap-sv/config.ts';
 
-import type { StatusResponse } from './types.ts'
+import type { StatusResponse } from './types.ts';
 
 export interface DiscoveredServer {
 	host: string;
@@ -13,10 +13,7 @@ export interface DiscoveredServer {
 function getPorts(): number[] {
 	const config = loadPlantMapConfig(bootstrapPlantMapConfig());
 
-	return [...new Set([
-		config.devServer.port,
-		config.prodServer.port
-	])];
+	return [...new Set([config.devServer.port, config.prodServer.port])];
 }
 
 async function probeServer(port: number): Promise<DiscoveredServer | null> {
@@ -30,7 +27,7 @@ async function probeServer(port: number): Promise<DiscoveredServer | null> {
 
 		if (!response.ok) return null;
 
-		const status = await response.json() as StatusResponse;
+		const status = (await response.json()) as StatusResponse;
 
 		if (
 			status.protocolVersion !== 1 ||

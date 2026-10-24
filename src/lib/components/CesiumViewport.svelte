@@ -29,6 +29,7 @@
 	let hoverInfo = $state<{
 		name: string;
 		value: string;
+		tag: string;
 		x: number;
 		y: number;
 	} | null>(null);
@@ -224,6 +225,7 @@
 							hoverInfo = {
 								name: pickedObject.id.name || pickedObject.id.id,
 								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
+								tag: pickedObject.id.id,
 								x: movement.endPosition.x,
 								y: movement.endPosition.y
 							};
