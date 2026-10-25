@@ -5,13 +5,8 @@ import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
 
+import type { DatabaseStatus } from './types.ts';
 export const DATABASE_PATH = join(homedir(), '.plantmap-sv', 'db', 'local.sqlite');
-
-export interface DatabaseStatus {
-	ready: boolean;
-	path: string;
-	error?: string;
-}
 
 /**
  * Create the parent directory when necessary.

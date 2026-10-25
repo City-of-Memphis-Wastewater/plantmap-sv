@@ -17,6 +17,15 @@ export interface DatabasePayload {
 }
 
 /**
+ * Status of the local SQLite database.
+ */
+export interface DatabaseStatus {
+    ready: boolean;
+    path: string;
+    error?: string;
+}
+
+/**
  * Result of attempting to persist a batch of sensor readings.
  */
 export interface WriteConfirmation {
@@ -34,3 +43,5 @@ export interface CachedSensorReading {
 	value: number | null;
 	quality: string | null;
 }
+
+
