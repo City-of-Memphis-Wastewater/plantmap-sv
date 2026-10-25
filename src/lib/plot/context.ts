@@ -12,7 +12,7 @@ export const DEFAULT_TAGS = ['M100FI'];
 export const DEFAULT_DAYS = 2;
 export const DEFAULT_DATAPOINT_COUNT = 400;
 export const DEFAULT_SECONDS_BETWEEN_POINTS = 60;
-export const DEFAULT_FUNCTION_TYPE = 'AVG';
+export const DEFAULT_FUNCTION_TYPE = 'VALUE';
 
 // Input limits
 export const MAX_TAGS = 25;

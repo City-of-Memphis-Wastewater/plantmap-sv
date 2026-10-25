@@ -72,7 +72,7 @@ export class ClientEdsSoap {
 		startSeconds: number,
 		endSeconds: number,
 		secondsBetweenPoints: number = 60,
-		functionType: string = 'AVG'
+		functionType: string = 'VALUE'
 	) {
 		return this.tabular.fetch(
 			sensorIds,

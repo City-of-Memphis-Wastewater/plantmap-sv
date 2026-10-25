@@ -21,7 +21,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const days = Number(url.searchParams.get('days') ?? '1');
 	const stepSeconds = Number(url.searchParams.get('stepSeconds') ?? '60');
-	const functionType = (url.searchParams.get('function') ?? 'AVG').trim().toUpperCase();
+	const functionType = (url.searchParams.get('function') ?? 'VALUE').trim().toUpperCase();
 
 	console.log('');
 	console.log('============================================================');
@@ -47,7 +47,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			{
 				success: false,
 				error: 'Invalid parameters.',
-				usage: '/api/debug/tabular?tags=M100FI&days=1&stepSeconds=60&function=AVG'
+				usage: '/api/debug/tabular?tags=M100FI&days=1&stepSeconds=60&function=VALUE'
 			},
 			{ status: 400 }
 		);
