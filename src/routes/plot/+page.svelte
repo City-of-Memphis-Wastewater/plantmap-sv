@@ -471,7 +471,7 @@
 					<select id="function" bind:value={functionType}>
 						{#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
 							<option value={supportedFunction}>
-								{supportedFunction === 'AVG' ? 'Average' : supportedFunction}
+								{supportedFunction === 'VALUE' ? 'Value' : supportedFunction}
 							</option>
 						{/each}
 					</select>
