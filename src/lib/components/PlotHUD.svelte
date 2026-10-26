@@ -15,8 +15,20 @@
 		x: number;
 		y: number;
 	} = $props();
+    
+    type PlotResponse = {
+        sensorId?: string;
+        readings?: {
+            sampledAt: number;
+            databaseTimestamp: number | null;
+            value: number | null;
+            quality: string | null;
+        }[];
+        error?: string;
+        detail?: string;
+    };
 
-	type PlotResponse = {
+	type PlotResponseDefunct = {
 		request?: {
 			start: string;
 			end: string;
@@ -90,63 +102,54 @@
 		error = '';
 		points = [];
 		unit = '';
+        
+        const params = new URLSearchParams({
+            sensorId: sensorTag
+        });
 
-		const params = new URLSearchParams({
-			tags: sensorTag,
-			days: String(WINDOW_DAYS),
-			secondsBetweenPoints: String(STEP_SECONDS),
-			function: DEFAULT_FUNCTION_TYPE
-		});
+        try {
+            const response = await fetch(`/api/telemetry-history?${params}`, {
+                signal: controller.signal
+            });
 
-		try {
-			const response = await fetch(`${PLOT_API_PATH}?${params}`, {
-				signal: controller.signal
-			});
+            const result: PlotResponse = await response.json();
 
-			const result: PlotResponse = await response.json();
+            if (!response.ok) {
+                throw new Error(
+                    result.detail ?? result.error ?? `History request failed (${response.status})`
+                );
+            }
 
-			if (!response.ok) {
-				throw new Error(result.error ?? `History request failed (${response.status})`);
-			}
+            if (controller.signal.aborted) return;
 
-			if (controller.signal.aborted) return;
+            points = (result.readings ?? [])
+                .map((reading) => ({
+                    time: reading.sampledAt * 1000,
+                    value: reading.value
+                }))
+                .filter(
+                    (point): point is Point =>
+                        Number.isFinite(point.time) &&
+                        typeof point.value === 'number' &&
+                        Number.isFinite(point.value)
+                )
+                .sort((a, b) => a.time - b.time);
 
-			const series = Object.entries(result.values ?? {}).find(
-				([key]) => key.toUpperCase() === sensorTag.toUpperCase()
-			)?.[1];
-			if (!series) {
-				throw new Error(result.error ?? 'No historical data returned for this sensor.');
-			}
+            updatedAt = Date.now();
 
-			const readings = series as EDSTelemetryValue[];
+            if (points.length === 0) {
+                error = 'No cached readings in the last 48 hours.';
+            }
+        } catch (cause) {
+            if (cause instanceof Error && cause.name === 'AbortError') return;
 
-			points = readings
-				.map((reading) => ({
-					time: reading.timestamp ? Date.parse(reading.timestamp) : NaN,
-					value: reading.value
-				}))
-				.filter(
-					(point): point is Point =>
-						Number.isFinite(point.time) &&
-						typeof point.value === 'number' &&
-						Number.isFinite(point.value)
-				)
-				.sort((a, b) => a.time - b.time);
-
-			updatedAt = Date.now();
-
-			if (points.length === 0) {
-				error = 'No numeric readings available for this period.';
-			}
-		} catch (cause) {
-			if (cause instanceof Error && cause.name === 'AbortError') return;
-
-			error = cause instanceof Error ? cause.message : String(cause);
-		} finally {
-			if (!controller.signal.aborted) {
-				loading = false;
-			}
-		}
+            error = cause instanceof Error ? cause.message : String(cause);
+        } finally {
+            if (!controller.signal.aborted) {
+                loading = false;
+            }
+        }
+		
 	}
 
 	onMount(() => {
