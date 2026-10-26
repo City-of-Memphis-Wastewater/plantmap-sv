@@ -12,10 +12,9 @@ export {
 	readLatestCachedSensorReadings
 } from './crud.ts';
 
-export const VALID_MINUTE_INT_LIST = [0, 15, 30, 45] as const;
+export { VALID_MINUTE_INT_LIST } from './context';
 
 export type {
-	CachedSensorReading,
 	DatabasePayload,
 	DatabaseStatus,
 	WriteConfirmation

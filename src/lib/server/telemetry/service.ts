@@ -4,13 +4,12 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { getEdsClient } from '$lib/server/eds/factory';
-import {
-	VALID_MINUTE_INT_LIST,
-	writeSensorReadings,
-} from '$lib/database/index';
-
+import { getDatabaseTimestamp } from '$lib/database/time';
+import type { EdsPointTelemetry } from '$lib/server/eds/types';
 import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
 import type { DatabasePayload } from '$lib/database/types';
+
+import { persistBatch } from './persistence.ts';
 
 type Subscriber = (snapshot: TelemetrySnapshot) => void;
 
@@ -24,6 +23,36 @@ class TelemetryService {
 	private timer: ReturnType<typeof setTimeout> | null = null;
 	private polling = false;
 	private subscribers = new Set<Subscriber>();
+    private lastPersistedDatabaseTimestamp: number | null = null;
+    private persistBatchIfNeeded(
+        sensorMap: Record<string, SensorNode>,
+        liveData: Record<string, EdsPointTelemetry>,
+        iessSuffix: string
+    ): void {
+        const databaseTimestamp = getDatabaseTimestamp();
+
+        if (databaseTimestamp === this.lastPersistedDatabaseTimestamp) {
+            return;
+        }
+
+        try {
+            const result = persistBatch(
+                sensorMap,
+                liveData,
+                iessSuffix,
+                databaseTimestamp
+            );
+
+            if (result.persisted) {
+                this.lastPersistedDatabaseTimestamp = databaseTimestamp;
+            }
+        } catch (error) {
+            console.error(
+                '[TelemetryService] Persistence failed:',
+                error instanceof Error ? error.message : error
+            );
+        }
+    }
 	private loadSensorMap(): Record<string, SensorNode> {
 		const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
@@ -119,6 +148,12 @@ class TelemetryService {
 			};
 
 			this.broadcast();
+
+            this.persistBatchIfNeeded(
+                sensorMap,
+                liveData,
+                client.iessSuffix
+            );
 		} catch (error) {
 			console.warn(
 				'[TelemetryService] EDS SOAP endpoint unreachable:',

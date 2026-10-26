@@ -9,6 +9,7 @@ import {
   readCachedSensorReadings,
   readLatestCachedSensorReadings
 } from './crud.ts';
+import { getDatabaseTimestamp } from './time.ts';
 import type { DatabasePayload } from './types.ts';
 
 describe('local database CRUD', () => {
@@ -28,12 +29,14 @@ describe('local database CRUD', () => {
     sensorId: string,
     sampledAt: number,
     value: number | null,
+    databaseTimestamp: number = getDatabaseTimestamp(),
     quality = 'GOOD'
   ): DatabasePayload {
     return {
       sensorId,
       sampledAt,
       sourceTimestamp: new Date(sampledAt * 1000).toISOString(),
+      databaseTimestamp,
       value,
       quality
     };
@@ -51,6 +54,7 @@ describe('local database CRUD', () => {
           sensorId: 'M100FI',
           sampledAt: 1000,
           sourceTimestamp: new Date(1000 * 1000).toISOString(),
+          
           value: 12.5,
           quality: 'GOOD'
         }
@@ -82,12 +86,12 @@ describe('local database CRUD', () => {
 
   it('updates an existing reading with the same sensor and timestamp', () => {
     writeSensorReadings(
-      [reading('M100FI', 1000, 12.5, 'GOOD')],
+      [reading('M100FI', 1000, 12.5)],
       databasePath
     );
 
     const result = writeSensorReadings(
-      [reading('M100FI', 1000, 15.25, 'UNCERTAIN')],
+      [reading('M100FI', 1000, 15.25)],
       databasePath
     );
 

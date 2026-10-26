@@ -24,7 +24,7 @@ export function buildLocalDatabase(path: string = DATABASE_PATH): DatabaseSync {
 	ensureDatabaseDirectory(path);
 
 	const db = new DatabaseSync(path);
-
+    
 	try {
 		db.exec(`
             PRAGMA journal_mode = WAL;
@@ -34,9 +34,10 @@ export function buildLocalDatabase(path: string = DATABASE_PATH): DatabaseSync {
                 sensor_id TEXT NOT NULL,
                 sampled_at INTEGER NOT NULL,
                 source_timestamp TEXT,
+                database_timestamp INTEGER NOT NULL,
                 value REAL,
                 quality TEXT,
-                PRIMARY KEY (sensor_id, sampled_at)
+                PRIMARY KEY (sensor_id, database_timestamp)
             );
 
             CREATE INDEX IF NOT EXISTS idx_sensor_readings_sampled_at

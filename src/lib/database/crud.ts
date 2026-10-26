@@ -56,7 +56,7 @@ export function writeSensorReadings(
           reading.sensorId,
           reading.sampledAt,
           reading.sourceTimestamp,
-          reading.readAt,
+          reading.databaseTimestamp,
           reading.value,
           reading.quality
         );

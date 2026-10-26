@@ -8,19 +8,12 @@ import type { EdsPointTelemetry } from '$lib/server/eds/types';
  * The EDS point provides the value, quality, and source timestamp.
  * PlantMap supplies the map sensor ID and sampling timestamp.
  */
-export interface DatabasePayloadDefunct {
-	sensorId: string;
-	sampledAt: number;
-	sourceTimestamp: EdsPointTelemetry['timestamp'];
-	value: EdsPointTelemetry['value'];
-	quality: EdsPointTelemetry['quality'];
-}
 
 export interface DatabasePayload {
   sensorId: string;
-  sampledAt: number;              // Canonical n-minute (n=15, or other) window start
+  sampledAt: number;              // Local retrieval time, Unix secondst
   sourceTimestamp: string | null; // Original EDS timestamp
-  readAt: number;                 // Local retrieval time, Unix seconds
+  databaseTimestamp: number;      // Canonical n-minute (n=15, or other) window start.
   value: number | null;
   quality: string | null;
 }
@@ -42,13 +35,3 @@ export interface WriteConfirmation {
 	sampledAt: number;
 }
 
-/**
- * A reading retrieved from the local database.
- */
-export interface CachedSensorReading {
-	sensorId: string;
-	sampledAt: number;
-	sourceTimestamp: string | null;
-	value: number | null;
-	quality: string | null;
-}
