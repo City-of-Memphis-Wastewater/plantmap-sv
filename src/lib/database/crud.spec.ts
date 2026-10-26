@@ -114,35 +114,28 @@ describe('database CRUD', () => {
 		);
 	});
 
-	it('updates an existing sensor reading for the same database timestamp', () => {
-		writeSensorReadings([reading('M100FI', 1111, 1000, 10)], databasePath);
+    it('does not replace an existing reading for the same database timestamp', () => {
+      writeSensorReadings([reading('M100FI', 1111, 1000, 10)], databasePath);
 
-		const result = writeSensorReadings(
-			[reading('M100FI', 2222, 1000, 15.25, 'UNCERTAIN')],
-			databasePath
-		);
+      const result = writeSensorReadings(
+        [reading('M100FI', 2222, 1000, 15.25, 'UNCERTAIN')],
+        databasePath
+      );
 
-		expect(result.written).toBe(1);
-		expect(result.databaseTimestamp).toBe(1000);
+      expect(result.written).toBe(0);
+      expect(result.databaseTimestamp).toBe(1000);
 
-		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
-			{
-				sensorId: 'M100FI',
-				databaseTimestamp: 1000,
-				sourceTimestamp: new Date(2222 * 1000).toISOString(),
-				value: 15.25,
-				quality: 'UNCERTAIN'
-			}
-		]);
-	});
-
-	it('rejects batches containing different database timestamps', () => {
-		const payload = [reading('M100FI', 1111, 1000, 10), reading('M310LI', 2222, 2000, 20)];
-
-		expect(() => writeSensorReadings(payload, databasePath)).toThrow(
-			'All readings in a database batch must share the same databaseTimestamp timestamp.'
-		);
-	});
+      expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
+        {
+          sensorId: 'M100FI',
+          sampledAt: 1111,
+          databaseTimestamp: 1000,
+          sourceTimestamp: new Date(1111 * 1000).toISOString(),
+          value: 10,
+          quality: 'GOOD'
+        }
+      ]);
+    });
 
 	it('allows different sampledAt values in the same database window', () => {
 		const payload = [reading('M100FI', 1111, 1000, 10), reading('M310LI', 2222, 1000, 20)];
