@@ -21,14 +21,26 @@ echo Application directory: %APPDIR%>> "%LOGFILE%"
 echo Port: %PORT%>> "%LOGFILE%"
 echo ============================================================>> "%LOGFILE%"
 
-echo. >> "%LOGFILE%"
-echo === npm install === >> "%LOGFILE%"
-call npm install  >> "%LOGFILE%" 2>&1
+echo.>> "%LOGFILE%" 
+echo === Node version ===>> "%LOGFILE%" 
+node --version >> "%LOGFILE%" 2>&1 
 if errorlevel 1 goto :error
 
-echo Building PlantMap...>> "%LOGFILE%"
-call npm run build >> "%LOGFILE%" 2>&1
+echo. >> "%LOGFILE%"
+echo === npm ci === >> "%LOGFILE%"
+call npm ci  >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
+
+echo.>> "%LOGFILE%" 
+echo === Build PlantMap ===>> "%LOGFILE%" 
+call npm run build >> "%LOGFILE%" 2>&1 
+if errorlevel 1 goto :error 
+
+if not exist "build\index.js" ( 
+    echo ERROR: build\index.js was not generated.>> "%LOGFILE%" 
+    set "EXITCODE=1" 
+    goto :failed 
+)
 
 echo. >> "%LOGFILE%"
 echo === Copy Cesium assets === >> "%LOGFILE%"
