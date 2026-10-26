@@ -53,6 +53,7 @@ describe('database CRUD', () => {
 		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
 			{
 				sensorId: 'M100FI',
+                sampledAt: 1234,
 				databaseTimestamp: 1000,
 				sourceTimestamp: new Date(1234 * 1000).toISOString(),
 				value: 12.5,
