@@ -4,13 +4,84 @@ import { buildLocalDatabase } from './build.ts';
 
 import type { CachedSensorReading, DatabasePayload, WriteConfirmation } from './types.ts';
 
+
 /**
  * Persist a batch of sensor readings in one transaction.
  *
  * Existing readings at the same sensor ID and sampling timestamp
  * are replaced, making retries safe.
  */
-export function cacheToLocalDatabase(
+
+export function writeSensorReadings(
+  payload: DatabasePayload[],
+  databasePath?: string
+): WriteConfirmation {
+  if (payload.length === 0) {
+    return {
+      written: 0,
+      sampledAt: Math.floor(Date.now() / 1000)
+    };
+  }
+
+  const sampledAt = payload[0].sampledAt;
+
+  if (payload.some((reading) => reading.sampledAt !== sampledAt)) {
+    throw new Error(
+      'All readings in a database batch must share the same sampledAt timestamp.'
+    );
+  }
+
+  const db = buildLocalDatabase(databasePath);
+  let written = 0;
+
+  try {
+    const insert = db.prepare(`
+      INSERT INTO sensor_readings (
+        sensor_id,
+        sampled_at,
+        source_timestamp,
+        read_at,
+        value,
+        quality
+      )
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT (sensor_id, sampled_at) DO NOTHING
+    `);
+
+    db.exec('BEGIN IMMEDIATE');
+
+    try {
+      for (const reading of payload) {
+        const result = insert.run(
+          reading.sensorId,
+          reading.sampledAt,
+          reading.sourceTimestamp,
+          reading.readAt,
+          reading.value,
+          reading.quality
+        );
+
+        written += Number(result.changes);
+      }
+
+      db.exec('COMMIT');
+    } catch (error) {
+      try {
+        db.exec('ROLLBACK');
+      } catch {
+        // Preserve the original error.
+      }
+
+      throw error;
+    }
+
+    return { written, sampledAt };
+  } finally {
+    db.close();
+  }
+}
+
+export function cacheToLocalDatabaseDefunct(
 	payload: DatabasePayload[],
 	databasePath?: string
 ): WriteConfirmation {
