@@ -1,9 +1,8 @@
 // src/lib/database/crud.ts
 
 import { buildLocalDatabase } from './build.ts';
-
+import { getDatabaseTimestamp } from './time.ts';
 import type { CachedSensorReading, DatabasePayload, WriteConfirmation } from './types.ts';
-
 
 /**
  * Persist a batch of sensor readings in one transaction.
@@ -13,23 +12,23 @@ import type { CachedSensorReading, DatabasePayload, WriteConfirmation } from './
  */
 
 export function writeSensorReadings(
-  payload: DatabasePayload[],
-  databasePath?: string
+	payload: DatabasePayload[],
+	databasePath?: string
 ): WriteConfirmation {
-  if (payload.length === 0) {
-    return {
-      written: 0,
-      databaseTimestamp: null
-    };
-  }
+	if (payload.length === 0) {
+		return {
+			written: 0,
+			databaseTimestamp: getDatabaseTimeStamp()
+		};
+	}
 
-  const databaseTimestamp = payload[0].databaseTimestamp;
+	const databaseTimestamp = payload[0].databaseTimestamp;
 
-  const db = buildLocalDatabase(databasePath);
-  let written = 0;
+	const db = buildLocalDatabase(databasePath);
+	let written = 0;
 
-  try {
-    const insert = db.prepare(`
+	try {
+		const insert = db.prepare(`
       INSERT INTO sensor_readings (
         sensor_id,
         sampled_at,
@@ -42,37 +41,37 @@ export function writeSensorReadings(
       ON CONFLICT (sensor_id, database_timestamp) DO NOTHING
     `);
 
-    db.exec('BEGIN IMMEDIATE');
+		db.exec('BEGIN IMMEDIATE');
 
-    try {
-      for (const reading of payload) {
-        const result = insert.run(
-          reading.sensorId,
-          reading.sampledAt,
-          reading.sourceTimestamp,
-          reading.databaseTimestamp,
-          reading.value,
-          reading.quality
-        );
+		try {
+			for (const reading of payload) {
+				const result = insert.run(
+					reading.sensorId,
+					reading.sampledAt,
+					reading.sourceTimestamp,
+					reading.databaseTimestamp,
+					reading.value,
+					reading.quality
+				);
 
-        written += Number(result.changes);
-      }
+				written += Number(result.changes);
+			}
 
-      db.exec('COMMIT');
-    } catch (error) {
-      try {
-        db.exec('ROLLBACK');
-      } catch {
-        // Preserve the original error.
-      }
+			db.exec('COMMIT');
+		} catch (error) {
+			try {
+				db.exec('ROLLBACK');
+			} catch {
+				// Preserve the original error.
+			}
 
-      throw error;
-    }
+			throw error;
+		}
 
-    return { written, databaseTimestamp };
-  } finally {
-    db.close();
-  }
+		return { written, databaseTimestamp };
+	} finally {
+		db.close();
+	}
 }
 
 /**
@@ -84,7 +83,7 @@ export function readCachedSensorReadings(
 	sensorId: string,
 	from: number,
 	to: number,
-    databasePath?: string
+	databasePath?: string
 ): CachedSensorReading[] {
 	if (from > to) {
 		throw new Error('"from" must be less than or equal to "to".');
@@ -104,9 +103,9 @@ export function readCachedSensorReadings(
                 quality
             FROM sensor_readings
             WHERE sensor_id = ?
-              AND sampled_at >= ?
-              AND sampled_at <= ?
-            ORDER BY sampled_at ASC
+              AND database_timestamp >= ?
+              AND database_timestamp <= ?
+            ORDER BY database_timestamp ASC
         `
 			)
 			.all(sensorId, from, to);
@@ -139,11 +138,12 @@ export function readLatestCachedSensorReadings(
                 sensor_id AS sensorId,
                 sampled_at AS sampledAt,
                 source_timestamp AS sourceTimestamp,
+                database_timestamp AS databaseTimestamp,
                 value,
                 quality
             FROM sensor_readings
             WHERE sensor_id = ?
-            ORDER BY sampled_at DESC
+            ORDER BY database_timestamp DESC
             LIMIT ?
         `
 			)

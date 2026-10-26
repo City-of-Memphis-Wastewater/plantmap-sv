@@ -10,12 +10,12 @@ import type { EdsPointTelemetry } from '$lib/server/eds/types';
  */
 
 export interface DatabasePayload {
-  sensorId: string;
-  sampledAt: number;              // Local retrieval time, Unix secondst
-  sourceTimestamp: string | null; // Original EDS timestamp
-  databaseTimestamp: number;      // Canonical n-minute (n=15, or other) window start.
-  value: number | null;
-  quality: string | null;
+	sensorId: string;
+	sampledAt: number; // Local retrieval time, Unix secondst
+	sourceTimestamp: string | null; // Original EDS timestamp
+	databaseTimestamp: number; // Canonical n-minute (n=15, or other) window start.
+	value: number | null;
+	quality: string | null;
 }
 
 /**
@@ -35,12 +35,11 @@ export interface WriteConfirmation {
 	databaseTimestamp: number | null;
 }
 
-
 export interface CachedSensorReading {
-    sensorId: string;
-    sampledAt: number;
-    sourceTimestamp: string | null;
-    databaseTimestamp: number | null;
-    value: number | null;
-    quality: string | null;
+	sensorId: string;
+	sampledAt: number;
+	sourceTimestamp: string | null;
+	databaseTimestamp: number | null;
+	value: number | null;
+	quality: string | null;
 }

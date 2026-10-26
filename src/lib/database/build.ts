@@ -24,7 +24,7 @@ export function buildLocalDatabase(path: string = DATABASE_PATH): DatabaseSync {
 	ensureDatabaseDirectory(path);
 
 	const db = new DatabaseSync(path);
-    
+
 	try {
 		db.exec(`
             PRAGMA journal_mode = WAL;
@@ -85,4 +85,3 @@ export function checkStatusLocalDatabase(path: string = DATABASE_PATH): Database
 		};
 	}
 }
-

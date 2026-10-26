@@ -1,190 +1,169 @@
-
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import {
-  writeSensorReadings,
-  readCachedSensorReadings,
-  readLatestCachedSensorReadings
+	writeSensorReadings,
+	readCachedSensorReadings,
+	readLatestCachedSensorReadings
 } from './crud.ts';
-import { getDatabaseTimestamp } from './time.ts';
 import type { DatabasePayload } from './types.ts';
 
-describe('local database CRUD', () => {
-  let tempDirectory: string;
-  let databasePath: string;
+describe('database CRUD', () => {
+	let tempDir: string;
+	let databasePath: string;
 
-  beforeEach(() => {
-    tempDirectory = mkdtempSync(join(tmpdir(), 'plantmap-db-test-'));
-    databasePath = join(tempDirectory, 'local.sqlite');
-  });
+	beforeEach(() => {
+		tempDir = mkdtempSync(join(tmpdir(), 'plantmap-db-'));
+		databasePath = join(tempDir, 'test.sqlite');
+	});
 
-  afterEach(() => {
-    rmSync(tempDirectory, { recursive: true, force: true });
-  });
+	afterEach(() => {
+		rmSync(tempDir, { recursive: true, force: true });
+	});
 
-  function reading(
-    sensorId: string,
-    sampledAt: number,
-    value: number | null,
-    databaseTimestamp: number = getDatabaseTimestamp(),
-    quality = 'GOOD'
-  ): DatabasePayload {
-    return {
-      sensorId,
-      sampledAt,
-      sourceTimestamp: new Date(sampledAt * 1000).toISOString(),
-      databaseTimestamp,
-      value,
-      quality
-    };
-  }
+	function reading(
+		sensorId: string,
+		sampledAt: number,
+		databaseTimestamp: number,
+		value: number | null,
+		quality: string | null = 'GOOD'
+	): DatabasePayload {
+		return {
+			sensorId,
+			sampledAt,
+			sourceTimestamp: new Date(sampledAt * 1000).toISOString(),
+			databaseTimestamp,
+			value,
+			quality
+		};
+	}
 
-  it('writes and reads a sensor reading', () => {
-    const payload = [reading('M100FI', 1000, 12.5)];
+	it('writes a reading and returns its database timestamp', () => {
+		const payload = [reading('M100FI', 1234, 1000, 12.5)];
 
-    const result = writeSensorReadings(payload, databasePath);
+		const result = writeSensorReadings(payload, databasePath);
 
-    expect(result).toEqual({ written: 1, databaseTimestamp: 1000 });
-    expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath))
-      .toEqual([
-        {
-          sensorId: 'M100FI',
-          databaseTimestamp: 1000,
-          sourceTimestamp: new Date(1000 * 1000).toISOString(),
-          
-          value: 12.5,
-          quality: 'GOOD'
-        }
-      ]);
-  });
+		expect(result).toEqual({
+			written: 1,
+			databaseTimestamp: 1000
+		});
 
-  it('includes both endpoints in a time-range query', () => {
-    writeSensorReadings([reading('M100FI', 1000, 10)], databasePath);
+		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
+			{
+				sensorId: 'M100FI',
+				databaseTimestamp: 1000,
+				sourceTimestamp: new Date(1234 * 1000).toISOString(),
+				value: 12.5,
+				quality: 'GOOD'
+			}
+		]);
+	});
 
-    writeSensorReadings(
-      [
-        reading('M100FI', 2000, 20),
-        reading('OTHER', 2000, 999)
-      ],
-      databasePath
-    );
+	it('returns zero written for an empty batch', () => {
+		const result = writeSensorReadings([], databasePath);
 
-    writeSensorReadings([reading('M100FI', 3000, 30)], databasePath);
+		expect(result.written).toBe(0);
+		expect(Number.isInteger(result.databaseTimestamp)).toBe(true);
+	});
 
-    const result = readCachedSensorReadings(
-      'M100FI',
-      1000,
-      2000,
-      databasePath
-    );
+	it('reads cached readings within an inclusive database timestamp range', () => {
+		writeSensorReadings(
+			[
+				reading('M100FI', 1111, 1000, 10),
+				reading('M100FI', 2222, 2000, 20),
+				reading('M100FI', 3333, 3000, 30),
+				reading('OTHER', 2222, 2000, 99)
+			],
+			databasePath
+		);
 
-    expect(result.map((item) => item.databaseTimestamp)).toEqual([1000, 2000]);
-  });
+		const result = readCachedSensorReadings('M100FI', 1000, 2000, databasePath);
 
-  it('updates an existing reading with the same sensor and timestamp', () => {
-    writeSensorReadings(
-      [reading('M100FI', 1000, 12.5)],
-      databasePath
-    );
+		expect(result.map((item) => item.databaseTimestamp)).toEqual([1000, 2000]);
+		expect(result.map((item) => item.value)).toEqual([10, 20]);
+	});
 
-    const result = writeSensorReadings(
-      [reading('M100FI', 1000, 15.25)],
-      databasePath
-    );
+	it('rejects a reversed database timestamp range', () => {
+		expect(() => readCachedSensorReadings('M100FI', 2000, 1000, databasePath)).toThrow(
+			'"from" must be less than or equal to "to".'
+		);
+	});
 
-    expect(result.written).toBe(1);
+	it('reads the latest readings in chronological order', () => {
+		writeSensorReadings(
+			[
+				reading('M100FI', 1001, 1000, 10),
+				reading('M100FI', 2002, 2000, 20),
+				reading('M100FI', 3003, 3000, 30),
+				reading('M100FI', 4004, 4000, 40)
+			],
+			databasePath
+		);
 
-    const rows = readCachedSensorReadings(
-      'M100FI',
-      1000,
-      1000,
-      databasePath
-    );
+		const result = readLatestCachedSensorReadings('M100FI', 2, databasePath);
 
-    expect(rows).toHaveLength(1);
-    expect(rows[0].value).toBe(15.25);
-    expect(rows[0].quality).toBe('UNCERTAIN');
-  });
+		expect(result.map((item) => item.databaseTimestamp)).toEqual([3000, 4000]);
+		expect(result.map((item) => item.value)).toEqual([30, 40]);
+	});
 
-  it('rejects batches containing different sample timestamps', () => {
-    expect(() =>
-      writeSensorReadings(
-        [
-          reading('M100FI', 1000, 12.5),
-          reading('FI8001', 2000, 25)
-        ],
-        databasePath
-      )
-    ).toThrow(
-      'All readings in a database batch must share the same databaseTimestamp timestamp.'
-    );
-  });
+	it('rejects a non-positive latest-reading limit', () => {
+		expect(() => readLatestCachedSensorReadings('M100FI', 0, databasePath)).toThrow(
+			'"limit" must be a positive integer.'
+		);
+	});
 
-  it('returns the latest readings in chronological order', () => {
-    
-    for (const [sampledAt, value] of [
-      [1000, 10],
-      [2000, 20],
-      [3000, 30],
-      [4000, 40]
-    ] as const) {
-      writeSensorReadings(
-        [reading('M100FI', sampledAt, value)],
-        databasePath
-      );
-    }
+	it('updates an existing sensor reading for the same database timestamp', () => {
+		writeSensorReadings([reading('M100FI', 1111, 1000, 10)], databasePath);
 
-    const result = readLatestCachedSensorReadings(
-      'M100FI',
-      2,
-      databasePath
-    );
+		const result = writeSensorReadings(
+			[reading('M100FI', 2222, 1000, 15.25, 'UNCERTAIN')],
+			databasePath
+		);
 
-    expect(result.map((item) => item.databaseTimestamp)).toEqual([3000, 4000]);
-    expect(result.map((item) => item.value)).toEqual([30, 40]);
-  });
+		expect(result.written).toBe(1);
+		expect(result.databaseTimestamp).toBe(1000);
 
-  it('rolls back the entire batch if one insert fails', () => {
-    const invalidReading = {
-      ...reading('INVALID', 1000, 10),
-      sensorId: null
-    } as unknown as DatabasePayload;
+		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
+			{
+				sensorId: 'M100FI',
+				databaseTimestamp: 1000,
+				sourceTimestamp: new Date(2222 * 1000).toISOString(),
+				value: 15.25,
+				quality: 'UNCERTAIN'
+			}
+		]);
+	});
 
-    expect(() =>
-      writeSensorReadings(
-        [
-          reading('M100FI', 1000, 12.5),
-          invalidReading
-        ],
-        databasePath
-      )
-    ).toThrow();
+	it('rejects batches containing different database timestamps', () => {
+		const payload = [reading('M100FI', 1111, 1000, 10), reading('M310LI', 2222, 2000, 20)];
 
-    expect(
-      readCachedSensorReadings('M100FI', 1000, 1000, databasePath)
-    ).toEqual([]);
-  });
+		expect(() => writeSensorReadings(payload, databasePath)).toThrow(
+			'All readings in a database batch must share the same databaseTimestamp timestamp.'
+		);
+	});
 
-  it('rejects an inverted time range', () => {
-    expect(() =>
-      readCachedSensorReadings('M100FI', 2000, 1000, databasePath)
-    ).toThrow('"from" must be less than or equal to "to".');
-  });
+	it('allows different sampledAt values in the same database window', () => {
+		const payload = [reading('M100FI', 1111, 1000, 10), reading('M310LI', 2222, 1000, 20)];
 
-  it('rejects a non-positive latest-reading limit', () => {
-    expect(() =>
-      readLatestCachedSensorReadings('M100FI', 0, databasePath)
-    ).toThrow('"limit" must be a positive integer.');
-  });
+		const result = writeSensorReadings(payload, databasePath);
 
-  it('handles an empty batch without writing rows', () => {
-    const result = writeSensorReadings([], databasePath);
+		expect(result.written).toBe(2);
+		expect(result.databaseTimestamp).toBe(1000);
+	});
 
-    expect(result.written).toBe(0);
-    expect(Number.isInteger(result.databaseTimestamp)).toBe(true);
-  });
+	it('rolls back the entire batch when an insert fails', () => {
+		const payload = [
+			reading('M100FI', 1111, 1000, 10),
+			{
+				...reading('M310LI', 2222, 1000, 20),
+				sensorId: null as unknown as string
+			}
+		];
+
+		expect(() => writeSensorReadings(payload, databasePath)).toThrow();
+
+		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([]);
+	});
 });
-
