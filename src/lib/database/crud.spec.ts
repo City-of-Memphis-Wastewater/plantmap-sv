@@ -47,12 +47,12 @@ describe('local database CRUD', () => {
 
     const result = writeSensorReadings(payload, databasePath);
 
-    expect(result).toEqual({ written: 1, sampledAt: 1000 });
+    expect(result).toEqual({ written: 1, databaseTimestamp: 1000 });
     expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath))
       .toEqual([
         {
           sensorId: 'M100FI',
-          sampledAt: 1000,
+          databaseTimestamp: 1000,
           sourceTimestamp: new Date(1000 * 1000).toISOString(),
           
           value: 12.5,
@@ -81,7 +81,7 @@ describe('local database CRUD', () => {
       databasePath
     );
 
-    expect(result.map((item) => item.sampledAt)).toEqual([1000, 2000]);
+    expect(result.map((item) => item.databaseTimestamp)).toEqual([1000, 2000]);
   });
 
   it('updates an existing reading with the same sensor and timestamp', () => {
@@ -119,7 +119,7 @@ describe('local database CRUD', () => {
         databasePath
       )
     ).toThrow(
-      'All readings in a database batch must share the same sampledAt timestamp.'
+      'All readings in a database batch must share the same databaseTimestamp timestamp.'
     );
   });
 
@@ -143,7 +143,7 @@ describe('local database CRUD', () => {
       databasePath
     );
 
-    expect(result.map((item) => item.sampledAt)).toEqual([3000, 4000]);
+    expect(result.map((item) => item.databaseTimestamp)).toEqual([3000, 4000]);
     expect(result.map((item) => item.value)).toEqual([30, 40]);
   });
 
@@ -184,7 +184,7 @@ describe('local database CRUD', () => {
     const result = writeSensorReadings([], databasePath);
 
     expect(result.written).toBe(0);
-    expect(Number.isInteger(result.sampledAt)).toBe(true);
+    expect(Number.isInteger(result.databaseTimestamp)).toBe(true);
   });
 });
 

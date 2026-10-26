@@ -40,6 +40,7 @@ export interface CachedSensorReading {
     sensorId: string;
     sampledAt: number;
     sourceTimestamp: string | null;
+    databaseTimestamp: number | null;
     value: number | null;
     quality: string | null;
 }
