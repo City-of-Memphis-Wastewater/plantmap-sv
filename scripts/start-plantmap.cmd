@@ -21,9 +21,20 @@ echo Application directory: %APPDIR%>> "%LOGFILE%"
 echo Port: %PORT%>> "%LOGFILE%"
 echo ============================================================>> "%LOGFILE%"
 
+echo. >> "%LOGFILE%"
+echo === npm install === >> "%LOGFILE%"
+call npm install  >> "%LOGFILE%" 2>&1
+if errorlevel 1 goto :error
+
 echo Building PlantMap...>> "%LOGFILE%"
 call npm run build >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
+
+echo. >> "%LOGFILE%"
+echo === Copy Cesium assets === >> "%LOGFILE%"
+"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%copy-cesium.mjs" >> "%LOGFILE%" 2>&1
+if errorlevel 1 goto :error
+
 
 echo Starting PlantMap...>> "%LOGFILE%"
 "C:\Program Files\nodejs\node.exe" build >> "%LOGFILE%" 2>&1
