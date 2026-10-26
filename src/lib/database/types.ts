@@ -32,7 +32,7 @@ export interface DatabaseStatus {
  */
 export interface WriteConfirmation {
 	written: number;
-	sampledAt: number;
+	databaseTimestamp: number | null;
 }
 
 
