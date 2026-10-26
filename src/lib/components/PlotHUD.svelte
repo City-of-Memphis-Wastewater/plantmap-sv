@@ -177,17 +177,12 @@
 			<div class="mt-0.5 truncate text-[10px] text-slate-500">{tag}</div>
 		</div>
 
-		<div class="shrink-0 text-right">
-			{#if loading}
-				<span class="text-slate-400">Loading…</span>
-			{:else if latestValue !== undefined}
-				<div class="font-mono text-sm font-semibold text-emerald-300">
-					{latestValue.toLocaleString(undefined, { maximumFractionDigits: 3 })}
-					<span class="text-[10px] font-normal text-emerald-500">{unit}</span>
-				</div>
-				<div class="text-[10px] text-slate-500">Latest</div>
-			{/if}
-		</div>
+        <div class="shrink-0 text-right">
+            <div class="font-mono text-sm font-semibold text-emerald-300">
+                {currentValue}
+            </div>
+            <div class="text-[10px] text-slate-500">Live</div>
+        </div>
 	</div>
 
 	<div class="mb-1 flex items-center justify-between text-[10px] text-slate-500">
