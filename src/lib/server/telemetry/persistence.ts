@@ -5,69 +5,64 @@ import { getDatabaseTimestamp } from '$lib/database/time';
 import { writeSensorReadings } from '$lib/database/index';
 
 export function buildPersistencePayload(
-    sensorMap: Record<string, SensorNode>,
-    liveData: Record<string, EdsPointTelemetry>,
-    iessSuffix: string,
-    databaseTimestamp: number
+	sensorMap: Record<string, SensorNode>,
+	liveData: Record<string, EdsPointTelemetry>,
+	iessSuffix: string,
+	databaseTimestamp: number
 ): DatabasePayload[] {
-    const payload: DatabasePayload[] = [];
+	const payload: DatabasePayload[] = [];
 
-    for (const [sensorId] of Object.entries(sensorMap)) {
-        const point = liveData[`${sensorId}${iessSuffix}`];
+	for (const [sensorId] of Object.entries(sensorMap)) {
+		const point = liveData[`${sensorId}${iessSuffix}`];
 
-        if (!point || point.timestamp == null) {
-            continue;
-        }
+		if (!point || point.timestamp == null) {
+			continue;
+		}
 
-        const milliseconds = Date.parse(point.timestamp);
+		const milliseconds = Date.parse(point.timestamp);
 
-        if (!Number.isFinite(milliseconds)) {
-            continue;
-        }
+		if (!Number.isFinite(milliseconds)) {
+			continue;
+		}
 
-        payload.push({
-            sensorId,
-            sampledAt: Math.floor(milliseconds / 1000),
-            sourceTimestamp: point.timestamp,
-            databaseTimestamp,
-            value: point.value,
-            quality: point.quality
-        });
-    }
+		payload.push({
+			sensorId,
+			sampledAt: Math.floor(milliseconds / 1000),
+			sourceTimestamp: point.timestamp,
+			databaseTimestamp,
+			value: point.value,
+			quality: point.quality
+		});
+	}
 
-    return payload;
+	return payload;
 }
 
 export type PersistenceResult =
-    | { persisted: true; databaseTimestamp: number; written: number }
-    | { persisted: false; databaseTimestamp: number; reason: 'already-empty' };
+	| { persisted: true; databaseTimestamp: number; written: number }
+	| { persisted: false; databaseTimestamp: number; reason: 'already-empty' };
 
 export function persistBatch(
-    sensorMap: Record<string, SensorNode>,
-    liveData: Record<string, EdsPointTelemetry>,
-    iessSuffix: string,
-    databaseTimestamp: number = getDatabaseTimestamp()
+	sensorMap: Record<string, SensorNode>,
+	liveData: Record<string, EdsPointTelemetry>,
+	iessSuffix: string,
+	databaseTimestamp: number = getDatabaseTimestamp()
 ): PersistenceResult {
-    const payload = buildPersistencePayload(
-        sensorMap,
-        liveData,
-        iessSuffix,
-        databaseTimestamp
-    );
+	const payload = buildPersistencePayload(sensorMap, liveData, iessSuffix, databaseTimestamp);
 
-    if (payload.length === 0) {
-        return {
-            persisted: false,
-            databaseTimestamp,
-            reason: 'already-empty'
-        };
-    }
+	if (payload.length === 0) {
+		return {
+			persisted: false,
+			databaseTimestamp,
+			reason: 'already-empty'
+		};
+	}
 
-    const confirmation = writeSensorReadings(payload);
+	const confirmation = writeSensorReadings(payload);
 
-    return {
-        persisted: true,
-        databaseTimestamp,
-        written: confirmation.written
-    };
+	return {
+		persisted: true,
+		databaseTimestamp,
+		written: confirmation.written
+	};
 }

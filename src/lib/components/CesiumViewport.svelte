@@ -33,16 +33,12 @@
 		x: number;
 		y: number;
 	} | null>(null);
-    
-    let hoveredSensor = $derived(
-        hoverInfo ? telemetryStore.sensors[hoverInfo.tag] : undefined
-    );
 
-    let hoverValue = $derived(
-        hoveredSensor
-            ? `${hoveredSensor.value} ${hoveredSensor.unit}`
-            : hoverInfo?.value ?? ''
-    );
+	let hoveredSensor = $derived(hoverInfo ? telemetryStore.sensors[hoverInfo.tag] : undefined);
+
+	let hoverValue = $derived(
+		hoveredSensor ? `${hoveredSensor.value} ${hoveredSensor.unit}` : (hoverInfo?.value ?? '')
+	);
 
 	let cameraPos = $state({
 		lat: 0,
@@ -236,7 +232,7 @@
 								name: pickedObject.id.name || pickedObject.id.id,
 								value: sensor ? `${sensor.value} ${sensor.unit}` : 'Entity Selected',
 								tag: sensor?.id ?? pickedObject.id.id.replace(/^sensor-/, ''),
-                                x: movement.endPosition.x,
+								x: movement.endPosition.x,
 								y: movement.endPosition.y
 							};
 						} else {
@@ -314,11 +310,9 @@
 	/>
 
 	<!-- Hover Sensor Card -->
-    {#if showHoverInfo && hoverInfo}
-        <HoverTooltip
-            hoverInfo={{ ...hoverInfo, value: hoverValue }}
-        />
-    {/if}
+	{#if showHoverInfo && hoverInfo}
+		<HoverTooltip hoverInfo={{ ...hoverInfo, value: hoverValue }} />
+	{/if}
 	<!-- Debug Overlay -->
 	{#if showDebugger}
 		<ViewportDebugger {webGlSupported} {viewMode} {statusMsg} {cameraPos} {errorLog} />

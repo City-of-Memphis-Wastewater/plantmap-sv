@@ -1,4 +1,4 @@
-// src/lib/server/telemetry/service.ts 
+// src/lib/server/telemetry/service.ts
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -23,36 +23,31 @@ class TelemetryService {
 	private timer: ReturnType<typeof setTimeout> | null = null;
 	private polling = false;
 	private subscribers = new Set<Subscriber>();
-    private lastPersistedDatabaseTimestamp: number | null = null;
-    private persistBatchIfNeeded(
-        sensorMap: Record<string, SensorNode>,
-        liveData: Record<string, EdsPointTelemetry>,
-        iessSuffix: string
-    ): void {
-        const databaseTimestamp = getDatabaseTimestamp();
+	private lastPersistedDatabaseTimestamp: number | null = null;
+	private persistBatchIfNeeded(
+		sensorMap: Record<string, SensorNode>,
+		liveData: Record<string, EdsPointTelemetry>,
+		iessSuffix: string
+	): void {
+		const databaseTimestamp = getDatabaseTimestamp();
 
-        if (databaseTimestamp === this.lastPersistedDatabaseTimestamp) {
-            return;
-        }
+		if (databaseTimestamp === this.lastPersistedDatabaseTimestamp) {
+			return;
+		}
 
-        try {
-            const result = persistBatch(
-                sensorMap,
-                liveData,
-                iessSuffix,
-                databaseTimestamp
-            );
+		try {
+			const result = persistBatch(sensorMap, liveData, iessSuffix, databaseTimestamp);
 
-            if (result.persisted) {
-                this.lastPersistedDatabaseTimestamp = databaseTimestamp;
-            }
-        } catch (error) {
-            console.error(
-                '[TelemetryService] Persistence failed:',
-                error instanceof Error ? error.message : error
-            );
-        }
-    }
+			if (result.persisted) {
+				this.lastPersistedDatabaseTimestamp = databaseTimestamp;
+			}
+		} catch (error) {
+			console.error(
+				'[TelemetryService] Persistence failed:',
+				error instanceof Error ? error.message : error
+			);
+		}
+	}
 	private loadSensorMap(): Record<string, SensorNode> {
 		const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
@@ -115,10 +110,10 @@ class TelemetryService {
 		try {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
-            const timestamp = new Date().toISOString()
-            //console.info('[TelemetryService] Script calculated time:',  timestamp);
-            
-            const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
+			const timestamp = new Date().toISOString();
+			//console.info('[TelemetryService] Script calculated time:',  timestamp);
+
+			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
 				const point = liveData[`${id}${client.iessSuffix}`];
 
 				// Ignore quality for now. Only a missing point or value
@@ -148,11 +143,7 @@ class TelemetryService {
 
 			this.broadcast();
 
-            this.persistBatchIfNeeded(
-                sensorMap,
-                liveData,
-                client.iessSuffix
-            );
+			this.persistBatchIfNeeded(sensorMap, liveData, client.iessSuffix);
 		} catch (error) {
 			console.warn(
 				'[TelemetryService] EDS SOAP endpoint unreachable:',

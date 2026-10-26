@@ -53,7 +53,7 @@ describe('database CRUD', () => {
 		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
 			{
 				sensorId: 'M100FI',
-                sampledAt: 1234,
+				sampledAt: 1234,
 				databaseTimestamp: 1000,
 				sourceTimestamp: new Date(1234 * 1000).toISOString(),
 				value: 12.5,
@@ -115,28 +115,28 @@ describe('database CRUD', () => {
 		);
 	});
 
-    it('does not replace an existing reading for the same database timestamp', () => {
-      writeSensorReadings([reading('M100FI', 1111, 1000, 10)], databasePath);
+	it('does not replace an existing reading for the same database timestamp', () => {
+		writeSensorReadings([reading('M100FI', 1111, 1000, 10)], databasePath);
 
-      const result = writeSensorReadings(
-        [reading('M100FI', 2222, 1000, 15.25, 'UNCERTAIN')],
-        databasePath
-      );
+		const result = writeSensorReadings(
+			[reading('M100FI', 2222, 1000, 15.25, 'UNCERTAIN')],
+			databasePath
+		);
 
-      expect(result.written).toBe(0);
-      expect(result.databaseTimestamp).toBe(1000);
+		expect(result.written).toBe(0);
+		expect(result.databaseTimestamp).toBe(1000);
 
-      expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
-        {
-          sensorId: 'M100FI',
-          sampledAt: 1111,
-          databaseTimestamp: 1000,
-          sourceTimestamp: new Date(1111 * 1000).toISOString(),
-          value: 10,
-          quality: 'GOOD'
-        }
-      ]);
-    });
+		expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath)).toEqual([
+			{
+				sensorId: 'M100FI',
+				sampledAt: 1111,
+				databaseTimestamp: 1000,
+				sourceTimestamp: new Date(1111 * 1000).toISOString(),
+				value: 10,
+				quality: 'GOOD'
+			}
+		]);
+	});
 
 	it('allows different sampledAt values in the same database window', () => {
 		const payload = [reading('M100FI', 1111, 1000, 10), reading('M310LI', 2222, 1000, 20)];

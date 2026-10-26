@@ -9,26 +9,26 @@
 		name = tag,
 		x,
 		y,
-        currentValue
+		currentValue
 	}: {
 		tag: string;
 		name?: string;
 		x: number;
 		y: number;
-        currentValue: string;
+		currentValue: string;
 	} = $props();
-    
-    type PlotResponse = {
-        sensorId?: string;
-        readings?: {
-            sampledAt: number;
-            databaseTimestamp: number | null;
-            value: number | null;
-            quality: string | null;
-        }[];
-        error?: string;
-        detail?: string;
-    };
+
+	type PlotResponse = {
+		sensorId?: string;
+		readings?: {
+			sampledAt: number;
+			databaseTimestamp: number | null;
+			value: number | null;
+			quality: string | null;
+		}[];
+		error?: string;
+		detail?: string;
+	};
 
 	type PlotResponseDefunct = {
 		request?: {
@@ -104,54 +104,53 @@
 		error = '';
 		points = [];
 		unit = '';
-        
-        const params = new URLSearchParams({
-            sensorId: sensorTag
-        });
 
-        try {
-            const response = await fetch(`/api/telemetry-history?${params}`, {
-                signal: controller.signal
-            });
+		const params = new URLSearchParams({
+			sensorId: sensorTag
+		});
 
-            const result: PlotResponse = await response.json();
+		try {
+			const response = await fetch(`/api/telemetry-history?${params}`, {
+				signal: controller.signal
+			});
 
-            if (!response.ok) {
-                throw new Error(
-                    result.detail ?? result.error ?? `History request failed (${response.status})`
-                );
-            }
+			const result: PlotResponse = await response.json();
 
-            if (controller.signal.aborted) return;
+			if (!response.ok) {
+				throw new Error(
+					result.detail ?? result.error ?? `History request failed (${response.status})`
+				);
+			}
 
-            points = (result.readings ?? [])
-                .map((reading) => ({
-                    time: reading.sampledAt * 1000,
-                    value: reading.value
-                }))
-                .filter(
-                    (point): point is Point =>
-                        Number.isFinite(point.time) &&
-                        typeof point.value === 'number' &&
-                        Number.isFinite(point.value)
-                )
-                .sort((a, b) => a.time - b.time);
+			if (controller.signal.aborted) return;
 
-            updatedAt = Date.now();
+			points = (result.readings ?? [])
+				.map((reading) => ({
+					time: reading.sampledAt * 1000,
+					value: reading.value
+				}))
+				.filter(
+					(point): point is Point =>
+						Number.isFinite(point.time) &&
+						typeof point.value === 'number' &&
+						Number.isFinite(point.value)
+				)
+				.sort((a, b) => a.time - b.time);
 
-            if (points.length === 0) {
-                error = 'No cached readings in the last 48 hours.';
-            }
-        } catch (cause) {
-            if (cause instanceof Error && cause.name === 'AbortError') return;
+			updatedAt = Date.now();
 
-            error = cause instanceof Error ? cause.message : String(cause);
-        } finally {
-            if (!controller.signal.aborted) {
-                loading = false;
-            }
-        }
-		
+			if (points.length === 0) {
+				error = 'No cached readings in the last 48 hours.';
+			}
+		} catch (cause) {
+			if (cause instanceof Error && cause.name === 'AbortError') return;
+
+			error = cause instanceof Error ? cause.message : String(cause);
+		} finally {
+			if (!controller.signal.aborted) {
+				loading = false;
+			}
+		}
 	}
 
 	onMount(() => {
@@ -177,12 +176,12 @@
 			<div class="mt-0.5 truncate text-[10px] text-slate-500">{tag}</div>
 		</div>
 
-        <div class="shrink-0 text-right">
-            <div class="font-mono text-sm font-semibold text-emerald-300">
-                {currentValue}
-            </div>
-            <div class="text-[10px] text-slate-500">Live</div>
-        </div>
+		<div class="shrink-0 text-right">
+			<div class="font-mono text-sm font-semibold text-emerald-300">
+				{currentValue}
+			</div>
+			<div class="text-[10px] text-slate-500">Live</div>
+		</div>
 	</div>
 
 	<div class="mb-1 flex items-center justify-between text-[10px] text-slate-500">
