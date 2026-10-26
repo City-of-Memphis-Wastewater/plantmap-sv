@@ -45,12 +45,12 @@ export class Points {
 	</soap:Body>
 </soap:Envelope>`;
 
-		this.client.log('Points.getRegex sending request', {
-			idcsTags,
-			iessTags,
-			regexPattern,
-			endpoint: this.client.endpoint
-		});
+		//this.client.log('Points.getRegex sending request', {
+		//	idcsTags,
+		//	iessTags,
+		//	regexPattern,
+		//	endpoint: this.client.endpoint
+		//});
 
 		try {
 			const response = await fetch(this.client.endpoint, {

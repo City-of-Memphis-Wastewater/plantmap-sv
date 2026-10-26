@@ -1,4 +1,4 @@
-// src/lib/server/telemetry/service.ts
+// src/lib/server/telemetry/service.ts 
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -25,60 +25,6 @@ class TelemetryService {
 	private timer: ReturnType<typeof setTimeout> | null = null;
 	private polling = false;
 	private subscribers = new Set<Subscriber>();
-    private timestampDiagnostics = new Map<
-      string,
-      {
-        lastTimestamp: string | null;
-        polls: number;
-        changes: number;
-        missing: number;
-      }
-    >();
-
-    private diagnosticPollCount = 0;
-
-    private inspectSourceTimestamps(
-      sensorIds: string[],
-      liveData: Record<string, { timestamp: string | null }>,
-      iessSuffix: string
-    ): void {
-      for (const sensorId of sensorIds) {
-        const timestamp = liveData[`${sensorId}${iessSuffix}`]?.timestamp ?? null;
-
-        const stats = this.timestampDiagnostics.get(sensorId);
-
-        if (!stats) {
-          this.timestampDiagnostics.set(sensorId, {
-            lastTimestamp: timestamp,
-            polls: 1,
-            changes: 0,
-            missing: timestamp === null ? 1 : 0
-          });
-          continue;
-        }
-
-        stats.polls++;
-
-        if (timestamp === null) {
-          stats.missing++;
-        }
-
-        if (timestamp !== stats.lastTimestamp) {
-          stats.changes++;
-          stats.lastTimestamp = timestamp;
-        }
-      }
-
-      this.diagnosticPollCount++;
-
-      // Polling is every 2 seconds: report approximately once per minute.
-      if (this.diagnosticPollCount % 30 === 0) {
-        console.info(
-          '[TelemetryService] EDS source timestamp diagnostics:',
-          Object.fromEntries(this.timestampDiagnostics)
-        );
-      }
-    }
 	private loadSensorMap(): Record<string, SensorNode> {
 		const configPath = resolve(process.cwd(), 'static/config/sensors.json');
 
@@ -141,13 +87,11 @@ class TelemetryService {
 		try {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
+            const timestamp = new Date().toISOString()
+            console.info('[TelemetryService] Script calculated time:',  timestamp);
+            console.info('[TelemetryService] Onward');
             
-            this.inspectSourceTimestamps(
-              sensorIds,
-              liveData,
-              client.iessSuffix
-            );
-			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
+            const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
 				const point = liveData[`${id}${client.iessSuffix}`];
 
 				// Ignore quality for now. Only a missing point or value
