@@ -116,8 +116,7 @@ class TelemetryService {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
             const timestamp = new Date().toISOString()
-            console.info('[TelemetryService] Script calculated time:',  timestamp);
-            console.info('[TelemetryService] Onward');
+            //console.info('[TelemetryService] Script calculated time:',  timestamp);
             
             const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {
 				const point = liveData[`${id}${client.iessSuffix}`];
