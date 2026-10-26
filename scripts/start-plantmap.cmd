@@ -28,7 +28,7 @@ if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"
 echo === npm install === >> "%LOGFILE%"
-call npm install  >> "%LOGFILE%" 2>&1
+call npm install  --ignore-scripts >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo.>> "%LOGFILE%" 
