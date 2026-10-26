@@ -40,7 +40,7 @@ export function writeSensorReadings(
         sensor_id,
         sampled_at,
         source_timestamp,
-        read_at,
+        database_timestamp,
         value,
         quality
       )
