@@ -19,17 +19,11 @@ export function writeSensorReadings(
   if (payload.length === 0) {
     return {
       written: 0,
-      sampledAt: Math.floor(Date.now() / 1000)
+      databaseTimestamp: null
     };
   }
 
-  const sampledAt = payload[0].sampledAt;
-
-  if (payload.some((reading) => reading.sampledAt !== sampledAt)) {
-    throw new Error(
-      'All readings in a database batch must share the same sampledAt timestamp.'
-    );
-  }
+  const databaseTimestamp = payload[0].databaseTimestamp;
 
   const db = buildLocalDatabase(databasePath);
   let written = 0;
@@ -45,7 +39,7 @@ export function writeSensorReadings(
         quality
       )
       VALUES (?, ?, ?, ?, ?, ?)
-      ON CONFLICT (sensor_id, sampled_at) DO NOTHING
+      ON CONFLICT (sensor_id, database_timestamp) DO NOTHING
     `);
 
     db.exec('BEGIN IMMEDIATE');
@@ -75,7 +69,7 @@ export function writeSensorReadings(
       throw error;
     }
 
-    return { written, sampledAt };
+    return { written, databaseTimestamp };
   } finally {
     db.close();
   }
