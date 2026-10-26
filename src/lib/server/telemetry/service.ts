@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 import { getEdsClient } from '$lib/server/eds/factory';
 import {
 	VALID_MINUTE_INT_LIST,
-	cacheToLocalDatabase,
+	writeSensorReadings,
 } from '$lib/database/index';
 
 import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';

@@ -7,7 +7,7 @@ export {
 } from './build.ts';
 
 export {
-	cacheToLocalDatabase,
+	writeSensorReadings,
 	readCachedSensorReadings,
 	readLatestCachedSensorReadings
 } from './crud.ts';

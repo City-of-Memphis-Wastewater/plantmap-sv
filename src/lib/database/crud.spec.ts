@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import {
-  cacheToLocalDatabase,
+  writeSensorReadings,
   readCachedSensorReadings,
   readLatestCachedSensorReadings
 } from './crud.ts';
@@ -42,7 +42,7 @@ describe('local database CRUD', () => {
   it('writes and reads a sensor reading', () => {
     const payload = [reading('M100FI', 1000, 12.5)];
 
-    const result = cacheToLocalDatabase(payload, databasePath);
+    const result = writeSensorReadings(payload, databasePath);
 
     expect(result).toEqual({ written: 1, sampledAt: 1000 });
     expect(readCachedSensorReadings('M100FI', 1000, 1000, databasePath))
@@ -58,9 +58,9 @@ describe('local database CRUD', () => {
   });
 
   it('includes both endpoints in a time-range query', () => {
-    cacheToLocalDatabase([reading('M100FI', 1000, 10)], databasePath);
+    writeSensorReadings([reading('M100FI', 1000, 10)], databasePath);
 
-    cacheToLocalDatabase(
+    writeSensorReadings(
       [
         reading('M100FI', 2000, 20),
         reading('OTHER', 2000, 999)
@@ -68,7 +68,7 @@ describe('local database CRUD', () => {
       databasePath
     );
 
-    cacheToLocalDatabase([reading('M100FI', 3000, 30)], databasePath);
+    writeSensorReadings([reading('M100FI', 3000, 30)], databasePath);
 
     const result = readCachedSensorReadings(
       'M100FI',
@@ -81,12 +81,12 @@ describe('local database CRUD', () => {
   });
 
   it('updates an existing reading with the same sensor and timestamp', () => {
-    cacheToLocalDatabase(
+    writeSensorReadings(
       [reading('M100FI', 1000, 12.5, 'GOOD')],
       databasePath
     );
 
-    const result = cacheToLocalDatabase(
+    const result = writeSensorReadings(
       [reading('M100FI', 1000, 15.25, 'UNCERTAIN')],
       databasePath
     );
@@ -107,7 +107,7 @@ describe('local database CRUD', () => {
 
   it('rejects batches containing different sample timestamps', () => {
     expect(() =>
-      cacheToLocalDatabase(
+      writeSensorReadings(
         [
           reading('M100FI', 1000, 12.5),
           reading('FI8001', 2000, 25)
@@ -127,7 +127,7 @@ describe('local database CRUD', () => {
       [3000, 30],
       [4000, 40]
     ] as const) {
-      cacheToLocalDatabase(
+      writeSensorReadings(
         [reading('M100FI', sampledAt, value)],
         databasePath
       );
@@ -150,7 +150,7 @@ describe('local database CRUD', () => {
     } as unknown as DatabasePayload;
 
     expect(() =>
-      cacheToLocalDatabase(
+      writeSensorReadings(
         [
           reading('M100FI', 1000, 12.5),
           invalidReading
@@ -177,7 +177,7 @@ describe('local database CRUD', () => {
   });
 
   it('handles an empty batch without writing rows', () => {
-    const result = cacheToLocalDatabase([], databasePath);
+    const result = writeSensorReadings([], databasePath);
 
     expect(result.written).toBe(0);
     expect(Number.isInteger(result.sampledAt)).toBe(true);
