@@ -18,7 +18,7 @@ export function writeSensorReadings(
 	if (payload.length === 0) {
 		return {
 			written: 0,
-			databaseTimestamp: getDatabaseTimeStamp()
+			databaseTimestamp: getDatabaseTimestamp()
 		};
 	}
 
@@ -99,6 +99,7 @@ export function readCachedSensorReadings(
                 sensor_id AS sensorId,
                 sampled_at AS sampledAt,
                 source_timestamp AS sourceTimestamp,
+                database_timestamp AS databaseTimestamp,
                 value,
                 quality
             FROM sensor_readings
