@@ -26,11 +26,6 @@ echo === Node version ===>> "%LOGFILE%"
 node --version >> "%LOGFILE%" 2>&1 
 if errorlevel 1 goto :error
 
-echo. >> "%LOGFILE%"
-echo === npm install === >> "%LOGFILE%"
-call npm install  --ignore-scripts >> "%LOGFILE%" 2>&1
-if errorlevel 1 goto :error
-
 echo.>> "%LOGFILE%" 
 echo === Build PlantMap ===>> "%LOGFILE%" 
 call npm run build >> "%LOGFILE%" 2>&1 
