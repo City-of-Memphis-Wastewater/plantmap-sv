@@ -90,7 +90,8 @@ export function cacheToLocalDatabase(
 export function readCachedSensorReadings(
 	sensorId: string,
 	from: number,
-	to: number
+	to: number,
+    databasePath?: string
 ): CachedSensorReading[] {
 	if (from > to) {
 		throw new Error('"from" must be less than or equal to "to".');
