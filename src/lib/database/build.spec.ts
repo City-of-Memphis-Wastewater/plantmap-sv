@@ -12,8 +12,7 @@ import { join } from 'node:path';
 
 import {
   checkStatusLocalDatabase,
-  createLocalDatabase,
-  ensureLocalDatabase
+  buildLocalDatabase,
 } from './build.ts';
 
 describe('local database initialization', () => {
@@ -38,7 +37,7 @@ describe('local database initialization', () => {
   });
 
   it('creates a usable database', () => {
-    const status = createLocalDatabase(databasePath);
+    const status = buildLocalDatabase(databasePath);
 
     expect(status.ready).toBe(true);
     expect(status.path).toBe(databasePath);
@@ -47,7 +46,7 @@ describe('local database initialization', () => {
   });
 
   it('creates a missing database when ensure is called', () => {
-    const status = ensureLocalDatabase(databasePath);
+    const status = checkStatusLocalDatabase(databasePath);
 
     expect(status.ready).toBe(true);
     expect(status.path).toBe(databasePath);
@@ -55,9 +54,9 @@ describe('local database initialization', () => {
   });
 
   it('recognizes an existing usable database', () => {
-    createLocalDatabase(databasePath);
+    buildLocalDatabase(databasePath);
 
-    const status = ensureLocalDatabase(databasePath);
+    const status = checkStatusLocalDatabase(databasePath);
 
     expect(status.ready).toBe(true);
     expect(status.path).toBe(databasePath);
@@ -67,7 +66,7 @@ describe('local database initialization', () => {
     const originalContents = 'This is not a SQLite database.';
     writeFileSync(databasePath, originalContents, 'utf8');
 
-    const status = ensureLocalDatabase(databasePath);
+    const status = checkStatusLocalDatabase(databasePath);
 
     expect(status.ready).toBe(false);
     expect(status.path).toBe(databasePath);

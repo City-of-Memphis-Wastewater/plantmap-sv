@@ -7,7 +7,6 @@ import { getEdsClient } from '$lib/server/eds/factory';
 import {
 	VALID_MINUTE_INT_LIST,
 	cacheToLocalDatabase,
-	ensureLocalDatabase
 } from '$lib/database/index';
 
 import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
