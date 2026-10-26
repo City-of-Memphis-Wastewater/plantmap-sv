@@ -208,20 +208,17 @@ export async function plot(args: string[] = []): Promise<void> {
 		// --help has already printed its output.
 		if (options.tags.length === 0) return;
 
-		//const url = `/plot?${buildPlotSearchParams(options).toString()}`;
 		const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
 
-		const url = `/plot?${query}`;
+		const plotquery = `/plot?${query}`;
 
-		//const range = resolveTimeAspects(options);
-		//const url = buildPlotUrl(options, range);
 		const server = await discoverServer();
 
 		if (!server) {
 			throw new Error('PlantMap server is not running.');
 		}
 
-		const plotUrl = `${server.url}/plot?tags=m100fi,fi8001,m310li&days=4`;
+		const plotUrl = `${server.url}${plotquery}`;
 		console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
 		openUrl(plotUrl.toString());
 	} catch (error) {

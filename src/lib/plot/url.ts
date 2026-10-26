@@ -144,7 +144,7 @@ export function buildPlotSearchParams(options: PlotOptions): URLSearchParams {
 		params.set('end', options.end);
 	}
 
-	if (options.windowDays !== undefined) {
+	if (options.windowDays !== undefined && !(options.start && options.end)) {
 		params.set('days', String(options.windowDays));
 	}
 
