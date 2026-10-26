@@ -4,15 +4,20 @@ import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
-
 import type { DatabaseStatus } from './types.ts';
-export const DATABASE_PATH = join(homedir(), '.plantmap-sv', 'db', 'local.sqlite');
+
+export const DATABASE_PATH = join(
+    homedir(), 
+    '.plantmap-sv', 
+    'db', 
+    'local.sqlite'
+);
 
 /**
  * Create the parent directory when necessary.
  */
-function ensureDatabaseDirectory(): void {
-	mkdirSync(dirname(DATABASE_PATH), { recursive: true });
+function ensureDatabaseDirectory(path: string): void {
+	mkdirSync(dirname(path), { recursive: true });
 }
 
 /**
@@ -20,10 +25,12 @@ function ensureDatabaseDirectory(): void {
  *
  * The caller is responsible for closing the returned connection.
  */
-export function buildLocalDatabase(): DatabaseSync {
-	ensureDatabaseDirectory();
+export function buildLocalDatabase(
+    path: string = DATABASE_PATH
+): DatabaseSync {
+	ensureDatabaseDirectory(path);
 
-	const db = new DatabaseSync(DATABASE_PATH);
+	const db = new DatabaseSync(path);
 
 	try {
 		db.exec(`
@@ -54,17 +61,19 @@ export function buildLocalDatabase(): DatabaseSync {
  * Check whether the local database exists and is usable.
  * Does not create or initialize the database.
  */
-export function checkStatusLocalDatabase(): DatabaseStatus {
-	if (!existsSync(DATABASE_PATH)) {
+export function checkStatusLocalDatabase(
+    path: string = DATABASE_PATH
+): DatabaseStatus {
+	if (!existsSync(path)) {
 		return {
 			ready: false,
-			path: DATABASE_PATH,
+			path: path,
 			error: 'Database does not exist.'
 		};
 	}
 
 	try {
-		const db = new DatabaseSync(DATABASE_PATH, { readOnly: true });
+		const db = new DatabaseSync(path, { readOnly: true });
 
 		try {
 			db.prepare('SELECT 1 FROM sensor_readings LIMIT 1').get();
@@ -74,12 +83,12 @@ export function checkStatusLocalDatabase(): DatabaseStatus {
 
 		return {
 			ready: true,
-			path: DATABASE_PATH
+			path: path
 		};
 	} catch (error) {
 		return {
 			ready: false,
-			path: DATABASE_PATH,
+			path: path,
 			error: error instanceof Error ? error.message : String(error)
 		};
 	}
@@ -89,16 +98,18 @@ export function checkStatusLocalDatabase(): DatabaseStatus {
  * Create and initialize the local database if necessary.
  * Existing tables and readings are preserved.
  */
-export function createLocalDatabase(): DatabaseStatus {
+export function createLocalDatabase(
+    path: string = DATABASE_PATH
+): DatabaseStatus {
 	try {
-		const db = buildLocalDatabase();
+		const db = buildLocalDatabase(path);
 		db.close();
 
-		return checkStatusLocalDatabase();
+		return checkStatusLocalDatabase(path);
 	} catch (error) {
 		return {
 			ready: false,
-			path: DATABASE_PATH,
+			path: path,
 			error: error instanceof Error ? error.message : String(error)
 		};
 	}
@@ -108,15 +119,17 @@ export function createLocalDatabase(): DatabaseStatus {
  * Ensure the local database exists and is usable.
  * Creates and initializes it only when it does not exist.
  */
-export function ensureLocalDatabase(): DatabaseStatus {
-	const status = checkStatusLocalDatabase();
+export function ensureLocalDatabase(
+    path: string = DATABASE_PATH
+): DatabaseStatus {
+	const status = checkStatusLocalDatabase(path);
 
 	if (status.ready) {
 		return status;
 	}
 
-	if (!existsSync(DATABASE_PATH)) {
-		return createLocalDatabase();
+	if (!existsSync(path)) {
+		return createLocalDatabase(path);
 	}
 
 	// The file exists but is unusable. Do not overwrite it.
