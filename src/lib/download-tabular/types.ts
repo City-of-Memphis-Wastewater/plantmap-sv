@@ -14,5 +14,5 @@ export type FileType = (typeof FILE_TYPES)[number];
  * Options accepted by the download endpoint.
  */
 export interface DownloadOptions {
-    format: FileType;
+	format: FileType;
 }

@@ -20,9 +20,9 @@ export interface DatabasePayload {
  * Status of the local SQLite database.
  */
 export interface DatabaseStatus {
-    ready: boolean;
-    path: string;
-    error?: string;
+	ready: boolean;
+	path: string;
+	error?: string;
 }
 
 /**
@@ -43,5 +43,3 @@ export interface CachedSensorReading {
 	value: number | null;
 	quality: string | null;
 }
-
-

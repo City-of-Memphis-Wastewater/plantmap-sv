@@ -4,15 +4,16 @@ import { buildLocalDatabase } from './build.ts';
 
 import type { CachedSensorReading, DatabasePayload, WriteConfirmation } from './types.ts';
 
-const OVERWRITE = false;
-
 /**
  * Persist a batch of sensor readings in one transaction.
  *
  * Existing readings at the same sensor ID and sampling timestamp
  * are replaced, making retries safe.
  */
-export function cacheToLocalDatabase(payload: DatabasePayload[]): WriteConfirmation {
+export function cacheToLocalDatabase(
+	payload: DatabasePayload[],
+	databasePath?: string
+): WriteConfirmation {
 	if (payload.length === 0) {
 		return {
 			written: 0,
@@ -26,7 +27,7 @@ export function cacheToLocalDatabase(payload: DatabasePayload[]): WriteConfirmat
 		throw new Error('All readings in a database batch must share the same sampledAt timestamp.');
 	}
 
-	const db = buildLocalDatabase();
+	const db = buildLocalDatabase(databasePath);
 
 	try {
 		const insert = db.prepare(`
@@ -38,6 +39,9 @@ export function cacheToLocalDatabase(payload: DatabasePayload[]): WriteConfirmat
                 quality
             )
             VALUES (?, ?, ?, ?, ?)
+
+            -- UPSERT policy: a new reading replaces an existing reading
+            -- with the same sensor ID and sample timestamp.
             ON CONFLICT (sensor_id, sampled_at)
             DO UPDATE SET
                 source_timestamp = excluded.source_timestamp,
@@ -60,7 +64,12 @@ export function cacheToLocalDatabase(payload: DatabasePayload[]): WriteConfirmat
 
 			db.exec('COMMIT');
 		} catch (error) {
-			db.exec('ROLLBACK');
+			try {
+				db.exec('ROLLBACK');
+			} catch {
+				// Preserve of error is rollback also fails.
+			}
+
 			throw error;
 		}
 
@@ -119,13 +128,14 @@ export function readCachedSensorReadings(
  */
 export function readLatestCachedSensorReadings(
 	sensorId: string,
-	limit = 192
+	limit = 192,
+	databasePath?: string
 ): CachedSensorReading[] {
 	if (!Number.isInteger(limit) || limit < 1) {
 		throw new Error('"limit" must be a positive integer.');
 	}
 
-	const db = buildLocalDatabase();
+	const db = buildLocalDatabase(databasePath);
 
 	try {
 		const rows = db
@@ -145,6 +155,8 @@ export function readLatestCachedSensorReadings(
 			)
 			.all(sensorId, limit);
 
+		// The SQL query fetches the newest readings first. Return them
+		// oldest-to-newest, which is more convenient for plotting.
 		return (rows as unknown as CachedSensorReading[]).reverse();
 	} finally {
 		db.close();

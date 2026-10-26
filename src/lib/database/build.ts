@@ -6,12 +6,7 @@ import { homedir } from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
 import type { DatabaseStatus } from './types.ts';
 
-export const DATABASE_PATH = join(
-    homedir(), 
-    '.plantmap-sv', 
-    'db', 
-    'local.sqlite'
-);
+export const DATABASE_PATH = join(homedir(), '.plantmap-sv', 'db', 'local.sqlite');
 
 /**
  * Create the parent directory when necessary.
@@ -25,9 +20,7 @@ function ensureDatabaseDirectory(path: string): void {
  *
  * The caller is responsible for closing the returned connection.
  */
-export function buildLocalDatabase(
-    path: string = DATABASE_PATH
-): DatabaseSync {
+export function buildLocalDatabase(path: string = DATABASE_PATH): DatabaseSync {
 	ensureDatabaseDirectory(path);
 
 	const db = new DatabaseSync(path);
@@ -61,9 +54,7 @@ export function buildLocalDatabase(
  * Check whether the local database exists and is usable.
  * Does not create or initialize the database.
  */
-export function checkStatusLocalDatabase(
-    path: string = DATABASE_PATH
-): DatabaseStatus {
+export function checkStatusLocalDatabase(path: string = DATABASE_PATH): DatabaseStatus {
 	if (!existsSync(path)) {
 		return {
 			ready: false,
@@ -98,9 +89,7 @@ export function checkStatusLocalDatabase(
  * Create and initialize the local database if necessary.
  * Existing tables and readings are preserved.
  */
-export function createLocalDatabase(
-    path: string = DATABASE_PATH
-): DatabaseStatus {
+export function createLocalDatabase(path: string = DATABASE_PATH): DatabaseStatus {
 	try {
 		const db = buildLocalDatabase(path);
 		db.close();
@@ -119,9 +108,7 @@ export function createLocalDatabase(
  * Ensure the local database exists and is usable.
  * Creates and initializes it only when it does not exist.
  */
-export function ensureLocalDatabase(
-    path: string = DATABASE_PATH
-): DatabaseStatus {
+export function ensureLocalDatabase(path: string = DATABASE_PATH): DatabaseStatus {
 	const status = checkStatusLocalDatabase(path);
 
 	if (status.ready) {
