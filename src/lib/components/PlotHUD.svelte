@@ -8,12 +8,14 @@
 		tag,
 		name = tag,
 		x,
-		y
+		y,
+        currentValue
 	}: {
 		tag: string;
 		name?: string;
 		x: number;
 		y: number;
+        currentValue: string;
 	} = $props();
     
     type PlotResponse = {
