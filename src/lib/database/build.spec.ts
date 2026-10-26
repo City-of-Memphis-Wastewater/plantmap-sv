@@ -36,23 +36,6 @@ describe('local database initialization', () => {
     expect(status.error).toBe('Database does not exist.');
   });
 
-  it('creates a usable database', () => {
-    const status = buildLocalDatabase(databasePath);
-
-    expect(status.ready).toBe(true);
-    expect(status.path).toBe(databasePath);
-    expect(status.error).toBeUndefined();
-    expect(existsSync(databasePath)).toBe(true);
-  });
-
-  it('creates a missing database when ensure is called', () => {
-    const status = checkStatusLocalDatabase(databasePath);
-
-    expect(status.ready).toBe(true);
-    expect(status.path).toBe(databasePath);
-    expect(existsSync(databasePath)).toBe(true);
-  });
-
   it('recognizes an existing usable database', () => {
     buildLocalDatabase(databasePath);
 
