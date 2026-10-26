@@ -58,15 +58,17 @@ describe('local database CRUD', () => {
   });
 
   it('includes both endpoints in a time-range query', () => {
+    cacheToLocalDatabase([reading('M100FI', 1000, 10)], databasePath);
+
     cacheToLocalDatabase(
       [
-        reading('M100FI', 1000, 10),
         reading('M100FI', 2000, 20),
-        reading('M100FI', 3000, 30),
         reading('OTHER', 2000, 999)
       ],
       databasePath
     );
+
+    cacheToLocalDatabase([reading('M100FI', 3000, 30)], databasePath);
 
     const result = readCachedSensorReadings(
       'M100FI',
@@ -118,15 +120,18 @@ describe('local database CRUD', () => {
   });
 
   it('returns the latest readings in chronological order', () => {
-    cacheToLocalDatabase(
-      [
-        reading('M100FI', 1000, 10),
-        reading('M100FI', 2000, 20),
-        reading('M100FI', 3000, 30),
-        reading('M100FI', 4000, 40)
-      ],
-      databasePath
-    );
+    
+    for (const [sampledAt, value] of [
+      [1000, 10],
+      [2000, 20],
+      [3000, 30],
+      [4000, 40]
+    ] as const) {
+      cacheToLocalDatabase(
+        [reading('M100FI', sampledAt, value)],
+        databasePath
+      );
+    }
 
     const result = readLatestCachedSensorReadings(
       'M100FI',
