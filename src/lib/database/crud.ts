@@ -67,7 +67,7 @@ export function cacheToLocalDatabase(
 			try {
 				db.exec('ROLLBACK');
 			} catch {
-				// Preserve of error is rollback also fails.
+				// Preserve the original error if rollback also fails.
 			}
 
 			throw error;
@@ -97,7 +97,7 @@ export function readCachedSensorReadings(
 		throw new Error('"from" must be less than or equal to "to".');
 	}
 
-	const db = buildLocalDatabase();
+	const db = buildLocalDatabase(databasePath);
 
 	try {
 		const rows = db
