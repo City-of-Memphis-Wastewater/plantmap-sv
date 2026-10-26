@@ -27,8 +27,8 @@ node --version >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"
-echo === npm ci === >> "%LOGFILE%"
-call npm ci  >> "%LOGFILE%" 2>&1
+echo === npm install === >> "%LOGFILE%"
+call npm install  >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo.>> "%LOGFILE%" 
