@@ -154,34 +154,34 @@
 	}
 
 	/**
-	*onMount(() => {
-	*	void loadHistory(tag);
-    *
-	*	return () => requestController?.abort();
-	*});
-    *
-	*$effect(() => {
-	*	const currentTag = tag;
-	*	void currentTag;
-	*	void loadHistory(tag);
-	*});
-    */
+	 *onMount(() => {
+	 *	void loadHistory(tag);
+	 *
+	 *	return () => requestController?.abort();
+	 *});
+	 *
+	 *$effect(() => {
+	 *	const currentTag = tag;
+	 *	void currentTag;
+	 *	void loadHistory(tag);
+	 *});
+	 */
 	let loadedTag = '';
 
-    $effect(() => {
-        const sensorTag = tag;
+	$effect(() => {
+		const sensorTag = tag;
 
-        if (!sensorTag || sensorTag === loadedTag) {
-            return;
-        }
+		if (!sensorTag || sensorTag === loadedTag) {
+			return;
+		}
 
-        loadedTag = sensorTag;
-        void loadHistory(sensorTag);
-    });
+		loadedTag = sensorTag;
+		void loadHistory(sensorTag);
+	});
 
-    onDestroy(() => {
-        requestController?.abort();
-    });
+	onDestroy(() => {
+		requestController?.abort();
+	});
 </script>
 
 <div
