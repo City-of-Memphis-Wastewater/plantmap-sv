@@ -1,0 +1,9 @@
+[project]
+name = "plantmap-sv"
+description = "Python support for plantmap-sv"
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dworshak-secret>=1.3.6",
+]
