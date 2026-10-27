@@ -47,7 +47,7 @@ def send_email_with_attachment(
     recipient:str,
     subject:str,
     body:str
-)
+)->None:
 
     # Validate all attachments before sending.
     attachments = []
