@@ -119,10 +119,13 @@ def send_email_with_attachment(
 
     with smtplib.SMTP_SSL(
         "smtp.gmail.com",
-        465,
+        587,
         context=context,
         timeout=30,
     ) as smtp:
+        smtp.ehlo()
+        smtp.starttls(context=context)
+        smtp.ehlo()
         smtp.login(sender_address, password)
         smtp.send_message(message)
 
