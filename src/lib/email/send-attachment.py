@@ -41,26 +41,46 @@ def main():
     args = parser.parse_args()
     return args
 
+# ---
+
+def resolve_attachments(paths: list[str]) -> list[Path]:
+    resolved = []
+
+    for raw_path in paths:
+        path = Path(raw_path).expanduser().resolve(strict=True)
+
+        if not path.is_file():
+            raise ValueError(f"Attachment is not a file: {path}")
+
+        if path.stat().st_size == 0:
+            raise ValueError(f"Attachment is empty: {path}")
+
+        resolved.append(path)
+
+    return resolved
+
+
+def add_attachments(
+    message: EmailMessage,
+    paths: list[str],
+) -> None:
+    for path in resolve_attachments(paths):
+        message.add_attachment(
+            path.read_bytes(),
+            maintype="application",
+            subtype="octet-stream",
+            filename=path.name,
+        )
+
+# ---
+
 def send_email_with_attachment(
-    attachment:str,
-    #sender:str,
+    attachments:list[str],
     recipient:str,
     subject:str,
     body:str
 )->None:
 
-    # Validate all attachments before sending.
-    attachments = []
-    for filename in attachment:
-        path = Path(filename)
-
-        if not path.is_file():
-            raise FileNotFoundError(f"Attachment not found: {path}")
-
-        if path.stat().st_size == 0:
-            raise ValueError(f"Attachment is empty: {path}")
-
-        attachments.append(path)
 
     # Retrieve credentials from the local Dworshak vault.
     vault = DworshakSecret()
@@ -76,6 +96,9 @@ def send_email_with_attachment(
     message["To"] = recipient
     message["Subject"] = subject
     message.set_content(body)
+
+    attachments = resolve_attachments(attachments)
+    #add_attachments(message, attachments)
 
     for path in attachments:
         content_type, _ = mimetypes.guess_type(path.name)
