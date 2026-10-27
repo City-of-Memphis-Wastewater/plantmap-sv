@@ -126,7 +126,7 @@ def send_email_with_attachment(
         smtp.login(sender_address, password)
         smtp.send_message(message)
 
-    print(f"Email sent successfully to {args.recipient}")
+    print(f"Email sent successfully to {recipient}")
 
 
 if __name__ == "__main__":
