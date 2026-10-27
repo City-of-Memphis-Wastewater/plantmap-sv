@@ -120,7 +120,6 @@ def send_email_with_attachment(
     with smtplib.SMTP(
         "smtp.gmail.com",
         587,
-        context=context,
         timeout=30,
     ) as smtp:
         smtp.ehlo()
