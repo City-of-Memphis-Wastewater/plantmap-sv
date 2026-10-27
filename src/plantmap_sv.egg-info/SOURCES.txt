@@ -1,9 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-src/lib/email/send-attachment.py
-src/plantmap_sv.egg-info/PKG-INFO
-src/plantmap_sv.egg-info/SOURCES.txt
-src/plantmap_sv.egg-info/dependency_links.txt
-src/plantmap_sv.egg-info/requires.txt
-src/plantmap_sv.egg-info/top_level.txt

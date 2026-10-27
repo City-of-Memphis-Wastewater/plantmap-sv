@@ -24,3 +24,23 @@ vite.config.ts.timestamp-*
 
 /static/cesium
 rm.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.venv/
+venv/
+uv.lock
+.key
+.vscode/
+dist/
+build/
+src/defunct/*
+*.sqlite3
+*.egg-info/
+.dockerignore
+.python-version
+
