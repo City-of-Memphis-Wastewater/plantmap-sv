@@ -14,7 +14,7 @@ from dworshak_secret import DworshakSecret
 
 # Configure these to match the service/item names in your vault.
 VAULT_SERVICE = "gmail-smtp"
-VAULT_USERNAME_ITEM = "email-address"
+VAULT_SENDER_ADDRESS_ITEM = "email-address"
 VAULT_PASSWORD_ITEM = "app-password"
 
 # Recipient and sender can be supplied on the command line.
@@ -31,7 +31,7 @@ def main():
         required=True,
         help="File to attach; repeat this option for multiple files.",
     )
-    parser.add_argument("--from", dest="sender", required=True)
+    #parser.add_argument("--from", dest="sender", required=True)
     parser.add_argument("--to", dest="recipient", required=True)
     parser.add_argument("--subject", default="Automated report")
     parser.add_argument(
@@ -43,7 +43,7 @@ def main():
 
 def send_email_with_attachment(
     attachment:str,
-    sender:str,
+    #sender:str,
     recipient:str,
     subject:str,
     body:str
@@ -64,15 +64,15 @@ def send_email_with_attachment(
 
     # Retrieve credentials from the local Dworshak vault.
     vault = DworshakSecret()
-    username = vault.get(VAULT_SERVICE, VAULT_USERNAME_ITEM, fail=True)
+    sender_address = vault.get(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM, fail=True)
     password = vault.get(VAULT_SERVICE, VAULT_PASSWORD_ITEM, fail=True)
 
-    if not username or not password:
+    if not sender_address or not password:
         raise RuntimeError("Gmail SMTP credentials are missing from the vault.")
 
     # Build the email.
     message = EmailMessage()
-    message["From"] = sender
+    message["From"] = sender_address # sender
     message["To"] = recipient
     message["Subject"] = subject
     message.set_content(body)
@@ -100,7 +100,7 @@ def send_email_with_attachment(
         context=context,
         timeout=30,
     ) as smtp:
-        smtp.login(username, password)
+        smtp.login(sender_address, password)
         smtp.send_message(message)
 
     print(f"Email sent successfully to {args.recipient}")
@@ -111,7 +111,7 @@ if __name__ == "__main__":
         args = main()
         send_email_with_attachment(
             attachment = args.attachment,
-            sender = args.sender,
+            #sender = args.sender,
             recipient = args.recipient,
             subject = args.subject,
             body = args.body
