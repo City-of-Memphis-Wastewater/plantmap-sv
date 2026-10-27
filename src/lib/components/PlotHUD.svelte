@@ -1,6 +1,6 @@
 <!-- src/lib/components/PlotHUD.svelte -->
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import type { EDSTelemetrySeries, EDSTelemetryValue } from '$lib/server/eds/types';
 	import { PLOT_API_PATH, DEFAULT_FUNCTION_TYPE } from '$lib/plot/context';
 
@@ -153,17 +153,35 @@
 		}
 	}
 
-	onMount(() => {
-		void loadHistory(tag);
+	/**
+	*onMount(() => {
+	*	void loadHistory(tag);
+    *
+	*	return () => requestController?.abort();
+	*});
+    *
+	*$effect(() => {
+	*	const currentTag = tag;
+	*	void currentTag;
+	*	void loadHistory(tag);
+	*});
+    */
+	let loadedTag = '';
 
-		return () => requestController?.abort();
-	});
+    $effect(() => {
+        const sensorTag = tag;
 
-	$effect(() => {
-		const currentTag = tag;
-		void currentTag;
-		void loadHistory(tag);
-	});
+        if (!sensorTag || sensorTag === loadedTag) {
+            return;
+        }
+
+        loadedTag = sensorTag;
+        void loadHistory(sensorTag);
+    });
+
+    onDestroy(() => {
+        requestController?.abort();
+    });
 </script>
 
 <div
