@@ -1,0 +1,34 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[[package]]
+name = "dworshak-secret"
+version = "1.3.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyhabitat" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/dd/ca/c285c023cceadc3349ebc8405bce5a484bdbc09aff411db813ef74fc45fa/dworshak_secret-1.3.6.tar.gz", hash = "sha256:d7b58533a9f7de9b0bb1c459183cd6ac125f71e186debf3c64ad6dcab29712c0", size = 24658, upload-time = "2026-07-07T15:17:35.272Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/18/5425409fc9744912a0f238742a5f267d4dde2e0ce2b97a21e71b7dac30d8/dworshak_secret-1.3.6-py3-none-any.whl", hash = "sha256:c9422cdf11dc6f5474f674a14825c0cbecb05912bac17a1fb5541c635c3d3060", size = 26537, upload-time = "2026-07-07T15:17:33.899Z" },
+]
+
+[[package]]
+name = "plantmap-sv"
+source = { virtual = "." }
+dependencies = [
+    { name = "dworshak-secret" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "dworshak-secret", specifier = ">=1.3.6" }]
+
+[[package]]
+name = "pyhabitat"
+version = "1.3.16"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/dc/a728b1ff63e502e6bf31640e1cc46871b7dd91719be4eeeda5a902627bbc/pyhabitat-1.3.16.tar.gz", hash = "sha256:3cfbda389c22300aa9ad343d660a7fcab2808fc3dfdfec4e4db1423114e76822", size = 40632, upload-time = "2026-09-25T17:47:10.408Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ca/fc/7b6fd9c666fff69410b3980b106edf5aac83b7a8019a7a5931ff633df5c2/pyhabitat-1.3.16-py3-none-any.whl", hash = "sha256:bab8fcf15c3e390b1cf3f8ebd05834379cc9584a66cbd8dc65623ba790501975", size = 43431, upload-time = "2026-09-25T17:47:08.985Z" },
+]
