@@ -117,7 +117,7 @@ def send_email_with_attachment(
     # Send via Gmail using implicit TLS.
     context = ssl.create_default_context()
 
-    with smtplib.SMTP_SSL(
+    with smtplib.SMTP(
         "smtp.gmail.com",
         587,
         context=context,
