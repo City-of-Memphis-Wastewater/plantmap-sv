@@ -133,7 +133,7 @@ if __name__ == "__main__":
     try:
         args = main()
         send_email_with_attachment(
-            attachment = args.attachment,
+            attachments = args.attachment,
             #sender = args.sender,
             recipient = args.recipient,
             subject = args.subject,
