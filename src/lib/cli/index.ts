@@ -5,6 +5,7 @@ import { secret } from './secret.ts';
 import { config } from './config.ts';
 import { start } from './start.ts';
 import { plot } from './plot.ts';
+import { download } from './download.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -17,7 +18,11 @@ export async function runCli(args: string[]) {
 		case 'plot':
 			plot(args.slice(1));
 			return;
-
+			
+        case 'download':
+        	await download(args);
+        	break;
+        	
 		case 'secret':
 			secret();
 			return;
