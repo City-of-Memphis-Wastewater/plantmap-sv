@@ -36,3 +36,9 @@ export const SUPPORTED_FUNCTION_TYPES = ['AVG', 'VALUE'] as const;
 // API and page paths
 export const PLOT_PAGE_PATH = '/plot';
 export const PLOT_API_PATH = '/api/plot';
+
+export const DOWNLOAD_API_PATH = '/api/download';
+
+export const SUPPORTED_DOWNLOAD_FORMATS = ['csv', 'json', 'xlsx'] as const;
+
+export type DownloadFormat = (typeof SUPPORTED_DOWNLOAD_FORMATS)[number];

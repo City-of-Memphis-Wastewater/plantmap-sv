@@ -173,6 +173,17 @@
 		return params;
 	}
 
+	function downloadData(format: 'csv' | 'json' | 'xlsx'): void {
+		try {
+			const params = buildRequestParams();
+
+			params.set('format', format);
+
+			window.location.href = `/api/download?${params.toString()}`;
+		} catch (error) {
+			errorMessage = error instanceof Error ? error.message : String(error);
+		}
+	}
 	/**
 	 * Fetch historical telemetry and update the chart.
 	 */
@@ -480,6 +491,18 @@
 
 				<button type="submit" disabled={loading}>
 					{loading ? 'Loading…' : 'Plot trend'}
+				</button>
+
+				<button type="button" disabled={loading} onclick={() => downloadData('csv')}>
+					Download CSV
+				</button>
+
+				<button type="button" disabled={loading} onclick={() => downloadData('json')}>
+					Download JSON
+				</button>
+
+				<button type="button" disabled={loading} onclick={() => downloadData('xlsx')}>
+					Download XLSX
 				</button>
 			</div>
 
