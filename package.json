@@ -58,7 +58,7 @@
 		"@threlte/extras": "^9.22.0",
 		"cesium": "^1.145.0",
 		"echarts": "^6.1.0",
-		"memphis-settings": "^0.0.8",
+		"memphis-settings": "^0.0.9",
 		"proj4": "^2.22.0",
 		"three": "^0.186.1",
 		"three-geo": "^1.4.5",
