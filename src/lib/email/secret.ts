@@ -1,8 +1,8 @@
 import { bootstrapPlantMapSecret } from '$lib/plantmap-sv/bootstrap';
 
 export interface EmailCredentials {
-	email_address: string;
-	password: string;
+	email_address: string | undefined;
+	password: string | undefined;
 }
 
 export function getEmailCreds(): EmailCredentials {
