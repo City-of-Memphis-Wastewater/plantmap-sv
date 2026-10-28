@@ -631,6 +631,33 @@
 		min-height: 340px;
 	}
 
+	.page-header {
+		position: relative;
+	}
+
+	.map-button {
+		display: inline-block;
+		margin-bottom: 1rem;
+		padding: 0.6rem 1rem;
+		border: 1px solid #475569;
+		border-radius: 0.5rem;
+		background: #0f172a;
+		color: #fff;
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color 150ms ease;
+	}
+
+	.map-button:hover {
+		background: #334155;
+	}
+
+	.map-button:focus-visible {
+		outline: 2px solid #60a5fa;
+		outline-offset: 2px;
+	}
+
 	@media (max-width: 600px) {
 		main {
 			padding: 0.75rem;
