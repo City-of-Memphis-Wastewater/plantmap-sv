@@ -217,7 +217,7 @@ export async function plot(args: string[] = []): Promise<void> {
 		const server = await discoverServer();
 
         if (!server) {
-    		console.log('PlantMap server is not running. Open the URL above when the server is available.');
+    		console.log('PlantMap server is not running locally. Open the URL above when the server is available.');
     		return;
     	}
 
