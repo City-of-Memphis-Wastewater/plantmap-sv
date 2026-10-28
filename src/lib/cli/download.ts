@@ -1,6 +1,6 @@
 // src/lib/cli/download.ts
 
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -19,7 +19,8 @@ import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 
 interface DownloadOptions extends PlotOptions {
-	formats: DownloadFormat[];
+  formats: DownloadFormat[];
+  outputDir: string;
 }
 
 function printHelp(): void {
@@ -52,6 +53,9 @@ Time-range behavior:
 Sampling behavior:
   --datapoint-count takes precedence over --seconds-between-points.
 
+Output directory:
+  --output-dir, -o <directory>   Directory for downloaded files (default: current directory)
+  
 Examples:
   plantmap-sv download M100FI
   plantmap-sv download M100FI FI8001 --days 4
@@ -119,7 +123,8 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	let windowDays: number | undefined;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
-
+    let outputDir: path = process.cwd();
+    
 	const valueOptions = new Map<string, string>([
 		['--start', 'start'],
 		['-s', 'start'],
@@ -132,7 +137,9 @@ function parseArgs(args: string[]): DownloadOptions | null {
 		['--seconds-between-points', 'secondsBetweenPoints'],
 		['-sec', 'secondsBetweenPoints'],
 		['--format', 'format'],
-		['-f', 'format']
+		['-f', 'format'],
+		['--output-dir', 'outputDir'],
+		['-o', 'outputDir']
 	]);
 
 	for (let i = 0; i < args.length; i++) {
@@ -189,6 +196,10 @@ function parseArgs(args: string[]): DownloadOptions | null {
 			case 'format':
 				requestedFormats.push(...parseFormat(value));
 				break;
+
+		    case 'outputDir':
+                outputDir = path.resolve(process.cwd(), value);
+                break;
 		}
 	}
 
@@ -319,11 +330,17 @@ async function downloadFormat(
 		throw new Error(`The server returned an empty ${format.toUpperCase()} file.`);
 	}
 
-	await writeFile(filename, data);
+	await mkdir(options.outputDir, { recursive: true });
 
-	console.log(`Saved ${filename} (${data.length.toLocaleString()} bytes)`);
+    const outputPath = path.join(options.outputDir, filename);
 
-	return filename;
+    await writeFile(outputPath, data);
+
+    console.log(
+            `Saved ${outputPath} (${data.length.toLocaleString()} bytes)`
+    );
+
+    return outputPath;
 }
 
 export async function download(args: string[] = []): Promise<void> {
@@ -377,3 +394,4 @@ export async function download(args: string[] = []): Promise<void> {
 		process.exitCode = 1;
 	}
 }
+
