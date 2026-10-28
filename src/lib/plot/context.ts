@@ -39,6 +39,6 @@ export const PLOT_API_PATH = '/api/plot';
 
 export const DOWNLOAD_API_PATH = '/api/download';
 
-export const SUPPORTED_DOWNLOAD_FORMATS = ['csv', 'json', 'xlsx'] as const;
+export const SUPPORTED_DOWNLOAD_FORMATS = ['csv', 'json', 'png'] as const;
 
 export type DownloadFormat = (typeof SUPPORTED_DOWNLOAD_FORMATS)[number];

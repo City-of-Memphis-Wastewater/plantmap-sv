@@ -123,7 +123,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	let windowDays: number | undefined;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
-    let outputDir: path = process.cwd();
+    let outputDir: process.cwd();
     
 	const valueOptions = new Map<string, string>([
 		['--start', 'start'],

@@ -19,7 +19,7 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
 
 	if (supplied.length === 0) {
-		throw new Error('Provide a download format: csv, json, or xlsx.');
+		throw new Error('Provide a download format: csv, json, or png.');
 	}
 
 	const formats = [
@@ -32,7 +32,7 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	];
 
 	if (formats.length === 0) {
-		throw new Error('Provide a download format: csv, json, or xlsx.');
+		throw new Error('Provide a download format: csv, json, or png.');
 	}
 
 	for (const format of formats) {
@@ -125,10 +125,10 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		const format = formats[0];
 
-		if (format === 'xlsx') {
+		if (format === 'png') {
 			return json(
 				{
-					error: 'XLSX export is not implemented yet.'
+					error: 'PNG export is not implemented yet.'
 				},
 				{ status: 501 }
 			);
