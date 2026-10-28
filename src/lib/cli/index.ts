@@ -18,11 +18,11 @@ export async function runCli(args: string[]) {
 		case 'plot':
 			plot(args.slice(1));
 			return;
-			
-        case 'download':
-        	await download(args.slice(1));
-        	break;
-        	
+
+		case 'download':
+			await download(args.slice(1));
+			break;
+
 		case 'secret':
 			secret();
 			return;

@@ -19,8 +19,8 @@ import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 
 interface DownloadOptions extends PlotOptions {
-  formats: DownloadFormat[];
-  outputDir: string;
+	formats: DownloadFormat[];
+	outputDir: string;
 }
 
 function printHelp(): void {
@@ -101,9 +101,7 @@ function parseFormat(value: string): DownloadFormat[] {
 
 	for (const format of formats) {
 		if (
-			!SUPPORTED_DOWNLOAD_FORMATS.includes(
-				format as (typeof SUPPORTED_DOWNLOAD_FORMATS)[number]
-			)
+			!SUPPORTED_DOWNLOAD_FORMATS.includes(format as (typeof SUPPORTED_DOWNLOAD_FORMATS)[number])
 		) {
 			throw new Error(
 				`Unsupported format "${format}". Supported formats: ${SUPPORTED_DOWNLOAD_FORMATS.join(', ')}.`
@@ -123,8 +121,8 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	let windowDays: number | undefined;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
-    let outputDir: process.cwd();
-    
+	let outputDir: string = process.cwd();
+
 	const valueOptions = new Map<string, string>([
 		['--start', 'start'],
 		['-s', 'start'],
@@ -185,21 +183,16 @@ function parseArgs(args: string[]): DownloadOptions | null {
 				break;
 
 			case 'secondsBetweenPoints':
-				secondsBetweenPoints = parsePositiveNumber(
-					value,
-					arg,
-					MAX_SECONDS_BETWEEN_POINTS,
-					true
-				);
+				secondsBetweenPoints = parsePositiveNumber(value, arg, MAX_SECONDS_BETWEEN_POINTS, true);
 				break;
 
 			case 'format':
 				requestedFormats.push(...parseFormat(value));
 				break;
 
-		    case 'outputDir':
-                outputDir = path.resolve(process.cwd(), value);
-                break;
+			case 'outputDir':
+				outputDir = path.resolve(process.cwd(), value);
+				break;
 		}
 	}
 
@@ -214,19 +207,14 @@ function parseArgs(args: string[]): DownloadOptions | null {
 		windowDays,
 		datapointCount,
 		secondsBetweenPoints,
+		outputDir,
 		formats: [
-			...new Set(
-				requestedFormats.length > 0 ? requestedFormats : (['csv'] as DownloadFormat[])
-			)
+			...new Set(requestedFormats.length > 0 ? requestedFormats : (['csv'] as DownloadFormat[]))
 		]
 	};
 }
 
-function getFilename(
-	response: Response,
-	format: DownloadFormat,
-	tags: string[]
-): string {
+function getFilename(response: Response, format: DownloadFormat, tags: string[]): string {
 	const disposition = response.headers.get('content-disposition');
 
 	let filename: string | undefined;
@@ -249,9 +237,7 @@ function getFilename(
 	}
 
 	if (!filename) {
-		const safeTags = tags
-			.map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_'))
-			.join('_');
+		const safeTags = tags.map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_')).join('_');
 
 		filename = `plantmap-${safeTags}-${new Date().toISOString().replace(/[:.]/g, '-')}.${format}`;
 	}
@@ -332,15 +318,13 @@ async function downloadFormat(
 
 	await mkdir(options.outputDir, { recursive: true });
 
-    const outputPath = path.join(options.outputDir, filename);
+	const outputPath = path.join(options.outputDir, filename);
 
-    await writeFile(outputPath, data);
+	await writeFile(outputPath, data);
 
-    console.log(
-            `Saved ${outputPath} (${data.length.toLocaleString()} bytes)`
-    );
+	console.log(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
 
-    return outputPath;
+	return outputPath;
 }
 
 export async function download(args: string[] = []): Promise<void> {
@@ -394,4 +378,3 @@ export async function download(args: string[] = []): Promise<void> {
 		process.exitCode = 1;
 	}
 }
-
