@@ -482,5 +482,16 @@
 "unit": "mg/L",
 "precision": null,
 "status": "normal"
+},
+"PM-23KV-M-KW-TOT": {
+"id": "PM-23KV-M-KW-TOT",
+"name": "Active Power",
+"lat": 35.071243,
+"lon": -90.154722,
+"altitude": 1,
+"value": 5800,
+"unit": "KW",
+"precision": null,
+"status": "normal"
 }
 }
