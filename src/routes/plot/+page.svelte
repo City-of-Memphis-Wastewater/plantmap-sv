@@ -368,7 +368,10 @@
 </svelte:head>
 
 <main>
-	<header>
+	<header class="page-header">
+	    <a href="/" class="map-button" aria-label="Return to main map">
+            🗺️ Map
+        </a>
 		<h1>Historical Telemetry</h1>
 		<p>Retrieve and plot time-series data from Ovation EDS.</p>
 	</header>
