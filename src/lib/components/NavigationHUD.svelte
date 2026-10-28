@@ -6,7 +6,7 @@
 		showGeoJson = false,
 		showSensorLabels = false,
 		showSensorValues = false,
-		showHoverInfo = false,
+		showHoverInfo = true,
 		showDebugger = $bindable(false),
 		viewMode = '2D',
 		currentBasemap = 'satellite',
