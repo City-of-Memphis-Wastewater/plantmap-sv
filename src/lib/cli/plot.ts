@@ -209,17 +209,19 @@ export async function plot(args: string[] = []): Promise<void> {
 		if (options.tags.length === 0) return;
 
 		const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
-        
+
 		const relativeUrl = `/plot?${query}`;
 
-        console.log(`PlantMap plot relative URL:\n${relativeUrl}\n`);
-        
+		console.log(`PlantMap plot relative URL:\n${relativeUrl}\n`);
+
 		const server = await discoverServer();
 
-        if (!server) {
-    		console.log('PlantMap server is not running locally. Open the URL above when the server is available.');
-    		return;
-    	}
+		if (!server) {
+			console.log(
+				'PlantMap server is not running locally. Open the URL above when the server is available.'
+			);
+			return;
+		}
 
 		const plotUrl = `${server.url}${relativeUrl}`;
 		console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
