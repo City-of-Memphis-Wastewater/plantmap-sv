@@ -20,7 +20,7 @@ export async function runCli(args: string[]) {
 			return;
 			
         case 'download':
-        	await download(args);
+        	await download(args.slice(1));
         	break;
         	
 		case 'secret':
