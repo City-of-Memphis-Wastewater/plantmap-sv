@@ -123,12 +123,17 @@
 		const start = toIsoTimestamp(startTime);
 		const end = toIsoTimestamp(endTime);
 
-		const parsedDays = windowDays.trim() === '' ? undefined : Number(windowDays);
+        const daysText = String(windowDays ?? '').trim();
+        const datapointCountText = String(datapointCount ?? '').trim();
+        const secondsBetweenPointsText = String(secondsBetweenPoints ?? '').trim();
 
-		const parsedDatapointCount = datapointCount.trim() === '' ? undefined : Number(datapointCount);
+        const parsedDays = daysText === '' ? undefined : Number(daysText);
 
-		const parsedSecondsBetweenPoints =
-			secondsBetweenPoints.trim() === '' ? undefined : Number(secondsBetweenPoints);
+        const parsedDatapointCount =
+                datapointCountText === '' ? undefined : Number(datapointCountText);
+
+        const parsedSecondsBetweenPoints =
+                secondsBetweenPointsText === '' ? undefined : Number(secondsBetweenPointsText);
 
 		if (
 			parsedDays !== undefined &&
@@ -173,7 +178,7 @@
 		return params;
 	}
 
-	function downloadData(format: 'csv' | 'json'): void {
+	function downloadData(format: 'csv' | 'json' | 'svg'): void {
 		try {
 			const params = buildRequestParams();
 
@@ -218,8 +223,66 @@
 			const seriesData = result.values ?? {};
 
 			const series = buildTelemetryChartSeries(seriesData);
+            
+            sampleCount = Object.values(seriesData).reduce(
+                    (total, samples) => total + samples.length,
+                    0
+            );
 
-			//chart?.setOption(option, true);
+            if (!chart) {
+                    throw new Error('The chart has not finished initializing.');
+            }
+
+            const option: EChartsOption = {
+                    animation: false,
+                    tooltip: {
+                            trigger: 'axis',
+                            valueFormatter: (value) => {
+                                    if (value == null) {
+                                            return 'No reading';
+                                    }
+
+                                    return typeof value === 'number'
+                                            ? value.toLocaleString()
+                                            : String(value);
+                            }
+                    },
+                    legend: {
+                            type: 'scroll',
+                            top: 8
+                    },
+                    grid: {
+                            left: 72,
+                            right: 28,
+                            top: 58,
+                            bottom: 88
+                    },
+                    xAxis: {
+                            type: 'time',
+                            name: 'Time',
+                            nameLocation: 'middle',
+                            nameGap: 35
+                    },
+                    yAxis: {
+                            type: 'value',
+                            scale: true,
+                            name: 'Value'
+                    },
+                    dataZoom: [
+                            {
+                                    type: 'inside',
+                                    xAxisIndex: 0
+                            },
+                            {
+                                    type: 'slider',
+                                    xAxisIndex: 0,
+                                    bottom: 18
+                            }
+                    ],
+                    series
+            };
+
+            chart.setOption(option, true);
 
 			const returnedTags = Object.keys(seriesData);
 			const request = result.request;
@@ -391,9 +454,9 @@
 						step="1"
 						bind:value={datapointCount}
 						oninput={() => {
-							if (datapointCount !== '') {
-								secondsBetweenPoints = '';
-							}
+                            if (String(datapointCount ?? '').trim() !== '') {
+                                    secondsBetweenPoints = '';
+                            }
 						}}
 					/>
 				</div>
@@ -408,9 +471,9 @@
 						step="1"
 						bind:value={secondsBetweenPoints}
 						oninput={() => {
-							if (secondsBetweenPoints !== '') {
-								datapointCount = '';
-							}
+                            if (String(secondsBetweenPoints ?? '').trim() !== '') {
+                                    datapointCount = '';
+                            }
 						}}
 					/>
 				</div>
@@ -438,9 +501,9 @@
 					Download JSON
 				</button>
 
-				<!--button type="button" disabled={loading} onclick={() => downloadData('png')}>
-					Download PNG
-				</button-->
+				<button type="button" disabled={loading} onclick={() => downloadData('svg')}>
+					Download SVG
+				</button>
 			</div>
 
 			<small>
