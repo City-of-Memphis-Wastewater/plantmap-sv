@@ -173,7 +173,7 @@
 		return params;
 	}
 
-	function downloadData(format: 'csv' | 'json' | 'png'): void {
+	function downloadData(format: 'csv' | 'json'): void {
 		try {
 			const params = buildRequestParams();
 
