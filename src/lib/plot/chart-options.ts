@@ -1,19 +1,15 @@
-
 import type { EChartsOption } from 'echarts';
 
-export type TimeSeriesPoint = [
-  timestampMs: number,
-  value: number | null
-];
+export type TimeSeriesPoint = [timestampMs: number, value: number | null];
 
 export interface TimeSeries {
-  name: string;
-  data: TimeSeriesPoint[];
+	name: string;
+	data: TimeSeriesPoint[];
 }
 
 export interface TimeSeriesChartOptions {
-  series: TimeSeries[];
-  title?: string;
+	series: TimeSeries[];
+	title?: string;
 }
 
 /**
@@ -23,86 +19,86 @@ export interface TimeSeriesChartOptions {
  * Missing values should be null so the chart shows gaps.
  */
 export function buildTimeSeriesChartOptions({
-  series,
-  title
+	series,
+	title
 }: TimeSeriesChartOptions): EChartsOption {
-  return {
-    animation: false,
-    backgroundColor: '#ffffff',
+	return {
+		animation: false,
+		backgroundColor: '#ffffff',
 
-    ...(title
-      ? {
-          title: {
-            text: title,
-            left: 'center',
-            top: 12
-          }
-        }
-      : {}),
+		...(title
+			? {
+					title: {
+						text: title,
+						left: 'center',
+						top: 12
+					}
+				}
+			: {}),
 
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross'
-      }
-    },
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross'
+			}
+		},
 
-    legend: {
-      type: 'scroll',
-      top: title ? 44 : 12,
-      left: 12,
-      right: 12
-    },
+		legend: {
+			type: 'scroll',
+			top: title ? 44 : 12,
+			left: 12,
+			right: 12
+		},
 
-    grid: {
-      left: 64,
-      right: 28,
-      top: title ? 88 : 58,
-      bottom: 64,
-      containLabel: true
-    },
+		grid: {
+			left: 64,
+			right: 28,
+			top: title ? 88 : 58,
+			bottom: 64,
+			containLabel: true
+		},
 
-    xAxis: {
-      type: 'time',
-      boundaryGap: false,
-      axisLabel: {
-        hideOverlap: true
-      }
-    },
+		xAxis: {
+			type: 'time',
+			boundaryGap: false,
+			axisLabel: {
+				hideOverlap: true
+			}
+		},
 
-    yAxis: {
-      type: 'value',
-      scale: true,
-      splitLine: {
-        show: true,
-        lineStyle: {
-          type: 'dashed'
-        }
-      }
-    },
+		yAxis: {
+			type: 'value',
+			scale: true,
+			splitLine: {
+				show: true,
+				lineStyle: {
+					type: 'dashed'
+				}
+			}
+		},
 
-    dataZoom: [
-      {
-        type: 'inside',
-        xAxisIndex: 0
-      },
-      {
-        type: 'slider',
-        xAxisIndex: 0,
-        bottom: 8,
-        height: 18
-      }
-    ],
+		dataZoom: [
+			{
+				type: 'inside',
+				xAxisIndex: 0
+			},
+			{
+				type: 'slider',
+				xAxisIndex: 0,
+				bottom: 8,
+				height: 18
+			}
+		],
 
-    series: series.map((item) => ({
-      name: item.name,
-      type: 'line',
-      data: item.data,
-      showSymbol: false,
-      connectNulls: false,
-      emphasis: {
-        focus: 'series'
-      }
-    }))
-  };
+		series: series.map((item) => ({
+			name: item.name,
+			type: 'line',
+			data: item.data,
+			showSymbol: false,
+			connectNulls: false,
+			emphasis: {
+				focus: 'series'
+			}
+		}))
+	};
 }

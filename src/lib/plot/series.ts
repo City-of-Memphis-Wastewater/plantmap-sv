@@ -15,16 +15,8 @@ export function buildTelemetryChartSeries(
 		connectNulls: false,
 		data: samples
 			.filter(
-				(sample) =>
-					sample.timestamp !== null &&
-					Number.isFinite(Date.parse(sample.timestamp))
+				(sample) => sample.timestamp !== null && Number.isFinite(Date.parse(sample.timestamp))
 			)
-			.map(
-				(sample) =>
-					[Date.parse(sample.timestamp!), sample.value] as [
-						number,
-						number | null
-					]
-			)
+			.map((sample) => [Date.parse(sample.timestamp!), sample.value] as [number, number | null])
 	}));
 }

@@ -4,8 +4,8 @@
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
 
 	import { buildPlotSearchParams, parsePlotUrl } from '$lib/plot/url';
-    import { buildTelemetryChartSeries } from '$lib/plot/series';
-    
+	import { buildTelemetryChartSeries } from '$lib/plot/series';
+
 	import {
 		DEFAULT_TAGS,
 		DEFAULT_DAYS,
@@ -217,8 +217,8 @@
 			}
 
 			const seriesData = result.values ?? {};
-            
-            const series = buildTelemetryChartSeries(seriesData);
+
+			const series = buildTelemetryChartSeries(seriesData);
 
 			chart?.setOption(option, true);
 
@@ -287,7 +287,7 @@
 
 				chart = echarts.init(chartElement);
 				window.addEventListener('resize', resizeChart);
-                
+
 				if (shouldAutoLoad) {
 					void loadTrend(true);
 				}

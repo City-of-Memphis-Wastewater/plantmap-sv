@@ -115,7 +115,7 @@ function parseFormat(value: string): DownloadFormat[] {
 
 function parseArgs(args: string[]): DownloadOptions | null {
 	const rawTags: string[] = [];
-    //const tags = await parseTags(rawTags);
+	//const tags = await parseTags(rawTags);
 
 	const requestedFormats: DownloadFormat[] = [];
 
@@ -337,15 +337,13 @@ export async function download(args: string[] = []): Promise<void> {
 			return;
 		}
 
-        const tags = await parseTags(options.rawTags);
+		const tags = await parseTags(options.rawTags);
 
-        if (tags.length === 0) {
-          throw new Error(
-            'No IDCS tags found. Provide tags or a query file.'
-          );
-        }
+		if (tags.length === 0) {
+			throw new Error('No IDCS tags found. Provide tags or a query file.');
+		}
 
-        options.tags = tags;
+		options.tags = tags;
 
 		const server = await discoverServer();
 

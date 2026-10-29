@@ -78,7 +78,7 @@ function parsePositiveNumber(
 
 function parseArgs(args: string[]): PlotOptions {
 	const rawTags: string[] = [];
-    //const tags = await parseTags(rawTags);
+	//const tags = await parseTags(rawTags);
 
 	let start: string | undefined;
 	let end: string | undefined;
@@ -207,17 +207,15 @@ function openUrl(url: string): void {
 export async function plot(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
-        const tags = await parseTags(options.rawTags);
+		const tags = await parseTags(options.rawTags);
 
-        if (tags.length === 0) {
-          throw new Error(
-            'No IDCS tags found. Provide tags or a query file.'
-          );
-        }
+		if (tags.length === 0) {
+			throw new Error('No IDCS tags found. Provide tags or a query file.');
+		}
 
-        options.tags = tags;
-		
-        // --help has already printed its output.
+		options.tags = tags;
+
+		// --help has already printed its output.
 		if (options.tags.length === 0) return;
 
 		const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');

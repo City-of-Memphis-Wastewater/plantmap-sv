@@ -17,6 +17,8 @@ import { serializeTelemetryJson } from '$lib/download/json';
 
 import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
 import { renderChartSvg } from '$lib/download/svg';
+import { buildTelemetryChartSeries } from '$lib/plot/series';
+import type { EDSTelemetrySeries } from '$lib/server/eds/types';
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
@@ -137,29 +139,56 @@ export const GET: RequestHandler = async ({ url }) => {
 			);
 		}
 
-        // Inside GET, after the existing EDS fetch:
-        if (format === 'svg') {
-          const chartSeries = /* convert the fetched result into TimeSeries[] */;
+		// Inside GET, after the existing EDS fetch:
+		if (format === 'svg') {
+			const chartSeries = buildTelemetryChartSeries(values as EDSTelemetrySeries);
 
-          const svg = renderChartSvg(
-            buildTimeSeriesChartOptions({
-              series: chartSeries,
-              title: options.tags.join(', ')
-            })
-          );
+			const svg = renderChartSvg({
+				animation: false,
+				backgroundColor: '#ffffff',
+				legend: {
+					type: 'scroll',
+					top: 8
+				},
+				grid: {
+					left: 72,
+					right: 28,
+					top: 58,
+					bottom: 88
+				},
+				xAxis: {
+					type: 'time',
+					name: 'Time',
+					nameLocation: 'middle',
+					nameGap: 35
+				},
+				yAxis: {
+					type: 'value',
+					scale: true,
+					name: 'Value'
+				},
+				dataZoom: [
+					{ type: 'inside', xAxisIndex: 0 },
+					{ type: 'slider', xAxisIndex: 0, bottom: 18 }
+				],
+				series: chartSeries
+			});
 
-          return new Response(svg, {
-            headers: {
-              'Content-Type': 'image/svg+xml; charset=utf-8',
-              'Content-Disposition': `attachment; filename="${buildFilename(
-                options.tags,
-                timeAspects.startSeconds,
-                timeAspects.endSeconds,
-                'svg'
-              )}"`
-            }
-          });
-        }
+			const filename = buildFilename(
+				options.tags,
+				timeAspects.startSeconds,
+				timeAspects.endSeconds,
+				'svg'
+			);
+
+			return new Response(svg, {
+				headers: {
+					'Content-Type': 'image/svg+xml; charset=utf-8',
+					'Content-Disposition': `attachment; filename="${filename}"`,
+					'Cache-Control': 'no-store'
+				}
+			});
+		}
 
 		const body = format === 'csv' ? serializeTelemetryCsv(values) : serializeTelemetryJson(values);
 
