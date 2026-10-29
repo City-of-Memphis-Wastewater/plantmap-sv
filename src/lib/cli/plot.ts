@@ -14,6 +14,7 @@ import type { PlotOptions } from '../plot/types.ts';
 //import { resolveTimeAspects } from '../plot/resolve-time.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
+import { parseTags } from './helpers/parse-tags.ts';
 
 function printHelp(): void {
 	console.log(`
@@ -76,7 +77,15 @@ function parsePositiveNumber(
 }
 
 function parseArgs(args: string[]): PlotOptions {
-	const tags: string[] = [];
+	//const tags: string[] = [];
+    const tags = await parseTags(rawTags);
+
+    if (tags.length === 0) {
+      throw new Error(
+        'No IDCS tags found. Provide tags or a query file.'
+      );
+    }
+
 	let start: string | undefined;
 	let end: string | undefined;
 	let windowDays: number | undefined;

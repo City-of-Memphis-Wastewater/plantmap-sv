@@ -17,6 +17,7 @@ import type { PlotOptions } from '../plot/types.ts';
 
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
+import { parseTags } from './helpers/parse-tags.ts';
 
 interface DownloadOptions extends PlotOptions {
 	formats: DownloadFormat[];
@@ -113,7 +114,14 @@ function parseFormat(value: string): DownloadFormat[] {
 }
 
 function parseArgs(args: string[]): DownloadOptions | null {
-	const tags: string[] = [];
+	//const tags: string[] = [];
+    const tags = await parseTags(rawTags);
+
+    if (tags.length === 0) {
+      throw new Error(
+        'No IDCS tags found. Provide tags or a query file.'
+      );
+    }
 	const requestedFormats: DownloadFormat[] = [];
 
 	let start: string | undefined;
