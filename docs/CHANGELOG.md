@@ -9,12 +9,14 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 ## [0.0.6] – 2026-10-29
 
 ### Added:
+
 - Plotting, download, cli, status, and tabular requests.
 - Plotting Hover HUD, independent with pipeline-eds style CLI call, and in map view on hover.
 - Hover telemetry calls data from cached database.
 - Email functionality tested, ready to link to cli or curl call download for external transmission.
 
-### Internal: 
+### Internal:
+
 - Telemetry HUD needs a vertical scrollbar, and for the minimization key to possibly be lower and unmoving.
 - We need text size adjustment, and possibly roll controls.
 
