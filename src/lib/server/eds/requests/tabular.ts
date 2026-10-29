@@ -205,7 +205,7 @@ export class Tabular {
 		});
         
         // Heavy, verbose raw return
-		log('getTabular SOAP response body:', dataXml);
+		//log('getTabular SOAP response body:', dataXml);
 
 		log('getTabular SOAP response body (head/tail):', {
 			length: dataXml.length,
