@@ -67,6 +67,31 @@ export function parseNumericValue(value: string | null | undefined): number | nu
 	return Number.isFinite(parsed) ? parsed : null;
 }
 
+
+/**
+ * Parse a boolean reading as a numeric value.
+ *
+ * Ovation EDS uses <bv>true</bv> and <bv>false</bv>
+ * for boolean values. Normalize these to 1 and 0 so they
+ * remain compatible with numeric telemetry, charts, and CSV.
+ *
+ * Missing or unrecognized values remain null.
+ */
+export function parseBooleanValue(value: string | null | undefined): number | null {
+        if (value == null || value.trim() === '') {
+                return null;
+        }
+
+        switch (value.trim().toLowerCase()) {
+                case 'true':
+                        return 1;
+                case 'false':
+                        return 0;
+                default:
+                        return null;
+        }
+}
+
 /**
  * Parse an epoch-seconds timestamp.
  * Missing or invalid timestamps remain null rather than being replaced

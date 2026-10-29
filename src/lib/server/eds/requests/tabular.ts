@@ -13,8 +13,11 @@ export class Tabular {
 		endSeconds: number,
 		secondsBetweenPoints: number,
 		functionType: string = 'VALUE',
-		debug: boolean = false
+		debug?: boolean
 	): Promise<EDSTelemetrySeries> {
+
+        const debugEnabled = debug ?? this.client.debug;
+
 		if (sensorIds.length === 0) {
 			return {};
 		}
@@ -23,15 +26,15 @@ export class Tabular {
 
 		const iessTags = sensorIds.map((id) => formatIessTag(id, this.client.iessSuffix));
 
-		const log = (message: string, details?: unknown) => {
-			if (!debug) return;
+        const log = (message: string, details?: unknown) => {
+            if (!debugEnabled) return;
 
-			if (details === undefined) {
-				console.log(`[EDS Tabular DEBUG] ${message}`);
-			} else {
-				console.log(`[EDS Tabular DEBUG] ${message}`, details);
-			}
-		};
+            if (details === undefined) {
+                console.log(`[EDS Tabular DEBUG] ${message}`);
+            } else {
+                console.log(`[EDS Tabular DEBUG] ${message}`, details);
+            }
+        };
 
 		log('Input sensor IDs:', sensorIds);
 		log('Formatted IESS tags:', iessTags);
@@ -200,8 +203,9 @@ export class Tabular {
 			statusText: dataResp.statusText,
 			ok: dataResp.ok
 		});
-
-		// log('getTabular SOAP response body:', dataXml);
+        
+        // Heavy, verbose raw return
+		log('getTabular SOAP response body:', dataXml);
 
 		log('getTabular SOAP response body (head/tail):', {
 			length: dataXml.length,

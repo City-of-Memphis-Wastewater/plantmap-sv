@@ -3,6 +3,7 @@ import {
 	getXmlBlocks,
 	getXmlText,
 	parseNumericValue,
+    parseBooleanValue,
 	parseXmlQuality,
 	parseXmlTimestamp
 } from './common';

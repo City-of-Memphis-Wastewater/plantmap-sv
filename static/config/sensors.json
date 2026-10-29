@@ -493,5 +493,16 @@
 "unit": "KW",
 "precision": null,
 "status": "normal"
+},
+"E101MN": {
+"id": "E101MN",
+"name": "Raw Pump 1 RUN",
+"lat": 35.071666,
+"lon": -90.154162,
+"altitude": 0,
+"value": false,
+"unit": null,
+"precision": null,
+"status": "normal"
 }
 }
