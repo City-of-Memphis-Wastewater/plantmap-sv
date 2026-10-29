@@ -504,5 +504,38 @@
 "unit": "",
 "precision": null,
 "status": "normal"
+},
+"E102MN": {
+"id": "E102MN",
+"name": "Raw Pump 2 RUN",
+"lat": 35.071701,
+"lon": -90.154157,
+"altitude": 0,
+"value": false,
+"unit": "",
+"precision": null,
+"status": "normal"
+},
+"E103MN": {
+"id": "E103MN",
+"name": "Raw Pump 3 RUN",
+"lat": 35.071746,
+"lon": -90.154155,
+"altitude": 0,
+"value": false,
+"unit": "",
+"precision": null,
+"status": "normal"
+},
+"E104MN": {
+"id": "E104MN",
+"name": "Raw Pump 4 RUN",
+"lat": 35.071787,
+"lon": -90.154148,
+"altitude": 0,
+"value": false,
+"unit": "",
+"precision": null,
+"status": "normal"
 }
 }
