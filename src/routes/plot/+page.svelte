@@ -220,7 +220,7 @@
 
 			const series = buildTelemetryChartSeries(seriesData);
 
-			chart?.setOption(option, true);
+			//chart?.setOption(option, true);
 
 			const returnedTags = Object.keys(seriesData);
 			const request = result.request;
