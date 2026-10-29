@@ -30,7 +30,6 @@ export interface PlotOptions extends AllTimeInputs {
 	functionType?: string;
 }
 
-
 export interface ResolvedPlotRequest extends ResolvedTimeAspects {
 	tags: string[];
 	functionType: string;

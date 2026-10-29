@@ -3,7 +3,7 @@ import {
 	getXmlBlocks,
 	getXmlText,
 	parseNumericValue,
-    parseBooleanValue,
+	parseBooleanValue,
 	parseXmlQuality,
 	parseXmlTimestamp
 } from './common';
@@ -31,8 +31,8 @@ export function parseGetPointsResponse(xml: string): Record<string, EdsPointTele
 		}
 
 		const rawValue = getXmlText(block, 'av') ?? getXmlText(block, 'dv');
-        const booleanValue = getXmlText(block, 'bv');
-        const value = parseNumericValue(rawValue) ?? parseBooleanValue(booleanValue);
+		const booleanValue = getXmlText(block, 'bv');
+		const value = parseNumericValue(rawValue) ?? parseBooleanValue(booleanValue);
 
 		const point: EdsPointTelemetry = {
 			sid,

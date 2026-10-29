@@ -67,7 +67,6 @@ export function parseNumericValue(value: string | null | undefined): number | nu
 	return Number.isFinite(parsed) ? parsed : null;
 }
 
-
 /**
  * Parse a boolean reading as a numeric value.
  *
@@ -78,18 +77,18 @@ export function parseNumericValue(value: string | null | undefined): number | nu
  * Missing or unrecognized values remain null.
  */
 export function parseBooleanValue(value: string | null | undefined): number | null {
-        if (value == null || value.trim() === '') {
-                return null;
-        }
+	if (value == null || value.trim() === '') {
+		return null;
+	}
 
-        switch (value.trim().toLowerCase()) {
-                case 'true':
-                        return 1;
-                case 'false':
-                        return 0;
-                default:
-                        return null;
-        }
+	switch (value.trim().toLowerCase()) {
+		case 'true':
+			return 1;
+		case 'false':
+			return 0;
+		default:
+			return null;
+	}
 }
 
 /**

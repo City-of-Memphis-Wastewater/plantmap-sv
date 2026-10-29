@@ -1,176 +1,175 @@
-
 .plot-page {
-        width: min(1200px, 100%);
-        margin: 0 auto;
-        padding: 1.25rem;
-        box-sizing: border-box;
+	width: min(1200px, 100%);
+	margin: 0 auto;
+	padding: 1.25rem;
+	box-sizing: border-box;
 }
 
 .plot-page .page-header {
-        position: relative;
-        margin-bottom: 1.25rem;
+	position: relative;
+	margin-bottom: 1.25rem;
 }
 
 .plot-page h1 {
-        margin: 0 0 0.4rem;
-        font-size: 1.6rem;
+	margin: 0 0 0.4rem;
+	font-size: 1.6rem;
 }
 
 .plot-page .page-header p,
 .plot-page .status {
-        color: var(--text-secondary, #666);
+	color: var(--text-secondary, #666);
 }
 
 .plot-page form {
-        display: grid;
-        gap: 1rem;
-        padding: 1rem;
-        border: 1px solid var(--border-color, #ccc);
-        border-radius: 0.6rem;
+	display: grid;
+	gap: 1rem;
+	padding: 1rem;
+	border: 1px solid var(--border-color, #ccc);
+	border-radius: 0.6rem;
 }
 
 .plot-page fieldset {
-        display: grid;
-        gap: 0.85rem;
-        min-width: 0;
-        margin: 0;
-        padding: 0.85rem;
-        border: 1px solid var(--border-color, #ccc);
-        border-radius: 0.45rem;
+	display: grid;
+	gap: 0.85rem;
+	min-width: 0;
+	margin: 0;
+	padding: 0.85rem;
+	border: 1px solid var(--border-color, #ccc);
+	border-radius: 0.45rem;
 }
 
 .plot-page legend {
-        padding: 0 0.35rem;
-        font-weight: 600;
+	padding: 0 0.35rem;
+	font-weight: 600;
 }
 
 .plot-page .settings {
-        display: flex;
-        align-items: end;
-        gap: 0.85rem;
-        flex-wrap: wrap;
+	display: flex;
+	align-items: end;
+	gap: 0.85rem;
+	flex-wrap: wrap;
 }
 
 .plot-page .field {
-        display: grid;
-        gap: 0.35rem;
-        min-width: 125px;
-        flex: 1 1 150px;
+	display: grid;
+	gap: 0.35rem;
+	min-width: 125px;
+	flex: 1 1 150px;
 }
 
 .plot-page .tags-field {
-        width: 100%;
+	width: 100%;
 }
 
 .plot-page label {
-        font-weight: 600;
+	font-weight: 600;
 }
 
 .plot-page input,
 .plot-page select,
 .plot-page button {
-        min-width: 0;
-        box-sizing: border-box;
-        font: inherit;
-        padding: 0.6rem 0.7rem;
-        border: 1px solid var(--border-color, #aaa);
-        border-radius: 0.35rem;
+	min-width: 0;
+	box-sizing: border-box;
+	font: inherit;
+	padding: 0.6rem 0.7rem;
+	border: 1px solid var(--border-color, #aaa);
+	border-radius: 0.35rem;
 }
 
 .plot-page input,
 .plot-page select {
-        background: var(--input-background, transparent);
-        color: inherit;
+	background: var(--input-background, transparent);
+	color: inherit;
 }
 
 .plot-page .tags-field input {
-        width: 100%;
+	width: 100%;
 }
 
 .plot-page small {
-        color: var(--text-secondary, #666);
-        line-height: 1.5;
+	color: var(--text-secondary, #666);
+	line-height: 1.5;
 }
 
 .plot-page button {
-        cursor: pointer;
-        background: var(--button-background, #245a85);
-        color: var(--button-color, white);
-        border-color: transparent;
-        flex: 0 0 auto;
+	cursor: pointer;
+	background: var(--button-background, #245a85);
+	color: var(--button-color, white);
+	border-color: transparent;
+	flex: 0 0 auto;
 }
 
 .plot-page button:disabled {
-        cursor: wait;
-        opacity: 0.65;
+	cursor: wait;
+	opacity: 0.65;
 }
 
 .plot-page .status {
-        min-height: 1.25rem;
-        overflow-wrap: anywhere;
+	min-height: 1.25rem;
+	overflow-wrap: anywhere;
 }
 
 .plot-page .error {
-        color: var(--error-color, #b42318);
-        overflow-wrap: anywhere;
+	color: var(--error-color, #b42318);
+	overflow-wrap: anywhere;
 }
 
 .plot-page .chart-panel {
-        border: 1px solid var(--border-color, #ccc);
-        border-radius: 0.6rem;
-        overflow: hidden;
+	border: 1px solid var(--border-color, #ccc);
+	border-radius: 0.6rem;
+	overflow: hidden;
 }
 
 .plot-page .chart {
-        width: 100%;
-        height: min(65vh, 600px);
-        min-height: 340px;
+	width: 100%;
+	height: min(65vh, 600px);
+	min-height: 340px;
 }
 
 .plot-page .map-button {
-        display: inline-block;
-        margin-bottom: 1rem;
-        padding: 0.6rem 1rem;
-        border: 1px solid #475569;
-        border-radius: 0.5rem;
-        background: #0f172a;
-        color: #fff;
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background-color 150ms ease;
+	display: inline-block;
+	margin-bottom: 1rem;
+	padding: 0.6rem 1rem;
+	border: 1px solid #475569;
+	border-radius: 0.5rem;
+	background: #0f172a;
+	color: #fff;
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 150ms ease;
 }
 
 .plot-page .map-button:hover {
-        background: #334155;
+	background: #334155;
 }
 
 .plot-page .map-button:focus-visible {
-        outline: 2px solid #60a5fa;
-        outline-offset: 2px;
+	outline: 2px solid #60a5fa;
+	outline-offset: 2px;
 }
 
 @media (max-width: 600px) {
-        .plot-page {
-                padding: 0.75rem;
-        }
+	.plot-page {
+		padding: 0.75rem;
+	}
 
-        .plot-page .settings {
-                align-items: stretch;
-                flex-direction: column;
-        }
+	.plot-page .settings {
+		align-items: stretch;
+		flex-direction: column;
+	}
 
-        .plot-page .field {
-                width: 100%;
-                flex-basis: auto;
-        }
+	.plot-page .field {
+		width: 100%;
+		flex-basis: auto;
+	}
 
-        .plot-page button {
-                width: 100%;
-        }
+	.plot-page button {
+		width: 100%;
+	}
 
-        .plot-page .chart {
-                height: 430px;
-                min-height: 300px;
-        }
+	.plot-page .chart {
+		height: 430px;
+		min-height: 300px;
+	}
 }

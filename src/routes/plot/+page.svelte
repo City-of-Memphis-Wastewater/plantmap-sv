@@ -1,5 +1,5 @@
 <script lang="ts">
-    import './plot.css';
+	import './plot.css';
 	import { onMount } from 'svelte';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
@@ -44,9 +44,9 @@
 	let startTime = $state('');
 	let endTime = $state('');
 	let windowDays = $state<string | number>('');
-    let datapointCount = $state<string | number>(String(DEFAULT_DATAPOINT_COUNT));
-    let secondsBetweenPoints = $state<string | number>('');
-    let functionType = $state(DEFAULT_FUNCTION_TYPE);
+	let datapointCount = $state<string | number>(String(DEFAULT_DATAPOINT_COUNT));
+	let secondsBetweenPoints = $state<string | number>('');
+	let functionType = $state(DEFAULT_FUNCTION_TYPE);
 
 	// Request state
 	let loading = $state(false);
@@ -124,17 +124,16 @@
 		const start = toIsoTimestamp(startTime);
 		const end = toIsoTimestamp(endTime);
 
-        const daysText = String(windowDays ?? '').trim();
-        const datapointCountText = String(datapointCount ?? '').trim();
-        const secondsBetweenPointsText = String(secondsBetweenPoints ?? '').trim();
+		const daysText = String(windowDays ?? '').trim();
+		const datapointCountText = String(datapointCount ?? '').trim();
+		const secondsBetweenPointsText = String(secondsBetweenPoints ?? '').trim();
 
-        const parsedDays = daysText === '' ? undefined : Number(daysText);
+		const parsedDays = daysText === '' ? undefined : Number(daysText);
 
-        const parsedDatapointCount =
-                datapointCountText === '' ? undefined : Number(datapointCountText);
+		const parsedDatapointCount = datapointCountText === '' ? undefined : Number(datapointCountText);
 
-        const parsedSecondsBetweenPoints =
-                secondsBetweenPointsText === '' ? undefined : Number(secondsBetweenPointsText);
+		const parsedSecondsBetweenPoints =
+			secondsBetweenPointsText === '' ? undefined : Number(secondsBetweenPointsText);
 
 		if (
 			parsedDays !== undefined &&
@@ -224,66 +223,61 @@
 			const seriesData = result.values ?? {};
 
 			const series = buildTelemetryChartSeries(seriesData);
-            
-            sampleCount = Object.values(seriesData).reduce(
-                    (total, samples) => total + samples.length,
-                    0
-            );
 
-            if (!chart) {
-                    throw new Error('The chart has not finished initializing.');
-            }
+			sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
 
-            const option: EChartsOption = {
-                    animation: false,
-                    tooltip: {
-                            trigger: 'axis',
-                            valueFormatter: (value) => {
-                                    if (value == null) {
-                                            return 'No reading';
-                                    }
+			if (!chart) {
+				throw new Error('The chart has not finished initializing.');
+			}
 
-                                    return typeof value === 'number'
-                                            ? value.toLocaleString()
-                                            : String(value);
-                            }
-                    },
-                    legend: {
-                            type: 'scroll',
-                            top: 8
-                    },
-                    grid: {
-                            left: 72,
-                            right: 28,
-                            top: 58,
-                            bottom: 88
-                    },
-                    xAxis: {
-                            type: 'time',
-                            name: 'Time',
-                            nameLocation: 'middle',
-                            nameGap: 35
-                    },
-                    yAxis: {
-                            type: 'value',
-                            scale: true,
-                            name: 'Value'
-                    },
-                    dataZoom: [
-                            {
-                                    type: 'inside',
-                                    xAxisIndex: 0
-                            },
-                            {
-                                    type: 'slider',
-                                    xAxisIndex: 0,
-                                    bottom: 18
-                            }
-                    ],
-                    series
-            };
+			const option: EChartsOption = {
+				animation: false,
+				tooltip: {
+					trigger: 'axis',
+					valueFormatter: (value) => {
+						if (value == null) {
+							return 'No reading';
+						}
 
-            chart.setOption(option, true);
+						return typeof value === 'number' ? value.toLocaleString() : String(value);
+					}
+				},
+				legend: {
+					type: 'scroll',
+					top: 8
+				},
+				grid: {
+					left: 72,
+					right: 28,
+					top: 58,
+					bottom: 88
+				},
+				xAxis: {
+					type: 'time',
+					name: 'Time',
+					nameLocation: 'middle',
+					nameGap: 35
+				},
+				yAxis: {
+					type: 'value',
+					scale: true,
+					name: 'Value'
+				},
+				dataZoom: [
+					{
+						type: 'inside',
+						xAxisIndex: 0
+					},
+					{
+						type: 'slider',
+						xAxisIndex: 0,
+						bottom: 18
+					}
+				],
+				series
+			};
+
+			chart.setOption(option, true);
 
 			const returnedTags = Object.keys(seriesData);
 			const request = result.request;
@@ -380,155 +374,149 @@
 </svelte:head>
 
 <main class="plot-page">
-        <header class="page-header">
-                <a href="/" class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
-                <h1>Historical Telemetry</h1>
-                <p>Retrieve and plot time-series data from Ovation EDS.</p>
-        </header>
-        <form
-                onsubmit={(event) => {
-                        event.preventDefault();
-                        void loadTrend();
-                }}
-        >
-                <div class="field tags-field">
-                        <label for="tags">IDCS tags</label>
-                        <input
-                                id="tags"
-                                bind:value={tagsInput}
-                                placeholder="M100FI, FI8001"
-                                autocomplete="off"
-                                spellcheck="false"
-                                required
-                        />
-                        <small>
-                                Enter comma-separated IDs without the IESS suffix. Up to {MAX_TAGS} tags per request.
-                        </small>
-                </div>
+	<header class="page-header">
+		<a href="/" class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
+		<h1>Historical Telemetry</h1>
+		<p>Retrieve and plot time-series data from Ovation EDS.</p>
+	</header>
+	<form
+		onsubmit={(event) => {
+			event.preventDefault();
+			void loadTrend();
+		}}
+	>
+		<div class="field tags-field">
+			<label for="tags">IDCS tags</label>
+			<input
+				id="tags"
+				bind:value={tagsInput}
+				placeholder="M100FI, FI8001"
+				autocomplete="off"
+				spellcheck="false"
+				required
+			/>
+			<small>
+				Enter comma-separated IDs without the IESS suffix. Up to {MAX_TAGS} tags per request.
+			</small>
+		</div>
 
-                <fieldset>
-                        <legend>Time range</legend>
+		<fieldset>
+			<legend>Time range</legend>
 
-                        <div class="settings">
-                                <div class="field">
-                                        <label for="start">Start time</label>
-                                        <input id="start" type="datetime-local" bind:value={startTime} />
-                                </div>
+			<div class="settings">
+				<div class="field">
+					<label for="start">Start time</label>
+					<input id="start" type="datetime-local" bind:value={startTime} />
+				</div>
 
-                                <div class="field">
-                                        <label for="end">End time</label>
-                                        <input id="end" type="datetime-local" bind:value={endTime} />
-                                </div>
+				<div class="field">
+					<label for="end">End time</label>
+					<input id="end" type="datetime-local" bind:value={endTime} />
+				</div>
 
-                                <div class="field">
-                                        <label for="windowDays">Days</label>
-                                        <input
-                                                id="windoDays"
-                                                type="number"
-                                                min="0.001"
-                                                max={MAX_DAYS}
-                                                step="any"
-                                                bind:value={windowDays}
-                                        />
-                                </div>
-                        </div>
+				<div class="field">
+					<label for="windowDays">Days</label>
+					<input
+						id="windoDays"
+						type="number"
+						min="0.001"
+						max={MAX_DAYS}
+						step="any"
+						bind:value={windowDays}
+					/>
+				</div>
+			</div>
 
-                        <small>
-                                Leave both dates blank to plot the most recent {DEFAULT_DAYS}
-                                days. With an end time only, Days defaults to {DEFAULT_DAYS}. With a start time only, l
-eave
-                                Days blank to end at the current time. When both dates are supplied, they take preceden
-ce
-                                over Days.
-                        </small>
-                </fieldset>
+			<small>
+				Leave both dates blank to plot the most recent {DEFAULT_DAYS}
+				days. With an end time only, Days defaults to {DEFAULT_DAYS}. With a start time only, leave
+				Days blank to end at the current time. When both dates are supplied, they take precedence
+				over Days.
+			</small>
+		</fieldset>
 
-                <fieldset>
-                        <legend>Sampling</legend>
+		<fieldset>
+			<legend>Sampling</legend>
 
-                        <div class="settings">
-                                <div class="field">
-                                        <label for="datapointCount">Target datapoints</label>
-                                        <input
-                                                id="datapointCount"
-                                                type="number"
-                                                min="1"
-                                                max={MAX_DATAPOINT_COUNT}
-                                                step="1"
-                                                bind:value={datapointCount}
-                                                oninput={() => {
-                            if (String(datapointCount ?? '').trim() !== '') {
-                                    secondsBetweenPoints = '';
-                            }
-                                                }}
-                                        />
-                                </div>
+			<div class="settings">
+				<div class="field">
+					<label for="datapointCount">Target datapoints</label>
+					<input
+						id="datapointCount"
+						type="number"
+						min="1"
+						max={MAX_DATAPOINT_COUNT}
+						step="1"
+						bind:value={datapointCount}
+						oninput={() => {
+							if (String(datapointCount ?? '').trim() !== '') {
+								secondsBetweenPoints = '';
+							}
+						}}
+					/>
+				</div>
 
-                                <div class="field">
-                                        <label for="secondsBetweenPoints"> Seconds between points </label>
-                                        <input
-                                                id="secondsBetweenPoints"
-                                                type="number"
-                                                min="1"
-                                                max={MAX_SECONDS_BETWEEN_POINTS}
-                                                step="1"
-                                                bind:value={secondsBetweenPoints}
-                                                oninput={() => {
-                            if (String(secondsBetweenPoints ?? '').trim() !== '') {
-                                    datapointCount = '';
-                            }
-                                                }}
-                                        />
-                                </div>
+				<div class="field">
+					<label for="secondsBetweenPoints"> Seconds between points </label>
+					<input
+						id="secondsBetweenPoints"
+						type="number"
+						min="1"
+						max={MAX_SECONDS_BETWEEN_POINTS}
+						step="1"
+						bind:value={secondsBetweenPoints}
+						oninput={() => {
+							if (String(secondsBetweenPoints ?? '').trim() !== '') {
+								datapointCount = '';
+							}
+						}}
+					/>
+				</div>
 
-                                <div class="field">
-                                        <label for="function">Aggregation</label>
-                                        <select id="function" bind:value={functionType}>
-                                                {#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
-                                                        <option value={supportedFunction}>
-                                                                {supportedFunction === 'VALUE' ? 'Value' : supportedFun
-ction}
-                                                        </option>
-                                                {/each}
-                                        </select>
-                                </div>
+				<div class="field">
+					<label for="function">Aggregation</label>
+					<select id="function" bind:value={functionType}>
+						{#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
+							<option value={supportedFunction}>
+								{supportedFunction === 'VALUE' ? 'Value' : supportedFunction}
+							</option>
+						{/each}
+					</select>
+				</div>
 
-                                <button type="submit" disabled={loading}>
-                                        {loading ? 'Loading…' : 'Plot trend'}
-                                </button>
+				<button type="submit" disabled={loading}>
+					{loading ? 'Loading…' : 'Plot trend'}
+				</button>
 
-                                <button type="button" disabled={loading} onclick={() => downloadData('csv')}>
-                                        Download CSV
-                                </button>
+				<button type="button" disabled={loading} onclick={() => downloadData('csv')}>
+					Download CSV
+				</button>
 
-                                <button type="button" disabled={loading} onclick={() => downloadData('json')}>
-                                        Download JSON
-                                </button>
+				<button type="button" disabled={loading} onclick={() => downloadData('json')}>
+					Download JSON
+				</button>
 
-                                <button type="button" disabled={loading} onclick={() => downloadData('svg')}>
-                                        Download SVG
-                                </button>
-                        </div>
+				<button type="button" disabled={loading} onclick={() => downloadData('svg')}>
+					Download SVG
+				</button>
+			</div>
 
-                        <small>
-                                Enter either a target datapoint count or a sampling interval. If both are blank, the de
-fault
-                                target of
-                                {DEFAULT_DATAPOINT_COUNT} datapoints is used. The target is approximate; the API select
-s a supported
-                                sampling interval.
-                        </small>
-                </fieldset>
-        </form>
+			<small>
+				Enter either a target datapoint count or a sampling interval. If both are blank, the default
+				target of
+				{DEFAULT_DATAPOINT_COUNT} datapoints is used. The target is approximate; the API selects a supported
+				sampling interval.
+			</small>
+		</fieldset>
+	</form>
 
-        {#if errorMessage}
-                <p class="error" role="alert">{errorMessage}</p>
-        {/if}
+	{#if errorMessage}
+		<p class="error" role="alert">{errorMessage}</p>
+	{/if}
 
-        <p class="status" aria-live="polite">{statusMessage}</p>
+	<p class="status" aria-live="polite">{statusMessage}</p>
 
-        <section class="chart-panel" aria-label="Historical telemetry chart">
-                <div bind:this={chartElement} class="chart"></div>
-        </section>
+	<section class="chart-panel" aria-label="Historical telemetry chart">
+		<div bind:this={chartElement} class="chart"></div>
+	</section>
 </main>
-

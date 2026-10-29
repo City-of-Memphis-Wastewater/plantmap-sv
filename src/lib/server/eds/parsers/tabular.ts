@@ -6,7 +6,7 @@ import {
 	parseNumericValue,
 	parseXmlQuality,
 	parseXmlTimestamp,
-    parseBooleanValue
+	parseBooleanValue
 } from './common';
 import type { EDSTelemetrySeries } from '../types';
 
@@ -56,8 +56,8 @@ export function parseTabularResponse(xml: string, requestedTags: string[]): EDST
 				parseNumericValue(getXmlText(valueBlock, 'value')) ??
 				parseNumericValue(getXmlText(valueBlock, 'av')) ??
 				parseNumericValue(getXmlText(valueBlock, 'dv')) ??
-                parseBooleanValue(getXmlText(valueBlock, 'bv'));
-                
+				parseBooleanValue(getXmlText(valueBlock, 'bv'));
+
 			results[tag].push({
 				iessTag: tag,
 				value,
