@@ -42,11 +42,10 @@
 	let tagsInput = $state(DEFAULT_TAGS.join(','));
 	let startTime = $state('');
 	let endTime = $state('');
-	let windowDays = $state('');
-
-	let datapointCount = $state(String(DEFAULT_DATAPOINT_COUNT));
-	let secondsBetweenPoints = $state('');
-	let functionType = $state(DEFAULT_FUNCTION_TYPE);
+	let windowDays = $state<string | number>('');
+    let datapointCount = $state<string | number>(String(DEFAULT_DATAPOINT_COUNT));
+    let secondsBetweenPoints = $state<string | number>('');
+    let functionType = $state(DEFAULT_FUNCTION_TYPE);
 
 	// Request state
 	let loading = $state(false);
