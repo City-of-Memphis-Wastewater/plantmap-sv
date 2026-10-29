@@ -1,5 +1,5 @@
 // src/lib/server/eds/parsers/tabular.ts
-
+// valid boolean is being converted to null
 import {
 	getXmlBlocks,
 	getXmlText,
