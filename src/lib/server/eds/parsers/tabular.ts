@@ -57,6 +57,7 @@ export function parseTabularResponse(xml: string, requestedTags: string[]): EDST
 				parseNumericValue(getXmlText(valueBlock, 'av')) ??
 				parseNumericValue(getXmlText(valueBlock, 'dv')) ??
                 parseBooleanValue(getXmlText(valueBlock, 'bv'));
+                
 			results[tag].push({
 				iessTag: tag,
 				value,

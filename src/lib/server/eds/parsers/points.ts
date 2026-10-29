@@ -31,6 +31,8 @@ export function parseGetPointsResponse(xml: string): Record<string, EdsPointTele
 		}
 
 		const rawValue = getXmlText(block, 'av') ?? getXmlText(block, 'dv');
+        const booleanValue = getXmlText(block, 'bv');
+        const value = parseNumericValue(rawValue) ?? parseBooleanValue(booleanValue);
 
 		const point: EdsPointTelemetry = {
 			sid,
@@ -38,7 +40,7 @@ export function parseGetPointsResponse(xml: string): Record<string, EdsPointTele
 			idcs,
 			description,
 			units,
-			value: parseNumericValue(rawValue),
+			value,
 			quality: parseXmlQuality(block),
 			timestamp: parseXmlTimestamp(block)
 		};
