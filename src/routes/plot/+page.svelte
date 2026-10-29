@@ -4,7 +4,8 @@
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
 
 	import { buildPlotSearchParams, parsePlotUrl } from '$lib/plot/url';
-
+    import { buildTelemetryChartSeries } from '$lib/plot/series';
+    
 	import {
 		DEFAULT_TAGS,
 		DEFAULT_DAYS,
@@ -216,71 +217,8 @@
 			}
 
 			const seriesData = result.values ?? {};
-
-			const series: NonNullable<EChartsOption['series']> = Object.entries(seriesData).map(
-				([tag, samples]) => ({
-					name: tag,
-					type: 'line',
-					showSymbol: false,
-					connectNulls: false,
-					data: samples
-						.filter(
-							(sample) => sample.timestamp !== null && Number.isFinite(Date.parse(sample.timestamp))
-						)
-						.map(
-							(sample) => [Date.parse(sample.timestamp!), sample.value] as [number, number | null]
-						)
-				})
-			);
-
-			sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
-
-			const option: EChartsOption = {
-				animation: false,
-				tooltip: {
-					trigger: 'axis',
-					valueFormatter: (value) => {
-						if (value == null) {
-							return 'No reading';
-						}
-
-						return typeof value === 'number' ? value.toLocaleString() : String(value);
-					}
-				},
-				legend: {
-					type: 'scroll',
-					top: 8
-				},
-				grid: {
-					left: 72,
-					right: 28,
-					top: 58,
-					bottom: 88
-				},
-				xAxis: {
-					type: 'time',
-					name: 'Time',
-					nameLocation: 'middle',
-					nameGap: 35
-				},
-				yAxis: {
-					type: 'value',
-					scale: true,
-					name: 'Value'
-				},
-				dataZoom: [
-					{
-						type: 'inside',
-						xAxisIndex: 0
-					},
-					{
-						type: 'slider',
-						xAxisIndex: 0,
-						bottom: 18
-					}
-				],
-				series
-			};
+            
+            const series = buildTelemetryChartSeries(seriesData);
 
 			chart?.setOption(option, true);
 
@@ -349,7 +287,7 @@
 
 				chart = echarts.init(chartElement);
 				window.addEventListener('resize', resizeChart);
-
+                
 				if (shouldAutoLoad) {
 					void loadTrend(true);
 				}

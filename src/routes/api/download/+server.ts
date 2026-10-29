@@ -15,6 +15,9 @@ import { getEdsClient } from '$lib/server/eds/factory';
 import { serializeTelemetryCsv } from '$lib/download/csv';
 import { serializeTelemetryJson } from '$lib/download/json';
 
+import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
+import { renderChartSvg } from '$lib/download/svg';
+
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
 
@@ -133,6 +136,30 @@ export const GET: RequestHandler = async ({ url }) => {
 				{ status: 501 }
 			);
 		}
+
+        // Inside GET, after the existing EDS fetch:
+        if (format === 'svg') {
+          const chartSeries = /* convert the fetched result into TimeSeries[] */;
+
+          const svg = renderChartSvg(
+            buildTimeSeriesChartOptions({
+              series: chartSeries,
+              title: options.tags.join(', ')
+            })
+          );
+
+          return new Response(svg, {
+            headers: {
+              'Content-Type': 'image/svg+xml; charset=utf-8',
+              'Content-Disposition': `attachment; filename="${buildFilename(
+                options.tags,
+                timeAspects.startSeconds,
+                timeAspects.endSeconds,
+                'svg'
+              )}"`
+            }
+          });
+        }
 
 		const body = format === 'csv' ? serializeTelemetryCsv(values) : serializeTelemetryJson(values);
 
