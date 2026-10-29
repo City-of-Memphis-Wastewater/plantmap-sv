@@ -77,14 +77,8 @@ function parsePositiveNumber(
 }
 
 function parseArgs(args: string[]): PlotOptions {
-	//const tags: string[] = [];
-    const tags = await parseTags(rawTags);
-
-    if (tags.length === 0) {
-      throw new Error(
-        'No IDCS tags found. Provide tags or a query file.'
-      );
-    }
+	const rawTags: string[] = [];
+    //const tags = await parseTags(rawTags);
 
 	let start: string | undefined;
 	let end: string | undefined;
@@ -113,7 +107,7 @@ function parseArgs(args: string[]): PlotOptions {
 			printHelp();
 			process.exitCode = 0;
 			return {
-				tags: []
+				rawTags: []
 				//daysProvided: false
 			};
 		}
@@ -125,7 +119,7 @@ function parseArgs(args: string[]): PlotOptions {
 				throw new Error(`Unknown option: ${arg}`);
 			}
 
-			tags.push(arg);
+			rawTags.push(arg);
 			continue;
 		}
 
@@ -155,12 +149,12 @@ function parseArgs(args: string[]): PlotOptions {
 		}
 	}
 
-	if (tags.length === 0) {
-		throw new Error('Provide at least one IDCS tag.');
-	}
+	//if (rawTags.length === 0) {
+	//	throw new Error('Provide at least one IDCS tag.');
+	//}
 
 	return {
-		tags: [...new Set(tags)],
+		rawTags: [...new Set(rawTags)],
 		start,
 		end,
 		windowDays: windowDays,
@@ -213,8 +207,17 @@ function openUrl(url: string): void {
 export async function plot(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
+        const tags = await parseTags(options.rawTags);
 
-		// --help has already printed its output.
+        if (tags.length === 0) {
+          throw new Error(
+            'No IDCS tags found. Provide tags or a query file.'
+          );
+        }
+
+        options.tags = tags;
+		
+        // --help has already printed its output.
 		if (options.tags.length === 0) return;
 
 		const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');

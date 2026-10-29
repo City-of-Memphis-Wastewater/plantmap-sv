@@ -114,14 +114,9 @@ function parseFormat(value: string): DownloadFormat[] {
 }
 
 function parseArgs(args: string[]): DownloadOptions | null {
-	//const tags: string[] = [];
-    const tags = await parseTags(rawTags);
+	const rawTags: string[] = [];
+    //const tags = await parseTags(rawTags);
 
-    if (tags.length === 0) {
-      throw new Error(
-        'No IDCS tags found. Provide tags or a query file.'
-      );
-    }
 	const requestedFormats: DownloadFormat[] = [];
 
 	let start: string | undefined;
@@ -163,7 +158,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 				throw new Error(`Unknown option: ${arg}`);
 			}
 
-			tags.push(arg);
+			rawTags.push(arg);
 			continue;
 		}
 
@@ -204,12 +199,12 @@ function parseArgs(args: string[]): DownloadOptions | null {
 		}
 	}
 
-	if (tags.length === 0) {
-		throw new Error('Provide at least one IDCS tag.');
-	}
+	//if (rawTags.length === 0) {
+	//	throw new Error('Provide at least one IDCS tag.');
+	//}
 
 	return {
-		tags: [...new Set(tags)],
+		rawTags: [...new Set(rawTags)],
 		start,
 		end,
 		windowDays,
@@ -338,10 +333,19 @@ async function downloadFormat(
 export async function download(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
-
 		if (!options) {
 			return;
 		}
+
+        const tags = await parseTags(options.rawTags);
+
+        if (tags.length === 0) {
+          throw new Error(
+            'No IDCS tags found. Provide tags or a query file.'
+          );
+        }
+
+        options.tags = tags;
 
 		const server = await discoverServer();
 
