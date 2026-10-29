@@ -173,7 +173,7 @@
 		return params;
 	}
 
-	function downloadData(format: 'csv' | 'json' | 'xlsx'): void {
+	function downloadData(format: 'csv' | 'json' | 'png'): void {
 		try {
 			const params = buildRequestParams();
 
@@ -501,9 +501,9 @@
 					Download JSON
 				</button>
 
-				<button type="button" disabled={loading} onclick={() => downloadData('xlsx')}>
-					Download XLSX
-				</button>
+				<!--button type="button" disabled={loading} onclick={() => downloadData('png')}>
+					Download PNG
+				</button-->
 			</div>
 
 			<small>
