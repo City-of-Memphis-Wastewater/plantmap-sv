@@ -27,9 +27,9 @@ export interface ResolvedTimeAspects extends ResolvedTimeRange, ResolvedSampling
 
 export interface PlotOptions extends AllTimeInputs {
 	tags: string[];
-    rawTags: string[];
 	functionType?: string;
 }
+
 
 export interface ResolvedPlotRequest extends ResolvedTimeAspects {
 	tags: string[];

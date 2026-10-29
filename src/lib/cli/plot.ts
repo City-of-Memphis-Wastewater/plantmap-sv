@@ -76,8 +76,12 @@ function parsePositiveNumber(
 	return parsed;
 }
 
+//type PlotCliOptions = Omit<PlotOptions, 'tags'> & {
+//  rawTags: string[];
+//};
+
 function parseArgs(args: string[]): PlotOptions {
-	const rawTags: string[] = [];
+	const tags: string[] = [];
 	//const tags = await parseTags(rawTags);
 
 	let start: string | undefined;
@@ -107,7 +111,7 @@ function parseArgs(args: string[]): PlotOptions {
 			printHelp();
 			process.exitCode = 0;
 			return {
-				rawTags: []
+				tags: []
 				//daysProvided: false
 			};
 		}
@@ -119,7 +123,7 @@ function parseArgs(args: string[]): PlotOptions {
 				throw new Error(`Unknown option: ${arg}`);
 			}
 
-			rawTags.push(arg);
+			tags.push(arg);
 			continue;
 		}
 
@@ -149,12 +153,8 @@ function parseArgs(args: string[]): PlotOptions {
 		}
 	}
 
-	//if (rawTags.length === 0) {
-	//	throw new Error('Provide at least one IDCS tag.');
-	//}
-
 	return {
-		rawTags: [...new Set(rawTags)],
+		tags: [...new Set(tags)],
 		start,
 		end,
 		windowDays: windowDays,
@@ -207,7 +207,7 @@ function openUrl(url: string): void {
 export async function plot(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
-		const tags = await parseTags(options.rawTags);
+		const tags = await parseTags(options.tags);
 
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');

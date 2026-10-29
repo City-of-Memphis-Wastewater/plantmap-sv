@@ -24,6 +24,12 @@ interface DownloadOptions extends PlotOptions {
 	outputDir: string;
 }
 
+//type DownloadOptions = Omit<PlotOptions, 'tags'> & {
+//  rawTags: string[];
+//  outputDir: string;
+//  formats: DownloadFormat[];
+//};
+
 function printHelp(): void {
 	console.log(`
 Usage:
@@ -114,7 +120,7 @@ function parseFormat(value: string): DownloadFormat[] {
 }
 
 function parseArgs(args: string[]): DownloadOptions | null {
-	const rawTags: string[] = [];
+	const tags: string[] = [];
 	//const tags = await parseTags(rawTags);
 
 	const requestedFormats: DownloadFormat[] = [];
@@ -158,7 +164,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 				throw new Error(`Unknown option: ${arg}`);
 			}
 
-			rawTags.push(arg);
+			tags.push(arg);
 			continue;
 		}
 
@@ -204,7 +210,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	//}
 
 	return {
-		rawTags: [...new Set(rawTags)],
+		tags: [...new Set(tags)],
 		start,
 		end,
 		windowDays,
@@ -337,7 +343,7 @@ export async function download(args: string[] = []): Promise<void> {
 			return;
 		}
 
-		const tags = await parseTags(options.rawTags);
+		const tags = await parseTags(options.tags);
 
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');

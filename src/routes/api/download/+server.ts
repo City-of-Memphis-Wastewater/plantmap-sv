@@ -15,16 +15,16 @@ import { getEdsClient } from '$lib/server/eds/factory';
 import { serializeTelemetryCsv } from '$lib/download/csv';
 import { serializeTelemetryJson } from '$lib/download/json';
 
-import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
 import { renderChartSvg } from '$lib/download/svg';
-import { buildTelemetryChartSeries } from '$lib/plot/series';
 import type { EDSTelemetrySeries } from '$lib/server/eds/types';
+import { buildTelemetryChartSeries } from '$lib/plot/series';
+import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
 
 	if (supplied.length === 0) {
-		throw new Error('Provide a download format: csv, json, or png.');
+		throw new Error('Provide a download format: csv, json, or svg.');
 	}
 
 	const formats = [
@@ -37,7 +37,7 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	];
 
 	if (formats.length === 0) {
-		throw new Error('Provide a download format: csv, json, or png.');
+		throw new Error('Provide a download format: csv, json, or svg.');
 	}
 
 	for (const format of formats) {
@@ -130,14 +130,14 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		const format = formats[0];
 
-		if (format === 'png') {
-			return json(
-				{
-					error: 'PNG export is not implemented yet.'
-				},
-				{ status: 501 }
-			);
-		}
+		//if (format === 'png') {
+		//	return json(
+		//		{
+		//			error: 'PNG export is not implemented yet.'
+		//		},
+		//		{ status: 501 }
+		//	);
+		//}
 
 		// Inside GET, after the existing EDS fetch:
 		if (format === 'svg') {

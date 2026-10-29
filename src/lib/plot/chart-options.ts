@@ -1,22 +1,15 @@
 import type { EChartsOption } from 'echarts';
 
-export type TimeSeriesPoint = [timestampMs: number, value: number | null];
-
-export interface TimeSeries {
-	name: string;
-	data: TimeSeriesPoint[];
-}
-
 export interface TimeSeriesChartOptions {
-	series: TimeSeries[];
+	series: NonNullable<EChartsOption['series']>;
 	title?: string;
 }
 
 /**
  * Shared ECharts configuration for interactive plots and file exports.
  *
- * Timestamps must be Unix milliseconds, not seconds.
- * Missing values should be null so the chart shows gaps.
+ * The series are built by buildTelemetryChartSeries() in series.ts.
+ * Missing values should remain null so the chart shows gaps.
  */
 export function buildTimeSeriesChartOptions({
 	series,
@@ -60,7 +53,6 @@ export function buildTimeSeriesChartOptions({
 
 		xAxis: {
 			type: 'time',
-			boundaryGap: false,
 			axisLabel: {
 				hideOverlap: true
 			}
@@ -90,15 +82,6 @@ export function buildTimeSeriesChartOptions({
 			}
 		],
 
-		series: series.map((item) => ({
-			name: item.name,
-			type: 'line',
-			data: item.data,
-			showSymbol: false,
-			connectNulls: false,
-			emphasis: {
-				focus: 'series'
-			}
-		}))
+		series
 	};
 }
