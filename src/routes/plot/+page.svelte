@@ -1,4 +1,5 @@
 <script lang="ts">
+    import './plot.css';
 	import { onMount } from 'svelte';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
@@ -378,331 +379,156 @@
 	<meta name="description" content="Plot historical Ovation EDS telemetry readings over time." />
 </svelte:head>
 
-<main>
-	<header class="page-header">
-		<a href="/" class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
-		<h1>Historical Telemetry</h1>
-		<p>Retrieve and plot time-series data from Ovation EDS.</p>
-	</header>
-	<form
-		onsubmit={(event) => {
-			event.preventDefault();
-			void loadTrend();
-		}}
-	>
-		<div class="field tags-field">
-			<label for="tags">IDCS tags</label>
-			<input
-				id="tags"
-				bind:value={tagsInput}
-				placeholder="M100FI, FI8001"
-				autocomplete="off"
-				spellcheck="false"
-				required
-			/>
-			<small>
-				Enter comma-separated IDs without the IESS suffix. Up to {MAX_TAGS} tags per request.
-			</small>
-		</div>
+<main class="plot-page">
+        <header class="page-header">
+                <a href="/" class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
+                <h1>Historical Telemetry</h1>
+                <p>Retrieve and plot time-series data from Ovation EDS.</p>
+        </header>
+        <form
+                onsubmit={(event) => {
+                        event.preventDefault();
+                        void loadTrend();
+                }}
+        >
+                <div class="field tags-field">
+                        <label for="tags">IDCS tags</label>
+                        <input
+                                id="tags"
+                                bind:value={tagsInput}
+                                placeholder="M100FI, FI8001"
+                                autocomplete="off"
+                                spellcheck="false"
+                                required
+                        />
+                        <small>
+                                Enter comma-separated IDs without the IESS suffix. Up to {MAX_TAGS} tags per request.
+                        </small>
+                </div>
 
-		<fieldset>
-			<legend>Time range</legend>
+                <fieldset>
+                        <legend>Time range</legend>
 
-			<div class="settings">
-				<div class="field">
-					<label for="start">Start time</label>
-					<input id="start" type="datetime-local" bind:value={startTime} />
-				</div>
+                        <div class="settings">
+                                <div class="field">
+                                        <label for="start">Start time</label>
+                                        <input id="start" type="datetime-local" bind:value={startTime} />
+                                </div>
 
-				<div class="field">
-					<label for="end">End time</label>
-					<input id="end" type="datetime-local" bind:value={endTime} />
-				</div>
+                                <div class="field">
+                                        <label for="end">End time</label>
+                                        <input id="end" type="datetime-local" bind:value={endTime} />
+                                </div>
 
-				<div class="field">
-					<label for="windowDays">Days</label>
-					<input
-						id="windoDays"
-						type="number"
-						min="0.001"
-						max={MAX_DAYS}
-						step="any"
-						bind:value={windowDays}
-					/>
-				</div>
-			</div>
+                                <div class="field">
+                                        <label for="windowDays">Days</label>
+                                        <input
+                                                id="windoDays"
+                                                type="number"
+                                                min="0.001"
+                                                max={MAX_DAYS}
+                                                step="any"
+                                                bind:value={windowDays}
+                                        />
+                                </div>
+                        </div>
 
-			<small>
-				Leave both dates blank to plot the most recent {DEFAULT_DAYS}
-				days. With an end time only, Days defaults to {DEFAULT_DAYS}. With a start time only, leave
-				Days blank to end at the current time. When both dates are supplied, they take precedence
-				over Days.
-			</small>
-		</fieldset>
+                        <small>
+                                Leave both dates blank to plot the most recent {DEFAULT_DAYS}
+                                days. With an end time only, Days defaults to {DEFAULT_DAYS}. With a start time only, l
+eave
+                                Days blank to end at the current time. When both dates are supplied, they take preceden
+ce
+                                over Days.
+                        </small>
+                </fieldset>
 
-		<fieldset>
-			<legend>Sampling</legend>
+                <fieldset>
+                        <legend>Sampling</legend>
 
-			<div class="settings">
-				<div class="field">
-					<label for="datapointCount">Target datapoints</label>
-					<input
-						id="datapointCount"
-						type="number"
-						min="1"
-						max={MAX_DATAPOINT_COUNT}
-						step="1"
-						bind:value={datapointCount}
-						oninput={() => {
+                        <div class="settings">
+                                <div class="field">
+                                        <label for="datapointCount">Target datapoints</label>
+                                        <input
+                                                id="datapointCount"
+                                                type="number"
+                                                min="1"
+                                                max={MAX_DATAPOINT_COUNT}
+                                                step="1"
+                                                bind:value={datapointCount}
+                                                oninput={() => {
                             if (String(datapointCount ?? '').trim() !== '') {
                                     secondsBetweenPoints = '';
                             }
-						}}
-					/>
-				</div>
+                                                }}
+                                        />
+                                </div>
 
-				<div class="field">
-					<label for="secondsBetweenPoints"> Seconds between points </label>
-					<input
-						id="secondsBetweenPoints"
-						type="number"
-						min="1"
-						max={MAX_SECONDS_BETWEEN_POINTS}
-						step="1"
-						bind:value={secondsBetweenPoints}
-						oninput={() => {
+                                <div class="field">
+                                        <label for="secondsBetweenPoints"> Seconds between points </label>
+                                        <input
+                                                id="secondsBetweenPoints"
+                                                type="number"
+                                                min="1"
+                                                max={MAX_SECONDS_BETWEEN_POINTS}
+                                                step="1"
+                                                bind:value={secondsBetweenPoints}
+                                                oninput={() => {
                             if (String(secondsBetweenPoints ?? '').trim() !== '') {
                                     datapointCount = '';
                             }
-						}}
-					/>
-				</div>
+                                                }}
+                                        />
+                                </div>
 
-				<div class="field">
-					<label for="function">Aggregation</label>
-					<select id="function" bind:value={functionType}>
-						{#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
-							<option value={supportedFunction}>
-								{supportedFunction === 'VALUE' ? 'Value' : supportedFunction}
-							</option>
-						{/each}
-					</select>
-				</div>
+                                <div class="field">
+                                        <label for="function">Aggregation</label>
+                                        <select id="function" bind:value={functionType}>
+                                                {#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
+                                                        <option value={supportedFunction}>
+                                                                {supportedFunction === 'VALUE' ? 'Value' : supportedFun
+ction}
+                                                        </option>
+                                                {/each}
+                                        </select>
+                                </div>
 
-				<button type="submit" disabled={loading}>
-					{loading ? 'Loading…' : 'Plot trend'}
-				</button>
+                                <button type="submit" disabled={loading}>
+                                        {loading ? 'Loading…' : 'Plot trend'}
+                                </button>
 
-				<button type="button" disabled={loading} onclick={() => downloadData('csv')}>
-					Download CSV
-				</button>
+                                <button type="button" disabled={loading} onclick={() => downloadData('csv')}>
+                                        Download CSV
+                                </button>
 
-				<button type="button" disabled={loading} onclick={() => downloadData('json')}>
-					Download JSON
-				</button>
+                                <button type="button" disabled={loading} onclick={() => downloadData('json')}>
+                                        Download JSON
+                                </button>
 
-				<button type="button" disabled={loading} onclick={() => downloadData('svg')}>
-					Download SVG
-				</button>
-			</div>
+                                <button type="button" disabled={loading} onclick={() => downloadData('svg')}>
+                                        Download SVG
+                                </button>
+                        </div>
 
-			<small>
-				Enter either a target datapoint count or a sampling interval. If both are blank, the default
-				target of
-				{DEFAULT_DATAPOINT_COUNT} datapoints is used. The target is approximate; the API selects a supported
-				sampling interval.
-			</small>
-		</fieldset>
-	</form>
+                        <small>
+                                Enter either a target datapoint count or a sampling interval. If both are blank, the de
+fault
+                                target of
+                                {DEFAULT_DATAPOINT_COUNT} datapoints is used. The target is approximate; the API select
+s a supported
+                                sampling interval.
+                        </small>
+                </fieldset>
+        </form>
 
-	{#if errorMessage}
-		<p class="error" role="alert">{errorMessage}</p>
-	{/if}
+        {#if errorMessage}
+                <p class="error" role="alert">{errorMessage}</p>
+        {/if}
 
-	<p class="status" aria-live="polite">{statusMessage}</p>
+        <p class="status" aria-live="polite">{statusMessage}</p>
 
-	<section class="chart-panel" aria-label="Historical telemetry chart">
-		<div bind:this={chartElement} class="chart"></div>
-	</section>
+        <section class="chart-panel" aria-label="Historical telemetry chart">
+                <div bind:this={chartElement} class="chart"></div>
+        </section>
 </main>
 
-<style>
-	main {
-		width: min(1200px, 100%);
-		margin: 0 auto;
-		padding: 1.25rem;
-		box-sizing: border-box;
-	}
-
-	header {
-		margin-bottom: 1.25rem;
-	}
-
-	h1 {
-		margin: 0 0 0.4rem;
-		font-size: 1.6rem;
-	}
-
-	header p,
-	.status {
-		color: var(--text-secondary, #666);
-	}
-
-	form {
-		display: grid;
-		gap: 1rem;
-		padding: 1rem;
-		border: 1px solid var(--border-color, #ccc);
-		border-radius: 0.6rem;
-	}
-
-	fieldset {
-		display: grid;
-		gap: 0.85rem;
-		min-width: 0;
-		margin: 0;
-		padding: 0.85rem;
-		border: 1px solid var(--border-color, #ccc);
-		border-radius: 0.45rem;
-	}
-
-	legend {
-		padding: 0 0.35rem;
-		font-weight: 600;
-	}
-
-	.settings {
-		display: flex;
-		align-items: end;
-		gap: 0.85rem;
-		flex-wrap: wrap;
-	}
-
-	.field {
-		display: grid;
-		gap: 0.35rem;
-		min-width: 125px;
-		flex: 1 1 150px;
-	}
-
-	.tags-field {
-		width: 100%;
-	}
-
-	label {
-		font-weight: 600;
-	}
-
-	input,
-	select,
-	button {
-		min-width: 0;
-		box-sizing: border-box;
-		font: inherit;
-		padding: 0.6rem 0.7rem;
-		border: 1px solid var(--border-color, #aaa);
-		border-radius: 0.35rem;
-	}
-
-	input,
-	select {
-		background: var(--input-background, transparent);
-		color: inherit;
-	}
-
-	.tags-field input {
-		width: 100%;
-	}
-
-	small {
-		color: var(--text-secondary, #666);
-		line-height: 1.5;
-	}
-
-	button {
-		cursor: pointer;
-		background: var(--button-background, #245a85);
-		color: var(--button-color, white);
-		border-color: transparent;
-		flex: 0 0 auto;
-	}
-
-	button:disabled {
-		cursor: wait;
-		opacity: 0.65;
-	}
-
-	.status {
-		min-height: 1.25rem;
-		overflow-wrap: anywhere;
-	}
-
-	.error {
-		color: var(--error-color, #b42318);
-		overflow-wrap: anywhere;
-	}
-
-	.chart-panel {
-		border: 1px solid var(--border-color, #ccc);
-		border-radius: 0.6rem;
-		overflow: hidden;
-	}
-
-	.chart {
-		width: 100%;
-		height: min(65vh, 600px);
-		min-height: 340px;
-	}
-
-	.page-header {
-		position: relative;
-	}
-
-	.map-button {
-		display: inline-block;
-		margin-bottom: 1rem;
-		padding: 0.6rem 1rem;
-		border: 1px solid #475569;
-		border-radius: 0.5rem;
-		background: #0f172a;
-		color: #fff;
-		font-size: 0.875rem;
-		font-weight: 600;
-		text-decoration: none;
-		transition: background-color 150ms ease;
-	}
-
-	.map-button:hover {
-		background: #334155;
-	}
-
-	.map-button:focus-visible {
-		outline: 2px solid #60a5fa;
-		outline-offset: 2px;
-	}
-
-	@media (max-width: 600px) {
-		main {
-			padding: 0.75rem;
-		}
-
-		.settings {
-			align-items: stretch;
-			flex-direction: column;
-		}
-
-		.field {
-			width: 100%;
-			flex-basis: auto;
-		}
-
-		button {
-			width: 100%;
-		}
-
-		.chart {
-			height: 430px;
-			min-height: 300px;
-		}
-	}
-</style>
