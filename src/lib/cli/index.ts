@@ -35,6 +35,14 @@ export async function runCli(args: string[]) {
 			start(args.slice(1));
 			return;
 
+        case 'status':
+			start();
+			return;
+
+        case 'email':
+			email(args.slice(1));
+			return;
+
 		case 'help':
 			printHelp();
 			return;
@@ -57,9 +65,12 @@ Usage:
 Commands:
   start     Start the production server.
   setup     Configure PlantMap.
-  plot      Call plant data by tags and time aspects.
+  plot      Plot plant data by tags and time aspects, converted to URL.
+  download  Download plant data by tags and time aspects, converted to URL.
   secret    List secrets stored in app dir.
   config    List config values stored in app dir.
+  status    Pending, call status endpoint at /api/status/
+  email     Send file to target, using configured gmail and app settings.  
   help      Show this help.
 `);
 }
