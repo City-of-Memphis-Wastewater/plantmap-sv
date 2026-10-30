@@ -14,9 +14,9 @@ export interface EmailCredentials {
 }
 
 export interface EmailConfigs {
-	smtp_host: string | undefined;
-    smtp_port: number | undefined;
-    smtp_security: string | undefined;
+	smtp_host: string   ;
+    smtp_port: number;
+    smtp_security: string;
 }
 
 export function getEmailCreds(): EmailCredentials {
@@ -31,9 +31,9 @@ export function getEmailCreds(): EmailCredentials {
 export function getEmailConfigs(): EmailConfigs {
     const config = bootstrapPlantMapConfig();
 
-    const smtp_host=config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM) ?? "smtp.gmail.com"
-    const smtp_port=config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM) ?? 587
-    const smtp_security=config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM) ?? "starttls"
+    const smtp_host=config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM) ?? "smtp.gmail.com";
+    const smtp_port=config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM) ?? 587;
+    const smtp_security=config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM) ?? "starttls";
 
 	return { smtp_host, smtp_port, smtp_security };
 }
