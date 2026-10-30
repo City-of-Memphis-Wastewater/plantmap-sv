@@ -4,6 +4,8 @@ import { setup } from './setup.ts';
 import { secret } from './secret.ts';
 import { config } from './config.ts';
 import { start } from './start.ts';
+import { status } from './status.ts';
+import { email } from './email.ts';
 import { plot } from './plot.ts';
 import { download } from './download.ts';
 
@@ -36,7 +38,7 @@ export async function runCli(args: string[]) {
 			return;
 
         case 'status':
-			start();
+			status();
 			return;
 
         case 'email':
