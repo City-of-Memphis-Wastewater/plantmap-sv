@@ -38,7 +38,7 @@ export async function runCli(args: string[]) {
 			return;
 
         case 'status':
-			status();
+			status(args.slice(1));
 			return;
 
         case 'email':
