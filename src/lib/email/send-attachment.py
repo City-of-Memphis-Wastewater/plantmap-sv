@@ -13,9 +13,13 @@ from dworshak_secret import DworshakSecret
 
 
 # Configure these to match the service/item names in your vault.
-VAULT_SERVICE = "gmail-smtp"
-VAULT_SENDER_ADDRESS_ITEM = "email-address"
-VAULT_PASSWORD_ITEM = "app-password"
+VAULT_SERVICE = "email"
+VAULT_SENDER_ADDRESS_ITEM = "send-address"
+VAULT_PASSWORD_ITEM = "send-password"
+CONFIG_SERVICE = "email"
+CONFIG_SMTP_HOST_ITEM = "smpt-host"
+CONFIG_SMTP_PORT_ITEM = "smpt-port"
+CONFIG_SMTP_SECURITY_ITEM = "smpt-security"
 
 # Recipient and sender can be supplied on the command line.
 # Alternatively, make them configuration values for your environment.
@@ -86,6 +90,10 @@ def send_email_with_attachment(
     vault = DworshakSecret()
     sender_address = vault.get(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM, fail=True)
     password = vault.get(VAULT_SERVICE, VAULT_PASSWORD_ITEM, fail=True)
+    config = DworshakSecret()
+    smtp_host=config.get(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM, default = "smtp.gmail.com")
+    smtp_port=config.get(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM, default = "587")
+    smtp_security=config.get(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM, default = "starttls")
 
     if not sender_address or not password:
         raise RuntimeError("Gmail SMTP credentials are missing from the vault.")
@@ -118,12 +126,15 @@ def send_email_with_attachment(
     context = ssl.create_default_context()
 
     with smtplib.SMTP(
-        "smtp.gmail.com",
-        587,
+        smtp_host,
+        smtp_port,
         timeout=30,
     ) as smtp:
         smtp.ehlo()
+        # if smtp_security == "starttls": 
         smtp.starttls(context=context)
+        #else:
+        #
         smtp.ehlo()
         smtp.login(sender_address, password)
         smtp.send_message(message)
