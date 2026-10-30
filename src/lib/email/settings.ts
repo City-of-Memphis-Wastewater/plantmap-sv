@@ -1,4 +1,4 @@
-import { bootstrapPlantMapSecret } from '$lib/plantmap-sv/bootstrap';
+import { bootstrapPlantMapSecret, bootstrapPlantMapConfig } from '$lib/plantmap-sv/bootstrap';
 
 const VAULT_SERVICE = "email"
 const VAULT_SENDER_ADDRESS_ITEM = "send-address"
@@ -13,12 +13,27 @@ export interface EmailCredentials {
 	password: string | undefined;
 }
 
+export interface EmailConfigs {
+	smtp_host: string | undefined;
+    smtp_port: number | undefined;
+    smtp_security: string | undefined;
+}
+
 export function getEmailCreds(): EmailCredentials {
 	const secret = bootstrapPlantMapSecret();
+
+	const sender_email_address = secret.value(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM);
+	const password = secret.value(VAULT_SERVICE, VAULT_PASSWORD_ITEM);
+    
+	return { sender_email_address, password };
+}
+
+export function getEmailConfigs(): EmailConfigs {
     const config = bootstrapPlantMapConfig();
 
-	const email_address = secret.value(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM);
-	const password = secret.value(VAULT_SERVICE, VAULT_PASSWORD_ITEM);
-    const 
-	return { email_address, password };
+    const smtp_host=config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM, default = "smtp.gmail.com")
+    const smtp_port=config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM, default = "587")
+    const smtp_security=config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM, default = "starttls")
+
+	return { smtp_host, smtp_port, smtp_security };
 }
