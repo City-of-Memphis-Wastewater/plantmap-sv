@@ -31,9 +31,9 @@ export function getEmailCreds(): EmailCredentials {
 export function getEmailConfigs(): EmailConfigs {
     const config = bootstrapPlantMapConfig();
 
-    const smtp_host=config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM, default = "smtp.gmail.com")
-    const smtp_port=config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM, default = "587")
-    const smtp_security=config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM, default = "starttls")
+    const smtp_host=config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM) ?? "smtp.gmail.com"
+    const smtp_port=config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM) ?? 587
+    const smtp_security=config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM) ?? "starttls"
 
 	return { smtp_host, smtp_port, smtp_security };
 }
