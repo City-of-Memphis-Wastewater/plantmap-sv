@@ -353,11 +353,30 @@ export async function download(args: string[] = []): Promise<void> {
 
 		const server = await discoverServer();
 
-		if (!server) {
-			throw new Error(
-				'PlantMap server is not running locally. Start it with "plantmap-sv start" and retry.'
-			);
-		}
+        // ---
+        const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
+
+        const relativeUrl = `/plot?${query}`;
+
+        console.log(`PlantMap plot relative URL:\n${relativeUrl}\n`);
+
+        if (!server) {
+                console.log(
+                        'PlantMap server is not running locally. Open the URL above when the server is available.'
+                );
+                return;
+        }
+
+        const plotUrl = `${server.url}${relativeUrl}`;
+        console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
+        openUrl(plotUrl.toString());
+
+        // ---
+		//if (!server) {
+		//	throw new Error(
+		//		'PlantMap server is not running locally. Start it with "plantmap-sv start" and retry.'
+		//	);
+		//}
 
 		console.log(`PlantMap server: ${server.url}`);
 		console.log(`Tags: ${options.tags.join(', ')}`);
