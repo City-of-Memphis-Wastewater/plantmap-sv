@@ -18,6 +18,7 @@ import type { PlotOptions } from '../plot/types.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 import { parseTags } from './helpers/parse-tags.ts';
+import { openUrl } from '$lib/utils/launch';
 
 interface DownloadOptions extends PlotOptions {
 	formats: DownloadFormat[];
