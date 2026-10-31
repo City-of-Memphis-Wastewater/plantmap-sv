@@ -10,10 +10,10 @@ const plantMapConfig = loadPlantMapConfig(bootstrapPlantMapConfig());
 
 export default defineConfig({
 	server: {
-		port: plantMapConfig.devServer.port
+		port: plantMapConfig.appServer.devPort
 	},
 	preview: {
-		port: plantMapConfig.devServer.port
+		port: plantMapConfig.appServer.devPort
 	},
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [

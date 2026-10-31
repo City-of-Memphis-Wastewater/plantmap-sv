@@ -13,7 +13,7 @@ export interface DiscoveredServer {
 function getPorts(): number[] {
 	const config = loadPlantMapConfig(bootstrapPlantMapConfig());
 
-	return [...new Set([config.devServer.port, config.prodServer.port])];
+	return [...new Set([config.appServer.devPort, config.appServer.prodPort])];
 }
 
 async function probeServer(port: number): Promise<DiscoveredServer | null> {

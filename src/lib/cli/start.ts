@@ -14,7 +14,7 @@ export function start(args: string[] = []) {
 	const config = bootstrapPlantMapConfig();
 	const plantMapConfig = loadPlantMapConfig(config);
 
-	let port = process.env.PORT ?? String(plantMapConfig.prodServer.port);
+	let port = process.env.PORT ?? String(plantMapConfig.appServer.prodPort);
 
 	for (let i = 0; i < args.length; i++) {
 		if (args[i] === '--port') {

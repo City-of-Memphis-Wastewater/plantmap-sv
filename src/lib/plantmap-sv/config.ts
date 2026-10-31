@@ -5,6 +5,25 @@ import { z } from 'zod';
 import type { MemphisConfig } from 'memphis-settings';
 
 export const PlantMapConfigSchema = z.object({
+    eds: z.object({
+        protocol: z.string(),
+        host: z.string(),
+        soapPort: z.number().int(),
+        iessSuffix: z.string(),
+        tabularMaxPolls: z.number().int().positive(),
+        tabularPollTimeoutMs: z.number().int().positive(),
+        debug: z.boolean()
+    }),
+
+    appServer: z.object({
+        protocol: z.string(),
+        host: z.string(),
+        prodPort: z.number().int(),
+        devPort: z.number().int()
+    })
+});
+
+export const PlantMapConfigSchemaDefunct = z.object({
 	eds: z.object({
 		protocol: z.string(),
 		host: z.string(),
@@ -38,12 +57,12 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 			debug: config.value('eds', 'debug') ?? false
 		},
 
-		prodServer: {
-			port: config.value('prodServer', 'port') ?? 4000
-		},
-
-		devServer: {
-			port: config.value('devServer', 'port') ?? 5173
+		appServer: {
+			prodPort: config.value('appServer', 'prodPort') ?? 4000,
+			devPort: config.value('appServer', 'devPort') ?? 5173,
+			protocol: config.value('appServer', 'protocol') ?? 'http://',
+			host: config.value('appServer', 'host') ?? config.value('eds', 'host') ?? '127.0.0.1',
+			 
 		}
 	});
 }

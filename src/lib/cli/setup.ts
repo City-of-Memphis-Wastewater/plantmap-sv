@@ -59,7 +59,7 @@ export async function setup() {
 	const prodPort = validatePort(
 		await number({
 			message: 'Production server port for this app:',
-			default: (config.value('prodServer', 'port') as number | undefined) ?? 4000
+			default: (config.value('appServer', 'prodPort') as number | undefined) ?? 4000
 		}),
 		'Production server port'
 	);
@@ -67,7 +67,7 @@ export async function setup() {
 	const devPort = validatePort(
 		await number({
 			message: 'Development server port for this app:',
-			default: (config.value('devServer', 'port') as number | undefined) ?? 5173
+			default: (config.value('appServer', 'devPort') as number | undefined) ?? 5173
 		}),
 		'Development server port'
 	);
@@ -101,9 +101,9 @@ export async function setup() {
 
 	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
-	config.setValue('devServer', 'port', devPort, { overwrite: true });
+	config.setValue('appServer', 'devPort', devPort, { overwrite: true });
 
-	config.setValue('prodServer', 'port', prodPort, { overwrite: true });
+	config.setValue('appServer', 'prodPort', prodPort, { overwrite: true });
 
 	config.setValue('eds', 'debug', debug, { overwrite: true });
 }
