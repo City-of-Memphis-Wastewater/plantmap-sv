@@ -1,9 +1,9 @@
 // 
-import { openUrl } from '$lib/utils/launch';
 // Something like "curl http://172.19.4.127:4000/api/status | jq ."
 // but href /api/status/
 
 import { discoverServer } from '../status/probe.ts';
+import { openUrl } from '../lib/utils/launch.ts';
 
 //
 // Suggest known config combos and as least print the url
@@ -11,7 +11,7 @@ import { discoverServer } from '../status/probe.ts';
 
 export function status(): null {
     const server = discoverServer();
-    onst relativeUrl = `/api/status/`;
+    const relativeUrl = `/api/status/`;
 
     console.log(`PlantMap status relative URL:\n${relativeUrl}\n`);
 
