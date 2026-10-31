@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getEmailCreds } from './secret';
+import { getEmailCreds } from './settings.ts';
 
 describe('getEmailCreds', () => {
 	it('returns an object containing email_address and password', () => {

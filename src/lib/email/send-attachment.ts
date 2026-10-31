@@ -1,2 +1,2 @@
 //
-import { getEmailCreds } from ./secret.ts
+import { getEmailCreds } from './settings.ts';
