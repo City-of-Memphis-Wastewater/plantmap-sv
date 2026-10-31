@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 
-function openUrl(url: string): void {
+export function openUrl(url: string): void {
     let commands: Array<{ command: string; args: string[] }>;
 
     if (process.env.TERMUX_VERSION) {

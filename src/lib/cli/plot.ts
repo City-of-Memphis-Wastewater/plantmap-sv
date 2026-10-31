@@ -14,7 +14,7 @@ import type { PlotOptions } from '../plot/types.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 import { parseTags } from './helpers/parse-tags.ts';
-import { openUrl } from '../utils/launch.ts';
+import { openUrl } from '../../lib/utils/launch.ts';
 
 
 function printHelp(): void {

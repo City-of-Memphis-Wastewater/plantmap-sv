@@ -3,7 +3,7 @@
 // but href /api/status/
 
 import { discoverServer } from '../status/probe.ts';
-import { openUrl } from '../lib/utils/launch.ts';
+import { openUrl } from '../../lib/utils/launch.ts';
 
 //
 // Suggest known config combos and as least print the url
@@ -23,6 +23,6 @@ export function status(): null {
     }
 
     const statusUrl = `${server.url}${relativeUrl}`;
-    console.log(`Getting PlantMap status:\n${plotUrl.toString()}`);
+    console.log(`Getting PlantMap status:\n${statusUrl.toString()}`);
     openUrl(statusUrl.toString());    
 }
