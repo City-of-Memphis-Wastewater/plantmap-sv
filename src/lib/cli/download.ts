@@ -295,7 +295,7 @@ async function downloadFormat(
         return null;
     }
     
-	const url = `${serverUrl}${relativeUrl}`;
+	//const url = `${serverUrl}${relativeUrl}`;
     const url = new URL(relativeUrl, serverUrl);
 
 	console.log(`Requesting ${format.toUpperCase()} data...`);
