@@ -15,16 +15,30 @@ export function getEmailCreds(): EmailCredentials {
 
 	const sender_email_address = secret.value(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM);
 	const sender_password = secret.value(VAULT_SERVICE, VAULT_PASSWORD_ITEM);
-
+    
+    //console.log({
+    //    hasSenderAddress: Boolean(sender_email_address),
+    //    hasSenderPassword: Boolean(sender_password)
+    //});
+    
 	return { sender_email_address, sender_password };
 }
 
 export function getEmailConfigs(): EmailConfigs {
-	const config = bootstrapPlantMapConfig();
+    const config = bootstrapPlantMapConfig();
 
-	const smtp_host = config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM) ?? 'smtp.gmail.com';
-	const smtp_port = config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM) ?? 587;
-	const smtp_security = config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM) ?? 'starttls';
+    const host = config.value(CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM);
+    const port = config.value(CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM);
+    const security = config.value(CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM);
 
-	return { smtp_host, smtp_port, smtp_security };
+    const smtp_host =
+        typeof host === 'string' ? host : 'smtp.gmail.com';
+
+    const smtp_port =
+        typeof port === 'number' ? port : 587;
+
+    const smtp_security =
+        typeof security === 'string' ? security : 'starttls';
+
+    return { smtp_host, smtp_port, smtp_security };
 }
