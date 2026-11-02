@@ -4,9 +4,9 @@ export const VAULT_SERVICE = "email"
 export const VAULT_SENDER_ADDRESS_ITEM = "send-address"
 export const VAULT_PASSWORD_ITEM = "send-password"
 export const CONFIG_SERVICE = "email"
-export const CONFIG_SMTP_HOST_ITEM = "smpt-host"
-export const CONFIG_SMTP_PORT_ITEM = "smpt-port"
-export const CONFIG_SMTP_SECURITY_ITEM = "smpt-security"
+export const CONFIG_SMTP_HOST_ITEM = "smtp-host"
+export const CONFIG_SMTP_PORT_ITEM = "smtp-port"
+export const CONFIG_SMTP_SECURITY_ITEM = "smtp-security"
 
 export interface EmailCredentials {
 	email_address: string | undefined;
