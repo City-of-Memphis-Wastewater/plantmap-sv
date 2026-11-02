@@ -31,9 +31,6 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 		)
 	];
 	console.log(`${Object.keys(formats)}`);
-	if (formats.length === 0) {
-		throw new Error('Provide a download format: ${SUPPORTED_DOWNLOAD_FORMATS.join(', ')}');
-	}
 
 	for (const format of formats) {
 		if (!SUPPORTED_DOWNLOAD_FORMATS.includes(format as DownloadFormat)) {

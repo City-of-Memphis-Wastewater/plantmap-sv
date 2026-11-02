@@ -6,6 +6,7 @@
 import { discoverServer } from '../status/probe.ts';
 import { openUrl } from '../utils/launch.ts';
 import type { AppStatus } from '../status/types.ts';
+import { readErrorMessage } from './helpers/errors.ts'
 
 export async function status(): Promise<void> {
 	const relativeUrl = `/api/status/`;
