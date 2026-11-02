@@ -8,16 +8,7 @@ export const CONFIG_SMTP_HOST_ITEM = 'smtp-host';
 export const CONFIG_SMTP_PORT_ITEM = 'smtp-port';
 export const CONFIG_SMTP_SECURITY_ITEM = 'smtp-security';
 
-export interface EmailCredentials {
-	sender_email_address: string | undefined;
-	password: string | undefined;
-}
-
-export interface EmailConfigs {
-	smtp_host: string;
-	smtp_port: number;
-	smtp_security: string;
-}
+import type { EmailCredentials, EmailConfigs } from './types.ts';
 
 export function getEmailCreds(): EmailCredentials {
 	const secret = bootstrapPlantMapSecret();
