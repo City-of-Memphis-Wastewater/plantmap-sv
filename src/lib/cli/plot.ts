@@ -16,7 +16,6 @@ import { discoverServer } from '../status/probe.ts';
 import { parseTags } from './helpers/parse-tags.ts';
 import { openUrl } from '../../lib/utils/launch.ts';
 
-
 function printHelp(): void {
 	console.log(`
 Usage:
@@ -163,7 +162,6 @@ function parseArgs(args: string[]): PlotOptions {
 		secondsBetweenPoints
 	};
 }
-
 
 export async function plot(args: string[] = []): Promise<void> {
 	try {

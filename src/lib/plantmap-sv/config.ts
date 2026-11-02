@@ -7,22 +7,22 @@ import { z } from 'zod';
 import type { MemphisConfig } from 'memphis-settings';
 
 export const PlantMapConfigSchema = z.object({
-    eds: z.object({
-        protocol: z.string(),
-        host: z.string(),
-        soapPort: z.number().int(),
-        iessSuffix: z.string(),
-        tabularMaxPolls: z.number().int().positive(),
-        tabularPollTimeoutMs: z.number().int().positive(),
-        debug: z.boolean()
-    }),
+	eds: z.object({
+		protocol: z.string(),
+		host: z.string(),
+		soapPort: z.number().int(),
+		iessSuffix: z.string(),
+		tabularMaxPolls: z.number().int().positive(),
+		tabularPollTimeoutMs: z.number().int().positive(),
+		debug: z.boolean()
+	}),
 
-    appServer: z.object({
-        //protocol: z.string(),
-        host: z.string(),
-        prodPort: z.number().int(),
-        devPort: z.number().int()
-    })
+	appServer: z.object({
+		//protocol: z.string(),
+		host: z.string(),
+		prodPort: z.number().int(),
+		devPort: z.number().int()
+	})
 });
 
 export const PlantMapConfigSchemaDefunct = z.object({
@@ -62,9 +62,8 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 		appServer: {
 			prodPort: config.value('appServer', 'prodPort') ?? 4000,
 			devPort: config.value('appServer', 'devPort') ?? 5173,
-			//protocol: config.value('appServer', 'protocol') ?? 'https://', 
-			host: config.value('appServer', 'host') ?? config.value('eds', 'host') ?? '127.0.0.1',
-			 
+			//protocol: config.value('appServer', 'protocol') ?? 'https://',
+			host: config.value('appServer', 'host') ?? config.value('eds', 'host') ?? '127.0.0.1'
 		}
 	});
 }

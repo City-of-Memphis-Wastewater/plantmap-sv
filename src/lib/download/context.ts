@@ -4,4 +4,4 @@ export const SUPPORTED_DOWNLOAD_FORMATS = ['csv', 'json', 'svg'] as const;
 
 export type DownloadFormat = (typeof SUPPORTED_DOWNLOAD_FORMATS)[number];
 
-export const DEFAULT_DOWNLOAD_FORMAT = 'csv'
+export const DEFAULT_DOWNLOAD_FORMAT = 'csv';

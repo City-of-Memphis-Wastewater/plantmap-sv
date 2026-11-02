@@ -8,13 +8,10 @@ import {
 	DEFAULT_DAYS,
 	DEFAULT_DATAPOINT_COUNT,
 	MAX_DAYS,
-	MAX_SECONDS_BETWEEN_POINTS,
+	MAX_SECONDS_BETWEEN_POINTS
 } from '../plot/context.ts';
 
-import {
-	SUPPORTED_DOWNLOAD_FORMATS,
-    DEFAULT_DOWNLOAD_FORMAT
-} from '../download/context.ts';
+import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 
 import type { DownloadFormat } from '../download/context.ts';
 
@@ -28,7 +25,6 @@ interface DownloadOptions extends PlotOptions {
 	formats: DownloadFormat[];
 	outputDir: string;
 }
-
 
 function printHelp(): void {
 	console.log(`
@@ -212,7 +208,11 @@ function parseArgs(args: string[]): DownloadOptions | null {
 		secondsBetweenPoints,
 		outputDir,
 		formats: [
-			...new Set(requestedFormats.length > 0 ? requestedFormats : ([DEFAULT_DOWNLOAD_FORMAT] as DownloadFormat[]))
+			...new Set(
+				requestedFormats.length > 0
+					? requestedFormats
+					: ([DEFAULT_DOWNLOAD_FORMAT] as DownloadFormat[])
+			)
 		]
 	};
 }
@@ -287,15 +287,15 @@ async function downloadFormat(
 	const params = buildPlotSearchParams(options);
 
 	params.set('format', format);
-    
-    const relativeUrl = `/api/download?${params.toString().replace(/%2C/gi, ',')}`;
-    console.log(relativeUrl);
-    if (!serverUrl) {
-        return null;
-    }
-    
+
+	const relativeUrl = `/api/download?${params.toString().replace(/%2C/gi, ',')}`;
+	console.log(relativeUrl);
+	if (!serverUrl) {
+		return null;
+	}
+
 	//const url = `${serverUrl}${relativeUrl}`;
-    const url = new URL(relativeUrl, serverUrl);
+	const url = new URL(relativeUrl, serverUrl);
 
 	console.log(`Requesting ${format.toUpperCase()} data...`);
 	console.log(url.toString());
@@ -356,11 +356,11 @@ export async function download(args: string[] = []): Promise<void> {
 		const server = await discoverServer();
 
 		console.log(`PlantMap download...`);
-        if (server) {
-            console.log(`PlantMap server: ${server.url}`);
-        } else {
-    		console.error(`Server has no url.`);
-    	}
+		if (server) {
+			console.log(`PlantMap server: ${server.url}`);
+		} else {
+			console.error(`Server has no url.`);
+		}
 		console.log(`Tags: ${options.tags.join(', ')}`);
 		console.log(`Formats: ${options.formats.join(', ')}`);
 		console.log('');
@@ -372,15 +372,11 @@ export async function download(args: string[] = []): Promise<void> {
 		for (const format of options.formats) {
 			try {
 				//savedFiles.push(await downloadFormat(server.url, options, format));
-                const savedFile = await downloadFormat(
-                    server?.url ?? null,
-                    options,
-                    format
-                );
+				const savedFile = await downloadFormat(server?.url ?? null, options, format);
 
-                if (savedFile) {
-                    savedFiles.push(savedFile);
-                }
+				if (savedFile) {
+					savedFiles.push(savedFile);
+				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				failures.push({ format, message });

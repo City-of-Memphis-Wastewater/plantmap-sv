@@ -8,51 +8,48 @@ import { openUrl } from '../utils/launch.ts';
 import type { AppStatus } from '../status/types.ts';
 
 export async function status(): Promise<void> {
-    const relativeUrl = `/api/status/`;
+	const relativeUrl = `/api/status/`;
 
-    console.log(`PlantMap status relative URL:\n${relativeUrl}\n`);
+	console.log(`PlantMap status relative URL:\n${relativeUrl}\n`);
 
-    const server = await discoverServer();
+	const server = await discoverServer();
 
-    if (!server) {
-        console.log(
-            'PlantMap server is not running locally. Open the URL above when the server is available.'
-        );
-        return;
-    }
+	if (!server) {
+		console.log(
+			'PlantMap server is not running locally. Open the URL above when the server is available.'
+		);
+		return;
+	}
 
-    const url = new URL(relativeUrl, server.url)
+	const url = new URL(relativeUrl, server.url);
 
-    console.log(`Getting PlantMap status:\n${url}`);
+	console.log(`Getting PlantMap status:\n${url}`);
 
-    let response: Response;
+	let response: Response;
 
-    try { 
-        response = await fetch(url);
-    } catch (error) { 
-        throw new Error(
-            `Could not contact the PlantMap server: ${
-                error instanceof Error ? error.message : String(error)
-            }`
-        );
-    }
+	try {
+		response = await fetch(url);
+	} catch (error) {
+		throw new Error(
+			`Could not contact the PlantMap server: ${
+				error instanceof Error ? error.message : String(error)
+			}`
+		);
+	}
 
-    if (!response.ok) {
-        const message = await readErrorMessage(response);
+	if (!response.ok) {
+		const message = await readErrorMessage(response);
 
-        throw new Error(
-            `Status request failed (HTTP ${response.status}): ${response.statusText}`
-        );
-    }
-    
-    let data: AppStatus
+		throw new Error(`Status request failed (HTTP ${response.status}): ${response.statusText}`);
+	}
 
-    try {
-        data = await response.json() as AppStatus;
-    } catch {
-        throw new Error('PlantMap returned an invalid JSON status response.');
-    }
-    
-    console.log(data)
+	let data: AppStatus;
 
+	try {
+		data = (await response.json()) as AppStatus;
+	} catch {
+		throw new Error('PlantMap returned an invalid JSON status response.');
+	}
+
+	console.log(data);
 }

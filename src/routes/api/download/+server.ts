@@ -1,18 +1,11 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-import {
-	DEFAULT_FUNCTION_TYPE,
-	SECONDS_PER_DAY,
-} from '$lib/plot/context';
+import { DEFAULT_FUNCTION_TYPE, SECONDS_PER_DAY } from '$lib/plot/context';
 
-import {
-	SUPPORTED_DOWNLOAD_FORMATS,
-    DEFAULT_DOWNLOAD_FORMAT,
-} from '$lib/download/context';
+import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '$lib/download/context';
 
 import type { DownloadFormat } from '$lib/download/context';
-
 
 import { parsePlotUrl } from '$lib/plot/url';
 import { resolveTimeAspects } from '$lib/plot/resolve-time';
@@ -31,16 +24,13 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 
 	const formats = [
 		...new Set(
-			(supplied.length > 0
-                ? supplied
-                : [DEFAULT_DOWNLOAD_FORMAT] // If a download format is not provided, use the default
-            )
+			(supplied.length > 0 ? supplied : [DEFAULT_DOWNLOAD_FORMAT]) // If a download format is not provided, use the default
 				.flatMap((value) => value.split(','))
 				.map((value) => value.trim().toLowerCase())
 				.filter(Boolean)
 		)
 	];
-    console.log(`${Object.keys(formats)}`)
+	console.log(`${Object.keys(formats)}`);
 	if (formats.length === 0) {
 		throw new Error('Provide a download format: ${SUPPORTED_DOWNLOAD_FORMATS.join(', ')}');
 	}

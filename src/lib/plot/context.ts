@@ -36,4 +36,3 @@ export const SUPPORTED_FUNCTION_TYPES = ['AVG', 'VALUE'] as const;
 // API and page paths
 export const PLOT_PAGE_PATH = '/plot';
 export const PLOT_API_PATH = '/api/plot';
-

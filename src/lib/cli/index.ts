@@ -37,11 +37,11 @@ export async function runCli(args: string[]) {
 			start(args.slice(1));
 			return;
 
-        case 'status':
+		case 'status':
 			status();
 			return;
 
-        case 'email':
+		case 'email':
 			email(args.slice(1));
 			return;
 
