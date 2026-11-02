@@ -50,17 +50,17 @@ export async function setup() {
 		'Ovation EDS SOAP API port'
 	);
 
-	const existingUsername = secret.value('eds', 'username');
-	const existingPassword = secret.value('eds', 'password');
+	const existingEdsUsername = secret.value('eds', 'username');
+	const existingeEdsPassword = secret.value('eds', 'password');
 
-	const username = await password({
-		message: existingUsername
+	const edsUsername = await password({
+		message: existingEdsUsername
 			? 'Ovation EDS username (Enter to keep existing):'
 			: 'Ovation EDS username:'
 	});
 
 	const edsPassword = await password({
-		message: existingPassword
+		message: existingEdsPassword
 			? 'Ovation EDS password (Enter to keep existing):'
 			: 'Ovation EDS password:'
 	});
@@ -147,15 +147,17 @@ export async function setup() {
     
     config.setValue('eds', 'soapPort', edsSoapPort, { overwrite: true });
 
-	if (username !== '') {
+	if (edsUsername !== '') {
 		secret.initializeVault();
 	}
 
-	if (username !== '') {
-		secret.setValue('eds', 'username', username, { overwrite: true });
+	if (edsUsername !== '') {
+		secret.setValue('eds', 'username', edsUsername, { overwrite: true });
 	}
-
-	secret.setValue('eds', 'password', edsPassword, { overwrite: true });
+    
+    if (edsPassword !== '') {
+		secret.setValue('eds', 'password', edsPassword, { overwrite: true });
+	}
 
 	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
@@ -171,6 +173,10 @@ export async function setup() {
     
     if (emailSmtpSenderEmail !== '') {
         secret.setValue(EMAIL_VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM, emailSmtpSenderEmail, { overwrite: true });
+    }
+
+    if (emailSmtpPassword !== '') {
+        secret.setValue(EMAIL_VAULT_SERVICE, VAULT_PASSWORD_ITEM, emailSmtpPassword, { overwrite: true });
     }
 
 	secret.setValue(EMAIL_VAULT_SERVICE, VAULT_PASSWORD_ITEM, emailSmtpPassword, { overwrite: true }); 
