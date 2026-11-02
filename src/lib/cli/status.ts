@@ -36,7 +36,6 @@ export async function status(): Promise<void> {
             }`
         );
     }
-    console.log(response.json())
 
     if (!response.ok) {
         const message = await readErrorMessage(response);
