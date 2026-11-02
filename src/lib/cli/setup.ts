@@ -17,6 +17,9 @@ export async function setup() {
 	const secret = bootstrapPlantMapSecret();
 
 	// --- Inputs ---
+    
+    console.log(`--- EDS Configuration ---`)
+    console.log(`This app relies on calling an Emerson Ovation EDS server.`)
 
 	const edsProtocol = await input({
 		message: 'Ovation EDS endpoint protocol:',
@@ -57,6 +60,7 @@ export async function setup() {
 		default: (config.value('eds', 'iessSuffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
+    console.log(`\n--- Plantmap-SV Self-Hosted Application Configuration ---`)
     const appProtocol = await input({
 		message: 'Endpoint protocol for this app:',
 		default: (config.value('appServer', 'protocol') as string | undefined) ?? 'https://'
@@ -87,6 +91,9 @@ export async function setup() {
 		message: 'Enable debugging for this app?',
 		default: (config.value('appServer', 'debug') as boolean | undefined) ?? false
 	});
+
+    console.log(`\n--- Email Reporting Configuration ---`)
+    // make it optional to even provide 
 
 	// --- Save ---
 
