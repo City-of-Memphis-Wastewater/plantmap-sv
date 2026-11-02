@@ -1,13 +1,13 @@
 import { bootstrapPlantMapConfig } from '../plantmap-sv/bootstrap.ts';
 import { loadPlantMapConfig } from '../plantmap-sv/config.ts';
 
-import type { Status } from './types.ts';
+import type { AppStatus } from './types.ts';
 
 export interface DiscoveredServer {
 	host: string;
 	port: number;
 	url: string;
-	status: Status;
+	status: AppStatus;
 }
 
 function getPorts(): number[] {
@@ -27,7 +27,7 @@ async function probeServer(port: number): Promise<DiscoveredServer | null> {
 
 		if (!response.ok) return null;
 
-		const status = (await response.json()) as Status;
+		const status = (await response.json()) as AppStatus;
 
 		if (
 			status.protocolVersion !== 1 ||

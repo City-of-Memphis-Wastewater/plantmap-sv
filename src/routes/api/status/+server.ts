@@ -5,12 +5,12 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 import { dev } from '$app/environment';
-import type { Status } from '$lib/status/types';
+import type { AppStatus } from '$lib/status/types';
 
 const startedAt = new Date().toISOString();
 
 export const GET: RequestHandler = () => {
-	const status: Status = {
+	const status: AppStatus = {
 		protocolVersion: 1,
 
 		application: {

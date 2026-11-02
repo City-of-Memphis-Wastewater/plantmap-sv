@@ -4,7 +4,8 @@
 //
 
 import { discoverServer } from '../status/probe.ts';
-import { openUrl } from '../../lib/utils/launch.ts';
+import { openUrl } from '../utils/launch.ts';
+import type { AppStatus } from '../status/types.ts';
 
 export async function status(): Promise<void> {
     const relativeUrl = `/api/status/`;
@@ -20,19 +21,14 @@ export async function status(): Promise<void> {
         return;
     }
 
-    //const statusUrl = `${server.url}${relativeUrl}`;
-    const statusUrl = new URL(relativeUrl, server.url)
+    const url = new URL(relativeUrl, server.url)
 
-    console.log(`Getting PlantMap status:\n${statusUrl}`);
-
-    //openUrl(statusUrl);
-
-    console.log(statusUrl.toString());
+    console.log(`Getting PlantMap status:\n${url}`);
 
     let response: Response;
 
     try { 
-        response = await fetch(statusUrl);
+        response = await fetch(url);
     } catch (error) { 
         throw new Error(
             `Could not contact the PlantMap server: ${
@@ -40,19 +36,24 @@ export async function status(): Promise<void> {
             }`
         );
     }
-    console.log(response)
+    console.log(response.json())
 
     if (!response.ok) {
         const message = await readErrorMessage(response);
 
         throw new Error(
-            `${format.toUpperCase()} download failed (HTTP ${response.status}): ${message}`
+            `Status request failed (HTTP ${response.status}): ${response.statusText}`
         );
     }
+    
+    let data: AppStatus
 
-    const data = Buffer.from(await response.arrayBuffer());
-
-    if (data.length === 0) {
-        throw new Error(`The server returned an empty ${format.toUpperCase()} response.`);
+    try {
+        data = await response.json() as AppStatus;
+    } catch {
+        throw new Error('PlantMap returned an invalid JSON status response.');
     }
+    
+    console.log(data)
+
 }

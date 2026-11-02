@@ -1,4 +1,4 @@
-export interface Status {
+export interface AppStatus {
 	protocolVersion: number;
 
 	application: {
