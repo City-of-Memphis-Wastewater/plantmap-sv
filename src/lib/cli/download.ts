@@ -38,7 +38,7 @@ Usage:
 Output formats:
   --format, -f <format>             Output format: ${SUPPORTED_DOWNLOAD_FORMATS.join(', ')}
                                     Repeat to request multiple formats.
-                                    Default: csv
+                                    Default: ${DEFAULT_DOWNLOAD_FORMAT}
 
 Time options:
   --start, -s <time>                Start time
