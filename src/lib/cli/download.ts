@@ -13,7 +13,8 @@ import {
 
 import {
     DownloadFormat,
-	SUPPORTED_DOWNLOAD_FORMATS
+	SUPPORTED_DOWNLOAD_FORMATS,
+    DEFAULT_DOWNLOAD_FORMAT
 } from '../download/context.ts';
 
 import type { PlotOptions } from '../plot/types.ts';
@@ -211,7 +212,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 		secondsBetweenPoints,
 		outputDir,
 		formats: [
-			...new Set(requestedFormats.length > 0 ? requestedFormats : (['csv'] as DownloadFormat[]))
+			...new Set(requestedFormats.length > 0 ? requestedFormats : ([DEFAULT_DOWNLOAD_FORMAT] as DownloadFormat[]))
 		]
 	};
 }

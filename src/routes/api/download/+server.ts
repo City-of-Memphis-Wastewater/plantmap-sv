@@ -8,6 +8,7 @@ import {
 
 import {
 	SUPPORTED_DOWNLOAD_FORMATS,
+    DEFAULT_DOWNLOAD_FORMAT,
 	type DownloadFormat
 } from '$lib/download/context';
 
@@ -27,13 +28,12 @@ import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
 
-	if (supplied.length === 0) {
-		throw new Error('Provide a download format: csv, json, or svg.');
-	}
-
 	const formats = [
 		...new Set(
-			supplied
+			(supplied.length > 0
+                ? supplied
+                : [DEFAULT_DOWNLOAD_FORMAT] // If a download format is not provided, use the default
+            )
 				.flatMap((value) => value.split(','))
 				.map((value) => value.trim().toLowerCase())
 				.filter(Boolean)
@@ -41,7 +41,7 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	];
     console.log(`${Object.keys(formats)}`)
 	if (formats.length === 0) {
-		throw new Error('Provide a download format: csv, json, or svg.');
+		throw new Error('Provide a download format: ${SUPPORTED_DOWNLOAD_FORMATS.join(', ')}');
 	}
 
 	for (const format of formats) {
