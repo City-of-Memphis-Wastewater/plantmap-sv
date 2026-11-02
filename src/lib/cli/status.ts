@@ -20,9 +20,39 @@ export async function status(): Promise<void> {
         return;
     }
 
-    const statusUrl = `${server.url}${relativeUrl}`;
+    //const statusUrl = `${server.url}${relativeUrl}`;
+    const statusUrl = new URL(relativeUrl, server.url)
 
     console.log(`Getting PlantMap status:\n${statusUrl}`);
 
-    openUrl(statusUrl);
+    //openUrl(statusUrl);
+
+    console.log(statusUrl.toString());
+
+    let response: Response;
+
+    try { 
+        response = await fetch(statusUrl);
+    } catch (error) { 
+        throw new Error(
+            `Could not contact the PlantMap server: ${
+                error instanceof Error ? error.message : String(error)
+            }`
+        );
+    }
+    console.log(response)
+
+    if (!response.ok) {
+        const message = await readErrorMessage(response);
+
+        throw new Error(
+            `${format.toUpperCase()} download failed (HTTP ${response.status}): ${message}`
+        );
+    }
+
+    const data = Buffer.from(await response.arrayBuffer());
+
+    if (data.length === 0) {
+        throw new Error(`The server returned an empty ${format.toUpperCase()} response.`);
+    }
 }
