@@ -42,7 +42,7 @@ export async function runCli(args: string[]) {
 			return;
 
 		case 'email':
-			email(args.slice(1));
+			await email(args.slice(1));
 			return;
 
 		case 'help':
