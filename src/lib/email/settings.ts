@@ -1,12 +1,12 @@
-import { bootstrapPlantMapSecret, bootstrapPlantMapConfig } from '$lib/plantmap-sv/bootstrap';
+import { bootstrapPlantMapSecret, bootstrapPlantMapConfig } from '../plantmap-sv/bootstrap.ts';
 
-const VAULT_SERVICE = "email"
-const VAULT_SENDER_ADDRESS_ITEM = "send-address"
-const VAULT_PASSWORD_ITEM = "send-password"
-const CONFIG_SERVICE = "email"
-const CONFIG_SMTP_HOST_ITEM = "smpt-host"
-const CONFIG_SMTP_PORT_ITEM = "smpt-port"
-const CONFIG_SMTP_SECURITY_ITEM = "smpt-security"
+export const VAULT_SERVICE = "email"
+export const VAULT_SENDER_ADDRESS_ITEM = "send-address"
+export const VAULT_PASSWORD_ITEM = "send-password"
+export const CONFIG_SERVICE = "email"
+export const CONFIG_SMTP_HOST_ITEM = "smpt-host"
+export const CONFIG_SMTP_PORT_ITEM = "smpt-port"
+export const CONFIG_SMTP_SECURITY_ITEM = "smpt-security"
 
 export interface EmailCredentials {
 	email_address: string | undefined;

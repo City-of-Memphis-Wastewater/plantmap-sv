@@ -4,6 +4,16 @@ import { input, password, confirm, number } from '@inquirer/prompts';
 
 import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '../plantmap-sv/bootstrap.ts';
 
+import {
+    VAULT_SERVICE as EMAIL_VAULT_SERVICE,
+    VAULT_SENDER_ADDRESS_ITEM,
+    VAULT_PASSWORD_ITEM,
+    CONFIG_SERVICE as EMAIL_CONFIG_SERVICE,
+    CONFIG_SMTP_HOST_ITEM,
+    CONFIG_SMTP_PORT_ITEM,
+    CONFIG_SMTP_SECURITY_ITEM
+} from '../email/settings.ts';
+
 function validatePort(value: number | undefined, name: string): number {
 	if (value === undefined || !Number.isInteger(value) || value < 1 || value > 65535) {
 		throw new Error(`${name} must be an integer between 1 and 65535`);
@@ -94,6 +104,40 @@ export async function setup() {
 
     console.log(`\n--- Email Reporting Configuration ---`)
     // make it optional to even provide 
+    
+    const existingEmailSender = secret.value(EMAIL_VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM);
+	const existingEmailPassword = secret.value(EMAIL_VAULT_SERVICE, VAULT_PASSWORD_ITEM);
+
+    const emailSmtpSenderEmail = await password({
+		message: existingEmailSender
+			? 'Email SMTP sender address (Enter to keep existing):'
+			: 'Email SMTP sender address:'
+	});
+
+    const emailSmtpPassword = await password({
+		message: existingEmailPassword
+			? 'Email SMTP password (Enter to keep existing):'
+			: 'Email SMTP password:'
+	});
+
+    const emailSmtpHost = await input({
+		message: 'SMTP host for emailing reports:',
+		default: (config.value(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM) as string | undefined) ?? 'smtp.gmail.com'
+	});
+    
+
+    const emailSmtpPort = validatePort(
+		await number({
+			message: 'SMTP port for emailing reports:',
+			default: (config.value(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM) as number | undefined) ?? 587
+		}),
+		'Development server port'
+	);
+
+    const emailSmtpSecurity = await input({
+		message: 'SMTP security config for emailing reports:',
+		default: (config.value(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM) as string | undefined) ?? 'starttls'
+	});
 
 	// --- Save ---
 
@@ -103,7 +147,7 @@ export async function setup() {
     
     config.setValue('eds', 'soapPort', edsSoapPort, { overwrite: true });
 
-	if (username !== '' || edsPassword !== '') {
+	if (username !== '') {
 		secret.initializeVault();
 	}
 
@@ -111,9 +155,7 @@ export async function setup() {
 		secret.setValue('eds', 'username', username, { overwrite: true });
 	}
 
-	if (edsPassword !== '') {
-		secret.setValue('eds', 'password', edsPassword, { overwrite: true });
-	}
+	secret.setValue('eds', 'password', edsPassword, { overwrite: true });
 
 	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
@@ -126,4 +168,16 @@ export async function setup() {
 	config.setValue('appServer', 'prodPort', appProdPort, { overwrite: true });
 
 	config.setValue('appServer', 'debug', appDebug, { overwrite: true });
+    
+    if (emailSmtpSenderEmail !== '') {
+        secret.setValue(EMAIL_VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM, emailSmtpSenderEmail, { overwrite: true });
+    }
+
+	secret.setValue(EMAIL_VAULT_SERVICE, VAULT_PASSWORD_ITEM, emailSmtpPassword, { overwrite: true }); 
+
+    config.setValue(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM, emailSmtpHost, { overwrite: true });
+
+    config.setValue(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM, emailSmtpPort, { overwrite: true });
+
+    config.setValue(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_SECURITY_ITEM, emailSmtpSecurity, { overwrite: true });
 }
