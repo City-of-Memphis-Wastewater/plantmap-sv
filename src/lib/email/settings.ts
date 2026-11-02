@@ -9,7 +9,7 @@ export const CONFIG_SMTP_PORT_ITEM = 'smtp-port';
 export const CONFIG_SMTP_SECURITY_ITEM = 'smtp-security';
 
 export interface EmailCredentials {
-	email_address: string | undefined;
+	sender_email_address: string | undefined;
 	password: string | undefined;
 }
 
