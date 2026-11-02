@@ -18,17 +18,18 @@ export async function setup() {
 
 	// --- Inputs ---
 
-	const protocol = await input({
+	const edsProtocol = await input({
 		message: 'Ovation EDS endpoint protocol:',
 		default: (config.value('eds', 'protocol') as string | undefined) ?? 'http://'
 	});
 
-	const host = await input({
+	const edsHost = await input({
 		message: 'Ovation EDS endpoint host address:',
 		default: (config.value('eds', 'host') as string | undefined) ?? '127.0.0.1'
 	});
+    
 
-	const soapPort = validatePort(
+	const edsSoapPort = validatePort(
 		await number({
 			message: 'Ovation EDS SOAP API port:',
 			default: (config.value('eds', 'soapPort') as number | undefined) ?? 43080
@@ -56,7 +57,17 @@ export async function setup() {
 		default: (config.value('eds', 'iessSuffix') as string | undefined) ?? '.UNIT0@NET0'
 	});
 
-	const prodPort = validatePort(
+    const appProtocol = await input({
+		message: 'Endpoint protocol for this app:',
+		default: (config.value('appServer', 'protocol') as string | undefined) ?? 'https://'
+	});
+
+	const appHost = await input({
+		message: 'Endpoint host address for this app:',
+		default: (config.value('appServer', 'host') as string | undefined) ?? config.value('eds', 'host') as string | undefined ?? '127.0.0.1'
+	});
+
+	const appProdPort = validatePort(
 		await number({
 			message: 'Production server port for this app:',
 			default: (config.value('appServer', 'prodPort') as number | undefined) ?? 4000
@@ -64,7 +75,7 @@ export async function setup() {
 		'Production server port'
 	);
 
-	const devPort = validatePort(
+	const appDevPort = validatePort(
 		await number({
 			message: 'Development server port for this app:',
 			default: (config.value('appServer', 'devPort') as number | undefined) ?? 5173
@@ -72,18 +83,18 @@ export async function setup() {
 		'Development server port'
 	);
 
-	const debug = await confirm({
-		message: 'Enable EDS debugging?',
-		default: (config.value('eds', 'debug') as boolean | undefined) ?? false
+	const appDebug = await confirm({
+		message: 'Enable debugging for this app?',
+		default: (config.value('appServer', 'debug') as boolean | undefined) ?? false
 	});
 
 	// --- Save ---
 
-	//env.setValue('OVATION_EDS_BASE_URL', baseUrl, { overwrite: true });
+	config.setValue('eds', 'protocol', edsProtocol, { overwrite: true });
 
-	config.setValue('eds', 'protocol', protocol, { overwrite: true });
-
-	config.setValue('eds', 'host', host, { overwrite: true });
+	config.setValue('eds', 'host', edsHost, { overwrite: true });
+    
+    config.setValue('eds', 'soapPort', edsSoapPort, { overwrite: true });
 
 	if (username !== '' || edsPassword !== '') {
 		secret.initializeVault();
@@ -97,13 +108,15 @@ export async function setup() {
 		secret.setValue('eds', 'password', edsPassword, { overwrite: true });
 	}
 
-	config.setValue('eds', 'soapPort', soapPort, { overwrite: true });
-
 	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
-	config.setValue('appServer', 'devPort', devPort, { overwrite: true });
+	config.setValue('appServer', 'protocol', appProtocol, { overwrite: true });
 
-	config.setValue('appServer', 'prodPort', prodPort, { overwrite: true });
+    config.setValue('appServer', 'host', appHost, { overwrite: true });
 
-	config.setValue('eds', 'debug', debug, { overwrite: true });
+    config.setValue('appServer', 'devPort', appDevPort, { overwrite: true });
+
+	config.setValue('appServer', 'prodPort', appProdPort, { overwrite: true });
+
+	config.setValue('appServer', 'debug', appDebug, { overwrite: true });
 }

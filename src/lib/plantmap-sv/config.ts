@@ -60,7 +60,7 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 		appServer: {
 			prodPort: config.value('appServer', 'prodPort') ?? 4000,
 			devPort: config.value('appServer', 'devPort') ?? 5173,
-			protocol: config.value('appServer', 'protocol') ?? 'http://',
+			protocol: config.value('appServer', 'protocol') ?? 'https://',
 			host: config.value('appServer', 'host') ?? config.value('eds', 'host') ?? '127.0.0.1',
 			 
 		}
