@@ -35,7 +35,7 @@ function parseFormats(params: URLSearchParams): DownloadFormat[] {
 				.filter(Boolean)
 		)
 	];
-
+    console.log(`${Object.keys(formats)}`)
 	if (formats.length === 0) {
 		throw new Error('Provide a download format: csv, json, or svg.');
 	}

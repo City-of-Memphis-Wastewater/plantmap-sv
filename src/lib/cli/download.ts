@@ -122,8 +122,6 @@ function parseFormat(value: string): DownloadFormat[] {
 
 function parseArgs(args: string[]): DownloadOptions | null {
 	const tags: string[] = [];
-	//const tags = await parseTags(rawTags);
-
 	const requestedFormats: DownloadFormat[] = [];
 
 	let start: string | undefined;
@@ -205,10 +203,6 @@ function parseArgs(args: string[]): DownloadOptions | null {
 				break;
 		}
 	}
-
-	//if (rawTags.length === 0) {
-	//	throw new Error('Provide at least one IDCS tag.');
-	//}
 
 	return {
 		tags: [...new Set(tags)],
