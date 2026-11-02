@@ -1,5 +1,7 @@
 // src/lib/plantmap-sv/config.ts
 
+// appServer protocol configuration to https is not currently supported and uses http by default
+
 import { z } from 'zod';
 
 import type { MemphisConfig } from 'memphis-settings';
@@ -16,7 +18,7 @@ export const PlantMapConfigSchema = z.object({
     }),
 
     appServer: z.object({
-        protocol: z.string(),
+        //protocol: z.string(),
         host: z.string(),
         prodPort: z.number().int(),
         devPort: z.number().int()
@@ -60,7 +62,7 @@ export function loadPlantMapConfig(config: MemphisConfig): PlantMapConfig {
 		appServer: {
 			prodPort: config.value('appServer', 'prodPort') ?? 4000,
 			devPort: config.value('appServer', 'devPort') ?? 5173,
-			protocol: config.value('appServer', 'protocol') ?? 'https://',
+			//protocol: config.value('appServer', 'protocol') ?? 'https://', 
 			host: config.value('appServer', 'host') ?? config.value('eds', 'host') ?? '127.0.0.1',
 			 
 		}

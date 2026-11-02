@@ -51,7 +51,7 @@ export async function setup() {
 	);
 
 	const existingEdsUsername = secret.value('eds', 'username');
-	const existingeEdsPassword = secret.value('eds', 'password');
+	const existingEdsPassword = secret.value('eds', 'password');
 
 	const edsUsername = await password({
 		message: existingEdsUsername
@@ -71,10 +71,12 @@ export async function setup() {
 	});
 
     console.log(`\n--- Plantmap-SV Self-Hosted Application Configuration ---`)
-    const appProtocol = await input({
-		message: 'Endpoint protocol for this app:',
-		default: (config.value('appServer', 'protocol') as string | undefined) ?? 'https://'
-	});
+    
+    // HTTPS is not an option if you don't have a certificate.
+    //const appProtocol = await input({
+	//	message: 'Endpoint protocol for this app:',
+	//	default: (config.value('appServer', 'protocol') as string | undefined) ?? 'https://'
+	//});
 
 	const appHost = await input({
 		message: 'Endpoint host address for this app:',
@@ -161,7 +163,7 @@ export async function setup() {
 
 	config.setValue('eds', 'iessSuffix', iessSuffix, { overwrite: true });
 
-	config.setValue('appServer', 'protocol', appProtocol, { overwrite: true });
+	//config.setValue('appServer', 'protocol', appProtocol, { overwrite: true });
 
     config.setValue('appServer', 'host', appHost, { overwrite: true });
 
