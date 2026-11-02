@@ -9,8 +9,9 @@ import {
 import {
 	SUPPORTED_DOWNLOAD_FORMATS,
     DEFAULT_DOWNLOAD_FORMAT,
-	type DownloadFormat
 } from '$lib/download/context';
+
+import type { DownloadFormat } from '$lib/download/context';
 
 
 import { parsePlotUrl } from '$lib/plot/url';

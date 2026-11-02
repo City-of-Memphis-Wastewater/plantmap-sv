@@ -12,10 +12,11 @@ import {
 } from '../plot/context.ts';
 
 import {
-    DownloadFormat,
 	SUPPORTED_DOWNLOAD_FORMATS,
     DEFAULT_DOWNLOAD_FORMAT
 } from '../download/context.ts';
+
+import type { DownloadFormat } from '../download/context.ts';
 
 import type { PlotOptions } from '../plot/types.ts';
 
