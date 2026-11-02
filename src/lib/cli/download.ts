@@ -281,27 +281,25 @@ async function readErrorMessage(response: Response): Promise<string> {
 }
 
 async function downloadFormat(
-	serverUrl: string,
+	serverUrl: string | null,
 	options: DownloadOptions,
 	format: DownloadFormat
-): Promise<string> {
-	const params = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
+): Promise<string | null> {
+	const params = buildPlotSearchParams(options);
 
 	params.set('format', format);
     
-    const relativeUrl = `/api/download?${params.toString()}`;
+    const relativeUrl = `/api/download?${params.toString().replace(/%2C/gi, ',')}`;
     console.log(relativeUrl);
     if (!serverUrl) {
-        console.log(
-            'PlantMap server is not running locally. Open the download URL above when the server is available.'
-        );
-        return;
+        return null;
     }
     
 	const url = `${serverUrl}${relativeUrl}`;
+    const url = new URL(relativeUrl, serverUrl);
 
 	console.log(`Requesting ${format.toUpperCase()} data...`);
-	console.log(url);
+	console.log(url.toString());
 
 	let response: Response;
 
@@ -358,7 +356,12 @@ export async function download(args: string[] = []): Promise<void> {
 
 		const server = await discoverServer();
 
-		console.log(`PlantMap server: ${server.url}`);
+		console.log(`PlantMap download...`);
+        if (server) {
+            console.log(`PlantMap server: ${server.url}`);
+        } else {
+    		console.error(`Server has no url.`);
+    	}
 		console.log(`Tags: ${options.tags.join(', ')}`);
 		console.log(`Formats: ${options.formats.join(', ')}`);
 		console.log('');
@@ -369,7 +372,16 @@ export async function download(args: string[] = []): Promise<void> {
 		// Request each format independently. The API currently returns one file per request.
 		for (const format of options.formats) {
 			try {
-				savedFiles.push(await downloadFormat(server.url, options, format));
+				//savedFiles.push(await downloadFormat(server.url, options, format));
+                const savedFile = await downloadFormat(
+                    server?.url ?? null,
+                    options,
+                    format
+                );
+
+                if (savedFile) {
+                    savedFiles.push(savedFile);
+                }
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				failures.push({ format, message });
