@@ -9,10 +9,13 @@ import {
 	DEFAULT_DATAPOINT_COUNT,
 	MAX_DAYS,
 	MAX_SECONDS_BETWEEN_POINTS,
-	SUPPORTED_DOWNLOAD_FORMATS
 } from '../plot/context.ts';
 
-import type { DownloadFormat } from '../download/context.ts';
+import {
+    DownloadFormat,
+	SUPPORTED_DOWNLOAD_FORMATS
+} from '../download/context.ts';
+
 import type { PlotOptions } from '../plot/types.ts';
 
 import { buildPlotSearchParams } from '../plot/url.ts';
