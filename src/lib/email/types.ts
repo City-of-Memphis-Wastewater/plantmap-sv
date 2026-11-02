@@ -1,6 +1,6 @@
 export interface EmailCredentials {
 	sender_email_address: string | undefined;
-	password: string | undefined;
+	sender_password: string | undefined;
 }
 
 export interface EmailConfigs {

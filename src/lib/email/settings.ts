@@ -14,9 +14,9 @@ export function getEmailCreds(): EmailCredentials {
 	const secret = bootstrapPlantMapSecret();
 
 	const sender_email_address = secret.value(VAULT_SERVICE, VAULT_SENDER_ADDRESS_ITEM);
-	const password = secret.value(VAULT_SERVICE, VAULT_PASSWORD_ITEM);
+	const sender_password = secret.value(VAULT_SERVICE, VAULT_PASSWORD_ITEM);
 
-	return { sender_email_address, password };
+	return { sender_email_address, sender_password };
 }
 
 export function getEmailConfigs(): EmailConfigs {

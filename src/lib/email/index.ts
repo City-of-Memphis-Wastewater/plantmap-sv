@@ -42,10 +42,10 @@ async function resolveAttachments(paths: string[]): Promise<string[]> {
 export async function sendEmailWithAttachments(
 	options: SendEmailOptions
 ): Promise<SendEmailResult> {
-	const { sender_email_address, password } = getEmailCreds();
+	const { sender_email_address, sender_password } = getEmailCreds();
 	const { smtp_host, smtp_port, smtp_security } = getEmailConfigs();
 
-	if (!sender_email_address || !password) {
+	if (!sender_email_address || !sender_password) {
 		throw new Error('Email credentials are missing. Run plantmap-sv setup.');
 	}
 
@@ -64,7 +64,7 @@ export async function sendEmailWithAttachments(
 		requireTLS: security === 'starttls',
 		auth: {
 			user: sender_email_address,
-			pass: password
+			pass: sender_password
 		},
 		connectionTimeout: 30000,
 		greetingTimeout: 30000,

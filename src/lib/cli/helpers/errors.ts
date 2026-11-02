@@ -1,4 +1,4 @@
-async function readErrorMessage(response: Response): Promise<string> {
+export async function readErrorMessage(response: Response): Promise<string> {
         const body = await response.text();
 
         if (body) {
