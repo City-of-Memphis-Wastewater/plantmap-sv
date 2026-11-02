@@ -4,9 +4,13 @@ import type { RequestHandler } from './$types';
 import {
 	DEFAULT_FUNCTION_TYPE,
 	SECONDS_PER_DAY,
+} from '$lib/plot/context';
+
+import {
 	SUPPORTED_DOWNLOAD_FORMATS,
 	type DownloadFormat
-} from '$lib/plot/context';
+} from '$lib/download/context';
+
 
 import { parsePlotUrl } from '$lib/plot/url';
 import { resolveTimeAspects } from '$lib/plot/resolve-time';

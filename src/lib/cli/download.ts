@@ -12,7 +12,7 @@ import {
 	SUPPORTED_DOWNLOAD_FORMATS
 } from '../plot/context.ts';
 
-import type { DownloadFormat } from '../plot/context.ts';
+import type { DownloadFormat } from '../download/context.ts';
 import type { PlotOptions } from '../plot/types.ts';
 
 import { buildPlotSearchParams } from '../plot/url.ts';
@@ -25,11 +25,6 @@ interface DownloadOptions extends PlotOptions {
 	outputDir: string;
 }
 
-//type DownloadOptions = Omit<PlotOptions, 'tags'> & {
-//  rawTags: string[];
-//  outputDir: string;
-//  formats: DownloadFormat[];
-//};
 
 function printHelp(): void {
 	console.log(`
