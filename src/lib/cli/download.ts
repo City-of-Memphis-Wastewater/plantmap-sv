@@ -285,10 +285,20 @@ async function downloadFormat(
 	options: DownloadOptions,
 	format: DownloadFormat
 ): Promise<string> {
-	const params = buildPlotSearchParams(options);
-	params.set('format', format);
+	const params = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
 
-	const url = `${serverUrl}/api/download?${params.toString()}`;
+	params.set('format', format);
+    
+    const relativeUrl = `/api/download?${params.toString()}`;
+    console.log(relativeUrl);
+    if (!serverUrl) {
+        console.log(
+            'PlantMap server is not running locally. Open the download URL above when the server is available.'
+        );
+        return;
+    }
+    
+	const url = `${serverUrl}${relativeUrl}`;
 
 	console.log(`Requesting ${format.toUpperCase()} data...`);
 	console.log(url);
@@ -347,31 +357,6 @@ export async function download(args: string[] = []): Promise<void> {
 		options.tags = tags;
 
 		const server = await discoverServer();
-
-        // ---
-        const query = buildPlotSearchParams(options).toString().replace(/%2C/gi, ',');
-
-        const relativeUrl = `/plot?${query}`;
-
-        console.log(`PlantMap plot relative URL:\n${relativeUrl}\n`);
-
-        if (!server) {
-                console.log(
-                        'PlantMap server is not running locally. Open the URL above when the server is available.'
-                );
-                return;
-        }
-
-        const plotUrl = `${server.url}${relativeUrl}`;
-        console.log(`Opening PlantMap plot:\n${plotUrl.toString()}`);
-        openUrl(plotUrl.toString());
-
-        // ---
-		//if (!server) {
-		//	throw new Error(
-		//		'PlantMap server is not running locally. Start it with "plantmap-sv start" and retry.'
-		//	);
-		//}
 
 		console.log(`PlantMap server: ${server.url}`);
 		console.log(`Tags: ${options.tags.join(', ')}`);
