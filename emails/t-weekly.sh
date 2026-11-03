@@ -1,24 +1,39 @@
 #!/bin/bash
 set -euo pipefail
 
-EMAIL_LIST=$(npx memphis-settings --app-dir ~/.plantmap-sv secret 
-get email-recipient list-1 --emit)
+EMAIL_LIST=$(npx memphis-settings \
+    --app-dir "$HOME/.plantmap-sv" \
+    secret get email-recipient list-0 --emit | jq -r .)
 
-EXPORT_PATHS_BIOREM=$(npx plantmap-sv download 
-queries/t-weekly-biorem-tags.txt 
---days 7 
---format csv --format json --format csv 
--o ~/.plantmap-sv/export 
+EXPORT_DIR="$HOME/.plantmap-sv/export"
+
+EXPORT_PATHS_BIOREM=$(npx plantmap-sv download \
+queries/t-weekly-biorem-tags.txt \
+--days 7 \
+--format csv --format json --format csv \
+-o "$EXPORT_DIR" \
 -sec 900)
 
-EXPORT_PATHS_SCAN=$(npx plantmap-sv download 
-queries/t-weekly-scan-tags.txt 
---days 7 
---format csv --format json --format csv
--o ~/.plantmap-sv/export 
+EXPORT_PATHS_SCAN=$(npx plantmap-sv download \
+queries/t-weekly-scan-tags.txt \
+--days 7 \
+--format csv --format json --format csv \
+-o "$EXPORT_DIR" \
 -sec 900)
 
-npx plantmap-sv email --to "$EMAIL_LIST" 
---subject "Weekly Influent and Effluent Report" 
---body "Attached is the weekly Influent and Effluent data, in 15 minute increments." 
---attachment "$EXPORT_PATHS_BIOREM,$EXPORT_PATHS_SCAN"
+mapfile -t BIOREM_PATHS <<< "$EXPORT_PATHS_BIOREM"
+mapfile -t SCAN_PATHS <<< "$EXPORT_PATHS_SCAN"
+
+ATTACHMENTS=("${BIOREM_PATHS[@]}" "${SCAN_PATHS[@]}")
+
+EMAIL_ARGS=()
+
+for path in "${ATTACHMENTS[@]}"; do
+    EMAIL_ARGS+=(--attachment "$path")
+done
+
+npx plantmap-sv email \
+    --to "$EMAIL_LIST" \
+    --subject "Weekly BioRem and S::CAN Report" \
+    --body "Attached is the weekly BioRem and S::CAN data, in 15 minute increments. This was sent from using PlantMap-SV automated reporting tools." \
+    "${EMAIL_ARGS[@]}"
