@@ -6,6 +6,14 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
+- Make map center and zoom configurble.
+- Zoom threashold for detail
+- exploded view with traces
+- bad quality, appended red B letter
+- run boolean represented as color
+
+---
+
 ## [0.0.7] – 2026-11-02
 
 ### Added:
