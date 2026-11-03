@@ -37,7 +37,7 @@
 	//let unit = $state('');
 	let loading = $state(false);
 	let error = $state('');
-	let updatedAt = $state(0);
+	//let updatedAt = $state(0);
 
 	//const WINDOW_DAYS = 2;
 	//const STEP_SECONDS = 60;
@@ -123,7 +123,7 @@
 				)
 				.sort((a, b) => a.time - b.time);
 
-			updatedAt = Date.now();
+			//updatedAt = Date.now();
 
 			if (points.length === 0) {
 				error = 'No cached readings in the last 48 hours.';
@@ -139,19 +139,6 @@
 		}
 	}
 
-	/**
-	 *onMount(() => {
-	 *	void loadHistory(tag);
-	 *
-	 *	return () => requestController?.abort();
-	 *});
-	 *
-	 *$effect(() => {
-	 *	const currentTag = tag;
-	 *	void currentTag;
-	 *	void loadHistory(tag);
-	 *});
-	 */
 	let loadedTag = '';
 
 	$effect(() => {
