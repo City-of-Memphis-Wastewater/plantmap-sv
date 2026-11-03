@@ -2,7 +2,6 @@
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import type { ResolvedTimeAspects } from '$lib/plot/types';
 
 import { getEdsClient } from '$lib/server/eds/factory';
 import { parsePlotUrl } from '$lib/plot/url';
