@@ -93,9 +93,9 @@ $EmailArgs = @(
     "plantmap-sv",
     "email",
     "--to", $EmailList,
-    "--subject", "Test - Daily Maxson EDS Report",
+    "--subject", "Test - Weekly Maxson EDS Report",
     "--body",
-    "Attached is the daily test data report in 15-minute increments. Open the SVG image file in your browser to view the graph. This report was generated using PlantMap-SV automated reporting tools."
+    "Attached is the test data report in 15-minute increments. Open the SVG image file in your browser to view the graph. This report was generated using PlantMap-SV automated reporting tools. This email address will likely be flagged; this is because i use 'memphistn' in the gmail account for this purpose, to send email using SMTP. Gmail is much friendlier than Microsoft for this. This is a test, but I plan to send regular reports like this."
 )
 
 foreach ($Path in $Attachments) {
@@ -104,4 +104,4 @@ foreach ($Path in $Attachments) {
 
 Invoke-PlantMap $EmailArgs
 
-Write-Host "Daily report sent successfully."
+Write-Host "Report sent successfully."
