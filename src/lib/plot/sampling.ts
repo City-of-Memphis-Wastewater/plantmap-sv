@@ -6,7 +6,6 @@ import {
 	MAX_SECONDS_BETWEEN_POINTS,
 	NICE_SAMPLING_INTERVALS
 } from './context';
-import type { SamplingInput, ResolvedSampling } from './types';
 
 // -----------------------------------------------------------------------------
 // Sampling resolution

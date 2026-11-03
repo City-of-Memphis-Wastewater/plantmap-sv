@@ -7,7 +7,6 @@ import { getEdsClient } from '$lib/server/eds/factory';
 import { getDatabaseTimestamp } from '$lib/database/time';
 import type { EdsPointTelemetry } from '$lib/server/eds/types';
 import type { SensorNode, TelemetrySnapshot } from '$lib/telemetry/types';
-import type { DatabasePayload } from '$lib/database/types';
 
 import { persistBatch } from './persistence.ts';
 
@@ -110,7 +109,6 @@ class TelemetryService {
 		try {
 			const client = getEdsClient();
 			const liveData = await client.points.getRegex(sensorIds);
-			const timestamp = new Date().toISOString();
 			//console.info('[TelemetryService] Script calculated time:',  timestamp);
 
 			const sensors: SensorNode[] = Object.entries(sensorMap).map(([id, config]) => {

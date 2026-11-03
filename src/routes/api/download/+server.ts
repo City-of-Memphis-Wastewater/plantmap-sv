@@ -17,7 +17,7 @@ import { serializeTelemetryJson } from '$lib/download/json';
 import { renderChartSvg } from '$lib/download/svg';
 import type { EDSTelemetrySeries } from '$lib/server/eds/types';
 import { buildTelemetryChartSeries } from '$lib/plot/series';
-import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options';
+//import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options'; // unused anyhere?
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');

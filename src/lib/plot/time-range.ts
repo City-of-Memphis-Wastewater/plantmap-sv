@@ -12,7 +12,7 @@
 /**
 
 * Resolve a requested plot time range into Unix timestamps.
-* 
+*
 * Behavior:
 * - Both start and end: use both; ignore days.
 * - Start only: end at now unless days is provided.
@@ -48,18 +48,18 @@ function validateDays(days: number): void {
 	}
 }
 
-function getNowSeconds(): number {
+export function getNowSeconds(): number {
 	return Math.floor(Date.now() / 1000);
 }
 
-function getNowSecondsRoundedToTheMostRecentHalfHour(): number {
+export function getNowSecondsRoundedToTheMostRecentHalfHour(): number {
 	const nowSeconds = getNowSeconds();
 	const halfHourSeconds = 30 * 60;
 
 	return Math.floor(nowSeconds / halfHourSeconds) * halfHourSeconds;
 }
 
-function getNowSecondsRoundedToTheMostRecentHour(): number {
+export function getNowSecondsRoundedToTheMostRecentHour(): number {
 	const nowSeconds = getNowSeconds();
 	const hourSeconds = 60 * 60;
 

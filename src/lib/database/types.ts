@@ -1,7 +1,5 @@
 // src/lib/database/types.ts
 
-import type { EdsPointTelemetry } from '$lib/server/eds/types';
-
 /**
  * One sensor reading selected for persistence.
  *

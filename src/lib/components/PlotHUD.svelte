@@ -1,8 +1,7 @@
 <!-- src/lib/components/PlotHUD.svelte -->
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import type { EDSTelemetrySeries, EDSTelemetryValue } from '$lib/server/eds/types';
-	import { PLOT_API_PATH, DEFAULT_FUNCTION_TYPE } from '$lib/plot/context';
+	import type { EDSTelemetrySeries } from '$lib/server/eds/types';
 
 	let {
 		tag,
@@ -30,31 +29,19 @@
 		detail?: string;
 	};
 
-	type PlotResponseDefunct = {
-		request?: {
-			start: string;
-			end: string;
-			secondsBetweenPoints: number;
-			function: string;
-		};
-		values?: EDSTelemetrySeries;
-		error?: string;
-		detail?: string;
-	};
-
 	type Point = {
 		time: number;
 		value: number;
 	};
 
 	let points = $state<Point[]>([]);
-	let unit = $state('');
+	//let unit = $state('');
 	let loading = $state(false);
 	let error = $state('');
-	let updatedAt = $state(0);
+	//let updatedAt = $state(0);
 
-	const WINDOW_DAYS = 2;
-	const STEP_SECONDS = 60;
+	//const WINDOW_DAYS = 2;
+	//const STEP_SECONDS = 60;
 	const CHART_WIDTH = 280;
 	const CHART_HEIGHT = 100;
 	const PADDING = 5;
@@ -81,7 +68,7 @@
 			.join(' ');
 	});
 
-	const latestValue = $derived(points.at(-1)?.value);
+	//const latestValue = $derived(points.at(-1)?.value);
 	const minValue = $derived(
 		points.length ? Math.min(...points.map((point) => point.value)) : undefined
 	);
