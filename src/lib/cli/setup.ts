@@ -191,8 +191,6 @@ export async function setup() {
 		});
 	}
 
-	secret.setValue(EMAIL_VAULT_SERVICE, VAULT_PASSWORD_ITEM, emailSmtpPassword, { overwrite: true });
-
 	config.setValue(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_HOST_ITEM, emailSmtpHost, { overwrite: true });
 
 	config.setValue(EMAIL_CONFIG_SERVICE, CONFIG_SMTP_PORT_ITEM, emailSmtpPort, { overwrite: true });
