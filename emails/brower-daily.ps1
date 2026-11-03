@@ -27,7 +27,7 @@ Write-Host "Retrieving email recipients..."
 
 $EmailList = & npx memphis-settings `
     --app-dir $AppDir `
-    config get email-recipient list-3
+    config get email-recipient list-4
 
 if ($LASTEXITCODE -ne 0 -or !$EmailList) {
     throw "Unable to retrieve email recipients."
