@@ -1,4 +1,5 @@
 // scripts/setup-creds.js
+// This expects there to be a .env file in root which has the required values to pass to the ship-in-a-bottle secrets and config across the priveleged veil.
 
 import {
 	bootstrapPlantMapEnv,

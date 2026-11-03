@@ -2,7 +2,7 @@
 
 set "SCRIPTDIR=%~dp0"
 set "APPDIR=%SCRIPTDIR%.."
-set "LOGFILE=%SCRIPTDIR%log-priveleged.txt"
+set "LOGFILE=%SCRIPTDIR%log-install-priveleged.txt"
 
 cd /d "%APPDIR%"
 
@@ -12,16 +12,6 @@ echo %LOGFILE% >> "%LOGFILE%"
 echo. >> "%LOGFILE%"
 echo === npm install === >> "%LOGFILE%"
 call npm install  >> "%LOGFILE%" 2>&1
-if errorlevel 1 goto :error
-
-echo. >> "%LOGFILE%"
-echo === Copy Cesium assets === >> "%LOGFILE%"
-"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%copy-cesium.mjs" >> "%LOGFILE%" 2>&1
-if errorlevel 1 goto :error
-
-echo. >> "%LOGFILE%"
-echo === Setup credentials and configuration === >> "%LOGFILE%"
-"C:\Program Files\nodejs\node.exe" "%SCRIPTDIR%setup-creds.js" >> "%LOGFILE%" 2>&1
 if errorlevel 1 goto :error
 
 echo. >> "%LOGFILE%"
