@@ -48,9 +48,27 @@ function validateDays(days: number): void {
 	}
 }
 
+function getNowSeconds(): number {
+    return Math.floor(Date.now() / 1000);
+}
+
+function getNowSecondsRoundedToTheMostRecentHalfHour(): number {
+    const nowSeconds = getNowSeconds();
+    const halfHourSeconds = 30 * 60;
+
+    return Math.floor(nowSeconds / halfHourSeconds) * halfHourSeconds;
+}
+
+function getNowSecondsRoundedToTheMostRecentHour(): number {
+    const nowSeconds = getNowSeconds();
+    const hourSeconds = 60 * 60;
+
+    return Math.floor(nowSeconds / hourSeconds) * hourSeconds;
+}
+
 export function assessTimeRange(
 	input: TimeRangeInput,
-	nowSeconds = Math.floor(Date.now() / 1000)
+	nowSeconds = getNowSecondsRoundedToTheMostRecentHalfHour()
 ): ResolvedTimeRange {
 	const { start, end, windowDays } = input;
 
