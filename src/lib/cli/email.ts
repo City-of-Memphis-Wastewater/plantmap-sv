@@ -58,10 +58,14 @@ function parseArgs(args: string[]): SendEmailOptions | null {
 		}
 
 		switch (arg) {
-			
 			case '--to':
-                recipients.push(...value.split(/[;,]/).map(v => v.trim()).filter(Boolean));
-                break;
+				recipients.push(
+					...value
+						.split(/[;,]/)
+						.map((v) => v.trim())
+						.filter(Boolean)
+				);
+				break;
 
 			case '--subject':
 			case '-s':
@@ -81,8 +85,8 @@ function parseArgs(args: string[]): SendEmailOptions | null {
 	}
 
 	if (recipients.length === 0) {
-        throw new Error('Missing required option: --to');
-    }
+		throw new Error('Missing required option: --to');
+	}
 
 	if (attachments.length === 0) {
 		throw new Error('At least one --attachment is required.');

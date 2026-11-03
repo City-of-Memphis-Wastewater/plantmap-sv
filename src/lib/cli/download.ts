@@ -311,8 +311,8 @@ async function downloadFormat(
 	await writeFile(outputPath, data);
 
 	//console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
-    console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
-    console.log(outputPath);
+	console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
+	console.log(outputPath);
 
 	return outputPath;
 }
