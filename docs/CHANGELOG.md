@@ -6,6 +6,15 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
+## [0.0.7] – 2026-11-02
+
+### Added:
+
+- appServer.host is now configured, but the only use case is for the probe. Because whenyou set this thing up on a machine as self-hosted, it doesn't need to know it's own url. Ergo, the only use case is for 'npx plantmap-sv' CLI commands status, download, and plot, which use src/lib/status/probe.ts:discoverServer() to first check for sa local server and then for the configured appServer host.
+- Email settings are now configured in the 'npx plantmap-sv setup' CLI experience, and retained in the relevant config and secret files.
+
+---
+
 ## [0.0.6] – 2026-10-29
 
 ### Added:
