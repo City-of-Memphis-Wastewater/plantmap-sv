@@ -59,7 +59,7 @@ Sampling behavior:
 
 Output directory:
   --output-dir, -o <directory>   Directory for downloaded files (default: current directory)
-  
+
 Examples:
   plantmap-sv download M100FI
   plantmap-sv download M100FI FI8001 --days 4
@@ -285,7 +285,8 @@ async function downloadFormat(
 		throw new Error(
 			`Could not contact the PlantMap server: ${
 				error instanceof Error ? error.message : String(error)
-			}`
+			}`,
+			{ cause: error }
 		);
 	}
 

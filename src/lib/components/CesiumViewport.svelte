@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import 'cesium/Build/Cesium/Widgets/widgets.css';
+	import { resolve } from '$app/paths';
 
 	import type { Viewer, GeoJsonDataSource, ScreenSpaceEventHandler } from 'cesium';
 	type CesiumModule = typeof import('cesium');
@@ -285,7 +286,7 @@
 	<div class="absolute inset-0 h-full w-full" bind:this={container}></div>
 	<!-- Plot Page Navigation -->
 	<a
-		href="/plot"
+		href={resolve('/plot')}
 		class="absolute top-4 right-4 z-50 rounded-lg border border-white/20 bg-slate-900/90 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur transition hover:bg-slate-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
 		aria-label="Open Plot page"
 	>

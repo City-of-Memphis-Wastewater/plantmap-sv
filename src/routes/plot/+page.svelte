@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './plot.css';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '$lib/server/eds/types';
 
@@ -375,7 +376,7 @@
 
 <main class="plot-page">
 	<header class="page-header">
-		<a href="/" class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
+		<a href={resolve('/')} class="map-button" aria-label="Return to main map"> 🗺️ Map </a>
 		<h1>Historical Telemetry</h1>
 		<p>Retrieve and plot time-series data from Ovation EDS.</p>
 	</header>
@@ -476,7 +477,7 @@
 				<div class="field">
 					<label for="function">Aggregation</label>
 					<select id="function" bind:value={functionType}>
-						{#each SUPPORTED_FUNCTION_TYPES as supportedFunction}
+						{#each SUPPORTED_FUNCTION_TYPES as supportedFunction (supportedFunction)}
 							<option value={supportedFunction}>
 								{supportedFunction === 'VALUE' ? 'Value' : supportedFunction}
 							</option>

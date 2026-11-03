@@ -32,7 +32,8 @@ export async function status(): Promise<void> {
 		throw new Error(
 			`Could not contact the PlantMap server: ${
 				error instanceof Error ? error.message : String(error)
-			}`
+			}`,
+			{ cause: error }
 		);
 	}
 

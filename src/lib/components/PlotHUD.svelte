@@ -1,7 +1,6 @@
 <!-- src/lib/components/PlotHUD.svelte -->
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import type { EDSTelemetrySeries } from '$lib/server/eds/types';
 
 	let {
 		tag,
@@ -90,7 +89,7 @@
 		loading = true;
 		error = '';
 		points = [];
-		unit = '';
+		//unit = '';
 
 		const params = new URLSearchParams({
 			sensorId: sensorTag
