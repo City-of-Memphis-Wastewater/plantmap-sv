@@ -37,7 +37,7 @@
 	//let unit = $state('');
 	let loading = $state(false);
 	let error = $state('');
-	//let updatedAt = $state(0);
+	let updatedAt = $state(0);
 
 	//const WINDOW_DAYS = 2;
 	//const STEP_SECONDS = 60;
