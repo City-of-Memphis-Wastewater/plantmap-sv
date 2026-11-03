@@ -1,12 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-APP_DIR = "$HOME/.plantmap-sv"
+APP_DIR="$HOME/.plantmap-sv"
 EXPORT_DIR="$APP_DIR/export"
 
 EMAIL_LIST=$(npx memphis-settings \
     --app-dir "$APP_DIR" \
-    secret get email-recipient list-0 --emit | jq -r .)
+    config get email-recipient list-0)
 
 EXPORT_PATHS_BIOREM=$(npx plantmap-sv download \
 queries/t-weekly-biorem-tags.txt \
