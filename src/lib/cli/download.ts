@@ -266,7 +266,7 @@ async function downloadFormat(
 	params.set('format', format);
 
 	const relativeUrl = `/api/download?${params.toString().replace(/%2C/gi, ',')}`;
-	console.log(relativeUrl);
+	console.error(relativeUrl);
 	if (!serverUrl) {
 		return null;
 	}
@@ -274,8 +274,8 @@ async function downloadFormat(
 	//const url = `${serverUrl}${relativeUrl}`;
 	const url = new URL(relativeUrl, serverUrl);
 
-	console.log(`Requesting ${format.toUpperCase()} data...`);
-	console.log(url.toString());
+	console.error(`Requesting ${format.toUpperCase()} data...`);
+	console.error(url.toString());
 
 	let response: Response;
 
@@ -310,7 +310,9 @@ async function downloadFormat(
 
 	await writeFile(outputPath, data);
 
-	console.log(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
+	//console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
+    console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
+    console.log(outputPath);
 
 	return outputPath;
 }
@@ -332,15 +334,15 @@ export async function download(args: string[] = []): Promise<void> {
 
 		const server = await discoverServer();
 
-		console.log(`PlantMap download...`);
+		console.error(`PlantMap download...`);
 		if (server) {
-			console.log(`PlantMap server: ${server.url}`);
+			console.error(`PlantMap server: ${server.url}`);
 		} else {
 			console.error(`Server has no url.`);
 		}
-		console.log(`Tags: ${options.tags.join(', ')}`);
-		console.log(`Formats: ${options.formats.join(', ')}`);
-		console.log('');
+		console.error(`Tags: ${options.tags.join(', ')}`);
+		console.error(`Formats: ${options.formats.join(', ')}`);
+		console.error('');
 
 		const savedFiles: string[] = [];
 		const failures: Array<{ format: DownloadFormat; message: string }> = [];
@@ -362,8 +364,8 @@ export async function download(args: string[] = []): Promise<void> {
 		}
 
 		if (savedFiles.length > 0) {
-			console.log('');
-			console.log(`Download complete: ${savedFiles.length} file(s) saved.`);
+			console.error('');
+			console.error(`Download complete: ${savedFiles.length} file(s) saved.`);
 		}
 
 		if (failures.length > 0) {
