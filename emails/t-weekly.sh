@@ -10,14 +10,14 @@ EXPORT_DIR="$HOME/.plantmap-sv/export"
 EXPORT_PATHS_BIOREM=$(npx plantmap-sv download \
 queries/t-weekly-biorem-tags.txt \
 --days 7 \
---format csv --format json --format csv \
+--format csv --format json --format svg \
 -o "$EXPORT_DIR" \
 -sec 900)
 
 EXPORT_PATHS_SCAN=$(npx plantmap-sv download \
 queries/t-weekly-scan-tags.txt \
 --days 7 \
---format csv --format json --format csv \
+--format csv --format json --format svg \
 -o "$EXPORT_DIR" \
 -sec 900)
 
@@ -25,6 +25,12 @@ mapfile -t BIOREM_PATHS <<< "$EXPORT_PATHS_BIOREM"
 mapfile -t SCAN_PATHS <<< "$EXPORT_PATHS_SCAN"
 
 ATTACHMENTS=("${BIOREM_PATHS[@]}" "${SCAN_PATHS[@]}")
+for path in "${ATTACHMENTS[@]}"; do
+    [[ -s "$path" ]] || {
+        echo "Missing or empty attachment: $path" >&2
+        exit 1
+    }
+done
 
 EMAIL_ARGS=()
 

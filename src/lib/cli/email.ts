@@ -8,7 +8,7 @@ Usage:
   plantmap-sv email --to <address> --attachment <file> [options]
 
 Required:
-  --to <address>              Recipient email address
+  --to <address>              Recipient email address; repeatable.
   --attachment, -a <file>     File to attach; repeat for multiple files
 
 Optional:
@@ -23,14 +23,16 @@ Examples:
       --body "Attached is the latest report." \\
       --attachment report.csv
 
-  plantmap-sv email --to recipient@example.com \\
+  npx plantmap-sv email \\
+      --to first@example.com \\
+      --to second@example.com \\
       --attachment report.csv \\
-      --attachment another-report.csv
+      --attachment report.json
 `);
 }
 
 function parseArgs(args: string[]): SendEmailOptions | null {
-	let recipient = '';
+	const recipients: string[] = [];
 	let subject: string | undefined;
 	let body: string | undefined;
 	const attachments: string[] = [];
@@ -56,9 +58,10 @@ function parseArgs(args: string[]): SendEmailOptions | null {
 		}
 
 		switch (arg) {
+			
 			case '--to':
-				recipient = value;
-				break;
+                recipients.push(...value.split(/[;,]/).map(v => v.trim()).filter(Boolean));
+                break;
 
 			case '--subject':
 			case '-s':
@@ -77,16 +80,16 @@ function parseArgs(args: string[]): SendEmailOptions | null {
 		}
 	}
 
-	if (!recipient.trim()) {
-		throw new Error('Missing required option: --to');
-	}
+	if (recipients.length === 0) {
+        throw new Error('Missing required option: --to');
+    }
 
 	if (attachments.length === 0) {
 		throw new Error('At least one --attachment is required.');
 	}
 
 	return {
-		recipient,
+		recipient: recipients.join(', '),
 		attachments,
 		subject,
 		body
