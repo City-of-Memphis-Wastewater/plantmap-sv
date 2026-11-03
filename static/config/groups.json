@@ -1,2 +1,21 @@
 {
+  "biorem": {
+    "name": "BioRem",
+    "description": "BioRem H2S scrubber instrumentation",
+    "tags": [
+      "BIOREM-01",
+      "SWG-100",
+      "M100FI",
+      "FI8001"
+    ]
+  },
+  "scan": {
+    "name": "S::CAN",
+    "description": "Influent and effluent instrumentation, for TSS, COD, BOD, and Temperature.",
+    "tags": [
+      "SI1000-1",
+      "SI1000-2",
+      "SI1000-3"
+    ]
+  }
 }
