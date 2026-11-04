@@ -8,6 +8,7 @@ import { status } from './status.ts';
 import { email } from './email.ts';
 import { plot } from './plot.ts';
 import { download } from './download.ts';
+import { report } from './report.ts';
 
 export async function runCli(args: string[]) {
 	const [command = 'help'] = args;
@@ -45,6 +46,10 @@ export async function runCli(args: string[]) {
 			await email(args.slice(1));
 			return;
 
+		case 'report':
+			await report(args.slice(1));
+			return;
+
 		case 'help':
 			printHelp();
 			return;
@@ -72,7 +77,8 @@ Commands:
   secret    List secrets stored in app dir.
   config    List config values stored in app dir.
   status    Pending, call status endpoint at /api/status/
-  email     Send file to target, using configured gmail and app settings.  
+  email     Send file to target, using configured gmail and app settings. 
+  report    A scheme to run downloads and then email them as attachements, with unified configuration via JSON. 
   help      Show this help.
 `);
 }
