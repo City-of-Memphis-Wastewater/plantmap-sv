@@ -3,12 +3,17 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 
 import {
+    resolveMemphisAppDir,
 	bootstrapMemphisConfig,
 	bootstrapMemphisSecret,
 	bootstrapMemphisEnv
 } from 'memphis-settings';
 
 const appName = packageJson.name;
+
+export function getPlantMapAppDir () {
+    return resolveMemphisAppDir(appName)
+}
 
 export function bootstrapPlantMapConfig() {
 	return bootstrapMemphisConfig(appName);
