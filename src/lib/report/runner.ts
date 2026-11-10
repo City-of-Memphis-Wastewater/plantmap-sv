@@ -1,4 +1,8 @@
+
+// Report orchestration will be implemented here.
+export {};
+
 const result = await runReport({
-    configPath: 't-weekly',
+    configPath: 'default',
     dryRun: false
 });

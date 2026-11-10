@@ -20,6 +20,7 @@ import { readErrorMessage } from './helpers/errors.ts';
 import { getFilename } from '../download/service.ts';
 
 import type { DownloadFormat } from '../download/context.ts';
+import { downloadFiles } from '../download/service.ts';
 import type { PlotOptions } from '../plot/types.ts';
 
 interface DownloadOptions extends PlotOptions {
@@ -218,6 +219,46 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	};
 }
 
+
+
+
+//---
+
+export async function download(args: string[] = []): Promise<void> {
+    try {
+        const options = parseArgs(args);
+        if (!options) return;
+
+        const tags = await parseTags(options.tags);
+
+        if (tags.length === 0) {
+            throw new Error('No IDCS tags found. Provide tags or a query file.');
+        }
+
+        console.error('PlantMap download...');
+        console.error(`Tags: ${tags.join(', ')}`);
+        console.error(`Formats: ${options.formats.join(', ')}`);
+
+        const savedFiles = await downloadFiles({
+            ...options,
+            tags
+        });
+
+        for (const file of savedFiles) {
+            console.error(`Saved ${file}`);
+            console.log(file);
+        }
+
+        console.error(`Download complete: ${savedFiles.length} file(s) saved.`);
+    } catch (error) {
+        console.error(error instanceof Error ? error.message : String(error));
+        console.error('');
+        printHelp();
+        process.exitCode = 1;
+    }
+}
+
+//---
 async function downloadFormat(
 	serverUrl: string | null,
 	options: DownloadOptions,
@@ -280,7 +321,7 @@ async function downloadFormat(
 	return outputPath;
 }
 
-export async function download(args: string[] = []): Promise<void> {
+export async function downloadDefunct(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
 		if (!options) {
@@ -314,7 +355,8 @@ export async function download(args: string[] = []): Promise<void> {
 		for (const format of options.formats) {
 			try {
 				//savedFiles.push(await downloadFormat(server.url, options, format));
-				const savedFile = await downloadFormat(server?.url ?? null, options, format);
+				//const savedFile = await downloadFormat(server?.url ?? null, options, format);
+				const savedFile = await download(server?.url ?? null, options, format);
 
 				if (savedFile) {
 					savedFiles.push(savedFile);
