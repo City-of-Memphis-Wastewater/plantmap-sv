@@ -1,22 +1,24 @@
 import type { DownloadFormat } from '../download/context.ts';
+import type { SendEmailResult } from '../email/types.ts';
 
-/**
- * Configuration for an automated PlantMap report.
- */
 export interface ReportInputJson {
     name?: string;
     recipients: string[];
     subject?: string;
     body?: string;
+    outputDir?: string;
     downloads: ReportDownloadCall[];
 }
 
-/**
- * One download operation within a report.
- */
 export interface ReportDownloadCall {
     tagsFile: string;
     days?: number;
     formats?: DownloadFormat[];
     secondsBetweenPoints?: number;
+}
+
+export interface ReportResult {
+    name: string;
+    attachments: string[];
+    email?: SendEmailResult;
 }

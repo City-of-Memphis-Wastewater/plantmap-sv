@@ -47,7 +47,8 @@ export async function runCli(args: string[]) {
 			return;
 
 		case 'report':
-			await report(args.slice(1));
+			//await report(args.slice(1));
+			await report();
 			return;
 
 		case 'help':
