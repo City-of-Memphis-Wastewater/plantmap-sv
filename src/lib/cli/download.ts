@@ -355,8 +355,7 @@ export async function downloadDefunct(args: string[] = []): Promise<void> {
 		for (const format of options.formats) {
 			try {
 				//savedFiles.push(await downloadFormat(server.url, options, format));
-				//const savedFile = await downloadFormat(server?.url ?? null, options, format);
-				const savedFile = await download(server?.url ?? null, options, format);
+				const savedFile = await downloadFormat(server?.url ?? null, options, format);
 
 				if (savedFile) {
 					savedFiles.push(savedFile);
