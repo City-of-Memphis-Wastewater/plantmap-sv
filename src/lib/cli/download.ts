@@ -13,14 +13,14 @@ import {
 
 import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 
-import type { DownloadFormat } from '../download/context.ts';
-
-import type { PlotOptions } from '../plot/types.ts';
-
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 import { parseTags } from './helpers/parse-tags.ts';
 import { readErrorMessage } from './helpers/errors.ts';
+import { getFilename } from '../download/service.ts';
+
+import type { DownloadFormat } from '../download/context.ts';
+import type { PlotOptions } from '../plot/types.ts';
 
 interface DownloadOptions extends PlotOptions {
 	formats: DownloadFormat[];
@@ -216,44 +216,6 @@ function parseArgs(args: string[]): DownloadOptions | null {
 			)
 		]
 	};
-}
-
-function getFilename(response: Response, format: DownloadFormat, tags: string[]): string {
-	const disposition = response.headers.get('content-disposition');
-
-	let filename: string | undefined;
-
-	if (disposition) {
-		const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i);
-
-		if (encodedMatch?.[1]) {
-			try {
-				filename = decodeURIComponent(encodedMatch[1].trim());
-			} catch {
-				// Fall back to the regular filename or a generated name.
-			}
-		}
-
-		if (!filename) {
-			const regularMatch = disposition.match(/filename="?([^";]+)"?/i);
-			filename = regularMatch?.[1]?.trim();
-		}
-	}
-
-	if (!filename) {
-		const safeTags = tags.map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_')).join('_');
-
-		filename = `plantmap-${safeTags}-${new Date().toISOString().replace(/[:.]/g, '-')}.${format}`;
-	}
-
-	// Never allow a server-provided filename to write outside the current directory.
-	filename = path.basename(filename).replace(/[\r\n]/g, '');
-
-	if (!filename || filename === '.' || filename === '..') {
-		throw new Error('The download server returned an invalid filename.');
-	}
-
-	return filename;
 }
 
 async function downloadFormat(

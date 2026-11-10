@@ -2,12 +2,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import type { DownloadFormat } from './context.ts';
-import type { PlotOptions } from '../plot/types.ts';
-
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 import { readErrorMessage } from '../cli/helpers/errors.ts';
+
+import type { DownloadFormat } from './context.ts';
+import type { PlotOptions } from '../plot/types.ts';
 
 export interface DownloadServiceOptions extends PlotOptions {
     formats: DownloadFormat[];
