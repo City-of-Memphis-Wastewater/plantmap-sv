@@ -5,7 +5,6 @@ import { DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 import { downloadFiles } from '../download/service.ts';
 import { sendEmailWithAttachments } from '../email/index.ts';
 import { getPlantMapAppDir } from '../plantmap-sv/bootstrap.ts';
-const appDir = resolveMemphisAppDir(packageJson.name);
 import { parseTags } from '../cli/helpers/parse-tags.ts';
 
 import { loadReportConfig } from './config.ts';

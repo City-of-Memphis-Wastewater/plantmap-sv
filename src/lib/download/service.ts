@@ -14,7 +14,7 @@ export interface DownloadServiceOptions extends PlotOptions {
     outputDir: string;
 }
 
-function getFilename(
+export function getFilename(
     response: Response,
     format: DownloadFormat,
     tags: string[]
