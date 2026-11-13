@@ -11,7 +11,8 @@ export interface ReportInputJson {
 }
 
 export interface ReportDownloadCall {
-    tagsFile: string;
+    tags?: string[];
+    tagsFiles?: string[];
     days?: number;
     formats?: DownloadFormat[];
     secondsBetweenPoints?: number;

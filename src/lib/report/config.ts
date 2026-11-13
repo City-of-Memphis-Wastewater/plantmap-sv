@@ -1,5 +1,5 @@
 
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
 
@@ -13,14 +13,84 @@ const ReportSchema = z.object({
     body: z.string().optional(),
     outputDir: z.string().optional(),
     downloads: z.array(
+        //z.object({
+        //    tagsFile: z.string().min(1),
+        //    days: z.number().positive().optional(),
+        //    formats: z.array(z.enum(SUPPORTED_DOWNLOAD_FORMATS)).min(1).optional(),
+        //    secondsBetweenPoints: z.number().int().positive().optional()
+        //})
         z.object({
-            tagsFile: z.string().min(1),
+            tags: z.array(z.string().min(1)).min(1).optional(),
+            tagsFiles: z.array(z.string().min(1)).min(1).optional(),
             days: z.number().positive().optional(),
             formats: z.array(z.enum(SUPPORTED_DOWNLOAD_FORMATS)).min(1).optional(),
             secondsBetweenPoints: z.number().int().positive().optional()
-        })
+        }).refine(
+            download =>
+                (download.tags?.length ?? 0) > 0 ||
+                (download.tagsFiles?.length ?? 0) > 0,
+            {
+                message: 'Each download requires at least one tag or tag file.'
+            }
+        )
     ).min(1)
 });
+
+const DEFAULT_REPORT_CONFIG: ReportInputJson = {
+    name: 'Weekly Default Report, Name',
+
+    recipients: [
+        'testA@example.comv',
+        'testB@example.com'
+    ],
+
+    subject: 'Weekly Default Report, Subject',
+
+    body: 'Attached is the weekly data, in 15 minute increments.',
+
+    outputDir: 'export',
+
+    downloads: [
+        {
+            tagsFile: 'queries/t-weekly-biorem-tags.txt',
+            days: 7,
+            formats: ['csv', 'json', 'svg'],
+            secondsBetweenPoints: 900
+        },
+        {
+            tagsFile: 'queries/t-weekly-scan-tags.txt',
+            days: 7,
+            formats: ['csv', 'json', 'svg'],
+            secondsBetweenPoints: 900
+        }
+    ]
+};
+
+export async function ensureDefaultReportConfig(
+    appDir: string
+): Promise<boolean> {
+    const reportPath = resolveReportPath('default', appDir);
+
+    await mkdir(path.dirname(reportPath), { recursive: true });
+
+    try {
+        await writeFile(
+            reportPath,
+            `${JSON.stringify(DEFAULT_REPORT_CONFIG, null, 4)}\n`,
+            { encoding: 'utf8', flag: 'wx' }
+        );
+
+        console.log(`Created default report configuration: ${reportPath}`);
+
+        return true;
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'EEXIST') {
+            return false;
+        }
+
+        throw error;
+    }
+}
 
 export function resolveReportPath(
     identifier = 'default',
