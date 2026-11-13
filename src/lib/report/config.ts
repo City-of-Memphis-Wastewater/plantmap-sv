@@ -50,13 +50,13 @@ const DEFAULT_REPORT_CONFIG: ReportInputJson = {
 
 	downloads: [
 		{
-			tagsFile: 'queries/t-weekly-biorem-tags.txt',
+			tagsFiles: ['queries/t-weekly-biorem-tags.txt'],
 			days: 7,
 			formats: ['csv', 'json', 'svg'],
 			secondsBetweenPoints: 900
 		},
 		{
-			tagsFile: 'queries/t-weekly-scan-tags.txt',
+			tagsFiles: ['queries/t-weekly-scan-tags.txt'],
 			days: 7,
 			formats: ['csv', 'json', 'svg'],
 			secondsBetweenPoints: 900
