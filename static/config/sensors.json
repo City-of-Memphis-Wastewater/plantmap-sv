@@ -219,6 +219,28 @@
 "precision": 1,
 "status": "normal"
 },
+"AIR4100-61": {
+"id": "AIR4100-61",
+"name": "Common Outlet O2",
+"lat": 35.06707,
+"lon": -90.13583,
+"altitude": 3.5,
+"value": 0.0,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-62": {
+"id": "AIR4100-62",
+"name": "Common Outlet CO2",
+"lat": 35.06707,
+"lon": -90.13582,
+"altitude": 3.5,
+"value": 0.0,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
 "AIR4100-63": {
 "id": "AIR4100-63",
 "name": "Common Outlet Methane",
@@ -250,6 +272,28 @@
 "value": 0.0,
 "unit": "BTU",
 "precision": 1,
+"status": "normal"
+},
+"B1_FIR_3000": {
+"id": "B1_FIR_3000",
+"name": "Flare Inlet Flow",
+"lat": 35.067060,
+"lon": -90.136097,
+"altitude": 1,
+"value": 0.00,
+"unit": "SCFM",
+"precision": 2,
+"status": "normal"
+},
+"B1_PIR_3000": {
+"id": "B1_PIR_3000",
+"name": "Flare Inlet Pressure",
+"lat": 35.067069,
+"lon": -90.136097,
+"altitude": 1,
+"value": 0.00,
+"unit": "PSIG",
+"precision": 2,
 "status": "normal"
 },
 "B1_TIR_3600_1": {
@@ -300,17 +344,6 @@
 "id": "B1_TIR_3600_5",
 "name": "Flare 5 Temp",
 "lat": 35.067061,
-"lon": -90.136192,
-"altitude": 5,
-"value": 1250,
-"unit": "Deg F",
-"precision": 1,
-"status": "normal"
-},
-"B1_TIR_3600_1": {
-"id": "B1_TIR_3600_1",
-"name": "Flare 1 Temp",
-"lat": 35.066981,
 "lon": -90.136192,
 "altitude": 5,
 "value": 1250,
