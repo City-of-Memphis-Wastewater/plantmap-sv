@@ -24,8 +24,8 @@
 "BR_TIT_830_C": {
 "id": "BR_TIT_830_C",
 "name": "Treated BioGas Temp",
-"lat": 35.0670822,
-"lon": -90.1358030,
+"lat": 35.0670810,
+"lon": -90.1358023,
 "altitude": 4,
 "value": 61,
 "unit": "Deg F",
