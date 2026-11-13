@@ -32,6 +32,17 @@
 "precision": 2,
 "status": "normal"
 },
+"BR_TIT_130_C": {
+"id": "BR_TIT_130_C",
+"name": "Inlet BioGas Temp",
+"lat": 35.067038,
+"lon": -90.135488,
+"altitude": 1,
+"value": 66,
+"unit": "Deg F",
+"precision": 2,
+"status": "normal"
+},
 "PT01100": {
 "id": "PT01100",
 "name": "BB 1 Gas Out Pressure",
