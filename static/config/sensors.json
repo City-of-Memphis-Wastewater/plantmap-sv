@@ -1,11 +1,11 @@
 {
-"SWG-100": {
-"id": "SWG-100",
-"name": "SWG 100 Biogas Analyzer",
+"AIR4100-14": {
+"id": "AIR4100-14",
+"name": "SWG100-Hydrogen Sulfide Common Inlet ",
 "lat": 35.067038,
 "lon": -90.135478,
-"altitude": 3,
-"value": 450,
+"altitude": 1,
+"value": 22900,
 "unit": "ppm H2S",
 "precision": 2,
 "status": "normal"
@@ -24,8 +24,8 @@
 "BR_TIT_830_C": {
 "id": "BR_TIT_830_C",
 "name": "Treated BioGas Temp",
-"lat": 35.0670810,
-"lon": -90.1358023,
+"lat": 35.0670730,
+"lon": -90.13579,
 "altitude": 4,
 "value": 61,
 "unit": "Deg F",
