@@ -120,6 +120,17 @@
 "precision": 1,
 "status": "normal"
 },
+"FT031020": {
+"id": "FT03102",
+"name": "BB 2 Gas Out Flow",
+"lat": 35.060317,
+"lon": -90.134027,
+"altitude": 1,
+"value": 400.0,
+"unit": "SCFM",
+"precision": 1,
+"status": "normal"
+},
 "B1_TIR_3600_1": {
 "id": "B1_TIR_3600_1",
 "name": "Flare 1 Temp",
