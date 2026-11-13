@@ -21,6 +21,17 @@
 "precision": 2,
 "status": "normal"
 },
+"BR_TIT_830_C": {
+"id": "BR_TIT_830_C",
+"name": "Treated BioGas Temp",
+"lat": 35.0670822,
+"lon": -90.1358043,
+"altitude": 4,
+"value": 61,
+"unit": "Deg F",
+"precision": 2,
+"status": "normal"
+},
 "BR_PIT_130_C": {
 "id": "BR_PIT_130_C",
 "name": "Inlet BioGas Pressure",
