@@ -13,10 +13,10 @@
 "BR_PIT_830_C": {
 "id": "BR_PIT_830_C",
 "name": "Treated Gas Pressure",
-"lat": ,
-"lon": ,
-"altitude": 1,
-"value": 8.0,
+"lat": 35.0670832,
+"lon": -90.1358043,
+"altitude": 4,
+"value": 7.9,
 "unit": "In WC",
 "precision": 2,
 "status": "normal"
