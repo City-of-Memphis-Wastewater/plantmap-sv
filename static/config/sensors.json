@@ -12,7 +12,7 @@
 },
 "BR_PIT_830_C": {
 "id": "BR_PIT_830_C",
-"name": "Treated Gas Pressure",
+"name": "Treated BioGas Pressure",
 "lat": 35.0670832,
 "lon": -90.1358043,
 "altitude": 4,
@@ -21,11 +21,22 @@
 "precision": 2,
 "status": "normal"
 },
+"BR_PIT_130_C": {
+"id": "BR_PIT_130_C",
+"name": "Inlet BioGas Pressure",
+"lat": 35.067060,
+"lon": -90.135488,
+"altitude": 1,
+"value": 7.8,
+"unit": "In WC",
+"precision": 2,
+"status": "normal"
+},
 "PT01100": {
 "id": "PT01100",
 "name": "BB 1 Gas Out Pressure",
-"lat": 35.0668447,
-"lon": -90.1349473,
+"lat": 35.0668451,
+"lon": -90.134945,
 "altitude": 3,
 "value": 14.0,
 "unit": "inH20",
@@ -35,8 +46,8 @@
 "B1_FIR_5400": {
 "id": "B1_FIR_5400",
 "name": "BB 1 Gas Out Flow",
-"lat": 35.066845,
-"lon": -90.134946,
+"lat": 35.0668451,
+"lon": -90.134937,
 "altitude": 3,
 "value": 1410.0,
 "unit": "SCFM",
@@ -46,12 +57,111 @@
 "B1_TIR_5400": {
 "id": "B1_TIR_5400",
 "name": "BB 1 Gas Out Temp",
-"lat": 35.0668453,
-"lon": -90.1349479,
+"lat": 35.0668451,
+"lon": -90.134953,
 "altitude": 3,
 "value": 1410.0,
 "unit": "Deg F",
 "precision": 2,
+"status": "normal"
+},
+"B1_SIT_5100": {
+"id": "B1_SIT_5100",
+"name": "BB 1 Blower 1 Speed",
+"lat": 35.066837,
+"lon": -90.134922,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"B1_SIT_5200": {
+"id": "B1_SIT_5200",
+"name": "BB 1 Blower 2 Speed",
+"lat": 35.066837,
+"lon": -90.134888,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"B1_SIT_5300": {
+"id": "B1_SIT_5300",
+"name": "BB 1 Blower 3 Speed",
+"lat": 35.066837,
+"lon": -90.134854,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_1": {
+"id": "B1_TIR_3600_1",
+"name": "Flare 1 Temp",
+"lat": 35.066981,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_2": {
+"id": "B1_TIR_3600_2",
+"name": "Flare 2 Temp",
+"lat": 35.066999,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_3": {
+"id": "B1_TIR_3600_3",
+"name": "Flare 3 Temp",
+"lat": 35.067016,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_4": {
+"id": "B1_TIR_3600_4",
+"name": "Flare 4 Temp",
+"lat": 35.067041,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_5": {
+"id": "B1_TIR_3600_5",
+"name": "Flare 5 Temp",
+"lat": 35.067061,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_3600_1": {
+"id": "B1_TIR_3600_1",
+"name": "Flare 1 Temp",
+"lat": 35.066981,
+"lon": -90.136192,
+"altitude": 5,
+"value": 1250,
+"unit": "Deg F",
+"precision": 1,
 "status": "normal"
 },
 "M100FI": {
