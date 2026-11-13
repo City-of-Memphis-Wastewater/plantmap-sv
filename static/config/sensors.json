@@ -1,15 +1,4 @@
 {
-"AIR4100-14": {
-"id": "AIR4100-14",
-"name": "SWG100-Hydrogen Sulfide Common Inlet ",
-"lat": 35.067038,
-"lon": -90.135478,
-"altitude": 1,
-"value": 22900,
-"unit": "ppm H2S",
-"precision": 2,
-"status": "normal"
-},
 "BR_PIT_830_C": {
 "id": "BR_PIT_830_C",
 "name": "Treated BioGas Pressure",
@@ -46,7 +35,7 @@
 "BR_TIT_130_C": {
 "id": "BR_TIT_130_C",
 "name": "Inlet BioGas Temp",
-"lat": 35.067050,
+"lat": 35.067055,
 "lon": -90.135488,
 "altitude": 1,
 "value": 66,
@@ -78,7 +67,7 @@
 },
 "B1_TIR_5400": {
 "id": "B1_TIR_5400",
-"name": "BB 1 Gas Out Temp",
+"name": "BB 1 Out Temp",
 "lat": 35.0668451,
 "lon": -90.134953,
 "altitude": 3,
@@ -120,14 +109,146 @@
 "precision": 1,
 "status": "normal"
 },
-"FT031020": {
+"FT03102": {
 "id": "FT03102",
-"name": "BB 2 Gas Out Flow",
+"name": "BB 2 Out Flow",
 "lat": 35.060317,
 "lon": -90.134027,
 "altitude": 1,
 "value": 400.0,
 "unit": "SCFM",
+"precision": 1,
+"status": "normal"
+},
+"B2_SIT_6100": {
+"id": "B2_SIT_6100",
+"name": "BB 2 Blower 1 Speed",
+"lat": 35.0602798,
+"lon": -90.1340783,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"B2_SIT_6200": {
+"id": "B2_SIT_6200",
+"name": "BB 2 Blower 2 Speed",
+"lat": 35.0602450,
+"lon": -90.1340809,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"B2_SIT_6400": {
+"id": "B2_SIT_6400",
+"name": "BB 2 Blower 3 Speed",
+"lat": 35.0602109,
+"lon": -90.1340870,
+"altitude": 1,
+"value": 99,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-11": {
+"id": "AIR4100-11",
+"name": "Common Inlet O2",
+"lat": 35.067051,
+"lon": -90.135487,
+"altitude": 1,
+"value": 18.4,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-14": {
+"id": "AIR4100-14",
+"name": "Common Inlet H2S",
+"lat": 35.067051,
+"lon": -90.135489,
+"altitude": 1,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-24": {
+"id": "AIR4100-24",
+"name": "Tank 1 H2S",
+"lat": 35.067046,
+"lon": -90.13573,
+"altitude": 10,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-34": {
+"id": "AIR4100-34",
+"name": "Tank 2 H2S",
+"lat": 35.067044,
+"lon": -90.135664,
+"altitude": 10,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-44": {
+"id": "AIR4100-44",
+"name": "Tank 3 H2S",
+"lat": 35.06704,
+"lon": -90.135600,
+"altitude": 10,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-54": {
+"id": "AIR4100-54",
+"name": "Tank 4 H2S",
+"lat": 35.067038,
+"lon": -90.135531,
+"altitude": 10,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-63": {
+"id": "AIR4100-63",
+"name": "Common Outlet Methane",
+"lat": 35.067076,
+"lon": -90.13583,
+"altitude": 3.5,
+"value": 0.0,
+"unit": "PCT",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-64": {
+"id": "AIR4100-64",
+"name": "Common Outlet H2S",
+"lat": 35.067076,
+"lon": -90.13582,
+"altitude": 3.5,
+"value": 0.0,
+"unit": "PPM",
+"precision": 1,
+"status": "normal"
+},
+"AIR4100-66": {
+"id": "AIR4100-66",
+"name": "Common Outlet Gross Caloric",
+"lat": 35.067076,
+"lon": -90.13581,
+"altitude": 3.5,
+"value": 0.0,
+"unit": "BTU",
 "precision": 1,
 "status": "normal"
 },
