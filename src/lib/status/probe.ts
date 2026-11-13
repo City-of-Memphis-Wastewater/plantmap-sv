@@ -14,30 +14,24 @@ const PROTOCOL = 'http://';
 
 // Not yet implemented
 function getTargetsIncludingProxy(): { host: string; port: number }[] {
-    const config = loadPlantMapConfig(bootstrapPlantMapConfig());
+	const config = loadPlantMapConfig(bootstrapPlantMapConfig());
 
-    const targets = [
-        { host: '127.0.0.1', ports: [
-            config.appServer.devPort,
-            config.appServer.prodPort
-        ]},
+	const targets = [
+		{ host: '127.0.0.1', ports: [config.appServer.devPort, config.appServer.prodPort] },
 
-        ...(config.appServer.proxy.enabled
-            ? [{
-                host: config.appServer.proxy.host,
-                ports: [config.appServer.proxy.port]
-            }]
-            : []),
+		...(config.appServer.proxy.enabled
+			? [
+					{
+						host: config.appServer.proxy.host,
+						ports: [config.appServer.proxy.port]
+					}
+				]
+			: []),
 
-        { host: config.appServer.host, ports: [
-            config.appServer.devPort,
-            config.appServer.prodPort
-        ]}
-    ];
+		{ host: config.appServer.host, ports: [config.appServer.devPort, config.appServer.prodPort] }
+	];
 
-    return targets.flatMap(({ host, ports }) =>
-        [...new Set(ports)].map((port) => ({ host, port }))
-    );
+	return targets.flatMap(({ host, ports }) => [...new Set(ports)].map((port) => ({ host, port })));
 }
 
 function getTargets(): { host: string; port: number }[] {

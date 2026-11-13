@@ -3,7 +3,7 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 
 import {
-    resolveMemphisAppDir,
+	resolveMemphisAppDir,
 	bootstrapMemphisConfig,
 	bootstrapMemphisSecret,
 	bootstrapMemphisEnv
@@ -11,8 +11,8 @@ import {
 
 const appName = packageJson.name;
 
-export function getPlantMapAppDir () {
-    return resolveMemphisAppDir(appName)
+export function getPlantMapAppDir() {
+	return resolveMemphisAppDir(appName);
 }
 
 export function bootstrapPlantMapConfig() {

@@ -3,7 +3,7 @@ import process from 'node:process';
 import { runReport } from '../report/runner.ts';
 
 function printHelp(): void {
-    console.log(`
+	console.log(`
 Usage:
   plantmap-sv report [name] [options]
 
@@ -25,37 +25,37 @@ Examples:
 }
 
 export async function report(args: string[] = []): Promise<void> {
-    try {
-        let identifier = 'default';
-        let dryRun = false;
-        let nameProvided = false;
+	try {
+		let identifier = 'default';
+		let dryRun = false;
+		let nameProvided = false;
 
-        for (const arg of args) {
-            if (arg === '--help' || arg === '-h') {
-                printHelp();
-                return;
-            }
+		for (const arg of args) {
+			if (arg === '--help' || arg === '-h') {
+				printHelp();
+				return;
+			}
 
-            if (arg === '--dry-run') {
-                dryRun = true;
-                continue;
-            }
+			if (arg === '--dry-run') {
+				dryRun = true;
+				continue;
+			}
 
-            if (arg.startsWith('-')) {
-                throw new Error(`Unknown report option: ${arg}`);
-            }
+			if (arg.startsWith('-')) {
+				throw new Error(`Unknown report option: ${arg}`);
+			}
 
-            if (nameProvided) {
-                throw new Error('Only one report name or path may be provided.');
-            }
+			if (nameProvided) {
+				throw new Error('Only one report name or path may be provided.');
+			}
 
-            identifier = arg;
-            nameProvided = true;
-        }
+			identifier = arg;
+			nameProvided = true;
+		}
 
-        await runReport(identifier, { dryRun });
-    } catch (error) {
-        console.error(error instanceof Error ? error.message : String(error));
-        process.exitCode = 1;
-    }
+		await runReport(identifier, { dryRun });
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		process.exitCode = 1;
+	}
 }

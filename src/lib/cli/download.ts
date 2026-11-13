@@ -219,43 +219,40 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	};
 }
 
-
-
-
 //---
 
 export async function download(args: string[] = []): Promise<void> {
-    try {
-        const options = parseArgs(args);
-        if (!options) return;
+	try {
+		const options = parseArgs(args);
+		if (!options) return;
 
-        const tags = await parseTags(options.tags);
+		const tags = await parseTags(options.tags);
 
-        if (tags.length === 0) {
-            throw new Error('No IDCS tags found. Provide tags or a query file.');
-        }
+		if (tags.length === 0) {
+			throw new Error('No IDCS tags found. Provide tags or a query file.');
+		}
 
-        console.error('PlantMap download...');
-        console.error(`Tags: ${tags.join(', ')}`);
-        console.error(`Formats: ${options.formats.join(', ')}`);
+		console.error('PlantMap download...');
+		console.error(`Tags: ${tags.join(', ')}`);
+		console.error(`Formats: ${options.formats.join(', ')}`);
 
-        const savedFiles = await downloadFiles({
-            ...options,
-            tags
-        });
+		const savedFiles = await downloadFiles({
+			...options,
+			tags
+		});
 
-        for (const file of savedFiles) {
-            console.error(`Saved ${file}`);
-            console.log(file);
-        }
+		for (const file of savedFiles) {
+			console.error(`Saved ${file}`);
+			console.log(file);
+		}
 
-        console.error(`Download complete: ${savedFiles.length} file(s) saved.`);
-    } catch (error) {
-        console.error(error instanceof Error ? error.message : String(error));
-        console.error('');
-        printHelp();
-        process.exitCode = 1;
-    }
+		console.error(`Download complete: ${savedFiles.length} file(s) saved.`);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		console.error('');
+		printHelp();
+		process.exitCode = 1;
+	}
 }
 
 //---
