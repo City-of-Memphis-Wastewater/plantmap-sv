@@ -10,14 +10,47 @@
 "precision": 2,
 "status": "normal"
 },
-"BIOREM-01": {
-"id": "BIOREM-01",
-"name": "BioRem Scrubber Stage 1",
-"lat": 35.067049,
-"lon": -90.135734,
-"altitude": 10,
-"value": 12.4,
-"unit": "in. w.c.",
+"BR_PIT_830_C": {
+"id": "BR_PIT_830_C",
+"name": "Treated Gas Pressure",
+"lat": ,
+"lon": ,
+"altitude": 1,
+"value": 8.0,
+"unit": "In WC",
+"precision": 2,
+"status": "normal"
+},
+"PT01100": {
+"id": "PT01100",
+"name": "BB 1 Gas Out Pressure",
+"lat": 35.0668447,
+"lon": -90.1349473,
+"altitude": 3,
+"value": 14.0,
+"unit": "inH20",
+"precision": 2,
+"status": "normal"
+},
+"B1_FIR_5400": {
+"id": "B1_FIR_5400",
+"name": "BB 1 Gas Out Flow",
+"lat": 35.066845,
+"lon": -90.134946,
+"altitude": 3,
+"value": 1410.0,
+"unit": "SCFM",
+"precision": 1,
+"status": "normal"
+},
+"B1_TIR_5400": {
+"id": "B1_TIR_5400",
+"name": "BB 1 Gas Out Temp",
+"lat": 35.0668453,
+"lon": -90.1349479,
+"altitude": 3,
+"value": 1410.0,
+"unit": "Deg F",
 "precision": 2,
 "status": "normal"
 },
