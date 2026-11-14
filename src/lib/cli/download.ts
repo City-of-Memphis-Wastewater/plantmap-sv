@@ -226,8 +226,7 @@ export async function download(args: string[] = []): Promise<void> {
 		const options = parseArgs(args);
 		if (!options) return;
 
-		//const tags = await parseTags(options.tags);
-        const tags = await parseTagsFromFilesOrAndStrings(options.tags);
+		const tags = await parseTagsFromFilesOrAndStrings(options.tags);
         
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');
@@ -256,7 +255,6 @@ export async function download(args: string[] = []): Promise<void> {
 	}
 }
 
-//---
 async function downloadFormat(
 	serverUrl: string | null,
 	options: DownloadOptions,
@@ -272,7 +270,6 @@ async function downloadFormat(
 		return null;
 	}
 
-	//const url = `${serverUrl}${relativeUrl}`;
 	const url = new URL(relativeUrl, serverUrl);
 
 	console.error(`Requesting ${format.toUpperCase()} data...`);
@@ -312,72 +309,9 @@ async function downloadFormat(
 
 	await writeFile(outputPath, data);
 
-	//console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
 	console.error(`Saved ${outputPath} (${data.length.toLocaleString()} bytes)`);
 	console.log(outputPath);
 
 	return outputPath;
 }
 
-export async function downloadDefunct(args: string[] = []): Promise<void> {
-	try {
-		const options = parseArgs(args);
-		if (!options) {
-			return;
-		}
-
-		const tags = await parseTags(options.tags);
-
-		if (tags.length === 0) {
-			throw new Error('No IDCS tags found. Provide tags or a query file.');
-		}
-
-		options.tags = tags;
-
-		const server = await discoverServer();
-
-		console.error(`PlantMap download...`);
-		if (server) {
-			console.error(`PlantMap server: ${server.url}`);
-		} else {
-			console.error(`Server has no url.`);
-		}
-		console.error(`Tags: ${options.tags.join(', ')}`);
-		console.error(`Formats: ${options.formats.join(', ')}`);
-		console.error('');
-
-		const savedFiles: string[] = [];
-		const failures: Array<{ format: DownloadFormat; message: string }> = [];
-
-		// Request each format independently. The API currently returns one file per request.
-		for (const format of options.formats) {
-			try {
-				//savedFiles.push(await downloadFormat(server.url, options, format));
-				const savedFile = await downloadFormat(server?.url ?? null, options, format);
-
-				if (savedFile) {
-					savedFiles.push(savedFile);
-				}
-			} catch (error) {
-				const message = error instanceof Error ? error.message : String(error);
-				failures.push({ format, message });
-				console.error(message);
-			}
-		}
-
-		if (savedFiles.length > 0) {
-			console.error('');
-			console.error(`Download complete: ${savedFiles.length} file(s) saved.`);
-		}
-
-		if (failures.length > 0) {
-			console.error(`${failures.length} format(s) failed.`);
-			process.exitCode = 1;
-		}
-	} catch (error) {
-		console.error(error instanceof Error ? error.message : String(error));
-		console.error('');
-		printHelp();
-		process.exitCode = 1;
-	}
-}
