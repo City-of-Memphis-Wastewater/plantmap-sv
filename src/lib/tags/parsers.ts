@@ -11,9 +11,9 @@ export interface ResolveTagsOptions {
 //	cwd = process.cwd(),
 //	detectFiles = false
 //}: ResolveTagsOptions): Promise<string[]> {
-	// One implementation:
-	// 1. Read explicitly supplied files.
-	// 2. If detectFiles, inspect values for readable files.
-	// 3. Normalize, remove comments, uppercase, deduplicate.
-    
+// One implementation:
+// 1. Read explicitly supplied files.
+// 2. If detectFiles, inspect values for readable files.
+// 3. Normalize, remove comments, uppercase, deduplicate.
+
 //}

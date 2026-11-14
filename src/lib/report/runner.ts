@@ -37,17 +37,11 @@ export async function runReport(
 	const attachments: string[] = [];
 
 	for (const [index, download] of config.downloads.entries()) {
-        const tagsFromConfig = download.tags ?? [];
+		const tagsFromConfig = download.tags ?? [];
 
-        const tagsFromFiles = await parseTagsFromFiles(
-            download.tagsFiles ?? [],
-            appDir
-        );
+		const tagsFromFiles = await parseTagsFromFiles(download.tagsFiles ?? [], appDir);
 
-        const tags = [...new Set([
-            ...tagsFromConfig,
-            ...tagsFromFiles
-        ])];
+		const tags = [...new Set([...tagsFromConfig, ...tagsFromFiles])];
 
 		//const tagInputs = [
 		//	...(download.tags ?? []),

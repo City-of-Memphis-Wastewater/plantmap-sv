@@ -22,43 +22,36 @@ export async function readErrorMessageDefunct(response: Response): Promise<strin
 	return response.statusText || 'Unknown server error';
 }
 
-
 export async function readErrorMessage(response: Response): Promise<string> {
-    const body = await response.text();
+	const body = await response.text();
 
-    if (body) {
-        try {
-            const parsed: unknown = JSON.parse(body);
+	if (body) {
+		try {
+			const parsed: unknown = JSON.parse(body);
 
-            if (typeof parsed === 'object' && parsed !== null) {
-                const payload = parsed as {
-                    error?: unknown;
-                    detail?: unknown;
-                };
+			if (typeof parsed === 'object' && parsed !== null) {
+				const payload = parsed as {
+					error?: unknown;
+					detail?: unknown;
+				};
 
-                const error =
-                    typeof payload.error === 'string'
-                        ? payload.error
-                        : undefined;
+				const error = typeof payload.error === 'string' ? payload.error : undefined;
 
-                const detail =
-                    typeof payload.detail === 'string'
-                        ? payload.detail
-                        : undefined;
+				const detail = typeof payload.detail === 'string' ? payload.detail : undefined;
 
-                if (error && detail) {
-                    return `${error} Detail: ${detail}`;
-                }
+				if (error && detail) {
+					return `${error} Detail: ${detail}`;
+				}
 
-                if (error) return error;
-                if (detail) return detail;
-            }
-        } catch {
-            // Response was not JSON.
-        }
+				if (error) return error;
+				if (detail) return detail;
+			}
+		} catch {
+			// Response was not JSON.
+		}
 
-        return body.slice(0, 500);
-    }
+		return body.slice(0, 500);
+	}
 
-    return response.statusText || 'Unknown server error';
+	return response.statusText || 'Unknown server error';
 }
