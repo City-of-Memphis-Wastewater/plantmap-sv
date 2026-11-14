@@ -62,6 +62,10 @@ export class ClientEdsSoap {
 	 * The actual SOAP request and parsing remain owned by Points.
 	 */
 	public async getRegex(idcsTags: string[]): Promise<Record<string, EdsPointTelemetry>> {
+	    // const metadata = await eds.getRegex(['M310LI', 'M199AI']);
+	    // metadata['M310LI.UNIT0@NET0'].units
+        // metadata['M310LI.UNIT0@NET0'].description
+        // metadata['M310LI.UNIT0@NET0'].idcs
 		return this.points.getRegex(idcsTags);
 	}
 	/**
