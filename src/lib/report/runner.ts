@@ -37,12 +37,24 @@ export async function runReport(
 	const attachments: string[] = [];
 
 	for (const [index, download] of config.downloads.entries()) {
-		const tagInputs = [
-			...(download.tags ?? []),
-			...(download.tagsFiles ?? []).map((file) => path.resolve(appDir, file))
-		];
+        const tagsFromConfig = download.tags ?? [];
 
-		const tags = await parseTags(tagInputs, appDir);
+        const tagsFromFiles = await parseTagsFromFiles(
+            download.tagsFiles ?? [],
+            appDir
+        );
+
+        const tags = [...new Set([
+            ...tagsFromConfig,
+            ...tagsFromFiles
+        ])];
+
+		//const tagInputs = [
+		//	...(download.tags ?? []),
+		//	...(download.tagsFiles ?? []).map((file) => path.resolve(appDir, file))
+		//];
+
+		//const tags = await parseTags(tagInputs, appDir);
 
 		if (tags.length === 0) {
 			throw new Error(`Download ${index + 1} produced no IDCS tags.`);
