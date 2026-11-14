@@ -78,7 +78,7 @@
 },
 "B1_SIT_5100": {
 "id": "B1_SIT_5100",
-"name": "BB 1 Blower 1 Speed",
+"name": "BB 1 Blower 1 VFD Speed",
 "lat": 35.066837,
 "lon": -90.134922,
 "altitude": 1,
@@ -89,7 +89,7 @@
 },
 "B1_SIT_5200": {
 "id": "B1_SIT_5200",
-"name": "BB 1 Blower 2 Speed",
+"name": "BB 1 Blower 2 VFD Speed",
 "lat": 35.066837,
 "lon": -90.134888,
 "altitude": 1,
@@ -100,7 +100,7 @@
 },
 "B1_SIT_5300": {
 "id": "B1_SIT_5300",
-"name": "BB 1 Blower 3 Speed",
+"name": "BB 1 Blower 3 VFD Speed",
 "lat": 35.066837,
 "lon": -90.134854,
 "altitude": 1,
