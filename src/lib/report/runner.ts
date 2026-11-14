@@ -6,6 +6,10 @@ import { downloadFiles } from '../download/service.ts';
 import { sendEmailWithAttachments } from '../email/index.ts';
 import { getPlantMapAppDir } from '../plantmap-sv/bootstrap.ts';
 import { parseTags } from '../cli/helpers/parse-tags.ts';
+import { 
+    //parseTagsFromString, 
+    parseTagsFromFiles 
+} from '../server/eds/parsers/tags.ts';
 
 import { ensureDefaultReportConfig, loadReportConfig } from './config.ts';
 import type { ReportResult } from './types.ts';
@@ -39,6 +43,7 @@ export async function runReport(
 	for (const [index, download] of config.downloads.entries()) {
 		const tagsFromConfig = download.tags ?? [];
 
+        // parseTagsFromString
 		const tagsFromFiles = await parseTagsFromFiles(download.tagsFiles ?? [], appDir);
 
 		const tags = [...new Set([...tagsFromConfig, ...tagsFromFiles])];
