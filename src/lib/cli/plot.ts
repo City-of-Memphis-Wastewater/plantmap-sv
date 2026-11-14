@@ -13,7 +13,8 @@ import type { PlotOptions } from '../plot/types.ts';
 //import { resolveTimeAspects } from '../plot/resolve-time.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
-import { parseTags } from './helpers/parse-tags.ts';
+//import { parseTags } from './helpers/parse-tags.ts';
+import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
 import { openUrl } from '../../lib/utils/launch.ts';
 
 function printHelp(): void {
@@ -82,7 +83,6 @@ function parsePositiveNumber(
 
 function parseArgs(args: string[]): PlotOptions {
 	const tags: string[] = [];
-	//const tags = await parseTags(rawTags);
 
 	let start: string | undefined;
 	let end: string | undefined;
@@ -166,8 +166,7 @@ function parseArgs(args: string[]): PlotOptions {
 export async function plot(args: string[] = []): Promise<void> {
 	try {
 		const options = parseArgs(args);
-		const tags = await parseTags(options.tags);
-
+		const tags = await parseTagsFromFilesOrAndStrings(options.tags);
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');
 		}
