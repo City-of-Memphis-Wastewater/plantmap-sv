@@ -8,7 +8,10 @@ import path from 'node:path';
  * Supports whitespace/comma-separated values, full-line comments,
  * and inline comments.
  */
-export function parseTagsFromString(content: string): string[] {
+export function parseTagsFromString(content: string | undefined): string[] {
+    if (!content) return [];
+
+    //export function parseTagsFromString(content: string): string[] {
 	const tags: string[] = [];
 
 	for (const line of content.split(/\r?\n/)) {

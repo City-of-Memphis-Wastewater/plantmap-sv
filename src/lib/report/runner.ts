@@ -5,7 +5,6 @@ import { DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 import { downloadFiles } from '../download/service.ts';
 import { sendEmailWithAttachments } from '../email/index.ts';
 import { getPlantMapAppDir } from '../plantmap-sv/bootstrap.ts';
-import { parseTags } from '../cli/helpers/parse-tags.ts';
 import { 
     //parseTagsFromString, 
     parseTagsFromFiles 
@@ -42,29 +41,15 @@ export async function runReport(
 
 	for (const [index, download] of config.downloads.entries()) {
 		const tagsFromConfig = download.tags ?? [];
-
-        // parseTagsFromString
-		const tagsFromFiles = await parseTagsFromFiles(download.tagsFiles ?? [], appDir);
+        //const tagsFromConfig = parseTagsFromString(download.tags ?? '');
+		
+        const tagsFromFiles = await parseTagsFromFiles(download.tagsFiles ?? [], appDir);
 
 		const tags = [...new Set([...tagsFromConfig, ...tagsFromFiles])];
-
-		//const tagInputs = [
-		//	...(download.tags ?? []),
-		//	...(download.tagsFiles ?? []).map((file) => path.resolve(appDir, file))
-		//];
-
-		//const tags = await parseTags(tagInputs, appDir);
 
 		if (tags.length === 0) {
 			throw new Error(`Download ${index + 1} produced no IDCS tags.`);
 		}
-
-		//const tagsPath = path.resolve(appDir, download.tagsFile);
-		//const tags = await parseTags([tagsPath], appDir);
-
-		//if (tags.length === 0) {
-		//    throw new Error(`No IDCS tags found in ${tagsPath}`);
-		//}
 
 		console.log(`Download ${index + 1}/${config.downloads.length}: ${tags.join(', ')}`);
 
