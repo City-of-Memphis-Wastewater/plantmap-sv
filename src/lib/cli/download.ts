@@ -15,7 +15,7 @@ import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download
 
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
-import { parseTags } from './helpers/parse-tags.ts';
+import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
 import { readErrorMessage } from './helpers/errors.ts';
 import { getFilename } from '../download/service.ts';
 
@@ -226,8 +226,9 @@ export async function download(args: string[] = []): Promise<void> {
 		const options = parseArgs(args);
 		if (!options) return;
 
-		const tags = await parseTags(options.tags);
-
+		//const tags = await parseTags(options.tags);
+        const tags = await parseTagsFromFilesOrAndStrings(options.tags);
+        
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');
 		}

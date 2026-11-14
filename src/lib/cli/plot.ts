@@ -13,7 +13,6 @@ import type { PlotOptions } from '../plot/types.ts';
 //import { resolveTimeAspects } from '../plot/resolve-time.ts';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
-//import { parseTags } from './helpers/parse-tags.ts';
 import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
 import { openUrl } from '../../lib/utils/launch.ts';
 
