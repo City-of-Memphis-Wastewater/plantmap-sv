@@ -4,7 +4,8 @@ import packageJson from '../../../../package.json';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-import { dev } from '$app/environment';
+//import { dev } from '$app/environment';
+import { dev } from '$app/env';
 import type { AppStatus } from '#lib/status/types';
 
 const startedAt = new Date().toISOString();
