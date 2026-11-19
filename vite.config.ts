@@ -1,3 +1,6 @@
+import adapter from '@sveltejs/adapter-node';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from '@tailwindcss/vite';
@@ -18,7 +21,17 @@ export default defineConfig({
 	assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.pbf', '**/*.geojson', '**/*.czml'],
 	plugins: [
 		tailwindcss(),
-		sveltekit() // Must remain empty so svelte.config.js is read
+        sveltekit({
+            adapter: adapter(),
+            preprocess: vitePreprocess(),
+            compilerOptions: {
+                runes: ({ filename }) =>
+                    filename.split(/[/\\]/).includes('node_modules')
+                        ? undefined
+                        : true
+            }
+        })
+		//sveltekit() // Must remain empty so svelte.config.js is read
 	],
 	optimizeDeps: {
 		include: ['cesium', 'mersenne-twister']
