@@ -4,7 +4,7 @@ import type { Viewer } from 'cesium';
 
 type CesiumModule = typeof import('cesium');
 
-import type { SensorNode } from '#lib/telemetry/types';
+import type { SensorNode } from '#lib/telemetry/types.js';
 
 export function syncSensorEntities(
 	viewer: Viewer,

@@ -1,8 +1,8 @@
 // src/lib/server/eds/factory.ts
 
-import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '#lib/plantmap-sv/bootstrap';
-import { loadPlantMapConfig } from '#lib/plantmap-sv/config';
-import { loadPlantMapSecret } from '#lib/plantmap-sv/secret';
+import { bootstrapPlantMapConfig, bootstrapPlantMapSecret } from '#lib/plantmap-sv/bootstrap.js';
+import { loadPlantMapConfig } from '#lib/plantmap-sv/config.js';
+import { loadPlantMapSecret } from '#lib/plantmap-sv/secret.js';
 
 import { ClientEdsSoap } from './client.ts';
 

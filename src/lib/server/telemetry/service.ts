@@ -3,10 +3,10 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { getEdsClient } from '#lib/server/eds/factory';
-import { getDatabaseTimestamp } from '#lib/database/time';
-import type { EdsPointTelemetry } from '#lib/server/eds/types';
-import type { SensorNode, TelemetrySnapshot } from '#lib/telemetry/types';
+import { getEdsClient } from '#lib/server/eds/factory.js';
+import { getDatabaseTimestamp } from '#lib/database/time.js';
+import type { EdsPointTelemetry } from '#lib/server/eds/types.js';
+import type { SensorNode, TelemetrySnapshot } from '#lib/telemetry/types.js';
 
 import { persistBatch } from './persistence.ts';
 

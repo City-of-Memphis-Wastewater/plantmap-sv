@@ -3,10 +3,10 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import type { ECharts, EChartsOption } from 'echarts';
-	import type { EDSTelemetryValue } from '#lib/server/eds/types';
+	import type { EDSTelemetryValue } from '#lib/server/eds/types.js';
 
-	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url';
-	import { buildTelemetryChartSeries } from '#lib/plot/series';
+	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url.js';
+	import { buildTelemetryChartSeries } from '#lib/plot/series.js';
 
 	import {
 		DEFAULT_TAGS,
@@ -20,7 +20,7 @@
 		SUPPORTED_FUNCTION_TYPES,
 		PLOT_API_PATH,
 		PLOT_PAGE_PATH
-	} from '#lib/plot/context';
+	} from '#lib/plot/context.js';
 
 	type PlotResponse = {
 		request?: {

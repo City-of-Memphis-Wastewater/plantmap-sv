@@ -1,11 +1,20 @@
+
 import { z } from 'zod';
-//import { env } from '$env/dynamic/private';
-import { env } from '$app/env/private';
+
+import {
+  OVATION_EDS_ENDPOINT,
+  OVATION_EDS_SUFFIX,
+  OVATION_EDS_TIMEOUT_MS
+} from '$app/env/private';
 
 const EnvSchema = z.object({
-	OVATION_EDS_ENDPOINT: z.url().default('http://000.00.0.000:00000'),
-	OVATION_EDS_SUFFIX: z.string().default('.UNIT0@NET0'),
-	OVATION_EDS_TIMEOUT_MS: z.coerce.number().default(5000)
+  OVATION_EDS_ENDPOINT: z.url().default('http://000.00.0.000:00000'),
+  OVATION_EDS_SUFFIX: z.string().default('.UNIT0@NET0'),
+  OVATION_EDS_TIMEOUT_MS: z.coerce.number().default(5000)
 });
 
-export const envConfig = EnvSchema.parse(env);
+export const envConfig = EnvSchema.parse({
+  OVATION_EDS_ENDPOINT,
+  OVATION_EDS_SUFFIX,
+  OVATION_EDS_TIMEOUT_MS
+});

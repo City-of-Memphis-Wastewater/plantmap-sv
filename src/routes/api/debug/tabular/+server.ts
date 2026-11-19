@@ -3,7 +3,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-import { getEdsClient } from '#lib/server/eds/factory';
+import { getEdsClient } from '#lib/server/eds/factory.js';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const started = Date.now();

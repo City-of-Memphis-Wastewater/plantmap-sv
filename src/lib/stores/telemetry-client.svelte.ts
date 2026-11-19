@@ -1,5 +1,5 @@
 // src/lib/stores/telemetry-client.svelte.ts
-import type { TelemetrySnapshot, SensorNode } from '#lib/telemetry/types';
+import type { TelemetrySnapshot, SensorNode } from '#lib/telemetry/types.js';
 
 class TelemetryStore {
 	sensors = $state<Record<string, SensorNode>>({});
