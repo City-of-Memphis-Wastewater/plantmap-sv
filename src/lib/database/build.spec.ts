@@ -27,7 +27,8 @@ describe('local database initialization', () => {
 	});
 
 	it('recognizes an existing usable database', () => {
-		buildLocalDatabase(databasePath);
+        const db = buildLocalDatabase(databasePath);
+        db.close();
 
 		const status = checkStatusLocalDatabase(databasePath);
 
