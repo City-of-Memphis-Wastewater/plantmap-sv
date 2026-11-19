@@ -14,6 +14,14 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 
 ---
 
+## [0.0.8] – 2026-11-19
+
+### Changed:
+
+- Svelte 2 -> Svelte 3
+
+---
+
 ## [0.0.7] – 2026-11-02
 
 ### Added:
