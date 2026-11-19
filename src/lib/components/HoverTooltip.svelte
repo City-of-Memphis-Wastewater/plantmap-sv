@@ -1,7 +1,7 @@
 <!-- src/lib/components/HoverTooltip.svelte -->
 <script lang="ts">
 	import PlotHUD from './PlotHUD.svelte';
-	import { telemetryStore } from '$lib/stores/telemetry-client.svelte';
+	import { telemetryStore } from '#lib/stores/telemetry-client.svelte';
 
 	let {
 		hoverInfo

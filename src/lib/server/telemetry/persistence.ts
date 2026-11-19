@@ -1,8 +1,8 @@
-import type { EdsPointTelemetry } from '$lib/server/eds/types';
-import type { SensorNode } from '$lib/telemetry/types';
-import type { DatabasePayload } from '$lib/database/types';
-import { getDatabaseTimestamp } from '$lib/database/time';
-import { writeSensorReadings } from '$lib/database/index';
+import type { EdsPointTelemetry } from '#lib/server/eds/types';
+import type { SensorNode } from '#lib/telemetry/types';
+import type { DatabasePayload } from '#lib/database/types';
+import { getDatabaseTimestamp } from '#lib/database/time';
+import { writeSensorReadings } from '#lib/database/index';
 
 export function buildPersistencePayload(
 	sensorMap: Record<string, SensorNode>,

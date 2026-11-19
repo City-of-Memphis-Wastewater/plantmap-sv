@@ -3,9 +3,9 @@
 	console.log('[PAGE] module loaded');
 
 	import { onMount } from 'svelte';
-	import CesiumViewport from '$lib/components/CesiumViewport.svelte';
-	import TelemetryHUD from '$lib/components/TelemetryHUD.svelte';
-	import { telemetryStore } from '$lib/stores/telemetry-client.svelte';
+	import CesiumViewport from '#lib/components/CesiumViewport.svelte';
+	import TelemetryHUD from '#lib/components/TelemetryHUD.svelte';
+	import { telemetryStore } from '#lib/stores/telemetry-client.svelte';
 
 	onMount(() => {
 		console.log('[PAGE] onMount');

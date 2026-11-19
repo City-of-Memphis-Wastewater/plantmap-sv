@@ -7,10 +7,10 @@
 	import type { Viewer, GeoJsonDataSource, ScreenSpaceEventHandler } from 'cesium';
 	type CesiumModule = typeof import('cesium');
 
-	import { telemetryStore } from '$lib/stores/telemetry-client.svelte';
-	import { applyBasemap } from '$lib/cesium/layers';
-	import { resetCamera, toggleViewMode } from '$lib/cesium/navigation';
-	import { syncSensorEntities } from '$lib/cesium/syncSensors';
+	import { telemetryStore } from '#lib/stores/telemetry-client.svelte';
+	import { applyBasemap } from '#lib/cesium/layers';
+	import { resetCamera, toggleViewMode } from '#lib/cesium/navigation';
+	import { syncSensorEntities } from '#lib/cesium/syncSensors';
 
 	import NavigationHUD from './NavigationHUD.svelte';
 	import ViewportDebugger from './ViewportDebugger.svelte';

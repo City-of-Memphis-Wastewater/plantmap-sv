@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { readCachedSensorReadings } from '$lib/database';
+//import { readCachedSensorReadings } from '#lib/database';
+import { readCachedSensorReadings } from '#lib/database/index.ts';
 
 const HISTORY_SECONDS = 48 * 60 * 60;
 

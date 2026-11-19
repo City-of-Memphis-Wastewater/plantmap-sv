@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { env } from '$env/dynamic/private';
+//import { env } from '$env/dynamic/private';
+import { env } from '$app/env/private';
 
 const EnvSchema = z.object({
 	OVATION_EDS_ENDPOINT: z.url().default('http://000.00.0.000:00000'),

@@ -1,4 +1,4 @@
-import type { EDSTelemetrySeries } from '$lib/server/eds/types';
+import type { EDSTelemetrySeries } from '#lib/server/eds/types';
 import type { EChartsOption } from 'echarts';
 
 /**

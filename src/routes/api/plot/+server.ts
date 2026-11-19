@@ -3,10 +3,10 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-import { getEdsClient } from '$lib/server/eds/factory';
-import { parsePlotUrl } from '$lib/plot/url';
-import { resolveTimeAspects } from '$lib/plot/resolve-time';
-import { DEFAULT_FUNCTION_TYPE, SECONDS_PER_DAY } from '$lib/plot/context';
+import { getEdsClient } from '#lib/server/eds/factory';
+import { parsePlotUrl } from '#lib/plot/url';
+import { resolveTimeAspects } from '#lib/plot/resolve-time';
+import { DEFAULT_FUNCTION_TYPE, SECONDS_PER_DAY } from '#lib/plot/context';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Preserve compatibility with callers using the previous parameter name.

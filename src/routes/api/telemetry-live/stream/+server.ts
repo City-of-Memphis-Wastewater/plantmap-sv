@@ -2,7 +2,7 @@
 
 import type { RequestHandler } from './$types';
 
-import { telemetryService } from '$lib/server/telemetry/service';
+import { telemetryService } from '#lib/server/telemetry/service';
 
 const encoder = new TextEncoder();
 

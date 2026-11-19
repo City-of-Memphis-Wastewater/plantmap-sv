@@ -1,23 +1,23 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-import { DEFAULT_FUNCTION_TYPE, SECONDS_PER_DAY } from '$lib/plot/context';
+import { DEFAULT_FUNCTION_TYPE, SECONDS_PER_DAY } from '#lib/plot/context';
 
-import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '$lib/download/context';
+import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '#lib/download/context';
 
-import type { DownloadFormat } from '$lib/download/context';
+import type { DownloadFormat } from '#lib/download/context';
 
-import { parsePlotUrl } from '$lib/plot/url';
-import { resolveTimeAspects } from '$lib/plot/resolve-time';
-import { getEdsClient } from '$lib/server/eds/factory';
+import { parsePlotUrl } from '#lib/plot/url';
+import { resolveTimeAspects } from '#lib/plot/resolve-time';
+import { getEdsClient } from '#lib/server/eds/factory';
 
-import { serializeTelemetryCsv } from '$lib/download/csv';
-import { serializeTelemetryJson } from '$lib/download/json';
+import { serializeTelemetryCsv } from '#lib/download/csv';
+import { serializeTelemetryJson } from '#lib/download/json';
 
-import { renderChartSvg } from '$lib/download/svg';
-import type { EDSTelemetrySeries } from '$lib/server/eds/types';
-import { buildTelemetryChartSeries } from '$lib/plot/series';
-//import { buildTimeSeriesChartOptions } from '$lib/plot/chart-options'; // unused anyhere?
+import { renderChartSvg } from '#lib/download/svg';
+import type { EDSTelemetrySeries } from '#lib/server/eds/types';
+import { buildTelemetryChartSeries } from '#lib/plot/series';
+//import { buildTimeSeriesChartOptions } from '#lib/plot/chart-options'; // unused anyhere?
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
