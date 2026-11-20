@@ -227,7 +227,7 @@ export async function download(args: string[] = []): Promise<void> {
 		if (!options) return;
 
 		const tags = await parseTagsFromFilesOrAndStrings(options.tags);
-        
+
 		if (tags.length === 0) {
 			throw new Error('No IDCS tags found. Provide tags or a query file.');
 		}
@@ -314,4 +314,3 @@ async function downloadFormat(
 
 	return outputPath;
 }
-

@@ -9,9 +9,9 @@ import path from 'node:path';
  * and inline comments.
  */
 export function parseTagsFromString(content: string | undefined): string[] {
-    if (!content) return [];
+	if (!content) return [];
 
-    //export function parseTagsFromString(content: string): string[] {
+	//export function parseTagsFromString(content: string): string[] {
 	const tags: string[] = [];
 
 	for (const line of content.split(/\r?\n/)) {
