@@ -14,7 +14,6 @@ import {
 import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 
 import { buildPlotSearchParams } from '../plot/url.ts';
-import { discoverServer } from '../status/probe.ts';
 import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
 import { readErrorMessage } from './helpers/errors.ts';
 import { getFilename } from '../download/service.ts';
