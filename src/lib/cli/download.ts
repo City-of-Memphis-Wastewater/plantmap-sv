@@ -1,6 +1,5 @@
 // src/lib/cli/download.ts
 
-import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -13,10 +12,9 @@ import {
 
 import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
 
-import { buildPlotSearchParams } from '../plot/url.ts';
 import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
-import { readErrorMessage } from './helpers/errors.ts';
-import { getFilename } from '../download/service.ts';
+//import { readErrorMessage } from './helpers/errors.ts';
+//import { getFilename } from '../download/service.ts';
 
 import type { DownloadFormat } from '../download/context.ts';
 import { downloadFiles } from '../download/service.ts';
