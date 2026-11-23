@@ -1,5 +1,4 @@
-
- // src/lib/cli/start.ts
+// src/lib/cli/start.ts
 
 import { spawn } from 'node:child_process';
 import path from 'node:path';
@@ -14,9 +13,9 @@ export function start(args: string[] = []) {
 	const config = bootstrapPlantMapConfig();
 	const plantMapConfig = loadPlantMapConfig(config);
 
-    // ---
-    
-    let dev = false;
+	// ---
+
+	let dev = false;
 	let portOverride: string | undefined;
 
 	for (let i = 0; i < args.length; i++) {
@@ -39,8 +38,10 @@ export function start(args: string[] = []) {
 		}
 	}
 
-	const port = portOverride ?? String(dev ? plantMapConfig.appServer.devPort : plantMapConfig.appServer.prodPort);
-    // ---
+	const port =
+		portOverride ??
+		String(dev ? plantMapConfig.appServer.devPort : plantMapConfig.appServer.prodPort);
+	// ---
 
 	const child = dev
 		? spawn('npm', ['run', 'dev', '--', '--port', port], {

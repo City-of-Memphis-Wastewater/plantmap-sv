@@ -1,5 +1,9 @@
 <!-- src/lib/components/NavigationHUD.svelte -->
 <script lang="ts">
+	import { onDestroy } from 'svelte';
+
+	type PanDirection = 'up' | 'down' | 'left' | 'right';
+
 	let {
 		showNavigation = $bindable(true),
 		geojsonLoaded = false,
@@ -15,6 +19,7 @@
 		onResetCamera = () => {},
 		onZoomIn = () => {},
 		onZoomOut = () => {},
+		onPanCamera = () => {},
 		onToggleGeoJson = () => {},
 		onToggleSensorLabels = () => {},
 		onToggleSensorValues = () => {},
@@ -34,15 +39,37 @@
 		onResetCamera?: () => void;
 		onZoomIn?: () => void;
 		onZoomOut?: () => void;
+		onPanCamera?: (direction: PanDirection) => void;
 		onToggleGeoJson?: () => void;
 		onToggleSensorLabels?: () => void;
 		onToggleSensorValues?: () => void;
 		onToggleHoverInfo?: () => void;
 	} = $props();
+
+	let panTimer: ReturnType<typeof setInterval> | undefined;
+
+	function stopPan() {
+		if (panTimer !== undefined) {
+			clearInterval(panTimer);
+			panTimer = undefined;
+		}
+	}
+
+	function startPan(direction: PanDirection) {
+		stopPan();
+
+		// Move immediately, then continue while held.
+		onPanCamera(direction);
+
+		panTimer = setInterval(() => {
+			onPanCamera(direction);
+		}, 100);
+	}
+
+	onDestroy(stopPan);
 </script>
 
 <div class="fixed right-3 bottom-[4vh] z-30 max-w-[220px]">
-	<!--div class="fixed top-1/2 right-3 z-30 -translate-y-1/2 max-w-[220px]"-->
 	<div
 		class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md"
 	>
@@ -63,7 +90,7 @@
 
 		{#if showNavigation}
 			<div class="flex flex-col gap-1.5 pt-1 text-slate-200">
-				<!-- View Mode Segmented Switch -->
+				<!-- View Mode -->
 				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
@@ -87,7 +114,7 @@
 					</button>
 				</div>
 
-				<!-- Basemap Segmented Switch -->
+				<!-- Basemap -->
 				<div class="grid grid-cols-2 rounded-md border border-slate-700/70 bg-slate-950/60 p-0.5">
 					<button
 						type="button"
@@ -111,35 +138,115 @@
 					</button>
 				</div>
 
-				<!-- Compact Camera Bar (+ / Reset / -) -->
+				<!-- Zoom -->
 				<div class="grid grid-cols-3 gap-1">
 					<button
 						type="button"
 						onclick={onZoomIn}
 						title="Zoom In"
 						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold text-slate-100 hover:bg-slate-700"
+						>+</button
 					>
-						+
-					</button>
 					<button
 						type="button"
 						onclick={onResetCamera}
 						title="Reset Camera View"
 						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-[10px] font-semibold text-slate-100 uppercase hover:bg-slate-700"
+						>Reset</button
 					>
-						Reset
-					</button>
 					<button
 						type="button"
 						onclick={onZoomOut}
 						title="Zoom Out"
 						class="rounded border border-slate-700/80 bg-slate-800/80 py-1 font-mono text-sm font-semibold text-slate-100 hover:bg-slate-700"
+						>−</button
 					>
-						−
-					</button>
 				</div>
 
-				<!-- Display Layer Toggles -->
+				<!-- Directional Pad -->
+				<div class="border-t border-slate-800/80 pt-1.5">
+					<div class="mb-1 px-1 font-mono text-[9px] tracking-wider text-slate-500 uppercase">
+						Pan / Move
+					</div>
+
+					<div class="mx-auto grid w-fit grid-cols-3 gap-1">
+						<!-- Top -->
+						<div></div>
+						<button
+							type="button"
+							aria-label="Pan up"
+							title="Pan Up"
+							onpointerdown={(e) => {
+								e.preventDefault();
+								e.currentTarget.setPointerCapture(e.pointerId);
+								startPan('up');
+							}}
+							onpointerup={stopPan}
+							onpointercancel={stopPan}
+							class="h-11 w-12 touch-none rounded border border-slate-700 bg-slate-800 font-mono text-lg text-white select-none active:bg-sky-600"
+							>↑</button
+						>
+						<div></div>
+
+						<!-- Middle -->
+						<button
+							type="button"
+							aria-label="Pan left"
+							title="Pan Left"
+							onpointerdown={(e) => {
+								e.preventDefault();
+								e.currentTarget.setPointerCapture(e.pointerId);
+								startPan('left');
+							}}
+							onpointerup={stopPan}
+							onpointercancel={stopPan}
+							class="h-11 w-12 touch-none rounded border border-slate-700 bg-slate-800 font-mono text-lg text-white select-none active:bg-sky-600"
+							>←</button
+						>
+						<button
+							type="button"
+							aria-label="Stop panning"
+							title="Stop"
+							onclick={stopPan}
+							class="h-11 w-12 rounded border border-slate-600 bg-slate-950 font-mono text-xs text-slate-400 hover:bg-slate-700"
+							>●</button
+						>
+						<button
+							type="button"
+							aria-label="Pan right"
+							title="Pan Right"
+							onpointerdown={(e) => {
+								e.preventDefault();
+								e.currentTarget.setPointerCapture(e.pointerId);
+								startPan('right');
+							}}
+							onpointerup={stopPan}
+							onpointercancel={stopPan}
+							class="h-11 w-12 touch-none rounded border border-slate-700 bg-slate-800 font-mono text-lg text-white select-none active:bg-sky-600"
+							>→</button
+						>
+
+						<!-- Bottom -->
+						<div></div>
+						<button
+							type="button"
+							aria-label="Pan down"
+							title="Pan Down"
+							onpointerdown={(e) => {
+								e.preventDefault();
+								e.currentTarget.setPointerCapture(e.pointerId);
+								startPan('down');
+							}}
+							onpointerup={stopPan}
+							onpointercancel={stopPan}
+							class="h-11 w-12 touch-none rounded border border-slate-700 bg-slate-800 font-mono text-lg text-white select-none active:bg-sky-600"
+							>↓</button
+						>
+						<div></div>
+					</div>
+				</div>
+
+				<!-- Layers -->
 				<div class="flex flex-col gap-1 border-t border-slate-800/80 pt-1.5">
 					<div class="px-1 font-mono text-[9px] tracking-wider text-slate-500 uppercase">
 						Layers
@@ -154,9 +261,8 @@
 						<span>Plant GeoJSON</span>
 						<span
 							class="text-[10px] font-bold {showGeoJson ? 'text-emerald-400' : 'text-slate-500'}"
+							>{showGeoJson ? 'ON' : 'OFF'}</span
 						>
-							{showGeoJson ? 'ON' : 'OFF'}
-						</span>
 					</button>
 
 					<button
@@ -167,10 +273,8 @@
 						<span>Sensor Labels</span>
 						<span
 							class="text-[10px] font-bold text-slate-500"
-							class:text-emerald-400={showSensorLabels}
+							class:text-emerald-400={showSensorLabels}>{showSensorLabels ? 'ON' : 'OFF'}</span
 						>
-							{showSensorLabels ? 'ON' : 'OFF'}
-						</span>
 					</button>
 
 					<button
@@ -181,10 +285,8 @@
 						<span>Sensor Values</span>
 						<span
 							class="text-[10px] font-bold text-slate-500"
-							class:text-emerald-400={showSensorValues}
+							class:text-emerald-400={showSensorValues}>{showSensorValues ? 'ON' : 'OFF'}</span
 						>
-							{showSensorValues ? 'ON' : 'OFF'}
-						</span>
 					</button>
 
 					<button
@@ -195,14 +297,12 @@
 						<span>Hover Info</span>
 						<span
 							class="text-[10px] font-bold text-slate-500"
-							class:text-emerald-400={showHoverInfo}
+							class:text-emerald-400={showHoverInfo}>{showHoverInfo ? 'ON' : 'OFF'}</span
 						>
-							{showHoverInfo ? 'ON' : 'OFF'}
-						</span>
 					</button>
 				</div>
 
-				<!-- Diagnostics Toggle -->
+				<!-- Debugger -->
 				<div class="border-t border-slate-800/80 pt-1.5">
 					<button
 						type="button"
@@ -210,11 +310,9 @@
 						class="flex w-full items-center justify-between rounded border border-slate-700/60 bg-slate-800/50 px-2 py-1 text-left font-mono text-[11px] hover:bg-slate-800"
 					>
 						<span class="text-slate-300">Debugger</span>
-						<span
-							class="text-[10px] font-bold {showDebugger ? 'text-amber-400' : 'text-slate-500'}"
+						<span class="text-[10px] font-bold {showDebugger ? 'text-amber-400' : 'text-slate-500'}"
+							>{showDebugger ? 'ON' : 'OFF'}</span
 						>
-							{showDebugger ? 'ON' : 'OFF'}
-						</span>
 					</button>
 				</div>
 			</div>

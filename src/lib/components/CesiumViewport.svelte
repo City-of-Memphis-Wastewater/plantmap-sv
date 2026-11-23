@@ -92,12 +92,60 @@
 		toggleViewMode(viewer, CesiumModule, targetMode);
 	}
 
+	const MIN_CAMERA_ALT = 80;
+	const MAX_CAMERA_ALT = 20_000;
+	const ZOOM_STEP = 300;
+
 	function zoomIn() {
-		viewer?.camera.zoomIn(300);
+		if (!viewer || !CesiumModule) return;
+
+		const height = viewer.camera.positionCartographic.height;
+		if (height <= MIN_CAMERA_ALT) return;
+
+		viewer.camera.zoomIn(Math.min(ZOOM_STEP, height - MIN_CAMERA_ALT));
 	}
 
 	function zoomOut() {
+		if (!viewer || !CesiumModule) return;
+
+		const height = viewer.camera.positionCartographic.height;
+		if (height >= MAX_CAMERA_ALT) return;
+
+		viewer.camera.zoomOut(Math.min(ZOOM_STEP, MAX_CAMERA_ALT - height));
+	}
+
+	function zoomInDefunct() {
+		viewer?.camera.zoomIn(300);
+	}
+
+	function zoomOutDefunct() {
 		viewer?.camera.zoomOut(300);
+	}
+
+	type PanDirection = 'up' | 'down' | 'left' | 'right';
+
+	function panCamera(direction: PanDirection) {
+		if (!viewer) return;
+
+		// Scale movement with camera altitude so navigation
+		// remains useful at both plant and overview scales.
+		const height = viewer.camera.positionCartographic.height;
+		const distance = Math.max(1, height * 0.015);
+
+		switch (direction) {
+			case 'up':
+				viewer.camera.moveUp(distance);
+				break;
+			case 'down':
+				viewer.camera.moveDown(distance);
+				break;
+			case 'left':
+				viewer.camera.moveLeft(distance);
+				break;
+			case 'right':
+				viewer.camera.moveRight(distance);
+				break;
+		}
 	}
 
 	function toggleGeoJson() {
@@ -308,6 +356,7 @@
 		onResetCamera={handleResetCamera}
 		onZoomIn={zoomIn}
 		onZoomOut={zoomOut}
+		onPanCamera={panCamera}
 		onToggleGeoJson={toggleGeoJson}
 		onToggleSensorLabels={toggleSensorLabels}
 		onToggleSensorValues={toggleSensorValues}

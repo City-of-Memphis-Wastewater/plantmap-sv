@@ -1,4 +1,3 @@
-
 <!-- src/lib/components/TelemetryHUD.svelte -->
 <script lang="ts">
 	import { telemetryStore } from '#lib/stores/telemetry-client.svelte.js';
@@ -12,7 +11,9 @@
 	>
 		<!-- Expandable, scrollable sensor matrix -->
 		{#if showTelemetryHud}
-			<div class="max-h-[calc(100dvh-110px)] overflow-y-auto overscroll-contain border-b border-slate-800/80 px-1.5 py-1 text-[10px]">
+			<div
+				class="max-h-[calc(100dvh-110px)] overflow-y-auto overscroll-contain border-b border-slate-800/80 px-1.5 py-1 text-[10px]"
+			>
 				<!-- Warning Callout -->
 				{#if telemetryStore.error}
 					<div class="mb-1 rounded bg-amber-950/40 px-1.5 py-0.5 font-mono text-[9px] italic">
