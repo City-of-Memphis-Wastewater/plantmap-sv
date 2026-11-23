@@ -1,4 +1,5 @@
-// src/lib/cli/start.ts
+
+ // src/lib/cli/start.ts
 
 import { spawn } from 'node:child_process';
 import path from 'node:path';
@@ -10,14 +11,18 @@ import { loadPlantMapConfig } from '../plantmap-sv/config.ts';
 const projectDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 export function start(args: string[] = []) {
-	//let port = process.env.PORT ?? '4000';
 	const config = bootstrapPlantMapConfig();
 	const plantMapConfig = loadPlantMapConfig(config);
 
-	let port = process.env.PORT ?? String(plantMapConfig.appServer.prodPort);
+    // ---
+    
+    let dev = false;
+	let portOverride: string | undefined;
 
 	for (let i = 0; i < args.length; i++) {
-		if (args[i] === '--port') {
+		if (args[i] === '--dev') {
+			dev = true;
+		} else if (args[i] === '--port') {
 			const value = args[++i];
 
 			if (!value || !/^\d+$/.test(value) || Number(value) < 1 || Number(value) > 65535) {
@@ -26,7 +31,7 @@ export function start(args: string[] = []) {
 				return;
 			}
 
-			port = value;
+			portOverride = value;
 		} else {
 			console.error(`Unknown start option: ${args[i]}`);
 			process.exitCode = 1;
@@ -34,15 +39,29 @@ export function start(args: string[] = []) {
 		}
 	}
 
-	const child = spawn(process.execPath, [path.join(projectDir, 'build/index.js')], {
-		cwd: projectDir,
-		env: {
-			...process.env,
-			NODE_ENV: 'production',
-			PORT: port
-		},
-		stdio: 'inherit'
-	});
+	const port = portOverride ?? String(dev ? plantMapConfig.appServer.devPort : plantMapConfig.appServer.prodPort);
+    // ---
+
+	const child = dev
+		? spawn('npm', ['run', 'dev', '--', '--port', port], {
+				cwd: projectDir,
+				env: {
+					...process.env,
+					NODE_ENV: 'development',
+					PORT: port
+				},
+				stdio: 'inherit',
+				shell: process.platform === 'win32'
+			})
+		: spawn(process.execPath, [path.join(projectDir, 'build/index.js')], {
+				cwd: projectDir,
+				env: {
+					...process.env,
+					NODE_ENV: 'production',
+					PORT: port
+				},
+				stdio: 'inherit'
+			});
 
 	child.on('error', (error) => {
 		console.error(`Failed to start PlantMap: ${error.message}`);
