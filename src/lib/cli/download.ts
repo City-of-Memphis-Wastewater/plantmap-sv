@@ -10,11 +10,13 @@ import {
 	MAX_SECONDS_BETWEEN_POINTS
 } from '../plot/context.ts';
 
-import { SUPPORTED_DOWNLOAD_FORMATS, DEFAULT_DOWNLOAD_FORMAT } from '../download/context.ts';
+import {
+    DEFAULT_EXPORT_DIR,
+    SUPPORTED_DOWNLOAD_FORMATS,
+    DEFAULT_DOWNLOAD_FORMAT
+} from '../download/context.ts';
 
 import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
-//import { readErrorMessage } from './helpers/errors.ts';
-//import { getFilename } from '../download/service.ts';
 
 import type { DownloadFormat } from '../download/context.ts';
 import { downloadFiles } from '../download/service.ts';
@@ -56,8 +58,8 @@ Sampling behavior:
   --datapoint-count takes precedence over --seconds-between-points.
 
 Output directory:
-  --output-dir, -o <directory>   Directory for downloaded files (default: current directory)
-
+  --output-dir, -o <directory>   Directory for downloaded files
+                               (default: ~/.plantmap-sv/export)
 Examples:
   plantmap-sv download M100FI
   plantmap-sv download M100FI FI8001 --days 4
@@ -123,8 +125,8 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	let windowDays: number | undefined;
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
-	let outputDir: string = process.cwd();
-
+	let outputDir: string = DEFAULT_EXPORT_DIR;
+    
 	const valueOptions = new Map<string, string>([
 		['--start', 'start'],
 		['-s', 'start'],

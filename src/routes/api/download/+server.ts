@@ -75,10 +75,13 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	try {
 		formats = parseFormats(url.searchParams);
-
+		
+        const includeDiagnostic = url.searchParams.get('includeDiagnostic') === '1';
 		const params = new URLSearchParams(url.searchParams);
 		params.delete('format');
 
+        params.delete('format');
+        params.delete('includeDiagnostic');
 		options = parsePlotUrl(params);
 
 		timeAspects = resolveTimeAspects({
@@ -113,11 +116,9 @@ export const GET: RequestHandler = async ({ url }) => {
         }
 
         const format = formats[0];
-
         // SVG uses the same complete plot preparation as /api/plot.
         if (format === 'svg') {
             const plot = await preparePlot(options, timeAspects, functionType);
-
             const svg = renderChartSvg(plot.chartOptions);
 
             const filename = buildFilename(
@@ -127,6 +128,24 @@ export const GET: RequestHandler = async ({ url }) => {
                 'svg'
             );
 
+            // CLI requests both files from this single plot preparation.
+            if (includeDiagnostic) {
+                return json(
+                    {
+                        svg,
+                        filename,
+                        diagnostic: plot.diagnostic,
+                        diagnosticFilename: filename.replace(/\.svg$/i, '-diagnostic.json')
+                    },
+                    {
+                        headers: {
+                            'Cache-Control': 'no-store'
+                        }
+                    }
+                );
+            }
+
+            // Ordinary browser SVG download remains a plain SVG response.
             return new Response(svg, {
                 headers: {
                     'Content-Type': 'image/svg+xml; charset=utf-8',

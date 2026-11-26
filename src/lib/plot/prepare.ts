@@ -9,6 +9,7 @@ import { buildTelemetryChartSeries } from '#lib/plot/series.js';
 import { buildTimeSeriesChartOptions } from '#lib/plot/chart-options.js';
 import {
     buildPlotDiagnosticReport,
+    savePlotDiagnosticReport,
     type PlotDiagnosticRequest
 } from '#lib/plot/diagnostic.js';
 
@@ -76,6 +77,8 @@ export async function preparePlot(
         units,
         chartOptions
     });
+
+    await savePlotDiagnosticReport(diagnostic);
 
     return {
         request,

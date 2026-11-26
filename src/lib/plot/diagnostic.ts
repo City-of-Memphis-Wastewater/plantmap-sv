@@ -1,3 +1,7 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
 import type { EChartsOption } from 'echarts';
 import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
 import type { PlotUnitAssessment } from './units.js';
@@ -229,5 +233,31 @@ export function buildPlotDiagnosticReport({
         chartConfig,
         diagnostics
     };
+}
+
+export async function savePlotDiagnosticReport(
+    report: PlotDiagnosticReport
+): Promise<string> {
+    const directory = path.join(
+        os.homedir(),
+        '.plantmap-sv',
+        'plot-diagnostic'
+    );
+
+    const safeTags = report.request.tags
+        .map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_'))
+        .join('-')
+        .slice(0, 100);
+
+    const timestamp = report.generatedAt
+        .replace(/[:.]/g, '-');
+
+    const filename = `plantmap-${safeTags}-${timestamp}-diagnostic.json`;
+    const outputPath = path.join(directory, filename);
+
+    await mkdir(directory, { recursive: true });
+    await writeFile(outputPath, JSON.stringify(report, null, 2), 'utf8');
+
+    return outputPath;
 }
 

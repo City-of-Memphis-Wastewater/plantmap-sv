@@ -4,9 +4,11 @@ import path from 'node:path';
 import { buildPlotSearchParams } from '../plot/url.ts';
 import { discoverServer } from '../status/probe.ts';
 import { readErrorMessage } from '../cli/helpers/errors.ts';
+import { PLOT_DIAGNOSTIC_DIR } from './context.ts';
 
 import type { DownloadFormat } from './context.ts';
 import type { PlotOptions } from '../plot/types.ts';
+import type { PlotDiagnosticReport } from '../plot/diagnostic.ts';
 
 export interface DownloadServiceOptions extends PlotOptions {
 	formats: DownloadFormat[];
