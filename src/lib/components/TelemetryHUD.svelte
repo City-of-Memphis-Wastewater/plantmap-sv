@@ -5,7 +5,8 @@
 	let showTelemetryHud = $state(false);
 </script>
 
-<div class="fixed bottom-[4vh] left-3 z-20 flex max-w-[240px] flex-col">
+<div class="fixed bottom-[4vh] left-3 z-20 flex max-w-[280px] flex-col">
+<!--div class="fixed bottom-[4vh] left-3 z-20 flex w-[280px] max-w-[90vw] flex-col"-->
 	<div
 		class="pointer-events-auto overflow-hidden rounded-md border border-slate-700/80 bg-slate-900/90 text-xs text-slate-100 shadow-xl backdrop-blur-md select-text"
 	>
@@ -30,7 +31,7 @@
 							</span>
 							<span class="font-semibold text-emerald-400">
 								{sensor.value ?? '--'}
-								<span class="text-[8px] font-normal text-slate-500">></span>
+								<span class="text-[8px] font-normal text-slate-500">{sensor.unit ?? ''}</span>
 							</span>
 						</div>
 					{:else}

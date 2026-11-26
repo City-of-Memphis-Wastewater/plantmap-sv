@@ -68,7 +68,7 @@
         onDestroy(stopPan);
 </script>
 
-<div class="fixed right-3 bottom-[4vh] z-30 max-w-[220px]">
+<div class="fixed right-3 bottom-[4vh] z-30 max-w-[195px]">
         <div class="rounded-lg border border-slate-700/80 bg-slate-900/95 p-1.5 shadow-2xl backdrop-blur-md">
 
                 {#if showNavigation}
@@ -171,7 +171,7 @@
                                                         onpointerup={stopPan}
                                                         onpointercancel={stopPan}
                                                         onlostpointercapture={stopPan}
-                                                        class="touch-none flex h-11 w-11 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
+                                                        class="touch-none flex h-9 w-9 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
                                                 >
                                                         ▲
                                                 </button>
@@ -190,7 +190,7 @@
                                                         onpointerup={stopPan}
                                                         onpointercancel={stopPan}
                                                         onlostpointercapture={stopPan}
-                                                        class="touch-none flex h-11 w-11 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
+                                                        class="touch-none flex h-9 w-9 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
                                                 >
                                                         ◀
                                                 </button>
@@ -211,7 +211,7 @@
                                                         onpointerup={stopPan}
                                                         onpointercancel={stopPan}
                                                         onlostpointercapture={stopPan}
-                                                        class="touch-none flex h-11 w-11 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
+                                                        class="touch-none flex h-9 w-9 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
                                                 >
                                                         ▶
                                                 </button>
@@ -230,7 +230,7 @@
                                                         onpointerup={stopPan}
                                                         onpointercancel={stopPan}
                                                         onlostpointercapture={stopPan}
-                                                        class="touch-none flex h-11 w-11 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
+                                                        class="touch-none flex h-9 w-9 items-center justify-center rounded border border-slate-700 bg-slate-800 text-lg text-slate-100 active:bg-sky-600"
                                                 >
                                                         ▼
                                                 </button>
