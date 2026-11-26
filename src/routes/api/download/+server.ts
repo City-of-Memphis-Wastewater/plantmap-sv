@@ -72,25 +72,21 @@ export const GET: RequestHandler = async ({ url }) => {
 	let formats: DownloadFormat[];
 	let options;
 	let timeAspects;
+    try {
+        formats = parseFormats(url.searchParams);
 
-	try {
-		formats = parseFormats(url.searchParams);
+        const params = new URLSearchParams(url.searchParams);
+        params.delete('format');
 
-		const includeDiagnostic = url.searchParams.get('includeDiagnostic') === '1';
-		const params = new URLSearchParams(url.searchParams);
-		params.delete('format');
+        options = parsePlotUrl(params);
 
-		params.delete('format');
-		params.delete('includeDiagnostic');
-		options = parsePlotUrl(params);
-
-		timeAspects = resolveTimeAspects({
-			start: options.start,
-			end: options.end,
-			windowDays: options.windowDays,
-			datapointCount: options.datapointCount,
-			secondsBetweenPoints: options.secondsBetweenPoints
-		});
+        timeAspects = resolveTimeAspects({
+                start: options.start,
+                end: options.end,
+                windowDays: options.windowDays,
+                datapointCount: options.datapointCount,
+                secondsBetweenPoints: options.secondsBetweenPoints
+        });;
 	} catch (error) {
 		return json(
 			{
