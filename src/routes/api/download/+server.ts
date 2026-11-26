@@ -124,23 +124,6 @@ export const GET: RequestHandler = async ({ url }) => {
 				'svg'
 			);
 
-			// CLI requests both files from this single plot preparation.
-			if (includeDiagnostic) {
-				return json(
-					{
-						svg,
-						filename,
-						diagnostic: plot.diagnostic,
-						diagnosticFilename: filename.replace(/\.svg$/i, '-diagnostic.json')
-					},
-					{
-						headers: {
-							'Cache-Control': 'no-store'
-						}
-					}
-				);
-			}
-
 			// Ordinary browser SVG download remains a plain SVG response.
 			return new Response(svg, {
 				headers: {
