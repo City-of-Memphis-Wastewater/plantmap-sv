@@ -7,6 +7,7 @@
 
 	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url.js';
 	import { buildTelemetryChartSeries } from '#lib/plot/series.js';
+	import type { PlotUnitAssessment } from '#lib/plot/units.js';
 
 	import {
 		DEFAULT_TAGS,
@@ -33,6 +34,7 @@
 			function: string;
 		};
 		values?: Record<string, EDSTelemetryValue[]>;
+		units?: PlotUnitAssessment;
 		error?: string;
 		detail?: string;
 	};
@@ -220,16 +222,35 @@
 						`Historical request failed with HTTP ${response.status}.`
 				);
 			}
+			// ---
+			//const seriesData = result.values ?? {};
 
+			//const series = buildTelemetryChartSeries(seriesData);
+
+			//sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
+			// ---
 			const seriesData = result.values ?? {};
+			const unitAssessment = result.units;
 
-			const series = buildTelemetryChartSeries(seriesData);
+			if (!unitAssessment) {
+				throw new Error('The API response did not include unit metadata.');
+			}
+
+			const series = buildTelemetryChartSeries(seriesData).map((item) => ({
+				...item,
+				yAxisIndex: unitAssessment.tagToAxisIndex[item.name ?? ''] ?? 0
+			}));
 
 			sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
 
+			// ---
 			if (!chart) {
 				throw new Error('The chart has not finished initializing.');
 			}
+
+			const leftAxisCount = unitAssessment.axes.filter((axis) => axis.index % 2 === 0).length;
+
+			const rightAxisCount = unitAssessment.axes.filter((axis) => axis.index % 2 !== 0).length;
 
 			const option: EChartsOption = {
 				animation: false,
@@ -248,8 +269,8 @@
 					top: 8
 				},
 				grid: {
-					left: 72,
-					right: 28,
+					left: 72 + Math.max(0, leftAxisCount - 1) * 50,
+					right: 72 + Math.max(0, rightAxisCount - 1) * 50,
 					top: 58,
 					bottom: 88
 				},
@@ -259,11 +280,22 @@
 					nameLocation: 'middle',
 					nameGap: 35
 				},
-				yAxis: {
-					type: 'value',
+				yAxis: unitAssessment.axes.map((axis) => ({
+					type: 'value' as const,
 					scale: true,
-					name: 'Value'
-				},
+					name: axis.units,
+					position: axis.index % 2 === 0 ? ('left' as const) : ('right' as const),
+					offset: Math.floor(axis.index / 2) * 50,
+					axisLine: {
+						show: true
+					},
+					axisLabel: {
+						show: true
+					},
+					splitLine: {
+						show: axis.index === 0
+					}
+				})),
 				dataZoom: [
 					{
 						type: 'inside',

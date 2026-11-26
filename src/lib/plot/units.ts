@@ -58,18 +58,14 @@ function resolveMetadata(
 	}
 
 	// Match the IDCS field.
-	const byIdcs = Object.values(metadata).find(
-		(point) => point.idcs === tag
-	);
+	const byIdcs = Object.values(metadata).find((point) => point.idcs === tag);
 
 	if (byIdcs) {
 		return byIdcs;
 	}
 
 	// Match the IESS field.
-	return Object.values(metadata).find(
-		(point) => point.iess === tag
-	);
+	return Object.values(metadata).find((point) => point.iess === tag);
 }
 
 /**

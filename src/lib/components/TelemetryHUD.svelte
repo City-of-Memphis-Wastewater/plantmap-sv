@@ -6,7 +6,7 @@
 </script>
 
 <div class="fixed bottom-[4vh] left-3 z-20 flex max-w-[280px] flex-col">
-<!--div class="fixed bottom-[4vh] left-3 z-20 flex w-[280px] max-w-[90vw] flex-col"-->
+	<!--div class="fixed bottom-[4vh] left-3 z-20 flex w-[280px] max-w-[90vw] flex-col"-->
 	<div
 		class="pointer-events-auto overflow-hidden rounded-md border border-slate-700/80 bg-slate-900/90 text-xs text-slate-100 shadow-xl backdrop-blur-md select-text"
 	>

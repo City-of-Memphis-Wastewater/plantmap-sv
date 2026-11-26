@@ -93,22 +93,22 @@
 	}
 
 	const MIN_CAMERA_ALT = 20;
-    const CLOSE_CAMERA_ALT = 120;
+	const CLOSE_CAMERA_ALT = 120;
 	const MAX_CAMERA_ALT = 20_000;
 	const ZOOM_STEP_FAR = 200;
-    const ZOOM_STEP_CLOSE = 20;
+	const ZOOM_STEP_CLOSE = 20;
 
 	function zoomIn() {
 		if (!viewer || !CesiumModule) return;
 
 		const height = viewer.camera.positionCartographic.height;
 		if (height <= MIN_CAMERA_ALT) return;
-        if (height > CLOSE_CAMERA_ALT) {
-    		viewer.camera.zoomIn(Math.min(ZOOM_STEP_FAR, height - MIN_CAMERA_ALT));
-        }
-        if (height <= CLOSE_CAMERA_ALT) {
-    		viewer.camera.zoomIn(Math.min(ZOOM_STEP_CLOSE, height - MIN_CAMERA_ALT));
-        }
+		if (height > CLOSE_CAMERA_ALT) {
+			viewer.camera.zoomIn(Math.min(ZOOM_STEP_FAR, height - MIN_CAMERA_ALT));
+		}
+		if (height <= CLOSE_CAMERA_ALT) {
+			viewer.camera.zoomIn(Math.min(ZOOM_STEP_CLOSE, height - MIN_CAMERA_ALT));
+		}
 	}
 
 	function zoomOut() {
@@ -117,12 +117,12 @@
 		const height = viewer.camera.positionCartographic.height;
 		if (height >= MAX_CAMERA_ALT) return;
 
-        if (height > CLOSE_CAMERA_ALT) {
-    		viewer.camera.zoomOut(Math.min(ZOOM_STEP_FAR, MAX_CAMERA_ALT - height));
-        }
-        if (height <= CLOSE_CAMERA_ALT) {
-    		viewer.camera.zoomOut(Math.min(ZOOM_STEP_CLOSE, MAX_CAMERA_ALT - height));
-        }
+		if (height > CLOSE_CAMERA_ALT) {
+			viewer.camera.zoomOut(Math.min(ZOOM_STEP_FAR, MAX_CAMERA_ALT - height));
+		}
+		if (height <= CLOSE_CAMERA_ALT) {
+			viewer.camera.zoomOut(Math.min(ZOOM_STEP_CLOSE, MAX_CAMERA_ALT - height));
+		}
 	}
 
 	function zoomInDefunct() {
