@@ -4,11 +4,11 @@
 	import { resolve } from '$app/paths';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '#lib/server/eds/types.js';
-
+    import type { PlotUnitAssessment } from '#lib/plot/units.js';
+    
 	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url.js';
 	import { buildTelemetryChartSeries } from '#lib/plot/series.js';
-	import type { PlotUnitAssessment } from '#lib/plot/units.js';
-
+	
 	import {
 		DEFAULT_TAGS,
 		DEFAULT_DAYS,
@@ -235,11 +235,20 @@
 			if (!unitAssessment) {
 				throw new Error('The API response did not include unit metadata.');
 			}
+			
+            const series = buildTelemetryChartSeries(seriesData).map((item) => {
+                const tag = String(item.name ?? '');
+                const axisIndex = unitAssessment.tagToAxisIndex[tag];
 
-			const series = buildTelemetryChartSeries(seriesData).map((item) => ({
-				...item,
-				yAxisIndex: unitAssessment.tagToAxisIndex[item.name ?? ''] ?? 0
-			}));
+                if (axisIndex === undefined) {
+                    throw new Error(`No engineering-unit axis mapping found for ${tag}.`);
+                }
+
+                return {
+                    ...item,
+                    yAxisIndex: axisIndex
+                };
+            });
 
 			sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
 

@@ -16,7 +16,7 @@
 		currentValue: string;
 	} = $props();
 
-	type PlotResponse = {
+	type HistPlotResponse = {
 		sensorId?: string;
 		readings?: {
 			sampledAt: number;
@@ -100,7 +100,7 @@
 				signal: controller.signal
 			});
 
-			const result: PlotResponse = await response.json();
+			const result: HistPlotResponse = await response.json();
 
 			if (!response.ok) {
 				throw new Error(

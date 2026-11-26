@@ -48,9 +48,12 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const functionType = options.functionType ?? DEFAULT_FUNCTION_TYPE;
 
-	// Request the historical data from EDS.
+	// Request historical data and point metadata from EDS.
 	try {
 		const eds = getEdsClient();
+
+		const metadata = await eds.getRegex(options.tags);
+		const units = assessPlotUnits(options.tags, metadata);
 
 		const values = await eds.tabular.fetch(
 			options.tags,
@@ -70,7 +73,8 @@ export const GET: RequestHandler = async ({ url }) => {
 					secondsBetweenPoints: timeAspects.secondsBetweenPoints,
 					function: functionType
 				},
-				values
+				values,
+				units
 			},
 			{
 				headers: {
@@ -79,11 +83,11 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		);
 	} catch (error) {
-		console.error('[API /api/plot] EDS tabular request failed:', error);
+		console.error('[API /api/plot] EDS plot request failed:', error);
 
 		return json(
 			{
-				error: 'The EDS tabular request failed.',
+				error: 'The EDS plot request failed.',
 				detail: error instanceof Error ? error.message : String(error)
 			},
 			{ status: 502 }

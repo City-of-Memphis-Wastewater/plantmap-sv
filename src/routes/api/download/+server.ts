@@ -15,9 +15,10 @@ import { serializeTelemetryCsv } from '#lib/download/csv.js';
 import { serializeTelemetryJson } from '#lib/download/json.js';
 
 import { renderChartSvg } from '#lib/download/svg.js';
-import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
-import { buildTelemetryChartSeries } from '#lib/plot/series.js';
+//import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
+//import { buildTelemetryChartSeries } from '#lib/plot/series.js';
 //import { buildTimeSeriesChartOptions } from '#lib/plot/chart-options.js'; // unused anyhere?
+import { preparePlot } from '#lib/server/plot/prepare.js';
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');
@@ -99,110 +100,83 @@ export const GET: RequestHandler = async ({ url }) => {
 	const functionType = options.functionType ?? DEFAULT_FUNCTION_TYPE;
 
 	try {
-		const eds = getEdsClient();
+	    // ---
+	    if (formats.length > 1) {
+            return json(
+                {
+                    error: 'Multiple formats are not implemented yet.',
+                    requestedFormats: formats,
+                    supportedSingleFormatRequest: true
+                },
+                { status: 501 }
+            );
+        }
 
-		const values = await eds.tabular.fetch(
-			options.tags,
-			timeAspects.startSeconds,
-			timeAspects.endSeconds,
-			timeAspects.secondsBetweenPoints,
-			functionType
-		);
+        const format = formats[0];
 
-		if (formats.length > 1) {
-			return json(
-				{
-					error: 'Multiple formats are not implemented yet.',
-					requestedFormats: formats,
-					supportedSingleFormatRequest: true
-				},
-				{ status: 501 }
-			);
-		}
+        // SVG uses the same complete plot preparation as /api/plot.
+        if (format === 'svg') {
+            const plot = await preparePlot(options, timeAspects, functionType);
 
-		const format = formats[0];
+            const svg = renderChartSvg(plot.chartOptions);
 
-		//if (format === 'png') {
-		//	return json(
-		//		{
-		//			error: 'PNG export is not implemented yet.'
-		//		},
-		//		{ status: 501 }
-		//	);
-		//}
+            const filename = buildFilename(
+                options.tags,
+                timeAspects.startSeconds,
+                timeAspects.endSeconds,
+                'svg'
+            );
 
-		// Inside GET, after the existing EDS fetch:
-		if (format === 'svg') {
-			const chartSeries = buildTelemetryChartSeries(values as EDSTelemetrySeries);
+            return new Response(svg, {
+                headers: {
+                    'Content-Type': 'image/svg+xml; charset=utf-8',
+                    'Content-Disposition': `attachment; filename="${filename}"`,
+                    'Cache-Control': 'no-store'
+                }
+            });
+        }
 
-			const svg = renderChartSvg({
-				animation: false,
-				backgroundColor: '#ffffff',
-				legend: {
-					type: 'scroll',
-					top: 8
-				},
-				grid: {
-					left: 72,
-					right: 28,
-					top: 58,
-					bottom: 88
-				},
-				xAxis: {
-					type: 'time',
-					name: 'Time',
-					nameLocation: 'middle',
-					nameGap: 35
-				},
-				yAxis: {
-					type: 'value',
-					scale: true,
-					name: 'Value'
-				},
-				dataZoom: [
-					{ type: 'inside', xAxisIndex: 0 },
-					{ type: 'slider', xAxisIndex: 0, bottom: 18 }
-				],
-				series: chartSeries
-			});
+        // CSV and JSON retain their existing lightweight data-only path.
+        const eds = getEdsClient();
 
-			const filename = buildFilename(
-				options.tags,
-				timeAspects.startSeconds,
-				timeAspects.endSeconds,
-				'svg'
-			);
+        const values = await eds.tabular.fetch(
+            options.tags,
+            timeAspects.startSeconds,
+            timeAspects.endSeconds,
+            timeAspects.secondsBetweenPoints,
+            functionType
+        );
 
-			return new Response(svg, {
-				headers: {
-					'Content-Type': 'image/svg+xml; charset=utf-8',
-					'Content-Disposition': `attachment; filename="${filename}"`,
-					'Cache-Control': 'no-store'
-				}
-			});
-		}
+        const body =
+            format === 'csv'
+                ? serializeTelemetryCsv(values)
+                : serializeTelemetryJson(values);
 
-		const body = format === 'csv' ? serializeTelemetryCsv(values) : serializeTelemetryJson(values);
+        const filename = buildFilename(
+            options.tags,
+            timeAspects.startSeconds,
+            timeAspects.endSeconds,
+            format
+        );
 
-		const filename = buildFilename(
-			options.tags,
-			timeAspects.startSeconds,
-			timeAspects.endSeconds,
-			format
-		);
-
-		return new Response(body, {
-			status: 200,
-			headers: {
-				'Content-Type':
-					format === 'csv' ? 'text/csv; charset=utf-8' : 'application/json; charset=utf-8',
-				'Content-Disposition': `attachment; filename="${filename}"`,
-				'Cache-Control': 'no-store',
-				'X-PlantMap-Window-Days': String(timeAspects.windowSeconds / SECONDS_PER_DAY),
-				'X-PlantMap-Sampling-Seconds': String(timeAspects.secondsBetweenPoints),
-				'X-PlantMap-Function': functionType
-			}
-		});
+        return new Response(body, {
+            status: 200,
+            headers: {
+                'Content-Type':
+                    format === 'csv'
+                        ? 'text/csv; charset=utf-8'
+                        : 'application/json; charset=utf-8',
+                'Content-Disposition': `attachment; filename="${filename}"`,
+                'Cache-Control': 'no-store',
+                'X-PlantMap-Window-Days': String(
+                    timeAspects.windowSeconds / SECONDS_PER_DAY
+                ),
+                'X-PlantMap-Sampling-Seconds': String(
+                    timeAspects.secondsBetweenPoints
+                ),
+                'X-PlantMap-Function': functionType
+            }
+        });
 	} catch (error) {
 		console.error('[API /api/download] EDS tabular request failed:', error);
 
