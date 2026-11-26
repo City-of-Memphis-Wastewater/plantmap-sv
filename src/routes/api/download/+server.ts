@@ -75,13 +75,13 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	try {
 		formats = parseFormats(url.searchParams);
-		
-        const includeDiagnostic = url.searchParams.get('includeDiagnostic') === '1';
+
+		const includeDiagnostic = url.searchParams.get('includeDiagnostic') === '1';
 		const params = new URLSearchParams(url.searchParams);
 		params.delete('format');
 
-        params.delete('format');
-        params.delete('includeDiagnostic');
+		params.delete('format');
+		params.delete('includeDiagnostic');
 		options = parsePlotUrl(params);
 
 		timeAspects = resolveTimeAspects({
@@ -103,99 +103,90 @@ export const GET: RequestHandler = async ({ url }) => {
 	const functionType = options.functionType ?? DEFAULT_FUNCTION_TYPE;
 
 	try {
-	    // ---
-	    if (formats.length > 1) {
-            return json(
-                {
-                    error: 'Multiple formats are not implemented yet.',
-                    requestedFormats: formats,
-                    supportedSingleFormatRequest: true
-                },
-                { status: 501 }
-            );
-        }
+		// ---
+		if (formats.length > 1) {
+			return json(
+				{
+					error: 'Multiple formats are not implemented yet.',
+					requestedFormats: formats,
+					supportedSingleFormatRequest: true
+				},
+				{ status: 501 }
+			);
+		}
 
-        const format = formats[0];
-        // SVG uses the same complete plot preparation as /api/plot.
-        if (format === 'svg') {
-            const plot = await preparePlot(options, timeAspects, functionType);
-            const svg = renderChartSvg(plot.chartOptions);
+		const format = formats[0];
+		// SVG uses the same complete plot preparation as /api/plot.
+		if (format === 'svg') {
+			const plot = await preparePlot(options, timeAspects, functionType);
+			const svg = renderChartSvg(plot.chartOptions);
 
-            const filename = buildFilename(
-                options.tags,
-                timeAspects.startSeconds,
-                timeAspects.endSeconds,
-                'svg'
-            );
+			const filename = buildFilename(
+				options.tags,
+				timeAspects.startSeconds,
+				timeAspects.endSeconds,
+				'svg'
+			);
 
-            // CLI requests both files from this single plot preparation.
-            if (includeDiagnostic) {
-                return json(
-                    {
-                        svg,
-                        filename,
-                        diagnostic: plot.diagnostic,
-                        diagnosticFilename: filename.replace(/\.svg$/i, '-diagnostic.json')
-                    },
-                    {
-                        headers: {
-                            'Cache-Control': 'no-store'
-                        }
-                    }
-                );
-            }
+			// CLI requests both files from this single plot preparation.
+			if (includeDiagnostic) {
+				return json(
+					{
+						svg,
+						filename,
+						diagnostic: plot.diagnostic,
+						diagnosticFilename: filename.replace(/\.svg$/i, '-diagnostic.json')
+					},
+					{
+						headers: {
+							'Cache-Control': 'no-store'
+						}
+					}
+				);
+			}
 
-            // Ordinary browser SVG download remains a plain SVG response.
-            return new Response(svg, {
-                headers: {
-                    'Content-Type': 'image/svg+xml; charset=utf-8',
-                    'Content-Disposition': `attachment; filename="${filename}"`,
-                    'Cache-Control': 'no-store'
-                }
-            });
-        }
+			// Ordinary browser SVG download remains a plain SVG response.
+			return new Response(svg, {
+				headers: {
+					'Content-Type': 'image/svg+xml; charset=utf-8',
+					'Content-Disposition': `attachment; filename="${filename}"`,
+					'Cache-Control': 'no-store'
+				}
+			});
+		}
 
-        // CSV and JSON retain their existing lightweight data-only path.
-        const eds = getEdsClient();
+		// CSV and JSON retain their existing lightweight data-only path.
+		const eds = getEdsClient();
 
-        const values = await eds.tabular.fetch(
-            options.tags,
-            timeAspects.startSeconds,
-            timeAspects.endSeconds,
-            timeAspects.secondsBetweenPoints,
-            functionType
-        );
+		const values = await eds.tabular.fetch(
+			options.tags,
+			timeAspects.startSeconds,
+			timeAspects.endSeconds,
+			timeAspects.secondsBetweenPoints,
+			functionType
+		);
 
-        const body =
-            format === 'csv'
-                ? serializeTelemetryCsv(values)
-                : serializeTelemetryJson(values);
+		const body = format === 'csv' ? serializeTelemetryCsv(values) : serializeTelemetryJson(values);
 
-        const filename = buildFilename(
-            options.tags,
-            timeAspects.startSeconds,
-            timeAspects.endSeconds,
-            format
-        );
+		const filename = buildFilename(
+			options.tags,
+			timeAspects.startSeconds,
+			timeAspects.endSeconds,
+			format
+		);
 
-        return new Response(body, {
-            status: 200,
-            headers: {
-                'Content-Type':
-                    format === 'csv'
-                        ? 'text/csv; charset=utf-8'
-                        : 'application/json; charset=utf-8',
-                'Content-Disposition': `attachment; filename="${filename}"`,
-                'Cache-Control': 'no-store',
-                'X-PlantMap-Window-Days': String(
-                    timeAspects.windowSeconds / SECONDS_PER_DAY
-                ),
-                'X-PlantMap-Sampling-Seconds': String(
-                    timeAspects.secondsBetweenPoints
-                ),
-                'X-PlantMap-Function': functionType
-            }
-        });
+		return new Response(body, {
+			status: 200,
+			headers: {
+				'Content-Type':
+					format === 'csv' ? 'text/csv; charset=utf-8' : 'application/json; charset=utf-8',
+				'Content-Disposition': `attachment; filename="${filename}"`,
+				'Cache-Control': 'no-store',
+				'X-PlantMap-Window-Days': String(timeAspects.windowSeconds / SECONDS_PER_DAY),
+				'X-PlantMap-Sampling-Seconds': String(timeAspects.secondsBetweenPoints),
+				'X-PlantMap-Function': functionType
+			}
+		});
 	} catch (error) {
 		console.error('[API /api/download] EDS tabular request failed:', error);
 

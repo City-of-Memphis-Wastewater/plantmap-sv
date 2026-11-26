@@ -7,10 +7,8 @@ import type { LineSeriesOption } from 'echarts/charts';
  * Invalid timestamps are skipped; null values remain null to preserve gaps.
  */
 
-export function buildTelemetryChartSeries(
-    seriesData: EDSTelemetrySeries
-): LineSeriesOption[] {
-//): NonNullable<EChartsOption['series']> {
+export function buildTelemetryChartSeries(seriesData: EDSTelemetrySeries): LineSeriesOption[] {
+	//): NonNullable<EChartsOption['series']> {
 	return Object.entries(seriesData).map(([tag, samples]) => ({
 		name: tag,
 		type: 'line',

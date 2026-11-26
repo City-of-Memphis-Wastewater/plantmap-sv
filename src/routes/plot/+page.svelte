@@ -4,12 +4,12 @@
 	import { resolve } from '$app/paths';
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '#lib/server/eds/types.js';
-    import type { PlotUnitAssessment } from '#lib/plot/units.js';
-    import type { PlotDiagnosticReport } from '#lib/plot/diagnostic.js';
-    
+	import type { PlotUnitAssessment } from '#lib/plot/units.js';
+	import type { PlotDiagnosticReport } from '#lib/plot/diagnostic.js';
+
 	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url.js';
 	import { buildTelemetryChartSeries } from '#lib/plot/series.js';
-	
+
 	import {
 		DEFAULT_TAGS,
 		DEFAULT_DAYS,
@@ -184,31 +184,24 @@
 	}
 
 	function downloadDiagnostic(report: PlotDiagnosticReport): void {
-        const timestamp = new Date(report.generatedAt)
-            .toISOString()
-            .replace(/[:.]/g, '-');
+		const timestamp = new Date(report.generatedAt).toISOString().replace(/[:.]/g, '-');
 
-        const tags = report.request.tags
-            .map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_'))
-            .join('_');
+		const tags = report.request.tags.map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_')).join('_');
 
-        const blob = new Blob(
-            [JSON.stringify(report, null, 2)],
-            { type: 'application/json' }
-        );
+		const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
 
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
 
-        link.href = url;
-        link.download = `plantmap-${tags}-${timestamp}-diagnostic.json`;
+		link.href = url;
+		link.download = `plantmap-${tags}-${timestamp}-diagnostic.json`;
 
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
 
-        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
+		window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+	}
 
 	function downloadData(format: 'csv' | 'json' | 'svg'): void {
 		try {
@@ -252,10 +245,10 @@
 				);
 			}
 			if (!result.diagnostic) {
-                throw new Error('The API response did not include a plot diagnostic report.');
-            }
+				throw new Error('The API response did not include a plot diagnostic report.');
+			}
 
-            downloadDiagnostic(result.diagnostic);
+			downloadDiagnostic(result.diagnostic);
 			// ---
 			//const seriesData = result.values ?? {};
 
@@ -269,20 +262,20 @@
 			if (!unitAssessment) {
 				throw new Error('The API response did not include unit metadata.');
 			}
-			
-            const series = buildTelemetryChartSeries(seriesData).map((item) => {
-                const tag = String(item.name ?? '');
-                const axisIndex = unitAssessment.tagToAxisIndex[tag];
 
-                if (axisIndex === undefined) {
-                    throw new Error(`No engineering-unit axis mapping found for ${tag}.`);
-                }
+			const series = buildTelemetryChartSeries(seriesData).map((item) => {
+				const tag = String(item.name ?? '');
+				const axisIndex = unitAssessment.tagToAxisIndex[tag];
 
-                return {
-                    ...item,
-                    yAxisIndex: axisIndex
-                };
-            });
+				if (axisIndex === undefined) {
+					throw new Error(`No engineering-unit axis mapping found for ${tag}.`);
+				}
+
+				return {
+					...item,
+					yAxisIndex: axisIndex
+				};
+			});
 
 			sampleCount = Object.values(seriesData).reduce((total, samples) => total + samples.length, 0);
 

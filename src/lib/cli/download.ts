@@ -11,9 +11,9 @@ import {
 } from '../plot/context.ts';
 
 import {
-    DEFAULT_EXPORT_DIR,
-    SUPPORTED_DOWNLOAD_FORMATS,
-    DEFAULT_DOWNLOAD_FORMAT
+	DEFAULT_EXPORT_DIR,
+	SUPPORTED_DOWNLOAD_FORMATS,
+	DEFAULT_DOWNLOAD_FORMAT
 } from '../download/context.ts';
 
 import { parseTagsFromFilesOrAndStrings } from '../server/eds/parsers/tags.ts';
@@ -126,7 +126,7 @@ function parseArgs(args: string[]): DownloadOptions | null {
 	let datapointCount: number | undefined;
 	let secondsBetweenPoints: number | undefined;
 	let outputDir: string = DEFAULT_EXPORT_DIR;
-    
+
 	const valueOptions = new Map<string, string>([
 		['--start', 'start'],
 		['-s', 'start'],
