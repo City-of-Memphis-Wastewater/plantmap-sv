@@ -5,6 +5,7 @@
 	import type { ECharts, EChartsOption } from 'echarts';
 	import type { EDSTelemetryValue } from '#lib/server/eds/types.js';
     import type { PlotUnitAssessment } from '#lib/plot/units.js';
+    import type { PlotDiagnosticReport } from '#lib/plot/diagnostic.js';
     
 	import { buildPlotSearchParams, parsePlotUrl } from '#lib/plot/url.js';
 	import { buildTelemetryChartSeries } from '#lib/plot/series.js';
@@ -37,6 +38,7 @@
 		units?: PlotUnitAssessment;
 		error?: string;
 		detail?: string;
+		diagnostic?: PlotDiagnosticReport;
 	};
 
 	let chartElement: HTMLDivElement;
@@ -181,6 +183,33 @@
 		return params;
 	}
 
+	function downloadDiagnostic(report: PlotDiagnosticReport): void {
+        const timestamp = new Date(report.generatedAt)
+            .toISOString()
+            .replace(/[:.]/g, '-');
+
+        const tags = report.request.tags
+            .map((tag) => tag.replace(/[^a-zA-Z0-9_-]/g, '_'))
+            .join('_');
+
+        const blob = new Blob(
+            [JSON.stringify(report, null, 2)],
+            { type: 'application/json' }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = `plantmap-${tags}-${timestamp}-diagnostic.json`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
 	function downloadData(format: 'csv' | 'json' | 'svg'): void {
 		try {
 			const params = buildRequestParams();
@@ -222,6 +251,11 @@
 						`Historical request failed with HTTP ${response.status}.`
 				);
 			}
+			if (!result.diagnostic) {
+                throw new Error('The API response did not include a plot diagnostic report.');
+            }
+
+            downloadDiagnostic(result.diagnostic);
 			// ---
 			//const seriesData = result.values ?? {};
 
