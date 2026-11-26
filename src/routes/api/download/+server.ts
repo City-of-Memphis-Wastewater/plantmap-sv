@@ -18,7 +18,7 @@ import { renderChartSvg } from '#lib/download/svg.js';
 //import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
 //import { buildTelemetryChartSeries } from '#lib/plot/series.js';
 //import { buildTimeSeriesChartOptions } from '#lib/plot/chart-options.js'; // unused anyhere?
-import { preparePlot } from '#lib/server/plot/prepare.js';
+import { preparePlot } from '#lib/plot/prepare.js';
 
 function parseFormats(params: URLSearchParams): DownloadFormat[] {
 	const supplied = params.getAll('format');

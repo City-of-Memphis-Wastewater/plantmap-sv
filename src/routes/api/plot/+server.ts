@@ -5,7 +5,7 @@ import { parsePlotUrl } from '#lib/plot/url.js';
 import { resolveTimeAspects } from '#lib/plot/resolve-time.js';
 import { DEFAULT_FUNCTION_TYPE } from '#lib/plot/context.js';
 
-import { preparePlot } from '#lib/server/plot/prepare.js';
+import { preparePlot } from '#lib/plot/prepare.js';
 
 export const GET: RequestHandler = async ({ url }) => {
     const params = new URLSearchParams(url.searchParams);

@@ -1,7 +1,6 @@
 import type { EChartsOption } from 'echarts';
 import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
 import type { PlotUnitAssessment } from './units.js';
-import type { PlotUnitAssessment } from './units.js';
 export interface PlotDiagnosticReport {
     reportVersion: number;
     generatedAt: string;

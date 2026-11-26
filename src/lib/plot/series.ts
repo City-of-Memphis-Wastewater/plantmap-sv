@@ -1,13 +1,16 @@
 import type { EDSTelemetrySeries } from '#lib/server/eds/types.js';
-import type { EChartsOption } from 'echarts';
+//import type { EChartsOption } from 'echarts';
+import type { LineSeriesOption } from 'echarts/charts';
 
 /**
  * Convert historical EDS samples into the series format ECharts expects.
  * Invalid timestamps are skipped; null values remain null to preserve gaps.
  */
+
 export function buildTelemetryChartSeries(
-	seriesData: EDSTelemetrySeries
-): NonNullable<EChartsOption['series']> {
+    seriesData: EDSTelemetrySeries
+): LineSeriesOption[] {
+//): NonNullable<EChartsOption['series']> {
 	return Object.entries(seriesData).map(([tag, samples]) => ({
 		name: tag,
 		type: 'line',
