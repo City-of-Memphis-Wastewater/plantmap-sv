@@ -258,6 +258,7 @@ export async function savePlotDiagnosticReport(
     await mkdir(directory, { recursive: true });
     await writeFile(outputPath, JSON.stringify(report, null, 2), 'utf8');
 
+    console.info(`[PlantMap] Plot diagnostic saved: ${outputPath}`);
     return outputPath;
 }
 
