@@ -7,10 +7,21 @@ The format is (read: strives to be) based on [Keep a Changelog](https://keepacha
 ---
 
 - Make map center and zoom configurble.
-- Zoom threashold for detail
 - exploded view with traces
 - bad quality, appended red B letter
 - run boolean represented as color
+- reporting
+- multi axes scaling
+
+---
+
+## [0.0.9] – 2026-11-25
+
+### Changed:
+
+- Zoom threshold improved with close and far regime.
+- Telemetry HUD now includes units.
+- Navigation HUD width decreased to accomodate phone screen with no overlap of Telemetry HUD.
 
 ---
 
