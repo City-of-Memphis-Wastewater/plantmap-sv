@@ -111,13 +111,20 @@ export function assessPlotUnits(
 			index
 		}));
 
-	// Build tag-to-axis lookup.
-	for (const axis of axes) {
-		for (const tag of axis.tags) {
-			tagToAxisIndex[tag] = axis.index;
-		}
-	}
+    // Build tag-to-axis lookup.
+    for (const axis of axes) {
+            for (const tag of axis.tags) {
+                    tagToAxisIndex[tag] = axis.index;
 
+                    // Also map the fully qualified EDS/IESS tag.
+                    const point = resolveMetadata(tag, metadata);
+
+                    if (point?.iess) {
+                            tagToAxisIndex[point.iess] = axis.index;
+                    }
+            }
+    }
+        
 	return {
 		axes,
 		tagToAxisIndex,
